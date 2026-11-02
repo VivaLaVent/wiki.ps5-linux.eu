@@ -1,6 +1,7 @@
 ---
 title: Supported firmware
 description: Which PS5 firmware versions can run Linux, and which one to choose.
+sidebar_position: 2
 ---
 
 # Supported firmware

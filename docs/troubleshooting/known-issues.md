@@ -16,10 +16,10 @@ description: Current known issues with PS5 Linux and answers to frequently asked
 | Screen saver broken | Open: disable it |
 | No HDMI audio on some monitors | Open, see [Audio](/using-linux/audio) |
 | 1440p/2160p display problems on some monitors | Open, see [Display output](/using-linux/display) |
-| CachyOS doesn't boot (kernel panic) | Broken: use Ubuntu or Arch |
+| CachyOS doesn't boot (kernel panic) | Reported on Discord, no tracked issue; use Ubuntu, Arch or PS5 Bazzite Deck |
 | MediaTek Wi-Fi/Bluetooth (most Slims, PS5 Pro) not in the official kernel | Use [PS5 Bazzite Deck](/installation/bazzite-deck) or a USB adapter |
 | No picture after choosing a display mode | See [Display recovery](/troubleshooting/display-recovery) |
-| Kernel update on M.2 causes a black screen | Workaround: stay on 7.0.10 |
+| Kernel update on M.2 causes a black screen | Reported on Discord, no tracked issue; workaround: stay on 7.0.10 |
 | Audio plays through the controller instead of HDMI | [Workaround available](/using-linux/audio#audio-plays-through-the-controller-instead-of-hdmi) |
 | Black screen after boot or after a mode change, Linux still running | [Lock the display link](/troubleshooting/display-link-lock) |
 | Bluetooth missing (`hci0` absent, `Host halt failed, -110`) | Kernels built between 5 Sep and 27 Oct 2026; update to 7.2.3, see [Bluetooth troubleshooting](/using-linux/dualsense#bluetooth-troubleshooting) |
@@ -30,7 +30,7 @@ description: Current known issues with PS5 Linux and answers to frequently asked
 
 ### CachyOS currently broken
 
-CachyOS currently doesn't boot; this has been confirmed by several users, including rmux. The kernel panics right after the orange LED stops blinking. **Use Ubuntu or Arch until this is fixed.** The [package repository](/advanced/package-repository#fix-scripts-for-older-images) has a `fix-cachyos.sh` for images that do boot.
+Several users, rmux among them, reported on Discord that the official CachyOS image panics right after the orange LED stops blinking. There is no tracked issue for it yet; if you hit it, open one on [ps5-linux-image](https://github.com/ps5-linux/ps5-linux-image/issues) with the panic text so it can be linked here. Until then, use Ubuntu, Arch or [PS5 Bazzite Deck](/installation/bazzite-deck). The [package repository](/advanced/package-repository#fix-scripts-for-older-images) has a `fix-cachyos.sh` for images that do boot.
 
 One user reported CachyOS running on firmware 13.60 with the official image and a kernel built from ps5-linux-patches (kernel 7.2.3). This has not been confirmed by the wiki editors, so treat it as a lead and not as a fix.
 
@@ -42,7 +42,7 @@ sed -i 's/-steamos3//' /usr/bin/gamescope-session-ps5
 
 ### Kernel update breaks M.2 boot
 
-Updating the kernel on an M.2 install can cause a black screen. Stay on kernel **7.0.10** on M.2 until this is fixed. If you already updated and get a black screen, reinstall 7.0.10 with chroot, see [Recovery via chroot](./recovery.md).
+Users reported on Discord that updating the kernel on an M.2 install gave a black screen, and that staying on **7.0.10** avoided it. There is no tracked issue and no confirmed cause; it has not been re-tested on 7.2.3. If you hit it, report it on [ps5-linux-patches](https://github.com/ps5-linux/ps5-linux-patches/issues) with `dmesg` so it can be linked here. If you already updated and get a black screen, reinstall 7.0.10 with chroot, see [Recovery via chroot](./recovery.md).
 
 ## FAQ
 
@@ -56,7 +56,7 @@ On the original PS5, use the front USB-C port or one of the rear USB-A ports. Th
 
 ### What happens when I restart Linux?
 
-The PS5 starts the PS5 OS. There is no way to restart straight into Linux on the standard images: run your jailbreak and the Linux loader again. [PS5 Bazzite Deck](/installation/bazzite-deck#built-in-commands) has an experimental warm restart (`ps5-warm-reboot`). When you test a new kernel, try it with `kexec` first if your image provides it, so a kernel that doesn't boot doesn't cost you a full cycle.
+A normal restart starts the PS5 OS, and you run the jailbreak and the loader again. To restart straight into Linux instead, use `kexec`: it works on any image, see [Restart straight into Linux](/advanced/warm-reboot). It is also the safe way to test a new kernel.
 
 ### Why is the screen black on the first boot?
 
@@ -76,7 +76,7 @@ Not in the usual sense. This is a soft-mod: you run the exploit each time you wa
 
 ### Can I use rest mode or resume with Linux?
 
-Not at the moment. Shutting down Linux puts the PS5 into rest mode. Relaunching Linux on the next power-up may be added later.
+Shutting down Linux puts the PS5 into rest mode, and the next power-up starts the PS5 OS. Suspend-to-idle from Linux (sleep and wake without leaving Linux) exists as `ps5-linux-patches` PR #4 by Dasloh and ships in [PS5 Bazzite Deck](/installation/bazzite-deck); it is not in the official kernel yet.
 
 ### Does Linux change the internal SSD?
 

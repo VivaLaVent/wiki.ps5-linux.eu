@@ -1,6 +1,7 @@
 ---
 title: Prerequisites
 description: PS5 settings, hardware and host machine you need before installing Linux.
+sidebar_position: 3
 ---
 
 # Prerequisites

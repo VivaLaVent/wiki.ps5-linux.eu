@@ -159,6 +159,7 @@ The default (512 MB) is:
 | 1 GB | `40000000` |
 | 2 GB | `80000000` |
 | 4 GB | `100000000` |
+| 6 GB (recommended for gaming) | `180000000` |
 | 8 GB | `200000000` |
 
 :::warning[What vram.txt actually controls]
@@ -176,7 +177,7 @@ That is why some games that use just over 8 GB of VRAM (Final Fantasy VII Remake
 ttm.pages_limit = (desired GTT size in GB) × 1024 × 1024 / 4
 ```
 
-Best practice is to leave `vram.txt` at the 512 MB default and raise `ttm.pages_limit` instead. You get the same ceiling without permanently locking that RAM away from the rest of the system when you are not gaming.
+For a console used for gaming, the community recommendation is **6 GB in `vram.txt`** (`180000000`): the GPU then has 6 GB it never has to compete for, and the ceiling becomes 6 + (14 - 6) / 2 = about 10 GB. On a server or a desktop that doesn't game, leave the default: the 6 GB are then locked away from everything else. Raising `ttm.pages_limit` gives the same ceiling without locking anything, and is the tool for games that need more than that.
 
 Example for a 10 GB GTT ceiling:
 

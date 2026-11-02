@@ -1,62 +1,24 @@
 ---
 title: First boot
-sidebar_position: 3
-description: Steps to complete after Linux boots for the first time (Ubuntu).
+sidebar_position: 4
+description: What to expect the first time Linux starts on the PS5, and the one thing to do before anything else on Ubuntu.
 ---
 
 # First boot
 
-These steps are for the default **Ubuntu** image.
+The first start takes longer than later ones: the root partition grows to fill the drive, and some images run a setup screen for the time zone, host name and password.
 
 :::warning[Ubuntu: black screen before you create a user]
 Ubuntu has no default user. If the screen goes black before you finish setup, you cannot SSH in, because there is no account to log in with. Create a user from another Linux system with chroot, see [Recovery via chroot](/troubleshooting/recovery).
 :::
 
-1. Create your user account and password. Make sure you remember them.
-2. Disable the screen saver. It is currently broken and cannot be dismissed once it starts.
-3. Hold the kernel packages so they are not upgraded by accident:
+1. Create your user account and password where the image asks for it, and remember them.
+2. If the screen stays black for more than a few minutes, switch TTY (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F2</kbd>, wait, <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F1</kbd>) before assuming the boot failed, see [Display recovery](/troubleshooting/display-recovery).
+3. Check that the root partition has grown: `df -h /` should show the drive's size, not a few GB. If not, see [USB and storage](/hardware/usb-storage#usb-drive-required).
 
-   ```bash
-   sudo apt-mark hold linux-generic linux-generic-hwe-24.04 linux-generic-hwe-26.04 \
-     linux-image-generic linux-image-generic-hwe-24.04 linux-image-generic-hwe-26.04 \
-     linux-headers-generic linux-headers-generic-hwe-24.04 linux-headers-generic-hwe-26.04
-   ```
-
-4. Install Firefox:
-
-   ```bash
-   sudo snap install firefox
-   ```
-
-5. Update Mesa:
-
-   ```bash
-   sudo snap refresh mesa-2404 --channel=latest/edge
-   sudo add-apt-repository ppa:kisak/kisak-mesa
-   sudo apt update && sudo apt upgrade
-   ```
-
-6. Install `ps5-linux-tools`:
-
-   ```bash
-   sudo apt install zlib1g-dev
-   git clone https://github.com/ps5-linux/ps5-linux-tools
-   cd ps5-linux-tools
-   make
-   ```
-
-7. Install the internal Wi-Fi driver:
-
-   ```bash
-   git clone https://github.com/ps5-linux/ps5-linux-mwifiex
-   cd ps5-linux-mwifiex
-   sudo ./install.sh
-   ```
-
-8. Optional: turn on the fan and CPU/GPU boost with `ps5_control`, see [GPU boost](/hardware/gpu#boost).
+Then work through the [Post-install checklist](./post-install.md): it holds the PS5-specific steps (kernel hold, fan and boost, GPU memory, Wi-Fi driver) that every image needs.
 
 ## Where to go next
 
-- [Move Linux to an M.2 SSD](/installation/m2-install)
-- [Set up your display](/using-linux/display) and [audio](/using-linux/audio)
-- [Get the best gaming performance](/using-linux/gaming-performance)
+- [Post-install checklist](./post-install.md)
+- [Move Linux to an M.2 SSD](./m2-install.md)

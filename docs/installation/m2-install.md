@@ -1,7 +1,7 @@
 ---
 title: Install to an M.2 SSD
 sidebar_label: Install to M.2
-sidebar_position: 4
+sidebar_position: 6
 description: Move your Linux install to the PS5's M.2 slot for better speed and capacity.
 ---
 

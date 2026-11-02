@@ -1,6 +1,6 @@
 ---
 title: Booting Linux
-sidebar_position: 2
+sidebar_position: 3
 description: Plug in the USB drive, send the Linux loader and read the boot LED.
 ---
 

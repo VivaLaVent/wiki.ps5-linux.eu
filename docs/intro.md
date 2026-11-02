@@ -14,7 +14,7 @@ Linux runs from a USB drive or an M.2 SSD. The internal SSD is never touched, so
 It is not limited to the ready-made images either: for example, Gentoo Linux has been run on a PS5 with kernel 7.3-rc6 and [rmux's patches](https://github.com/rmuxnet/ps5-linux-patches-1).
 
 :::tip[New here?]
-Start with [Getting started](/getting-started/overview). It lists what you need and walks you through every step in order.
+Start with [Getting started](/getting-started/overview). It lists what you need and walks you through every step in order. Not sure which image to pick? [Which image should I use?](/getting-started/which-image)
 :::
 
 ## Hardware status
@@ -36,8 +36,11 @@ Start with [Getting started](/getting-started/overview). It lists what you need 
 | DualSense (USB) | ✅ Working |
 | Hardware video decode (VCN) | ✅ Working since kernel release 7.2.3 |
 | Hardware video encode (VCN) | ⚠️ H.264 works, HEVC only with I-frames |
+| 1440p120, 4K120, HDR, VRR, HDMI CEC | ✅ FLAVA3 consoles, on PS5 Bazzite Deck; merged upstream in Oct/Nov 2026, see [HDMI chip](/hardware/hdmi) |
+| Restart straight into Linux (kexec) | ✅ Any image, see [Warm reboot](/advanced/warm-reboot) |
+| Sleep and wake (suspend-to-idle) | ⚠️ PS5 Bazzite Deck only (ps5-linux-patches PR #4) |
 | Screen saver | ❌ Broken |
-| CachyOS | ❌ Currently broken (kernel panic) |
+| CachyOS official image | ⚠️ Kernel panic reported on Discord, not tracked |
 
 See [Known issues](/troubleshooting/known-issues) for details and workarounds.
 

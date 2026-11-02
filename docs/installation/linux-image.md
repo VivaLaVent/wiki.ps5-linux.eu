@@ -9,13 +9,15 @@ description: Choose a distro, download or build a PS5 Linux image, and flash it 
 
 ## Choose an image
 
-There are three sources of ready-made images. All of them boot with the same [Linux loader](/installation/booting).
+Three sources, all booted by the same [Linux loader](/installation/booting). In the order most people should try them:
 
-| Source | What you get |
-| --- | --- |
-| [ps5-linux-image](https://github.com/ps5-linux/ps5-linux-image/releases/tag/latest) | The official images from the ps5-linux project (table below). |
-| [mia's ps5-linux-image builds](https://git.etawen.dev/mia/ps5-linux-image/releases/latest) | A fork with many more distros, see [Community images](#community-images-mias-builds). |
-| [PS5 Bazzite Deck](/installation/bazzite-deck) | Bazzite with the Steam Deck interface, with extra display, Wi-Fi and Bluetooth fixes and PS5 Slim and Pro support. |
+| Source | What you get | Pick it when |
+| --- | --- | --- |
+| [PS5 Bazzite Deck](/installation/bazzite-deck) | Steam Gaming Mode with a KDE desktop, every PS5 fix on this wiki already applied, updates in place, Slim and Pro support. | You want to play games and not maintain a kernel. |
+| [mia's community images](#community-images-mias-builds) | Automated builds of 20 distros (Ubuntu, Debian, Fedora, Arch, Alpine, Proxmox and more) that grow the root partition by themselves and update the kernel through the [package repository](/advanced/package-repository). | You want a normal desktop or server on a distro of your choice. |
+| [Official images](#official-images) | The ps5-linux project's own builder: Ubuntu, Arch, CachyOS and Fedora. | You want to build your own image or kernel from the reference setup. |
+
+Not sure? [Which image should I use?](/getting-started/which-image) weighs the two paths.
 
 ## Official images
 

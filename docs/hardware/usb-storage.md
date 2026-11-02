@@ -73,7 +73,7 @@ Some external SSD enclosures enter their own sleep mode after the payload launch
 The root partition is sparse: it starts small and is meant to grow to fill the drive. If `df` shows only a few GB free on a much larger drive, grow the filesystem:
 
 ```bash
-sudo resizefs2 /dev/sda1
+sudo resize2fs /dev/sda1
 ```
 
 Change the device and partition to match your drive.

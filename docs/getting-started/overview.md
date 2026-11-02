@@ -2,6 +2,7 @@
 title: Getting started
 sidebar_label: Overview
 description: What you need to run Linux on a PS5 and the steps to get there.
+sidebar_position: 1
 ---
 
 # Getting started
@@ -30,12 +31,12 @@ Linux currently runs on PS5 firmware **13.60 or lower**. Read [Supported firmwar
 ## Steps
 
 1. [Configure your PS5 settings](./prerequisites.md)
-2. [Get a Linux image](/installation/linux-image)
-3. [Flash the image to USB](/installation/linux-image#flash-the-image-to-usb)
+2. [Choose an image](./which-image.md): PS5 Bazzite Deck for gaming, a general distro for everything else
+3. [Get and flash the image](/installation/linux-image)
 4. Jailbreak your PS5 (not covered by this wiki)
 5. [Send the Linux loader payload](/installation/booting#send-the-linux-loader)
-6. [Complete the first boot setup](/installation/first-boot)
+6. [First boot](/installation/first-boot), then the [Post-install checklist](/installation/post-install)
 
-Want a console-like Steam experience? [PS5 Bazzite Deck](/installation/bazzite-deck) has its own, shorter install steps.
+[PS5 Bazzite Deck](/installation/bazzite-deck) has its own, shorter install steps and needs no post-install work.
 
 Once Linux is running, you can optionally [move it to an M.2 SSD](/installation/m2-install).

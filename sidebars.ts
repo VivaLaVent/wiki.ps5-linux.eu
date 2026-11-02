@@ -13,6 +13,7 @@ const sidebars: SidebarsConfig = {
         'getting-started/overview',
         'getting-started/firmware',
         'getting-started/prerequisites',
+        'getting-started/which-image',
       ],
     },
     {
@@ -24,6 +25,7 @@ const sidebars: SidebarsConfig = {
         'installation/bazzite-deck',
         'installation/booting',
         'installation/first-boot',
+        'installation/post-install',
         'installation/m2-install',
       ],
     },

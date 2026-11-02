@@ -36,7 +36,7 @@ The default `vram.txt` value is 512 MB, but the GPU is not limited to that. The 
 (vram.txt split) + (remaining RAM not in that split) / 2
 ```
 
-Raising `vram.txt` also raises that ceiling, but it permanently locks that memory away from the rest of the system. Raising `ttm.pages_limit` gives the same ceiling without locking anything. The full explanation, the size table and a worked example are in [VRAM](/hardware/gpu#vram).
+Raising `vram.txt` also raises that ceiling, but it locks that memory away from the rest of the system. For gaming, 6 GB in `vram.txt` is the usual choice; for everything else leave the default and, if needed, raise `ttm.pages_limit`, which gives the same ceiling without locking anything. The full explanation, the size table and a worked example are in [VRAM](/hardware/gpu#vram).
 
 :::info[Not enough memory for command submission]
 If a game crashes with `amdgpu_vm_validate() failed / Not enough memory for command submission` while plenty of RAM looks free, you have hit the GTT ceiling, not a lack of RAM. The fix is `ttm.pages_limit`, see [VRAM](/hardware/gpu#vram).

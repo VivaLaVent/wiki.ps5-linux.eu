@@ -24,12 +24,12 @@ Use **Proton Experimental** (bleeding-edge branch) for the best compatibility. F
 
 ## Performance tips
 
-- **Turn on the fan and CPU/GPU boost** with `ps5_control` before gaming, see [GPU boost](/hardware/gpu#boost).
+The basics (fan and boost on, 6 GB in `vram.txt`, the Wi-Fi driver) are in the [Post-install checklist](/installation/post-install). On top of those:
+
 - **1800p is a sweet spot:** many games that struggle at 4K reach 90+ fps at 1800p.
-- **Set `RADV_DEBUG=nohiz`** globally if you see graphical glitches, see [GPU performance tips](/hardware/gpu#performance-tips).
 - **Remove `idle=halt`** from `cmdline.txt` if you notice micro-stuttering.
 - **Unlock the extra compute units** if your unit has them, see [40 CU unlock](/hardware/gpu#40-cu-unlock).
-- **Raise the GPU memory ceiling** for games that need more than 8 GB of VRAM, see [VRAM](/hardware/gpu#vram).
+- **Raise the GPU memory ceiling** with `ttm.pages_limit` for games that need more than the 6 GB setting gives, see [VRAM](/hardware/gpu#vram).
 - Running **Gamescope straight from a TTY** (no desktop environment) is the lowest-overhead way to play. Gamescope also handles frame rate limiting and upscaling.
 
 ## Game streaming
