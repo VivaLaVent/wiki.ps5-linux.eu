@@ -50,10 +50,60 @@ At boot, before `bluetooth.service` starts, a service reads the chip's address, 
 
 </details>
 
+## DualSense pairs once but won't reconnect
+
+On some images the Bluetooth adapter starts in a non-connectable state, so the controller pairs but can't connect again after it turns off. Make the adapter connectable at every boot:
+
+```bash
+sudo systemctl enable --now bluetooth
+```
+
+Create a service that runs `btmgmt connectable on` after Bluetooth starts:
+
+```ini title="/etc/systemd/system/bt-connectable.service"
+[Unit]
+Description=Make Bluetooth adapter accept incoming connections (DualSense reconnect)
+After=bluetooth.service
+Requires=bluetooth.service
+
+[Service]
+Type=oneshot
+ExecStartPre=/usr/bin/sleep 2
+ExecStart=/usr/bin/btmgmt connectable on
+RemainAfterExit=yes
+
+[Install]
+WantedBy=bluetooth.target
+```
+
+Load the two drivers at boot:
+
+```text title="/etc/modules-load.d/dualsense.conf"
+hidp
+hid_playstation
+```
+
+Enable the service, then reboot:
+
+```bash
+sudo systemctl enable bt-connectable
+```
+
+:::note[Not tested]
+Reported on the official CachyOS image (Marvell IW620). The existing `JustWorksRepairing` tip under [Bluetooth troubleshooting](#bluetooth-troubleshooting) solves a related pairing problem and can be combined with this.
+:::
+
+### Controller quirks
+
+- **Used in the PS5 OS first:** pairing the controller in the PS5 OS breaks its Linux pairing. Remove it in Linux and pair again, or use the [shared Bluetooth address](#one-dualsense-for-the-ps5-and-linux) setup.
+- **USB while connected over Bluetooth:** don't plug in the USB cable while the controller is connected over Bluetooth. The log shows `Duplicate device found for MAC`.
+- **Speaker and headphone jack:** these work only over USB, not Bluetooth.
+
 ## Bluetooth troubleshooting
 
 - **The Bluetooth adapter disappears after a while:** the Bluetooth chips drop off USB when they enter USB power saving (U3), and stay gone until a power-off. Keep them powered with a udev rule that sets `power/control` to `on` for the IW620 Bluetooth (`1286:2059`), the MediaTek Bluetooth (`0e8d:3603`) and the Salina USB controller (`104d:9108`). PS5 Bazzite Deck does this by default.
 - **Bluetooth is gone after a warm restart (IW620):** the Bluetooth side of the chip can hang. Reloading the `btusb` driver brings it back; if not, power off and start Linux with the loader again.
+- **No `hci0` and `Host halt failed, -110` in `dmesg`:** the USB controller that carries Bluetooth did not start (`xhci_hcd 0000:40:00.6`). It affects kernels built from a ps5-linux-patches commit that disables the Salina xHCI initialisation (`xhci_salina_init()` inside `#if 0`). Rebuild the kernel with the patch `0001-xhci-pci-re-enable-salina-init.patch` applied, or remove the `#if 0` and its `#endif` by hand, see [Kernel setup](/advanced/kernel#build-from-source). Reloading modules does not help, because xHCI is built into the kernel. A `-110` error on the SATA controller (`40:00.3`) is harmless.
 - **Phantom Bluetooth adapters** (an extra `hciN` with address `00:00:00:00:00:00`): the [package repository's fix script](/advanced/package-repository#fix-scripts-for-older-images) turns them off.
 - **Pairing problems:** setting `JustWorksRepairing = always` and `PairableTimeout = 0` in `/etc/bluetooth/main.conf`, and loading the `hidp` module at boot, helps controllers pair and re-pair reliably.
 

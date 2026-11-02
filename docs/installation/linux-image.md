@@ -159,6 +159,16 @@ memory=8GB
 Then restart WSL with `wsl --shutdown`.
 :::
 
+## Verify the download
+
+A corrupt download is a common cause of an image that won't boot. Compare the checksum of your file with the one on the release page.
+
+```bash
+sha256sum ps5-ubuntu2604.img.xz
+```
+
+On Windows, run `Get-FileHash ps5-ubuntu2604.img.xz -Algorithm SHA256` in PowerShell. The values must match exactly.
+
 ## Flash the image to USB
 
 The drive must be **64 GB or larger**. An external SSD is strongly recommended.

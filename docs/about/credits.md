@@ -37,6 +37,7 @@ ps5-linux is a community project. Core contributors:
 | Dasloh | Sleep support, Linux-only Bluetooth address, USB power fixes |
 | [NotHavocc](https://github.com/NotHavocc/ps5-hwcon-plugin) | PS5 hardware control plugin |
 | [cmartinespinosa](https://github.com/cmartinespinosa/decky-ps5-bazzite-updater) | PS5 Bazzite Updater plugin |
+| [abrocoma](https://github.com/abrocoma) | CachyOS notes: display link lock, DualSense reconnect, boot-to-desktop and systemd ordering fixes |
 | [Gilles (VivaLaVent)](https://github.com/VivaLaVent) | [PS5 Bazzite Deck](/installation/bazzite-deck) and this wiki |
 
 ## Upstreamed kernel and Mesa changes

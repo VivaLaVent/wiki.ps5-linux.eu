@@ -41,6 +41,8 @@ const sidebars: SidebarsConfig = {
         'using-linux/dualsense',
         'using-linux/gaming-performance',
         'using-linux/memory-and-swap',
+        'using-linux/boot-to-desktop',
+        'using-linux/browser-video',
       ],
     },
     {
@@ -69,6 +71,8 @@ const sidebars: SidebarsConfig = {
       items: [
         'troubleshooting/known-issues',
         'troubleshooting/display-recovery',
+        'troubleshooting/display-link-lock',
+        'troubleshooting/modules-not-loading',
         'troubleshooting/getting-help',
         'troubleshooting/recovery',
       ],

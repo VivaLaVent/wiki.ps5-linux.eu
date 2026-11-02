@@ -21,10 +21,18 @@ description: Current known issues with PS5 Linux and answers to frequently asked
 | No picture after choosing a display mode | See [Display recovery](/troubleshooting/display-recovery) |
 | Kernel update on M.2 causes a black screen | Workaround: stay on 7.0.10 |
 | Audio plays through the controller instead of HDMI | [Workaround available](/using-linux/audio#audio-plays-through-the-controller-instead-of-hdmi) |
+| Black screen after boot or after a mode change, Linux still running | [Lock the display link](/troubleshooting/display-link-lock) |
+| Bluetooth missing (`hci0` absent, `Host halt failed, -110`) | Kernel built without Salina xHCI init, see [Bluetooth troubleshooting](/using-linux/dualsense#bluetooth-troubleshooting) |
+| DualSense pairs but won't reconnect | [Make the adapter connectable](/using-linux/dualsense#dualsense-pairs-once-but-wont-reconnect) |
+| Sysctl or module settings not applied after boot | [Systemd ordering cycle](/troubleshooting/modules-not-loading) |
+| Switching from Gaming Mode to the desktop kills HDMI | [Choose the session before booting](/using-linux/boot-to-desktop) |
+| No AV1 hardware decode, no GPU load sensor | Hardware limits, see [Browser video](/using-linux/browser-video) |
 
 ### CachyOS currently broken
 
 CachyOS currently doesn't boot; this has been confirmed by several users, including rmux. The kernel panics right after the orange LED stops blinking. **Use Ubuntu or Arch until this is fixed.**
+
+One user reported CachyOS running on firmware 13.60 with the official image and a kernel built from ps5-linux-patches (kernel 7.2.3). This has not been confirmed by the wiki editors, so treat it as a lead and not as a fix.
 
 An older image (7.0.2) may still work. This Gamescope session fix applied to an earlier issue on those images:
 
@@ -37,6 +45,26 @@ sed -i 's/-steamos3//' /usr/bin/gamescope-session-ps5
 Updating the kernel on an M.2 install can cause a black screen. Stay on kernel **7.0.10** on M.2 until this is fixed. If you already updated and get a black screen, reinstall 7.0.10 with chroot, see [Recovery via chroot](./recovery.md).
 
 ## FAQ
+
+### What are the default username and password?
+
+It depends on the image. The official CachyOS image uses `steam` / `steam` and the hostname `ps5`. [PS5 Bazzite Deck](/installation/bazzite-deck) uses `ps5` / `ps5`. Ubuntu has no default user, see [First boot](/installation/first-boot). Change the password with `passwd` after the first login, because SSH password login is on by default on some images.
+
+### Which USB port do I use for the Linux drive?
+
+On the original PS5, use the front USB-C port or a rear USB-A port. The front USB-A port is USB 2.0: booting from it works but is much slower, and one user reported it not working at all. On the PS5 Slim, use the rear ports. See [USB and storage](/hardware/usb-storage#usb-ports).
+
+### Does restarting Linux restart Linux?
+
+No. Restarting or shutting down Linux returns the PS5 to the PS5 OS. Run your jailbreak and the Linux loader again to get back in. Test a new kernel with `kexec` first when your image provides it, so a failed kernel doesn't cost you a full cycle.
+
+### Why is the screen black on the first boot?
+
+A black screen on the first boot is common, and Linux is usually running. Switch TTY with <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F2</kbd>, wait 2 to 3 seconds, then <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F1</kbd>. If it keeps happening, see [Lock the display link](/troubleshooting/display-link-lock).
+
+### Why are my fan and boost off?
+
+They are not on by default. Install `ps5-linux-tools` and enable the fan and boost services, see [Fan](/hardware/fan) and [GPU boost](/hardware/gpu#boost).
 
 ### Will the PS5 Slim or newer firmware be supported?
 

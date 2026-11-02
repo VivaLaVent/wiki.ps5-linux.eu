@@ -79,6 +79,16 @@ sudo resizefs2 /dev/sda1
 Change the device and partition to match your drive.
 :::
 
+### Root filesystem not found or boot hangs
+
+If the kernel starts but reports that it can't find the root filesystem, or boot stalls with a USB SSD, the drive is probably slow to appear. Add these to `cmdline.txt`, together with the UAS setting above if you have I/O errors:
+
+```text
+rootwait rootdelay=60 usbcore.autosuspend=-1
+```
+
+`rootwait rootdelay=60` waits up to 60 seconds for the drive, and `usbcore.autosuspend=-1` stops USB devices from going to sleep. For two drives, list both in the quirks: `usb-storage.quirks=xxxx:yyyy:u,aaaa:bbbb:u`.
+
 ## M.2 drives
 
 - **NVMe only.** SATA M.2 drives do **not** work, whatever adapter or enclosure you use.

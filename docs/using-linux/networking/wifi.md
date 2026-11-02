@@ -93,6 +93,25 @@ sudo chown root:root "$MNT/etc/NetworkManager/system-connections/wifi.nmconnecti
 sudo umount "$MNT"
 ```
 
+## After a kernel update
+
+A driver built with `install.sh` is built for the kernel that was running at the time. Run `sudo ./install.sh` again after every kernel update, or Wi-Fi disappears. The `linux-ps5` package from the [package repository](/advanced/package-repository) carries the driver, so it doesn't need this.
+
+## Check that it works
+
+A working driver prints these lines in `dmesg`:
+
+```text
+WLAN FW is active
+Driver loaded successfully
+```
+
+Then check the connection. The interface is usually called `wlp64s0f7`:
+
+```bash
+nmcli device status
+```
+
 ## Troubleshooting
 
 ### Arch: install fails (missing headers or wrong headers path)
@@ -175,6 +194,19 @@ If apt or dnf reports conflicts between cached package files with the same names
 ### Bazzite: no Wi-Fi networks
 
 Bazzite uses `iwd` as NetworkManager's Wi-Fi backend by default, which doesn't work with the IW620 driver. Switch back to `wpa_supplicant` with `ujust toggle-iwd` (choose "disable iwd"), then run `sudo systemctl restart NetworkManager`. Newer images already include this fix.
+
+### The interface shows as unavailable
+
+The radio is blocked. Turn it on:
+
+```bash
+nmcli radio wifi on
+rfkill unblock wifi
+```
+
+### Two `moal` option files
+
+If the `linux-ps5` package installed a `moal.conf` in `/etc/modprobe.d/` and you also have your own, modprobe merges the `options moal` lines from both. Keep them in sync or remove one.
 
 ### Wi-Fi doesn't connect or drops under load
 

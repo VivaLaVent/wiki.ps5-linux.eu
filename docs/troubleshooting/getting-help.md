@@ -1,6 +1,6 @@
 ---
 title: SSH and getting help
-sidebar_position: 2
+sidebar_position: 5
 description: Connect to your PS5 over SSH, collect logs and write a bug report that gets answers.
 ---
 

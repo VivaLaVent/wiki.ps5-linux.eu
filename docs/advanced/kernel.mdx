@@ -132,6 +132,18 @@ sudo cp /boot/initrd.img-$(make -s kernelrelease) /boot/efi/initrd.img
 sync
 ```
 
+The PS5 boots from the files on the boot partition, not from `/boot`. A `make install` on its own changes nothing the loader uses, so always copy the files as shown.
+
+:::tip[Keep the initrd small]
+Install modules with stripped debug symbols, or the initrd grows very large. An unstripped `amdgpu.ko` is about 775 MB and the initrd can reach about 300 MB, which makes boot slow:
+
+```bash
+sudo make modules_install INSTALL_MOD_STRIP=1
+```
+:::
+
+If you want hardware video decode, copy `firmware/amdgpu/ps5_vcn.bin` from the patch set to `/lib/firmware/amdgpu/` before you build the initrd, see [Hardware video (VCN)](/hardware/vcn).
+
 If the new kernel doesn't boot, rename the `.old` files back from another computer (the boot partition is FAT32, so any PC can open it).
 
 ### Building a kernel for Bazzite Game Mode
@@ -181,6 +193,8 @@ Other useful parameters:
 | `video=HDMI-A-1:3840x2160@60` | Forces a 4K mode | [4K black screen](/using-linux/display#4k-display-black-screen-after-login) |
 | `drm.edid_firmware=...` | Loads a custom EDID file | [Custom EDID](/using-linux/display#custom-edid-injection) |
 | `usb-storage.quirks=xxxx:yyyy:u` | Turns off UAS for one USB drive | [USB drive](/hardware/usb-storage#usb-drive-required) |
+| `rootwait rootdelay=60` | Waits up to 60 seconds for a slow USB drive before giving up on the root filesystem | [USB drive](/hardware/usb-storage#usb-drive-required) |
+| `usbcore.autosuspend=-1` | Stops USB devices from going to sleep, which can drop the drive | [USB drive](/hardware/usb-storage#usb-drive-required) |
 | `usbc_dp.enable=1` | DisplayPort output on the front USB-C port (PS5 Bazzite Deck) | [Boot options](/installation/bazzite-deck#boot-options-cmdlinetxt) |
 | `hdmi.frl_4k120=0` | Never offers 4K at 120 Hz (PS5 Bazzite Deck) | [Boot options](/installation/bazzite-deck#boot-options-cmdlinetxt) |
 
