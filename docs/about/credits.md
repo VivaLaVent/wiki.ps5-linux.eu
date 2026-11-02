@@ -31,7 +31,7 @@ ps5-linux is a community project. Core contributors:
 | [gzimbric](https://github.com/gzimbric/ps5-linux-loader) | PS5 Pro loader for 11.xx |
 | [Wigglez-sudo](https://github.com/Wigglez-sudo/12.xx-linux-loader) | 12.xx loader, including the PS5 Pro |
 | Lawson | VRR and 4K120 over HDMI 2.1 FRL |
-| hsgodd | Captures and research on the PS5 system's HDMI setup |
+| hsgodd | Captures and research on the PS5's HDMI setup |
 | Slip | HDR, SCDC, CEC and hotplug patches |
 | Tertium | USB-C display output |
 | Dasloh | Sleep support, Linux-only Bluetooth address, USB power fixes |

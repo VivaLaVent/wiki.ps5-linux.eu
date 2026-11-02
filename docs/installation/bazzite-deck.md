@@ -29,7 +29,7 @@ One image runs on every supported PS5. What you get depends on three parts of th
 | 1440p at 120 Hz | ✅ | ❌ | |
 | 4K at 120 Hz | ✅ | ❌ | v1.7.2+, needs an HDMI 2.1 TV and cable. From v1.8.5 only offered when the TV can take it, and falls back to 4K60 by itself if the link fails. |
 | HDR (1080p60, 4K60) | ✅ | ❌ | Game Mode → Settings → Display |
-| VRR (displays with HDMI VRR) | ✅ | ❌ | v1.7.1+, at every resolution: Game Mode → Settings → Display → Enable VRR. Like on the PS5 system, not on monitors that only have FreeSync (from v1.8.6). |
+| VRR (displays with HDMI VRR) | ✅ | ❌ | v1.7.1+, at every resolution: Game Mode → Settings → Display → Enable VRR. Like on the PS5 OS, not on monitors that only have FreeSync (from v1.8.6). |
 
 Both chips support 1080p60, 1080p120, 1440p60 and 4K60, when the display can do them. Other resolutions (ultrawide, other refresh rates) are not offered: the HDMI chip only has setups for these.
 
@@ -80,7 +80,7 @@ Already installed? Each release's notes explain how to update.
 | --- | --- |
 | `ps5-report` | Collects your hardware details and the relevant logs into one file for a bug report. It only reads. |
 | `ps5-perf` | CPU boost and fan target |
-| `ps5-warm-reboot` | Restarts straight back into Linux, without the PS5 system and the loader. Experimental, `on`/`off`. |
+| `ps5-warm-reboot` | Restarts straight back into Linux, without the PS5 OS and the loader. Experimental, `on`/`off`. |
 | `ps5-bt-address` | One DualSense for the PS5 and Linux, on by default. `status`, `on`, `off`. |
 
 ## Boot options (cmdline.txt)

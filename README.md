@@ -4,6 +4,7 @@ Source of [wiki.ps5-linux.eu](https://wiki.ps5-linux.eu), built with [Docusaurus
 
 ## Editing
 
+- Read [STYLE_GUIDE.md](STYLE_GUIDE.md) before writing or changing a page. It is not published on the site.
 - Pages live in `docs/`. The sidebar order is set in `sidebars.ts`.
 - `.md` files are plain Markdown. Use `.mdx` only when a page needs components such as `<Tabs>`.
 - The site is dark-only with a blue/purple accent. Colours, tables, code blocks and callouts are styled in `src/css/custom.css`.

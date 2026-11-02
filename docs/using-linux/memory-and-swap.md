@@ -144,10 +144,3 @@ sudo sysctl vm.swappiness=10
 ```
 
 To make it permanent, put `vm.swappiness=10` in a file under `/etc/sysctl.d/`. With zram, a higher value is normal, so leave the default if you use it.
-
-## Summary
-
-- The PS5 has **one shared memory pool**; the GPU's share comes out of the same RAM.
-- `vram.txt` is the **minimum** for the GPU; `ttm.pages_limit` raises the **ceiling**. Fix GPU "out of memory" crashes there.
-- **Swap** is a separate, system-wide safety net. Prefer zram or a swap file on M.2.
-- Don't swap to a flash drive.

@@ -28,7 +28,7 @@ The console's IP address is in your router's list of devices (on Bazzite it is o
 sudo chvt 2; sleep 3; sudo chvt 1
 ```
 
-## 2. Game Mode (Bazzite Deck)
+## 2. Game Mode (PS5 Bazzite Deck)
 
 **Turn VRR off or on:**
 
