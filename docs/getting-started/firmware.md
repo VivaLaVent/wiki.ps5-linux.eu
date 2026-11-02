@@ -9,6 +9,10 @@ description: Which PS5 firmware versions can run Linux, and which one to choose.
 Retail firmware is already past `14.xx` (the public installer shows something like `26.06-14.10.00`), but the exploit chain stops at **13.60**. There is no ETA for newer firmware, and asking on Discord will not make one appear faster.
 :::
 
+## PS5 Slim and PS5 Pro
+
+Linux also runs on the Slim and the Pro, as long as their firmware is supported. The Pro needs a loader with Pro support, see [Which loader](/installation/booting#which-loader).
+
 ## Exploitable versions
 
 Jailbreaking is not covered by this wiki; the exploit column is for reference only.

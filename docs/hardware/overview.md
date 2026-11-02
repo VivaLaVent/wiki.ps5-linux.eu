@@ -7,7 +7,23 @@ description: The PS5's SoC, storage, video, networking, audio and USB hardware, 
 
 # Hardware overview
 
-## SoC
+## Console models and chips
+
+Linux runs on the original PS5, the PS5 Slim and the PS5 Pro. Within those models, three parts decide what works:
+
+| Part | Variants | How to check |
+| --- | --- | --- |
+| **HDMI chip** | FLAVA3 (most consoles), VERDE (some later models) | `sudo dmesg \| grep "HDMI IC Type"` |
+| **Wi-Fi/Bluetooth chip** | Marvell IW620 (most original PS5s, `1b4b:2b56`), MediaTek MT7961 (most Slims, `14c3:7961`), MediaTek MT7925 (PS5 Pro, `14c3:7925`) | `lspci -nn \| grep -i -e 1b4b -e 14c3` |
+| **Model** | PS5 or Slim, PS5 Pro (GPU `1002:13da`) | `lspci -nn \| grep 1002:13da` |
+
+On [PS5 Bazzite Deck](/installation/bazzite-deck), `ps5-report` shows all three on its first lines.
+
+- **HDMI chip:** VERDE consoles don't get 1440p at 120 Hz, 4K at 120 Hz, HDR or VRR. See [PS5 Bazzite Deck](/installation/bazzite-deck#what-works-on-your-console) for the full comparison.
+- **Wi-Fi/Bluetooth chip:** the upstream kernel only supports the IW620, see [Wi-Fi](/using-linux/networking/wifi). The MediaTek chips work on PS5 Bazzite Deck.
+- **PS5 Pro:** needs a loader with Pro support (see [Which loader](/installation/booting#which-loader)) and its own GPU firmware. Its GPU has 60 active compute units, so the [40 CU unlock](./gpu.md#40-cu-unlock) doesn't apply.
+
+## SoC (original PS5 and Slim)
 
 The PS5 uses a custom **AMD Oberon** APU.
 
@@ -43,7 +59,7 @@ dmesg | grep spcie
 | Output | Revision | Wi-Fi/Bluetooth status |
 | --- | --- | --- |
 | `0x11xxxxx` | Salina rev1 (Marvell) | ✅ Supported |
-| `0x12xxxxx` | Salina rev2 (MediaTek on most units, but some rev2 boards are still Marvell) | ❌ Not supported yet, driver work in progress |
+| `0x12xxxxx` | Salina rev2 (MediaTek on most units, but some rev2 boards are still Marvell) | ❌ Not in the upstream kernel; MediaTek works on PS5 Bazzite Deck |
 
 ## Audio
 
@@ -54,8 +70,9 @@ dmesg | grep spcie
 
 - **USB-A (2 ports, USB 3.1 Gen 2):** AMD Ariel `1022:13ee`
 - **USB-C (1 port, USB 3.1 Gen 2 with DisplayPort Alt Mode):** AMD Ariel `1022:13ed`
-- The **front bottom USB-C** port is the recommended boot port.
-- The **rear USB-A** ports work for booting and for peripherals.
+- Original PS5: the **front USB-C** port and the **rear USB-A** ports are fast and good for booting.
+- PS5 Slim: boot from the **rear USB-A** ports.
+- **Front USB-C DisplayPort output:** off by default. PS5 Bazzite Deck can turn it on with `usbc_dp.enable=1` (v1.6.1+) for USB-C displays and the PS VR2; don't use this when your boot drive is in the front USB-C port.
 
 See [USB and storage](./usb-storage.md) for port speeds, hubs and adapters.
 

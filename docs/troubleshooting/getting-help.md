@@ -18,6 +18,7 @@ If something is broken and you want help on [Discord](https://discord.gg/ps5linu
 | Fedora | Yes | No | Yes |
 | Debian 12 | **No**: disabled by default because the default credentials are public | No | Yes |
 | Proxmox VE | Yes | **Yes** (`root@pam`, headless hypervisor) | Yes |
+| PS5 Bazzite Deck | Yes | No (user `ps5`, password `ps5`: change it!) | Yes |
 
 On Debian, enable SSH yourself once you reach the desktop:
 
@@ -48,6 +49,10 @@ ssh <your-username>@<ps5-ip>
 Accept the host key prompt the first time you connect. From here you can troubleshoot even if the display is black, see [Black screen, but SSH works](/using-linux/display#black-screen-but-ssh-works).
 
 ## Collect logs for a bug report
+
+:::tip[PS5 Bazzite Deck]
+Run `ps5-report` instead: it collects your hardware details and the relevant logs into one file. Ask in `#bazzite-problems` on the [Bazzite Deck Discord](https://discord.gg/qGcuTgBBYU). For display problems, see [Reporting a display problem](./display-recovery.md#reporting-a-display-problem).
+:::
 
 Before posting on Discord, collect everything relevant in one go:
 

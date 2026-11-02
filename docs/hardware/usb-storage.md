@@ -8,13 +8,19 @@ description: USB ports, hubs, network adapters, USB drives, M.2 drives and the G
 
 ## USB ports
 
+Every PS5 has fast ports (SuperSpeed, 10 Gbit/s) and one slow port (USB 2.0, 480 Mbit/s). Booting from the slow port works, but booting and loading become much slower.
+
+**Original PS5:**
+
 | Port | Type | Speed | Boot from it? |
 | --- | --- | --- | --- |
-| Front bottom | USB-C | USB 3.x | ✅ Recommended |
-| Front top | USB-A | USB 2.0 | ⚠️ Possible, but slow |
-| Rear | USB-A | USB 3.x | ✅ Yes |
+| Front | USB-C | USB 3.x | ✅ Recommended |
+| Front | USB-A | USB 2.0 | ⚠️ Possible, but slow |
+| Rear (2×) | USB-A | USB 3.x | ✅ Yes |
 
-All ports work for peripherals once Linux has booted.
+**PS5 Slim:** boot from the two **rear USB-A** ports. One of the two front USB-C ports is the slow one.
+
+All ports work for peripherals once Linux has booted. Use the slow port for a controller or keyboard.
 
 ## USB hubs and docks
 
@@ -42,6 +48,18 @@ Using an M.2-to-PCIe riser for an external GPU has been asked about and is confi
 Use a drive of **64 GB or more**. If you only have a small drive, see [No 64 GB USB drive?](/installation/m2-install#no-64-gb-usb-drive).
 
 If an M.2 enclosure isn't detected, try a different USB 3.x cable and a different port before assuming the drive is faulty.
+
+:::tip[USB SSD disconnects, freezes or shows I/O errors]
+Many USB-C SSDs and enclosures have buggy UAS support. Turn UAS off for that drive only: find its ID (`xxxx:yyyy`) with `lsusb`, then add this to `cmdline.txt`:
+
+```text title="cmdline.txt"
+usb-storage.quirks=xxxx:yyyy:u
+```
+:::
+
+:::warning[Some enclosures don't boot with the loader]
+If Linux won't boot from an SSD in a USB enclosure, try a different enclosure.
+:::
 
 :::warning[Reported: rear ports stop detecting M.2 enclosures on newer kernels]
 Several users report that an M.2 enclosure that worked on the rear USB-A ports with an older kernel is only detected on the front USB-C port after updating. It is not yet clear whether this is a kernel regression or down to hardware or cable differences. If a rear port shows nothing, try the front USB-C port before troubleshooting further.

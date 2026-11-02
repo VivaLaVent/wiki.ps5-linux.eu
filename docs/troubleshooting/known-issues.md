@@ -11,12 +11,14 @@ description: Current known issues with PS5 Linux and answers to frequently asked
 
 | Issue | Status |
 | --- | --- |
-| VCN HEVC encoding has corrupt colours with P-frames | Workaround: [I-frame-only or H.264](/hardware/vcn#using-it-with-ffmpeg) |
+| VCN HEVC encoding has corrupt colours with P-frames (also a red screen when streaming or recording) | Workaround: [I-frame-only or H.264](/hardware/vcn#using-it-with-ffmpeg) |
 | Wi-Fi (mwifiex) drops under load | Open, [workaround](/using-linux/networking/wifi#driver-stuck-under-sustained-load) |
 | Screen saver broken | Open: disable it |
 | No HDMI audio on some monitors | Open, see [Audio](/using-linux/audio) |
 | 1440p/2160p display problems on some monitors | Open, see [Display output](/using-linux/display) |
 | CachyOS doesn't boot (kernel panic) | Broken: use Ubuntu or Arch |
+| MediaTek Wi-Fi/Bluetooth (most Slims, PS5 Pro) not in the official kernel | Use [PS5 Bazzite Deck](/installation/bazzite-deck) or a USB adapter |
+| No picture after choosing a display mode | See [Display recovery](/troubleshooting/display-recovery) |
 | Kernel update on M.2 causes a black screen | Workaround: stay on 7.0.10 |
 | Audio plays through the controller instead of HDMI | [Workaround available](/using-linux/audio#audio-plays-through-the-controller-instead-of-hdmi) |
 

@@ -30,6 +30,8 @@ Start with [Getting started](/getting-started/overview). It lists what you need 
 | GPU boost (2.23 GHz) | ✅ Working via `ps5_control` |
 | GPU CU unlock (up to 40 CUs) | ✅ Working |
 | Wi-Fi (IW620 / mwifiex) | ⚠️ Working, with some instability |
+| Wi-Fi/Bluetooth (MediaTek, Slim and Pro) | ⚠️ Only on PS5 Bazzite Deck |
+| PS5 Slim / PS5 Pro | ✅ Slim working, ⚠️ Pro first version (PS5 Bazzite Deck) |
 | Blu-ray drive (`ahci_salina`) | ✅ Working |
 | DualSense (USB) | ✅ Working |
 | Hardware video decode (VCN) | ✅ Working, kernel must be built from source |
@@ -47,9 +49,10 @@ See [Known issues](/troubleshooting/known-issues) for details and workarounds.
 - [ps5-linux-tools](https://github.com/ps5-linux/ps5-linux-tools): fan, boost and M.2 tools
 - [ps5-linux-mwifiex](https://github.com/ps5-linux/ps5-linux-mwifiex): internal Wi-Fi driver
 - [ps5-linux-image](https://github.com/ps5-linux/ps5-linux-image): ready-made distro images
-- [ps5-linux-image (mia's builds)](https://git.etawen.dev/mia/ps5-linux-image)
+- [ps5-linux-image (mia's builds)](https://git.etawen.dev/mia/ps5-linux-image): many more distros
+- [PS5 Bazzite Deck](https://github.com/VivaLaVent/ps5-bazzite-deck): Bazzite with Steam Gaming Mode
+- [repo.etawen.dev](https://repo.etawen.dev): package repository for the kernel and tools
 - [Discord server](https://discord.gg/ps5linux): help, tips, development and bug reports
-- [Telegram](https://t.me/ps5linux): kernel builds and updates
 - [Video guide by Modded Warfare](https://www.youtube.com/watch?v=4Iix8SaJtaM)
 - [PS4 Linux guide](https://github.com/DionKill/ps4-linux-tutorial/)
 

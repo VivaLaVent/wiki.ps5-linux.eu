@@ -21,5 +21,5 @@ npm run build    # production build into build/
 
 ## Credits
 
-Content based on the [PS5 Linux Guide](https://guide.rmux.eu/) by rmuxnet and contributors (MIT License).
+See [NOTICE](NOTICE) for licence information.
 Community project, not affiliated with Sony Interactive Entertainment.

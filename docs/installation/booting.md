@@ -10,10 +10,10 @@ description: Plug in the USB drive, send the Linux loader and read the boot LED.
 
 Use one of the supported boot ports:
 
-- The **front bottom USB-C** port (recommended)
-- The **rear USB-A** ports
+- **Original PS5:** the **front USB-C** port or the two **rear USB-A** ports.
+- **PS5 Slim:** the two **rear USB-A** ports. One of the two front USB-C ports is the slow one, so the rear ports are the safe choice.
 
-The front top USB-A port is USB 2.0. It works but is slow, so avoid it.
+Every PS5 has one slow USB 2.0 port (on the original PS5, the front USB-A port). It works, but booting and loading are much slower; use it for a controller or keyboard instead.
 
 ## Jailbreak the PS5
 
@@ -27,9 +27,22 @@ If you use an autoloader, point `autoloader.txt` at the Linux loader `.elf` only
 
 There is no permanent jailbreak: you need to jailbreak again every time you want to boot into Linux. Once the exploit has run, the PS5 listens on port `9021` for the Linux loader.
 
+## Which loader
+
+The Linux loader is the payload that boots Linux. Use the one that matches your console and firmware:
+
+| Loader | For |
+| --- | --- |
+| [ps5-linux/ps5-linux-loader](https://github.com/ps5-linux/ps5-linux-loader/releases/) | The official loader |
+| [rmuxwashere/ps5-linux-loader](https://github.com/rmuxwashere/ps5-linux-loader/releases) | Original PS5 and Slim. The loader [PS5 Bazzite Deck](/installation/bazzite-deck) is tested with, including firmware 13.60 (support by soniciso1). |
+| [gzimbric/ps5-linux-loader](https://github.com/gzimbric/ps5-linux-loader) | PS5 Pro on 11.xx (branch `ps5-pro-11xx`) |
+| [Wigglez-sudo/12.xx-linux-loader](https://github.com/Wigglez-sudo/12.xx-linux-loader) | 12.xx, including the PS5 Pro |
+
+The pinned messages in the `#loader` channel on [Discord](https://discord.gg/ps5linux) point to the current payload.
+
 ## Send the Linux loader
 
-Download [`ps5-linux-loader.elf`](https://github.com/ps5-linux/ps5-linux-loader/releases/), or build it yourself:
+Download `ps5-linux-loader.elf` from one of the loaders above, or build the official one yourself:
 
 ```bash
 # ARM64 hosts only: install the cross-compilation tools first

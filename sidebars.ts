@@ -21,6 +21,7 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'installation/linux-image',
+        'installation/bazzite-deck',
         'installation/booting',
         'installation/first-boot',
         'installation/m2-install',
@@ -59,13 +60,14 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Advanced',
-      items: ['advanced/kernel'],
+      items: ['advanced/kernel', 'advanced/package-repository'],
     },
     {
       type: 'category',
       label: 'Troubleshooting & help',
       items: [
         'troubleshooting/known-issues',
+        'troubleshooting/display-recovery',
         'troubleshooting/getting-help',
         'troubleshooting/recovery',
       ],

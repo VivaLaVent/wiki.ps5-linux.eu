@@ -18,7 +18,7 @@ HDMI 2.1 output is driven by `amdgpu` and works out of the box once the driver l
 | 1440p | 120 Hz | Confirmed on Dell S3225QC |
 | 2160p (4K) | 60 Hz | Working (issues on some monitors) |
 
-30 Hz and wider 120 Hz support may be added in the future.
+30 Hz and wider 120 Hz support may be added in the future. [PS5 Bazzite Deck](/installation/bazzite-deck#what-works-on-your-console) adds 1440p and 4K at 120 Hz, HDR and VRR on consoles with the FLAVA3 HDMI chip.
 
 :::tip[`amdgpu.force_1080p=1` caps the refresh rate]
 This flag ships in the default `cmdline.txt` and was long assumed to be required. Testing on 2026-07-10 showed it is not needed for every monitor, and it **caps output at 60 Hz**, even on displays that support more.
@@ -60,6 +60,10 @@ It is not unusual for the exact same monitor or TV to work for one person and sh
 :::
 
 ## Troubleshooting a black screen
+
+:::tip[The console is running but shows nothing?]
+If Linux is running (white LED) but you chose a mode your display can't show, see [Display recovery](/troubleshooting/display-recovery) to get a shell and change the mode by command.
+:::
 
 **Try these in order:**
 

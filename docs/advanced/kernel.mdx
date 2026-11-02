@@ -9,16 +9,32 @@ import TabItem from '@theme/TabItem';
 
 # Kernel setup
 
-The ps5-linux project ships a patched kernel through [ps5-linux-patches](https://github.com/ps5-linux/ps5-linux-patches). Pre-built `.deb` packages are available for Debian and Ubuntu.
+The ps5-linux project ships a patched kernel through [ps5-linux-patches](https://github.com/ps5-linux/ps5-linux-patches). Pre-built packages are available for Debian/Ubuntu (`.deb`) and Arch-based distros (`.pkg.tar.zst`).
+
+The loader always starts the kernel (`bzImage`) and initrd (`initrd.img`) from the FAT32 partition of the USB drive, labelled `boot` and usually mounted at `/boot/efi` (or `/efi` on Bazzite). Whatever way you install a kernel, it has to end up there.
 
 ## Install a pre-built kernel
 
-Download a package from the [ps5-linux-patches releases](https://github.com/ps5-linux/ps5-linux-patches/releases) and install it:
+The easiest way is the [package repository](/advanced/package-repository): it installs the kernel with your package manager, copies it to the boot partition for you, and keeps it up to date.
+
+Or download a package from the [ps5-linux-patches releases](https://github.com/ps5-linux/ps5-linux-patches/releases) and install it:
+
+<Tabs groupId="distro">
+<TabItem value="debian" label="Debian / Ubuntu" default>
 
 ```bash
-# Debian/Ubuntu
 sudo dpkg -i ps5-linux-*.deb
 ```
+
+</TabItem>
+<TabItem value="arch" label="Arch Linux">
+
+```bash
+sudo pacman -U ps5-linux-*.pkg.tar.zst
+```
+
+</TabItem>
+</Tabs>
 
 :::warning[M.2 installs]
 Updating the kernel on an M.2 install can cause a black screen. Stay on **7.0.10** for now, see [Known issues](/troubleshooting/known-issues#kernel-update-breaks-m2-boot).
@@ -33,7 +49,7 @@ Build your own kernel to get fixes that aren't in a release yet, such as [hardwa
 GCC works, but Clang/LLVM is recommended.
 
 <Tabs groupId="distro">
-<TabItem value="arch" label="Arch Linux" default>
+<TabItem value="arch" label="Arch Linux">
 
 ```bash
 # Clang (recommended)
@@ -44,7 +60,7 @@ sudo pacman -S gcc pahole bison flex bc cpio python openssl
 ```
 
 </TabItem>
-<TabItem value="debian" label="Debian / Ubuntu">
+<TabItem value="debian" label="Debian / Ubuntu" default>
 
 ```bash
 # Clang (recommended)
@@ -68,6 +84,7 @@ cd linux
 git checkout "tags/v$(grep -m1 '^# Linux/' ../ps5-linux-patches/.config | awk '{print $3}')"
 git apply ../ps5-linux-patches/linux.patch
 cp ../ps5-linux-patches/.config .config
+make olddefconfig
 
 # With Clang (recommended)
 make LLVM=1 LLVM_IAS=1 -j$(nproc)
@@ -78,6 +95,53 @@ make -j$(nproc)
 sudo make modules_install
 sudo make install
 ```
+
+:::tip[Use the latest kernel version]
+The `git checkout` line reads the kernel version from the patch set's `.config`, so it always matches the patches. If you check out a tag by hand instead, look up the current supported version on the [ps5-linux-patches releases](https://github.com/ps5-linux/ps5-linux-patches/releases) page first.
+:::
+
+### Copy the kernel to the boot partition
+
+Build the initrd for the new kernel, back up the current kernel on the boot partition, and copy the new one in place. Run this from the `linux` folder:
+
+<Tabs groupId="distro">
+<TabItem value="debian" label="Debian / Ubuntu" default>
+
+```bash
+sudo update-initramfs -c -k "$(make -s kernelrelease)"
+```
+
+</TabItem>
+<TabItem value="arch" label="Arch Linux">
+
+```bash
+sudo mkinitcpio -k "$(make -s kernelrelease)" -g /boot/initrd.img-$(make -s kernelrelease)
+```
+
+</TabItem>
+</Tabs>
+
+```bash
+# Back up the current kernel and initrd
+sudo mv /boot/efi/bzImage /boot/efi/bzImage.old
+sudo mv /boot/efi/initrd.img /boot/efi/initrd.img.old
+
+# Copy the new kernel and initrd
+sudo cp arch/x86/boot/bzImage /boot/efi/bzImage
+sudo cp /boot/initrd.img-$(make -s kernelrelease) /boot/efi/initrd.img
+sync
+```
+
+If the new kernel doesn't boot, rename the `.old` files back from another computer (the boot partition is FAT32, so any PC can open it).
+
+### Building a kernel for Bazzite Game Mode
+
+Bazzite's Game Mode starts Steam through the `cardwired` service, which loads an eBPF program. That needs two kernel features the PS5 kernel configs don't enable:
+
+1. **The BPF LSM.** `CONFIG_BPF_LSM=y` is set, but `bpf` is missing from `CONFIG_LSM`, so it never activates. Add `bpf` to `CONFIG_LSM`, or add `lsm=landlock,lockdown,yama,integrity,apparmor,bpf` to `cmdline.txt`.
+2. **Kernel BTF.** Turn on `CONFIG_DEBUG_INFO_BTF` so that `/sys/kernel/btf/vmlinux` exists.
+
+Without them, `cardwired` crash-loops with `CardwireEbpfError(LSMNotEnabled)` or `error parsing /sys/kernel/btf/vmlinux`, Gamescope is killed a second after it starts, and after five attempts Bazzite drops you to the desktop. [PS5 Bazzite Deck](/installation/bazzite-deck) applies both changes.
 
 ### Pending in ps5-linux-patches
 
@@ -116,6 +180,11 @@ Other useful parameters:
 | `ttm.pages_limit=...` | Raises the GPU memory (GTT) ceiling | [VRAM](/hardware/gpu#vram) |
 | `video=HDMI-A-1:3840x2160@60` | Forces a 4K mode | [4K black screen](/using-linux/display#4k-display-black-screen-after-login) |
 | `drm.edid_firmware=...` | Loads a custom EDID file | [Custom EDID](/using-linux/display#custom-edid-injection) |
+| `usb-storage.quirks=xxxx:yyyy:u` | Turns off UAS for one USB drive | [USB drive](/hardware/usb-storage#usb-drive-required) |
+| `usbc_dp.enable=1` | DisplayPort output on the front USB-C port (PS5 Bazzite Deck) | [Boot options](/installation/bazzite-deck#boot-options-cmdlinetxt) |
+| `hdmi.frl_4k120=0` | Never offers 4K at 120 Hz (PS5 Bazzite Deck) | [Boot options](/installation/bazzite-deck#boot-options-cmdlinetxt) |
+
+`cmdline.txt` must stay a **single line**. Add options at the end, separated by a space.
 
 ## VRAM (vram.txt)
 

@@ -11,6 +11,10 @@ Requires firmware **4.00 or later**. The M.2 drive is used for Linux only: you c
 
 Before you buy a drive, read [M.2 drives](/hardware/usb-storage#m2-drives): only NVMe drives work, and Gen3 drives need an [unlock](/hardware/usb-storage#gen3-nvme-unlock).
 
+:::note[PS5 Bazzite Deck]
+Bazzite mounts the boot partition somewhere else and uses different labels. Follow [its own M.2 steps](/installation/bazzite-deck#install-to-the-internal-m2) instead.
+:::
+
 ## 1. Install the drive
 
 Install the M.2 drive following [Sony's official guide](https://www.playstation.com/en-us/support/hardware/ps5-install-m2-ssd). If it was previously used for games, format it first: **Settings → Storage → M.2 SSD Storage**.

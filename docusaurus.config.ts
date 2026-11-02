@@ -92,7 +92,7 @@ const config: Config = {
     footer: {
       style: 'dark',
       copyright:
-        'Based on the <a href="https://guide.rmux.eu/">PS5 Linux Guide</a> by rmuxnet and contributors · MIT License · Not affiliated with Sony Interactive Entertainment',
+        'Community project · MIT License · Not affiliated with Sony Interactive Entertainment',
     },
     prism: {
       theme: codeTheme,

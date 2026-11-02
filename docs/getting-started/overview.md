@@ -36,4 +36,6 @@ Linux currently runs on PS5 firmware **13.60 or lower**. Read [Supported firmwar
 5. [Send the Linux loader payload](/installation/booting#send-the-linux-loader)
 6. [Complete the first boot setup](/installation/first-boot)
 
+Want a console-like Steam experience? [PS5 Bazzite Deck](/installation/bazzite-deck) has its own, shorter install steps.
+
 Once Linux is running, you can optionally [move it to an M.2 SSD](/installation/m2-install).

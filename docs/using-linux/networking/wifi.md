@@ -10,10 +10,14 @@ description: Install, configure and troubleshoot the PS5's internal Wi-Fi.
 - **Internal chip:** `40:00.7` Marvell Technology Group Ltd. Device `[1b4b:2b56]` (rev 02)
 - **Driver:** NXP mwifiex fork, patched for the PS5's IW620
 
-:::warning[MediaTek MT7921 (Salina rev2, CFI-12xx chassis C) is not supported]
-Some newer boards use a MediaTek MT7921 (`14c3:7961`) instead of the Marvell chip covered on this page. See [Hardware overview](/hardware/overview#salina-chip-revision) for how to check which one you have.
+:::warning[MediaTek chips (most PS5 Slims and the PS5 Pro)]
+Some consoles use a MediaTek chip instead of the Marvell IW620 covered on this page: the MT7961 (`14c3:7961`) on most Slims and the MT7925 (`14c3:7925`) on the PS5 Pro. See [Console models and chips](/hardware/overview#console-models-and-chips) for how to check which one you have.
 
-There is currently **no working driver** for it. The stock `mt7921e` module isn't built in the official kernel config, and even test builds with it enabled never reach the firmware loading code. This needs reverse engineering, not just a config flag. If you have this chip, use a [USB Wi-Fi adapter](/hardware/usb-storage#usb-network-adapters) for now.
+The official ps5-linux kernel config doesn't build the `mt7921e` driver, so these chips don't work on the official images. [PS5 Bazzite Deck](/installation/bazzite-deck) builds it (`CONFIG_MT7921E=m`) and supports MediaTek Wi-Fi and Bluetooth. On other images, use a [USB Wi-Fi adapter](/hardware/usb-storage#usb-network-adapters).
+:::
+
+:::tip[Using the package repository?]
+The `linux-ps5` kernel package from the [package repository](/advanced/package-repository) already includes this driver, so Wi-Fi works without the install steps below.
 :::
 
 ## Install
@@ -167,6 +171,10 @@ sudo systemctl reboot
 ```
 
 If apt or dnf reports conflicts between cached package files with the same names, use the manual `install.sh` method instead.
+
+### Bazzite: no Wi-Fi networks
+
+Bazzite uses `iwd` as NetworkManager's Wi-Fi backend by default, which doesn't work with the IW620 driver. Switch back to `wpa_supplicant` with `ujust toggle-iwd` (choose "disable iwd"), then run `sudo systemctl restart NetworkManager`. Newer images already include this fix.
 
 ### Wi-Fi doesn't connect or drops under load
 

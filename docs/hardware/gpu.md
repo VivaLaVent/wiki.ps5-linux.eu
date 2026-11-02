@@ -78,16 +78,34 @@ Without the parameter, `dmesg` reports the hardware default (2 × 2 × 10 = 40 p
 amdgpu: SE 2, SH per SE 2, CU per SH 10, active_cu_number 36
 ```
 
+:::warning[Original PS5 and Slim only]
+Don't use this on a PS5 Pro: all of its 60 compute units are already active.
+:::
+
+It is a silicon lottery: on many consoles all 40 CUs work and you get more GPU power; on others the extra units cause green dots and other artefacts, a purple tint, or crashes. Try it, and turn it off again if you see any of that.
+
 To unlock all CUs, add this to `cmdline.txt` on the FAT32 USB partition:
 
 ```text title="cmdline.txt"
 amdgpu.ps5_cu_unlock=3
 ```
 
-Check the result after rebooting:
+Or let this one-liner do it from Linux (it finds `cmdline.txt` in `/boot/efi` or `/efi`):
+
+```bash
+E=$(for d in /boot/efi /efi; do sudo test -f $d/cmdline.txt && echo $d && break; done); sudo sed -i -e 's/amdgpu\.ps5_cu_unlock=[0-9]*/amdgpu.ps5_cu_unlock=3/' -e '/ps5_cu_unlock/!s/[[:space:]]*$/ amdgpu.ps5_cu_unlock=3/' $E/cmdline.txt && sudo cat $E/cmdline.txt
+```
+
+Reboot and run the loader, then check the result. It should show `40` (or `36` without the unlock):
 
 ```bash
 sudo dmesg | grep active_cu_number
+```
+
+To turn it off again:
+
+```bash
+E=$(for d in /boot/efi /efi; do sudo test -f $d/cmdline.txt && echo $d && break; done); sudo sed -i 's/ *amdgpu\.ps5_cu_unlock=[0-9]*//' $E/cmdline.txt && sudo cat $E/cmdline.txt
 ```
 
 The patch writes to both the CC register and the SPI. Both are needed for the unlock to actually affect dispatch (verified on the BC-250). Source: [ps5-linux-patches commit 5b0dc56](https://github.com/ps5-linux/ps5-linux-patches/commit/5b0dc56c1b37a01dd813cb0f58cd4ae2fc6ed45a).

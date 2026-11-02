@@ -7,7 +7,17 @@ description: Choose a distro, download or build a PS5 Linux image, and flash it 
 
 # Get and flash a Linux image
 
-## Available distros
+## Choose an image
+
+There are three sources of ready-made images. All of them boot with the same [Linux loader](/installation/booting).
+
+| Source | What you get |
+| --- | --- |
+| [ps5-linux-image](https://github.com/ps5-linux/ps5-linux-image/releases/tag/latest) | The official images from the ps5-linux project (table below). |
+| [mia's ps5-linux-image builds](https://git.etawen.dev/mia/ps5-linux-image/releases/latest) | A fork with many more distros, see [Community images](#community-images-mias-builds). |
+| [PS5 Bazzite Deck](/installation/bazzite-deck) | Bazzite with the Steam Deck interface, with extra display, Wi-Fi and Bluetooth fixes and PS5 Slim and Pro support. |
+
+## Official images
 
 | Distro | Desktop | Notes |
 | --- | --- | --- |
@@ -18,7 +28,7 @@ description: Choose a distro, download or build a PS5 Linux image, and flash it 
 | Debian 12 | Xfce | Successor to the old Kali-based image |
 | Proxmox VE 8 | None (headless) | Runs the PS5 as a hypervisor |
 | Bazzite | Gamescope + Steam | uBlue gaming Fedora, ostree-flattened |
-| Bazzite Deck | Gamescope + Steam, Steam Deck-style UI | Bazzite's Steam Deck interface variant |
+| Bazzite Deck | Gamescope + Steam, Steam Deck-style UI | Bazzite's Steam Deck interface variant. See also [PS5 Bazzite Deck](/installation/bazzite-deck). |
 | Batocera | Retro emulation front end | Pre-built squashfs root filesystem |
 
 You can also build a **multi-distro image** that switches between Ubuntu, Arch and CachyOS on the same USB drive using kexec.
@@ -58,6 +68,53 @@ You can also build a **multi-distro image** that switches between Ubuntu, Arch a
 ## Download a pre-built image
 
 Download an image from the [ps5-linux-image releases](https://github.com/ps5-linux/ps5-linux-image/releases/tag/latest). Pick the `.img.xz` file for your distro and decompress it.
+
+## Community images (mia's builds)
+
+These come from [mia's fork of ps5-linux-image](https://git.etawen.dev/mia/ps5-linux-image). They all use the same `linux-ps5` kernel and firmware setup, and they grow the root partition to fill the drive on the first boot. The links always point to the latest build. Sizes are compressed.
+
+**Debian-based:**
+
+| Image | Size | Notes |
+| --- | --- | --- |
+| [ps5-ubuntu2604.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-ubuntu2604.img.xz) | 1.7 GB | Ubuntu 26.04, GNOME |
+| [ps5-mint22-cinnamon.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-mint22-cinnamon.img.xz) | 1.8 GB | Linux Mint 22, Cinnamon (Ubuntu 24.04 base) |
+| [ps5-debian13-server.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-debian13-server.img.xz) | 683 MB | Debian 13 (Trixie), server profile with no desktop |
+| [ps5-debian13-xfce.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-debian13-xfce.img.xz) | 924 MB | Debian 13, Xfce |
+| [ps5-debian13-gnome.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-debian13-gnome.img.xz) | 1.3 GB | Debian 13, GNOME |
+| [ps5-debian13-kde.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-debian13-kde.img.xz) | 1.5 GB | Debian 13, KDE Plasma |
+| [ps5-debian13-proxmox.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-debian13-proxmox.img.xz) | 1.0 GB | Debian 13 with Proxmox VE 9, for running VMs on the PS5 |
+| [ps5-devuan-sway.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-devuan-sway.img.xz) | 581 MB | Devuan (no systemd), Sway |
+
+**Arch-based:**
+
+| Image | Size | Notes |
+| --- | --- | --- |
+| [ps5-arch.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-arch.img.xz) | 1.2 GB | Plain Arch Linux |
+| [ps5-cachyos.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-cachyos.img.xz) | 1.7 GB | CachyOS (performance-tuned Arch), KDE |
+| [ps5-artix-openrc.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-artix-openrc.img.xz) | 1.7 GB | Artix Linux (no systemd), OpenRC |
+| [ps5-artix-runit.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-artix-runit.img.xz) | 1.7 GB | Artix Linux, runit |
+| [ps5-miaos.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-miaos.img.xz) | 1.6 GB | MiaOS: Arch with KDE, Steam and Gamescope, console mode by default |
+
+**Fedora-based:**
+
+| Image | Size | Notes |
+| --- | --- | --- |
+| [ps5-fedora-gnome.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-fedora-gnome.img.xz) | 1.0 GB | Fedora 44 Workstation (GNOME) |
+| [ps5-fedora-kde.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-fedora-kde.img.xz) | 1.3 GB | Fedora 44 Kinoite (KDE Plasma) |
+| [ps5-bazzite-deck.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-bazzite-deck.img.xz) | 5.1 GB | Bazzite with the Steam Deck interface. Not the same as [PS5 Bazzite Deck](/installation/bazzite-deck). |
+
+**Other:**
+
+| Image | Size | Notes |
+| --- | --- | --- |
+| [ps5-alpine.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-alpine.img.xz) | 814 MB | Alpine Linux (musl, OpenRC): small, server and command line |
+| [ps5-batocera.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-batocera.img.xz) | 3.0 GB | Batocera (retro emulation) |
+| [ps5-tinycore.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-tinycore.img.xz) | 53 MB | Tiny Core: minimal live image, useful for rescue and testing |
+
+To build one yourself, each distro has a `distros/<name>/` folder in the [repository](https://git.etawen.dev/mia/ps5-linux-image). Run `build_image.sh --distro <name>` on any x86_64 Linux host with Docker. The shared kernel is built by the separate [kernel builder](https://git.etawen.dev/mia/ps5-linux-image-kernel).
+
+To install or update the kernel on these images with your package manager, see [Package repository](/advanced/package-repository).
 
 ## Build your own image
 
@@ -111,6 +168,13 @@ The drive must be **64 GB or larger**. An external SSD is strongly recommended.
 ```bash
 # Find your drive first with lsblk (Linux) or diskutil list (macOS)
 sudo dd if=ps5-ubuntu2604.img of=/dev/sdX bs=4M status=progress conv=fsync
+```
+
+On Linux you can also flash a compressed `.img.xz` directly, without decompressing it first:
+
+```bash
+xzcat ps5-ubuntu2604.img.xz | sudo dd of=/dev/sdX bs=4M status=progress conv=fsync
+sync
 ```
 
 :::danger
