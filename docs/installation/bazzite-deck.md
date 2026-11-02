@@ -15,7 +15,7 @@ It runs from a USB drive (or the M.2 slot) and is started by the Linux loader, l
 - **Support the project:** [Ko-fi](https://ko-fi.com/vivalavent)
 
 :::tip[Which version?]
-Use the release marked **Latest**. Releases marked **Pre-release** are test builds, even when their version number is higher.
+Use the release marked **Latest**, v2.0.1 at the time of writing (2 November 2026). Releases marked **Pre-release** are test builds, even when their version number is higher. v2.0.1 is a quick package (kernel, Bluetooth driver and scripts) on top of v2.0.0: a console on an older version updates to v2.0.0 first, with the command in that release's notes.
 :::
 
 ## What works on your console
@@ -27,20 +27,20 @@ One image runs on every supported PS5. What you get depends on three parts of th
 | Feature | FLAVA3 (most consoles) | VERDE (some later models) | Notes |
 | --- | :---: | :---: | --- |
 | 1440p at 120 Hz | ✅ | ❌ | |
-| 4K at 120 Hz | ✅ | ❌ | v1.7.2+, needs an HDMI 2.1 TV and cable. From v1.8.5 only offered when the TV can take it, and falls back to 4K60 by itself if the link fails. |
+| 4K at 120 Hz | ✅ | ❌ | Needs an HDMI 2.1 TV and cable. Only offered when the TV can take it, and falls back to 4K60 by itself if the link fails. |
 | HDR (1080p60, 4K60) | ✅ | ❌ | Game Mode → Settings → Display |
-| VRR (displays with HDMI VRR) | ✅ | ❌ | v1.7.1+, at every resolution: Game Mode → Settings → Display → Enable VRR. Like on the PS5 OS, not on monitors that only have FreeSync (from v1.8.6). |
+| VRR (displays with HDMI VRR) | ✅ | ❌ | At every resolution: Game Mode → Settings → Display → Enable VRR. Like on the PS5 OS, not on monitors that only have FreeSync. TVs that announce no VRR maximum (a Panasonic OLED) work again since v2.0.1. |
 
 Both chips support 1080p60, 1080p120, 1440p60 and 4K60, when the display can do them. Other resolutions (ultrawide, other refresh rates) are not offered: the HDMI chip only has setups for these.
 
 **By Wi-Fi/Bluetooth chip:**
 
-| Feature | IW620 | MediaTek | Notes |
-| --- | :---: | :---: | --- |
-| One DualSense for the PS5 and Linux | ✅ | ✅ | On by default from v1.8.9, see [DualSense](/using-linux/dualsense#one-dualsense-for-the-ps5-and-linux) |
-| Wi-Fi after restarting straight into Linux (`ps5-warm-reboot on`) | ⚠️ | ✅ | IW620: repaired automatically. If Wi-Fi is still missing, power off and run the loader. |
+| Feature | IW620 | MediaTek (Slim) | MediaTek (Pro) | Notes |
+| --- | :---: | :---: | :---: | --- |
+| One DualSense for the PS5 and Linux | ✅ | ✅ | ✅ | On by default, see [DualSense](/using-linux/dualsense#one-dualsense-for-the-ps5-and-linux). Pro since v2.0.1. |
+| Wi-Fi after restarting straight into Linux (`ps5-warm-reboot on`) | ⚠️ | ✅ | ✅ | IW620: repaired automatically. If Wi-Fi is still missing, power off and run the loader. |
 
-**PS5 Pro:** supported from v1.8.4 as a first version (GPU with its own firmware, Wi-Fi and Bluetooth). After the very first start, start Linux with the loader once more: the second start uses the Pro's GPU firmware. Reports are welcome in `#bazzite-ps5-pro-tests`.
+**PS5 Pro:** a first version (GPU with 60 compute units and its own firmware, Wi-Fi, Bluetooth from a cold boot and GPU load in overlays since v2.0.1). It needs a loader that dumps the Pro's GPU firmware to the boot partition: the official [ps5-linux-loader](https://github.com/ps5-linux/ps5-linux-loader) built from `main` on 2 November 2026 or later, on system software 13.20, 13.60 or 11.60; earlier releases and rmux's fork (v3.5 and older) don't, and the GPU then runs as a base PS5 with 36 compute units (`journalctl -u ps5-stage-viola-fw` says so). After the very first start, start Linux with the loader once more: the second start uses the Pro's GPU firmware. Not supported on the Pro: the 40 CU unlock. Details on [PS5 Pro](/hardware/ps5-pro); reports are welcome in `#bazzite-ps5-pro-tests`.
 
 ## Prerequisites
 
@@ -79,7 +79,7 @@ Already installed? Each release's notes explain how to update.
 | Command | What it does |
 | --- | --- |
 | `ps5-report` | Collects your hardware details and the relevant logs into one file for a bug report. It only reads. |
-| `ps5-perf` | CPU boost and fan target |
+| `ps5-perf` | CPU boost and the fan target (the console's firmware control, 80 °C by default). `ps5-perf status` shows the fan mode and speed, see [Fan control](/hardware/fan). |
 | `ps5-warm-reboot` | Restarts straight back into Linux, without the PS5 OS and the loader. Experimental, `on`/`off`. |
 | `ps5-bt-address` | One DualSense for the PS5 and Linux, on by default. `status`, `on`, `off`. |
 
@@ -91,8 +91,8 @@ Already installed? Each release's notes explain how to update.
 | --- | --- | --- |
 | `amdgpu.force_1080p=1` | Only allows 1080p60 | A black or garbled picture you can't get past, for example after choosing a resolution your display can't show. Remove it once you've set a working resolution, see [Display recovery](/troubleshooting/display-recovery). |
 | `usb-storage.quirks=xxxx:yyyy:u` | Turns off UAS for one USB drive (`xxxx:yyyy` from `lsusb`) | USB-C SSDs or enclosures that disconnect, freeze or show I/O errors (many have buggy UAS) |
-| `usbc_dp.enable=1` | Turns on DisplayPort output on the front USB-C port (v1.6.1+) | USB-C displays and the PS VR2. Not when your boot drive is in the front USB-C port. |
-| `hdmi.frl_4k120=0` | Never offers 4K at 120 Hz (v1.7.2+) | A TV where 4K120 misbehaves |
+| `usbc_dp.enable=1` | Turns on DisplayPort output on the front USB-C port | USB-C displays and the PS VR2. Not when your boot drive is in the front USB-C port. |
+| `hdmi.frl_4k120=0` | Never offers 4K at 120 Hz | A TV where 4K120 misbehaves |
 
 To turn off VRR, use Steam's setting (Settings → Display). To stop the TV from turning on with the console, turn off HDMI-CEC in the TV's settings (SIMPLINK, Anynet+, BRAVIA Sync…).
 
@@ -160,7 +160,7 @@ These are community-made and not part of the image. They need [Decky Loader](htt
 
 | Plugin | What it does |
 | --- | --- |
-| [PS5 hardware control](https://github.com/NotHavocc/ps5-hwcon-plugin) | Fan target, live temperatures, CPU and GPU governors and clocks, LED presets. It sets the same things as `ps5-perf`: whichever was set last applies. There is also a desktop version, [ps5-hwcon-gui](https://github.com/NotHavocc/ps5-hwcon-gui). |
+| [PS5 hardware control](https://github.com/NotHavocc/ps5-hwcon-plugin) | Fan target or curve, live temperatures, CPU and GPU governors and clocks, LED presets. It sets the same things as `ps5-perf`: whichever was set last applies. Needs v2.0.1 or v1.8.x for the fan (v2.0.0 had the fan modes swapped). There is also a desktop version, [ps5-hwcon-gui](https://github.com/NotHavocc/ps5-hwcon-gui). |
 | [PS5 Bazzite Updater](https://github.com/cmartinespinosa/decky-ps5-bazzite-updater) | Shows when a new release is out with its notes, installs it (the same update as in the release notes) and then powers off. Unofficial; full releases only. |
 
 ## Troubleshooting
@@ -176,13 +176,13 @@ E=$(for d in /boot/efi /efi; do sudo test -f $d/cmdline.txt && echo $d && break;
 - **Black screen, but the PS5 is running:** press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F2</kbd>, wait 2–3 seconds, then <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F1</kbd>. Over SSH: `sudo chvt 2; sleep 3; sudo chvt 1`.
 - **It boots back into the PS5 menu:** you pressed the power button before the orange light stopped blinking, or USB power in rest mode isn't set to **Always**.
 - **Artefacts, green dots or crashes:** turn the [40 CU unlock](/hardware/gpu#40-cu-unlock) off again. For glitches in a single game, use the launch option `RADV_DEBUG=nohiz %command%`.
-- **VRR:** no "Enable VRR" option means a VERDE console, a display without HDMI VRR (FreeSync-only monitors), or VRR turned off for that input on the TV. If the screen goes dark for 2 seconds in menus, use VRR per game instead (quick access menu → Performance). OLED flicker on the desktop: set Adaptive Sync to **Automatic**, not Always.
+- **VRR:** no "Enable VRR" option means a VERDE console, a display without HDMI VRR (FreeSync-only monitors), VRR turned off for that input on the TV, or a version before v2.0.1 with a TV that announces no VRR maximum (update). If the screen goes dark for 2 seconds in menus, use VRR per game instead (quick access menu → Performance). OLED flicker on the desktop: set Adaptive Sync to **Automatic**, not Always.
 - **HEVC video with broken colours or a red screen** (recording, streaming with Sunshine or Moonlight): the PS5's video engine gets HEVC P-frames wrong. Use **H.264**, or encode HEVC with I-frames only (see [VCN](/hardware/vcn#using-it-with-ffmpeg)). As a Moonlight client: use H.264, or "Force software decoding" for HEVC.
 - **Won't boot from an SSD in a USB enclosure:** some enclosures don't work with the loader. Try another one.
 
 ## How it works
 
-Bazzite's Game Mode never worked on the PS5 before, and it wasn't the display or Gamescope. Bazzite starts Steam through the `cardwired` service, which loads an eBPF program and needs two kernel features that the PS5 kernel configs don't enable: the **BPF LSM** (`bpf` must be in `CONFIG_LSM`) and **kernel BTF** (`CONFIG_DEBUG_INFO_BTF`). Without them, `cardwired` crash-loops and Bazzite drops you to the desktop after five attempts. See [Kernel setup](/advanced/kernel#building-a-kernel-for-bazzite-game-mode) for details.
+Bazzite's Game Mode never worked on the PS5 before, and it wasn't the display or Gamescope. Bazzite starts Steam through the `cardwired` service, which loads an eBPF program and needs two kernel features that the PS5 kernel configs don't enable: the **BPF LSM** (`bpf` must be in `CONFIG_LSM`) and **kernel BTF** (`CONFIG_DEBUG_INFO_BTF`). Without them, `cardwired` crash-loops and Bazzite drops you to the desktop after five attempts. See [Kernel setup](/advanced/kernel#build-a-kernel-for-bazzite-game-mode) for details.
 
 The image is built on the [ps5-linux-image](https://github.com/ps5-linux/ps5-linux-image) builder with Linux 7.3 and rmuxnet's 7.3 PS5 patches, plus its own HDMI, Wi-Fi and Bluetooth fixes. The config changes, the patch order and what each patch does are on [How the PS5 Bazzite Deck image is built](/advanced/image-build). Each release ships a `VERSIONS.md` with the exact versions used. To build it yourself (Linux or WSL with Docker and about 60 GB free; it takes a couple of hours):
 

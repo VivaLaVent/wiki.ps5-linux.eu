@@ -24,9 +24,34 @@ options amdgpu dpm=0 gpu_recovery=0
 Ports without this file (seen on a work-in-progress Fedora build) end up with no video or a black screen. If you are porting a new distro or building one from scratch, add this file before chasing any other display problem.
 :::
 
-## Boost
+## Clocks and boost
 
-By default, the GPU clock is lower than in the PS5 OS. Use `ps5_control` from [ps5-linux-tools](https://github.com/ps5-linux/ps5-linux-tools) to unlock full speed:
+The firmware starts the CPU at 3.2 GHz and the GPU below the PS5 OS's 2.23 GHz. How you get the full clocks depends on the kernel, see [Kernel setup](/advanced/kernel):
+
+| Kernel | CPU and GPU clocks | What to do |
+| --- | --- | --- |
+| [rmuxnet 7.3.1](/advanced/kernel#install-the-731-pinksoup-release) | `ps5-cpufreq` and `ps5-gpufreq` scale them with the load. | Nothing for the GPU. CPU boost (3.3 to 3.5 GHz) is off until you turn it on, below. |
+| PS5 Bazzite Deck | Upstream #66's GPU governor, CPU boost through `ps5-perf`. | On by default. |
+| Upstream 7.2.3 (packages from 1 November 2026) | Upstream #66's GPU governor (`ps5_gpufreq.temp_limit`, see [PS5 Pro](./ps5-pro.md#gpu-driver)); the CPU stays at 3.2 GHz until `ps5_control --boost on`. | Install [ps5-linux-tools](https://github.com/ps5-linux/ps5-linux-tools), below. |
+| Older upstream kernels | Fixed at the firmware's clocks until `ps5_control --boost on`. | Install [ps5-linux-tools](https://github.com/ps5-linux/ps5-linux-tools), below. |
+
+### rmuxnet 7.3.1: cpufreq and devfreq
+
+`ps5-cpufreq` drives the CPU P-states (800 MHz to 3.2 GHz, `schedutil` governor) through the SMU. The three boost states are off at boot. Turn them on:
+
+```bash
+echo 1 | sudo tee /sys/devices/system/cpu/cpufreq/boost
+```
+
+`ps5-gpufreq` is a devfreq driver at `/sys/class/devfreq/ps5-gpufreq/` with the `simple_ondemand` governor: 400 to 2,230 MHz on the original PS5 and the Slim, 500 to 2,350 MHz on the PS5 Pro, in 400 MHz steps up to 2,000 MHz and then the maximum. `cur_freq` shows the clock; `min_freq` and `max_freq` pin it, and `governor` set to `performance` holds the maximum.
+
+:::warning[Don't use ps5_control --boost on this kernel]
+The drivers already own the clocks. `ps5_control --boost on` pins them at maximum until a full restart and doesn't improve frame rates. Use the cpufreq `boost` switch above instead.
+:::
+
+### Older kernels: ps5-linux-tools
+
+Use `ps5_control` from [ps5-linux-tools](https://github.com/ps5-linux/ps5-linux-tools) to unlock full speed:
 
 ```bash
 cd ps5-linux-tools
@@ -34,9 +59,7 @@ sudo ./ps5_control --fan on
 sudo ./ps5_control --boost on
 ```
 
-Always turn the fan on together with boost; this matches how the PS5 OS behaves.
-
-For heavier loads, or if you want to sustain higher boost clocks, `--fan max` runs the fan harder than `on`:
+Always turn the fan on together with boost; this matches how the PS5 OS behaves. For heavier loads, or if you want to sustain higher boost clocks, `--fan max` runs the fan harder than `on`:
 
 ```bash
 sudo ./ps5_control --fan max
@@ -48,15 +71,7 @@ To apply both at every boot:
 sudo ./install.sh
 ```
 
-This installs `ps5fan.service` and `ps5boost.service` as systemd units.
-
-:::warning[PinkSoup kernel: don't use boost]
-If you use rmux's PinkSoup kernel, don't enable boost mode. It locks the clocks at maximum (you need a full restart to get dynamic clocks back), and it doesn't improve frame rates or performance.
-:::
-
-:::tip
-Recent kernels control the fan automatically based on the APU temperature. See [Fan control](./fan.md).
-:::
+This installs `ps5fan.service` and `ps5boost.service` as systemd units. On a kernel with the fan curve (see [Fan control](./fan.md)) `--fan` isn't needed.
 
 ## 40 CU unlock
 

@@ -51,5 +51,5 @@ Measured after the fix:
 - Cold boot works
 
 :::note[In release 7.2.3 and later]
-The fix is in the prebuilt kernel release **7.2.3** (1 November 2026) and later, see [Kernel setup](/advanced/kernel). On an older release kernel, update, or use a USB adapter for full gigabit speed.
+The fix is in the prebuilt kernel release **7.2.3** (1 November 2026) and later, in rmuxnet's 7.3.1 release and in PS5 Bazzite Deck, see [Kernel setup](/advanced/kernel). On an older release kernel, update, or use a USB adapter for full gigabit speed.
 :::

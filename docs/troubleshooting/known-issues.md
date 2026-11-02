@@ -17,12 +17,12 @@ description: Current known issues with PS5 Linux and answers to frequently asked
 | No HDMI audio on some monitors | Open, see [Audio](/using-linux/audio) |
 | 1440p/2160p display problems on some monitors | Open, see [Display output](/using-linux/display) |
 | CachyOS doesn't boot (kernel panic) | Reported on Discord, no tracked issue; use Ubuntu, Arch or PS5 Bazzite Deck |
-| MediaTek Wi-Fi/Bluetooth (most Slims, PS5 Pro) | Drivers in kernel 7.2.3 and later; the Slim's Bluetooth needs a [btusb patch](/using-linux/bluetooth#mediatek-on-the-slim), included by default in PS5 Bazzite Deck |
+| MediaTek Wi-Fi/Bluetooth (most Slims, PS5 Pro) | Wi-Fi drivers in kernel 7.2.3 and later (the Slim's since 30 October 2026); the Bluetooth needs [btusb fixes](/using-linux/bluetooth), in rmuxnet's 7.3.1 kernel and PS5 Bazzite Deck |
 | No picture after choosing a display mode | See [Display recovery](/troubleshooting/display-recovery) |
 | Kernel update on M.2 causes a black screen | Reported on Discord, no tracked issue; workaround: stay on 7.0.10 |
 | Audio plays through the controller instead of HDMI | [Workaround available](/using-linux/audio#audio-plays-through-the-controller-instead-of-hdmi) |
 | Black screen after boot or after a mode change, Linux still running | [Lock the display link](/troubleshooting/display-link-lock) |
-| Bluetooth missing (`hci0` absent, `Host halt failed, -110`) | Kernels built between 5 Sep and 27 Oct 2026; update to 7.2.3, see [Bluetooth troubleshooting](/using-linux/dualsense#bluetooth-troubleshooting) |
+| Bluetooth missing (`hci0` absent, `Host halt failed, -110`) | Kernels built from upstream between 5 Sep and 27 Oct 2026; update to 7.2.3 or newer, see [Bluetooth troubleshooting](/using-linux/dualsense#bluetooth-troubleshooting) |
 | DualSense pairs but won't reconnect | [Make the adapter connectable](/using-linux/dualsense#dualsense-pairs-once-but-wont-reconnect) |
 | Sysctl or module settings not applied after boot | [Systemd ordering cycle](/troubleshooting/modules-not-loading) |
 | Switching from Gaming Mode to the desktop kills HDMI | [Choose the session before booting](/using-linux/boot-to-desktop) |
@@ -64,7 +64,7 @@ A black screen on the first boot is common, and Linux is usually running. Switch
 
 ### Why are my fan and boost off?
 
-They are not on by default. Install `ps5-linux-tools` and enable the fan and boost services, see [Fan](/hardware/fan) and [GPU boost](/hardware/gpu#boost).
+On upstream's kernels the CPU boost is off until you install `ps5-linux-tools` and enable `ps5boost.service` (older kernels also need `ps5fan.service`; since the 7.2.3 packages of 28 October 2026 the fan follows a curve by itself). On rmuxnet's 7.3.1 kernel the fan curve and the GPU clock are automatic and the CPU boost is a sysfs switch; on PS5 Bazzite Deck both are on. See [Fan control](/hardware/fan) and [Clocks and boost](/hardware/gpu#clocks-and-boost).
 
 ### Will newer firmware be supported?
 

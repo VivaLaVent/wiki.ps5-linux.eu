@@ -11,7 +11,7 @@ The GPU does not drive the HDMI port directly. It sends DisplayPort to a separat
 **Credits:** Lawson (VRR fix, 4K120 port of Sony's setup), hsgodd (stock-system captures), Slip (4K120 detection and fallback, upstream #63).
 
 :::info[Patch base]
-The patches linked on this page apply to Linux v7.3 plus [rmuxnet/ps5-linux-patches-1](https://github.com/rmuxnet/ps5-linux-patches-1) `meower` at commit `baee34d`, in the order of the PS5 Bazzite Deck [`build.sh`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.0/build.sh). Several of them have since been merged into `ps5-linux/ps5-linux-patches`, see [Kernel setup](/advanced/kernel#recently-merged-and-still-pending).
+The patches linked on this page apply to Linux v7.3 plus [rmuxnet/ps5-linux-patches-1](https://github.com/rmuxnet/ps5-linux-patches-1) `meower` at commit `baee34d`, in the order of the PS5 Bazzite Deck [`build.sh`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/build.sh). HDR, CEC, hotplug, 4K120 over FRL with its fallback and ALLM are in `ps5-linux/ps5-linux-patches` (7.2.3) and in rmuxnet's 7.3.1 kernel; the VRR, mode, RGB range and link lock patches are PS5 Bazzite Deck only, see [Kernel setup](/advanced/kernel#what-is-where).
 :::
 
 ## The two HDMI chips
@@ -31,7 +31,7 @@ sudo dmesg | grep "HDMI IC Type"
 
 The chip has no general-purpose mode set. For each resolution it has a fixed setup: a mode index written to registers `0x7227` and `0x7070`, a PHY configuration and a block of InfoFrame registers. The kernel replays Sony's setup for the mode the compositor asked for. A mode the chip has no setup for cannot be output, whatever the GPU or the display can do.
 
-The GPU feeds the chip over an internal DisplayPort link of four lanes at HBR3. That link is wide enough for every mode below, but the driver used to train it at the lowest rate a mode needs, and the chip sometimes failed to sync at those lower rates. [`ps5-hdmi-link-lock.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.0/patches/ps5-hdmi-link-lock.patch) trains it at the full rate for every mode; the same idea by hand is on [Lock the display link](/troubleshooting/display-link-lock).
+The GPU feeds the chip over an internal DisplayPort link of four lanes at HBR3. That link is wide enough for every mode below, but the driver used to train it at the lowest rate a mode needs, and the chip sometimes failed to sync at those lower rates. [`ps5-hdmi-link-lock.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/patches/ps5-hdmi-link-lock.patch) trains it at the full rate for every mode; the same idea by hand is on [Lock the display link](/troubleshooting/display-link-lock).
 
 | Mode | Timing the chip expects | FLAVA3 | VERDE | Status |
 | --- | --- | --- | --- | --- |
@@ -44,7 +44,7 @@ The GPU feeds the chip over an internal DisplayPort link of four lanes at HBR3. 
 | 1080p100, 1440p100, 4K100 | VIC 64, CVT-RB, VIC 117 (index `0x0a`) | ⚠️ | ❌ | Not tested: offered as an experiment only |
 | 165 Hz, ultrawide, anything else | | ❌ | ❌ | Known not to work: no setup in the chip |
 
-[`ps5-hdmi-modes.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.0/patches/ps5-hdmi-modes.patch) offers these modes whenever the display's limits allow them, even if its EDID doesn't list them, drops the display's own 1440p variants (the chip only accepts the timing above), marks 1080p60 as preferred so a new display starts there, and skips modes a display accepts only as YCbCr 4:2:0. It also gives both 1440p syncs the standard polarity and shape on FLAVA3, because the chip shifts the picture by the pulse width when a polarity differs. [`ps5-hdmi-100hz-test.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.0/patches/ps5-hdmi-100hz-test.patch) adds the 100 Hz modes.
+[`ps5-hdmi-modes.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/patches/ps5-hdmi-modes.patch) offers these modes whenever the display's limits allow them, even if its EDID doesn't list them, drops the display's own 1440p variants (the chip only accepts the timing above), marks 1080p60 as preferred so a new display starts there, and skips modes a display accepts only as YCbCr 4:2:0. It also gives both 1440p syncs the standard polarity and shape on FLAVA3, because the chip shifts the picture by the pulse width when a polarity differs. [`ps5-hdmi-100hz-test.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/patches/ps5-hdmi-100hz-test.patch) adds the 100 Hz modes.
 
 ## VRR on FLAVA3
 
@@ -60,8 +60,9 @@ Two more rules come from testing:
 
 - **HDMI VRR only.** The chip's follow mode is HDMI VRR. A monitor that announces only AMD FreeSync (no VRR range in its HDMI Forum block) resynced and blanked at every refresh change, so such displays are not offered VRR, the same as on the PS5 OS. The log says why.
 - **48 Hz floor.** TVs often announce 40 Hz as their minimum, where OLEDs flicker visibly. The range used never goes below 48 Hz, the PS5 OS's own floor: below it, frames are doubled at 120 Hz modes, and 60 Hz modes keep a fixed 60 Hz. A TV with a higher minimum keeps it.
+- **An open-ended maximum counts as HDMI VRR.** Some TVs (a Panasonic OLED) announce HDMI VRR with a minimum of 48 Hz and `VRRmax` 0, which the HDMI spec defines as "up to the highest refresh rate". v1.8.6 to v2.0.0 read that as no HDMI VRR and refused it; since PS5 Bazzite Deck 2.0.1 the maximum is taken from the FreeSync range, or 120 Hz. The range is also read from the HF-SCDB block that newer TVs use instead of the VSDB. The log says why a display is or isn't offered VRR.
 
-Sources: [`ps5-vrr.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.0/patches/ps5-vrr.patch), [`ps5-vrr-stock-setup.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.0/patches/ps5-vrr-stock-setup.patch) (the chip only follows when every setup includes Sony's full PHY tail and VSync block), [`ps5-vrr-min-48.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.0/patches/ps5-vrr-min-48.patch), [`ps5-vrr-hdmi-only.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.0/patches/ps5-vrr-hdmi-only.patch), [`ps5-vrr-follow-guard.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.0/patches/ps5-vrr-follow-guard.patch).
+Sources: [`ps5-vrr.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/patches/ps5-vrr.patch), [`ps5-vrr-stock-setup.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/patches/ps5-vrr-stock-setup.patch) (the chip only follows when every setup includes Sony's full PHY tail and VSync block), [`ps5-vrr-min-48.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/patches/ps5-vrr-min-48.patch), [`ps5-vrr-hdmi-only.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/patches/ps5-vrr-hdmi-only.patch), [`ps5-vrr-follow-guard.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/patches/ps5-vrr-follow-guard.patch), [`ps5-vrr-hdmi-range.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/patches/ps5-vrr-hdmi-range.patch).
 
 :::tip[PS5 Bazzite Deck]
 Steam's VRR setting switches it. From a shell: `gamescopectl adaptive_sync 0` (or `1`) after exporting `XDG_RUNTIME_DIR` and `GAMESCOPE_WAYLAND_DISPLAY=gamescope-0`, see [Display recovery](/troubleshooting/display-recovery).
@@ -85,7 +86,7 @@ Because a TV that can't take the link was left black at every boot, there is a g
 
 **A stuck TV:** after a failed 4K120 attempt some TVs stay dark at every mode. Unplug the TV's power for a minute (standby isn't enough), then start the console again. `hdmi.frl_4k120=0` in `cmdline.txt` stops 4K120 from being offered at all.
 
-Sources: [`ps5-hdmi-frl-4k120.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.0/patches/ps5-hdmi-frl-4k120.patch), [`ps5-hdmi-4k120-guard.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.0/patches/ps5-hdmi-4k120-guard.patch).
+Sources: [`ps5-hdmi-frl-4k120.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/patches/ps5-hdmi-frl-4k120.patch), [`ps5-hdmi-4k120-guard.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/patches/ps5-hdmi-4k120-guard.patch).
 
 ## SCDC and TVs that drop to HDMI 1.4 modes
 
@@ -93,26 +94,46 @@ Some TVs announce their HDMI 2.1 EDID at boot and then, a few seconds after the 
 
 | Patch | Writes | Status |
 | --- | --- | --- |
-| [`ps5-hdmi-scdc-source-version.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.0/patches/ps5-hdmi-scdc-source-version.patch) | SCDC Source Version = 1, through the chip's DDC write descriptor at `0x7a80` | Confirmed on the TV that reported it |
-| [`ps5-hdmi-scdc-tmds-config.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.0/patches/ps5-hdmi-scdc-tmds-config.patch) | SCDC `TMDS_Config` at every setup, `0x00` when not scrambling, as a PC driver does | Not tested: the reporter hasn't confirmed it |
+| [`ps5-hdmi-scdc-source-version.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/patches/ps5-hdmi-scdc-source-version.patch) | SCDC Source Version = 1, through the chip's DDC write descriptor at `0x7a80` | Confirmed on the TV that reported it |
+| [`ps5-hdmi-scdc-tmds-config.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/patches/ps5-hdmi-scdc-tmds-config.patch) | SCDC `TMDS_Config` at every setup, `0x00` when not scrambling, as a PC driver does | Not tested: the reporter hasn't confirmed it |
 
 ## RGB range
 
 The GPU sends full-range RGB on the internal link, but the AVI InfoFrame's quantization field (PB3 bits Q1:Q0, chip register `0x7226` bits 3:2) stayed "default". TVs read "default" as limited for TV timings (1080p, 4K60) and as full for PC timings (1440p), so 1080p had crushed blacks while 1440p looked right. The driver now sends "full" explicitly for RGB output.
 
-CTA-861 codes the field as 0 default, 1 limited, 2 full. A first version wrote the parameter value itself, so "1 = full" went out as limited and every resolution was too dark on TVs set to Auto. [`ps5-hdmi-rgb-range-encoding.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.0/patches/ps5-hdmi-rgb-range-encoding.patch) maps the parameter to the right codes. Confirmed on an LG C4.
+CTA-861 codes the field as 0 default, 1 limited, 2 full. A first version wrote the parameter value itself, so "1 = full" went out as limited and every resolution was too dark on TVs set to Auto. [`ps5-hdmi-rgb-range-encoding.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/patches/ps5-hdmi-rgb-range-encoding.patch) maps the parameter to the right codes. Confirmed on an LG C4.
 
 `hdmi.rgb_range=1` is full (default), `2` limited, `0` sends no flag and lets the TV decide. VERDE consoles already declare full range and don't need this.
 
 ## Kernel parameters
 
+In every current kernel (upstream `main`, rmuxnet 7.3.1, PS5 Bazzite Deck):
+
 | Parameter | What it does |
 | --- | --- |
+| `amdgpu.force_1080p=1` | Only allows 1080p60. A safe mode to get a picture back, see [Display recovery](/troubleshooting/display-recovery). |
 | `hdmi.frl_4k120=0` | Never offers 4K at 120 Hz. For a TV where 4K120 misbehaves. |
+| `ps5_cec.one_touch_play=0` | Don't turn the TV on and switch it to the console at boot. |
+| `usbc_dp.enable=1` | DisplayPort output on the front USB-C port, for USB-C displays and the PS VR2. Off by default because programming the port's policy can reset a boot drive plugged in there. |
+
+Upstream `main` and rmuxnet 7.3.1 (Slip's native FRL work, #63 and #67; not in PS5 Bazzite Deck 2.0.1, which has its own 4K120 path):
+
+| Parameter | What it does |
+| --- | --- |
+| `hdmi.frl_yuv420=<0,1,2>` | 4:2:0 over native FRL: 0 off, 1 as a fallback (default), 2 preferred when the mode permits it. |
+| `hdmi.frl_recovery=0` | Turns off the bounded retries after a failed FRL link. |
+| `hdmi.allm=<0,1,2>` | Auto low latency mode on FLAVA3 for TVs that support it: 0 off, 1 while the content type is Game (default), 2 always. |
+| `hdmi.hdcp_mode=<n>` | HDCP on the HDMI output, applied at the next mode set: 0 on, 1 off, 2 on with HDCP 2.2, 3 off with the HDCP 2.2 bit set (default), -1 keep. |
+| `hdmi.extended_modes=<0,1,2>` | The modes the chip has setups for but the EDID doesn't list: 0 off, 1 offered (default), 2 offered and preferred. |
+
+Read-only state in `/sys/module/hdmi/parameters/`: `frl_rate` and `frl_rate_max` (the chip's FRL rates), `frl_failed` (write `N` to try FRL again on this display), `allm_sink`, `allm_active` and `recovery_status`.
+
+PS5 Bazzite Deck only:
+
+| Parameter | What it does |
+| --- | --- |
 | `hdmi.vrr=0` | Never offers VRR. |
 | `hdmi.rgb_range=<0,1,2>` | AVI RGB quantization flag: 1 full (default), 2 limited, 0 none. |
-| `amdgpu.force_1080p=1` | Only allows 1080p60. A safe mode to get a picture back, see [Display recovery](/troubleshooting/display-recovery). |
-| `usbc_dp.enable=1` | DisplayPort output on the front USB-C port, for USB-C displays and the PS VR2. Off by default because programming the port's policy can reset a boot drive plugged in there. |
 | `hdmi.icc_trace=1` | Logs every message to the chip and its reply. Debugging only, very noisy. |
 | `hdmi.vrr_measure=1` | Logs the measured frame intervals every 2 seconds while VRR is on. Debugging only. |
 

@@ -16,7 +16,7 @@ There are two ways to run Linux on a PS5, and the choice decides how much of thi
 | Problem on a general image | On PS5 Bazzite Deck |
 | --- | --- |
 | Internal Wi-Fi needs a driver install, and again after every kernel update | Built in, for the Marvell IW620 and the MediaTek chips on the Slim and the Pro |
-| Fan and CPU/GPU boost are off until you install `ps5-linux-tools` | On by default (`ps5-perf`) |
+| CPU boost is off until you install `ps5-linux-tools` (upstream kernels) | On by default (`ps5-perf`) |
 | DualSense pairs once and then won't reconnect | Fixed, and one controller keeps separate pairings for the PS5 OS and Linux |
 | Black screens from the internal display link | Link locked at full rate at every boot |
 | 1440p120, 4K120, HDR, VRR, HDMI CEC | Working on FLAVA3 consoles |

@@ -20,15 +20,15 @@ Linux runs on the original PS5, the PS5 Slim and the PS5 Pro. Within those model
 On [PS5 Bazzite Deck](/installation/bazzite-deck), `ps5-report` shows all three on its first lines.
 
 - **HDMI chip:** VERDE consoles don't get 1440p at 120 Hz, 4K at 120 Hz, HDR or VRR. How the chip works and why is on [HDMI chip](./hdmi.md); the feature table is on [PS5 Bazzite Deck](/installation/bazzite-deck#what-works-on-your-console).
-- **Wi-Fi/Bluetooth chip:** the IW620 uses the out-of-tree `mwifiex` port, see [Wi-Fi](/using-linux/networking/wifi). The MediaTek chips use the in-kernel `mt7921e` and `mt7925e` drivers, built by the official config since kernel release 7.2.3; the Slim's Bluetooth also needs an endpoint fix, see [Bluetooth](/using-linux/bluetooth#mediatek-on-the-slim), which PS5 Bazzite Deck includes by default.
-- **PS5 Pro:** supported by the official loader from firmware 11.00 (see [Which loader](/installation/booting#which-loader)). Its GPU (`1002:13da`, "Viola") needs its own firmware, which the loader dumps on 13.20 and 13.60 and the kernel package stages at boot. The GPU has 60 active compute units, so the [40 CU unlock](./gpu.md#40-cu-unlock) doesn't apply. Details on [PS5 Pro](./ps5-pro.md).
+- **Wi-Fi/Bluetooth chip:** the IW620 uses the out-of-tree `mwifiex` port, built into rmuxnet's 7.3.1 kernel and PS5 Bazzite Deck, see [Wi-Fi](/using-linux/networking/wifi). The MediaTek chips use the in-kernel `mt7925e` (Pro) and `mt7921e` (Slim, in the configs since 30 October 2026) drivers; their Bluetooth also needs fixes, see [Bluetooth](/using-linux/bluetooth), which rmuxnet's 7.3.1 kernel and PS5 Bazzite Deck include.
+- **PS5 Pro:** supported by the official loader from firmware 11.00 (see [Which loader](/installation/booting#which-loader)). Its GPU (`1002:13da`, "Viola") needs its own firmware, which only the official loader built from `main` (2 November 2026 or later) dumps, on 13.20, 13.60 and 11.60; the kernel package and PS5 Bazzite Deck stage it at boot. The GPU has 60 active compute units, so the [40 CU unlock](./gpu.md#40-cu-unlock) doesn't apply. Details on [PS5 Pro](./ps5-pro.md).
 
 ## SoC (original PS5 and Slim)
 
 The PS5 uses a custom **AMD Oberon** APU.
 
-- **CPU:** 8 cores / 16 threads, Zen 2 at 3.5 GHz (boost through `ps5_control`). Uses the `schedutil` cpufreq governor by default.
-- **GPU:** RDNA2, 36–40 active compute units (CUs) depending on the unit. Disabled CUs can be unlocked with a kernel parameter. PCI ID `1002:13fb`. Boosts to 2.23 GHz through `ps5_control`. See [GPU](./gpu.md).
+- **CPU:** 8 cores / 16 threads, Zen 2 at 3.2 GHz, 3.5 GHz with boost (`ps5-cpufreq` on rmuxnet's 7.3.1 kernel, `ps5_control` on older ones). Uses the `schedutil` cpufreq governor by default.
+- **GPU:** RDNA2, 36–40 active compute units (CUs) depending on the unit. Disabled CUs can be unlocked with a kernel parameter. PCI ID `1002:13fb`. Up to 2.23 GHz, see [Clocks and boost](./gpu.md#clocks-and-boost).
 - **RAM:** 16 GB of unified GDDR6. About 14 GB is usable by the OS; the rest is reserved by the firmware. VRAM comes out of that 14 GB, see [Memory, VRAM and swap](/using-linux/memory-and-swap).
 
 ## Storage
@@ -59,7 +59,7 @@ dmesg | grep spcie
 | Output | Revision | Wi-Fi/Bluetooth status |
 | --- | --- | --- |
 | `0x11xxxxx` | Salina rev1 (Marvell) | ✅ Supported |
-| `0x12xxxxx` | Salina rev2 (MediaTek on most units, but some rev2 boards are still Marvell) | ⚠️ Drivers in the official kernel since release 7.2.3; confirmed on PS5 Bazzite Deck |
+| `0x12xxxxx` | Salina rev2 (MediaTek on most units, but some rev2 boards are still Marvell) | ⚠️ Drivers in kernel 7.2.3 and later (the Slim's since 30 October 2026); confirmed on PS5 Bazzite Deck |
 
 ## Audio
 
@@ -72,7 +72,7 @@ dmesg | grep spcie
 - **USB-C (1 port, USB 3.1 Gen 2 with DisplayPort Alt Mode):** AMD Ariel `1022:13ed`
 - Original PS5: the **front USB-C** port and the **rear USB-A** ports are fast and good for booting.
 - PS5 Slim: boot from the **rear USB-A** ports.
-- **Front USB-C DisplayPort output:** off by default. PS5 Bazzite Deck can turn it on with `usbc_dp.enable=1` (v1.6.1+) for USB-C displays and the PS VR2; don't use this when your boot drive is in the front USB-C port.
+- **Front USB-C DisplayPort output:** off by default in every current kernel. Turn it on with `usbc_dp.enable=1` for USB-C displays and the PS VR2; don't use this when your boot drive is in the front USB-C port.
 
 See [USB and storage](./usb-storage.md) for port speeds, hubs and adapters.
 

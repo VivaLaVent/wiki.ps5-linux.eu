@@ -24,7 +24,7 @@ Use **Proton Experimental** (bleeding-edge branch) for the best compatibility. F
 
 ## Performance tips
 
-The basics (fan and boost on, 6 GB in `vram.txt`, the Wi-Fi driver) are in the [Post-install checklist](/installation/post-install). On top of those:
+The basics (fan and clocks checked, 6 GB in `vram.txt`, the Wi-Fi driver) are in the [Post-install checklist](/installation/post-install). On top of those:
 
 - **1800p is a sweet spot:** many games that struggle at 4K reach 90+ fps at 1800p.
 - **Remove `idle=halt`** from `cmdline.txt` if you notice micro-stuttering.

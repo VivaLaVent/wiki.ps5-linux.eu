@@ -1,7 +1,7 @@
 ---
 title: Kernel setup
 sidebar_position: 1
-description: Install or build the patched PS5 kernel, and the kernel parameters in cmdline.txt.
+description: Install or build the patched PS5 kernel, which patch set to use, and the kernel parameters in cmdline.txt.
 ---
 
 import Tabs from '@theme/Tabs';
@@ -9,65 +9,71 @@ import TabItem from '@theme/TabItem';
 
 # Kernel setup
 
-The ps5-linux project ships a patched kernel through [ps5-linux-patches](https://github.com/ps5-linux/ps5-linux-patches). Pre-built packages are available for Debian/Ubuntu (`.deb`), Arch-based distros (`.pkg.tar.zst`) and Fedora (`.rpm`). The newest release at the time of writing is **7.2.3** (1 November 2026).
+The PS5 kernel is stock Linux plus one patch file and a config. Two repositories carry it:
+
+| Repository | State (2 November 2026) | Get it as |
+| --- | --- | --- |
+| [rmuxnet/ps5-linux-patches-1](https://github.com/rmuxnet/ps5-linux-patches-1) | Linux **7.3.1**, release `7.3.1-PinkSoup` (2 November 2026). Nearly everything in upstream `main` plus CPU and GPU clock drivers for the base PS5 and the Pro, the Slim and Pro Bluetooth fixes, the IW620 Wi-Fi driver built in, `build.sh`. | A zip with `install.sh`, or `build.sh` on the PS5. |
+| [ps5-linux/ps5-linux-patches](https://github.com/ps5-linux/ps5-linux-patches) | Linux **7.2.3**. Every push to `main` becomes a packaged release; the newest is `kernel-7.2.3-fdc3eeb` (2 November 2026) with the fan curve, the HDMI work, the Pro GPU and VCN. | `.deb`, `.pkg.tar.zst` and `.rpm` packages, or the [package repository](/advanced/package-repository). |
+
+rmuxnet's repository is a fork of the official one and its work is merged upstream over time. Use it unless you need the package manager route; the two differ in the details listed under [What is where](#what-is-where). [PS5 Bazzite Deck](/installation/bazzite-deck) has its own kernel and update process, see its release notes.
 
 The loader always starts the kernel (`bzImage`) and initrd (`initrd.img`) from the FAT32 partition of the USB drive, labelled `boot` and usually mounted at `/boot/efi` (or `/efi` on Bazzite). Whatever way you install a kernel, it has to end up there.
-
-## Install a pre-built kernel
-
-The easiest way is the [package repository](/advanced/package-repository): it installs the kernel with your package manager, copies it to the boot partition for you, and keeps it up to date.
-
-Or download a package from the [ps5-linux-patches releases](https://github.com/ps5-linux/ps5-linux-patches/releases) and install it:
-
-<Tabs groupId="distro">
-<TabItem value="debian" label="Debian / Ubuntu" default>
-
-```bash
-sudo dpkg -i ps5-linux-*.deb
-```
-
-</TabItem>
-<TabItem value="arch" label="Arch Linux">
-
-```bash
-sudo pacman -U ps5-linux-*.pkg.tar.zst
-```
-
-</TabItem>
-</Tabs>
 
 :::warning[M.2 installs]
 Updating the kernel on an M.2 install can cause a black screen. Stay on **7.0.10** for now, see [Known issues](/troubleshooting/known-issues#kernel-update-breaks-m2-boot).
 :::
 
-## Build from source
+## Install the 7.3.1-PinkSoup release
 
-Build your own kernel to get fixes that aren't in a release yet, such as [hardware video (VCN)](/hardware/vcn) and the [Ethernet speed fix](/using-linux/networking/ethernet#slow-speed-high-cpu-use-and-no-ipv6-fixed).
+Download `ps5-linux-7.3.1-PinkSoup.zip` from the [releases](https://github.com/rmuxnet/ps5-linux-patches-1/releases) (about 45 MB) and run its installer on the PS5:
+
+```bash
+unzip ps5-linux-7.3.1-PinkSoup.zip
+cd ps5-linux-7.3.1-PinkSoup
+sudo ./install.sh
+```
+
+Then **cold boot** the PS5 (power off, start it, run the loader). The script:
+
+- copies the modules to `/lib/modules/7.3.1-PinkSoup` and the kernel to `/boot`,
+- builds the initrd with `mkinitcpio`, `update-initramfs` or `dracut`, whichever the distro has,
+- writes `/etc/modprobe.d/ps5-iw620.conf` for the Marvell IW620 Wi-Fi driver that comes with the kernel, and copies its firmware from the boot partition (`lib/nxp/pcieuartiw620_combo_v1.bin`) to `/lib/firmware/nxp/` when it is there, so the internal Wi-Fi works without [ps5-linux-mwifiex](/using-linux/networking/wifi),
+- finds the mounted partition that holds `bzImage` and asks you to confirm it (or pass the path: `sudo ./install.sh /boot/efi`),
+- backs the old `bzImage` and `initrd.img` up to `/boot/efi-backup/<date>` (the last three are kept) and copies the new ones in.
+
+To roll back, copy the backup over the files on the boot partition and cold boot again:
+
+```bash
+sudo cp /boot/efi-backup/<date>/bzImage /boot/efi/bzImage
+sudo cp /boot/efi-backup/<date>/initrd.img /boot/efi/initrd.img
+sync
+```
+
+The release is built with Clang, full LTO and `-march=znver2` (the PS5's Zen 2 cores); it is a kernel for the PS5, not for an ordinary PC.
+
+:::note[PS5 Pro]
+`install.sh` doesn't copy the Pro's GPU firmware into the initrd. Put the eight `viola_*.bin` files in `/lib/firmware/amdgpu/` before you run it, see [PS5 Pro](/hardware/ps5-pro#gpu-firmware). Not tested by the wiki editors with this installer.
+:::
+
+## Build with build.sh
+
+`build.sh` builds the same kernel on the PS5 itself. It clones Linux, applies the patch, builds with Clang, installs the modules and deploys to the boot partition with the same backup as `install.sh`. A full build takes a long time on the console; the source tree stays in `../linux`, so the next one is faster.
 
 ### Dependencies
-
-GCC works, but Clang/LLVM is recommended.
 
 <Tabs groupId="distro">
 <TabItem value="arch" label="Arch Linux">
 
 ```bash
-# Clang (recommended)
-sudo pacman -S clang llvm lld pahole bison flex bc cpio python openssl
-
-# GCC
-sudo pacman -S gcc pahole bison flex bc cpio python openssl
+sudo pacman -S --needed base-devel git bc cpio libelf clang lld llvm ccache mkinitcpio
 ```
 
 </TabItem>
 <TabItem value="debian" label="Debian / Ubuntu" default>
 
 ```bash
-# Clang (recommended)
-sudo apt install clang llvm lld dwarves bison flex bc cpio python3 libssl-dev libelf-dev
-
-# GCC
-sudo apt install gcc dwarves bison flex bc cpio python3 libssl-dev libelf-dev
+sudo apt install build-essential bc bison flex libssl-dev libelf-dev libncurses-dev dwarves git clang lld llvm ccache
 ```
 
 </TabItem>
@@ -75,91 +81,144 @@ sudo apt install gcc dwarves bison flex bc cpio python3 libssl-dev libelf-dev
 
 ### Build
 
-Clone `ps5-linux-patches` and `linux` side by side, then build:
-
 ```bash
-git clone https://github.com/ps5-linux/ps5-linux-patches
-git clone https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-cd linux
-git checkout "tags/v$(grep -m1 '^# Linux/' ../ps5-linux-patches/.config | awk '{print $3}')"
-git apply ../ps5-linux-patches/linux.patch
-cp ../ps5-linux-patches/.config .config
-make olddefconfig
-
-# With Clang (recommended)
-make LLVM=1 LLVM_IAS=1 -j$(nproc)
-
-# Or with GCC
-make -j$(nproc)
-
-sudo make modules_install
-sudo make install
+git clone https://github.com/rmuxnet/ps5-linux-patches-1 ps5-linux-patches
+cd ps5-linux-patches
+./build.sh
 ```
 
-:::tip[Use the latest kernel version]
-The `git checkout` line reads the kernel version from the patch set's `.config`, so it always matches the patches. If you check out a tag by hand instead, look up the current supported version on the [ps5-linux-patches releases](https://github.com/ps5-linux/ps5-linux-patches/releases) page first.
+The script asks whether the partition it found with `bzImage` on it is the right one. Press <kbd>Enter</kbd> to use it, or `n` to type the path. Cold boot when it is done. Roll back as above; the script prints the backup folder.
+
+All options are in `build.cfg`. Copy it to your own file and pass that to `build.sh` to change them:
+
+| Option | Default | What it does |
+| --- | --- | --- |
+| `KERNEL_REF` | `v7.3.1` | The kernel tag to build. Point releases (`v7.3.1`) come from the stable tree, release tags (`v7.3`) from mainline. |
+| `LTO` | `full` | `full`, `thin` or `none`. Full LTO needs the most memory. |
+| `MARCH`, `MTUNE` | `znver2` | CPU flags. Keep them for the PS5. |
+| `CCACHE` | `y` | Caches object files in `~/.cache/ccache` so rebuilds are faster. |
+| `SWAP_GB` | `auto` | Adds a swap file for the build: 10 GB with full LTO, 6 GB with thin, none without. |
+| `EFI_DIR` | `auto` | The boot partition. Set it to skip the question. |
+| `DEPLOY_EFI` | `y` | `n` builds and installs the modules without touching the boot partition. |
+
+The Wi-Fi driver for the Marvell IW620 (NXP `mwifiex`, already patched for 7.3) is in `oot/mwifiex` and is built with the kernel. Nothing else is needed for Wi-Fi.
+
+### Build by hand
+
+Without the script, the steps are the usual ones. The `.config` is made with Clang, so always pass `LLVM=1`, and keep the folder name `ps5-linux-patches`: the config loads the [VCN firmware](/hardware/vcn) from `../ps5-linux-patches/firmware`.
+
+```bash
+git clone https://github.com/rmuxnet/ps5-linux-patches-1 ps5-linux-patches
+git clone --depth 1 --branch v7.3.1 https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+cd linux
+git apply ../ps5-linux-patches/linux.patch
+cp ../ps5-linux-patches/.config .config
+make LLVM=1 olddefconfig
+make LLVM=1 -j$(nproc)
+sudo make LLVM=1 INSTALL_MOD_STRIP=1 modules_install
+```
+
+Use the kernel tag from the first lines of `.config`. For Wi-Fi, copy the driver into the tree before you build:
+
+```bash
+cp -a ../ps5-linux-patches/oot/mwifiex drivers/net/wireless/nxp-wlan
+sed -i 's/\$(CONFIG_NXP_WLAN_DRIVER)/m/g' drivers/net/wireless/nxp-wlan/Makefile
+echo 'obj-m += nxp-wlan/' >> drivers/net/wireless/Makefile
+```
+
+The same steps work for upstream `ps5-linux-patches` (clone that repository instead; its `.config` is for GCC, so `LLVM=1` is optional there, and it has no `oot/` driver).
+
+:::tip[Keep the initrd small]
+`INSTALL_MOD_STRIP=1` installs the modules without debug symbols. Without it an `amdgpu.ko` is about 775 MB, the initrd reaches about 300 MB and boot is slow.
 :::
 
 ### Copy the kernel to the boot partition
 
-Build the initrd for the new kernel, back up the current kernel on the boot partition, and copy the new one in place. Run this from the `linux` folder:
+`make install` doesn't put anything where the loader looks. Build the initrd for the new kernel, back up the current files on the boot partition and copy the new ones in. Run this from the `linux` folder:
 
 <Tabs groupId="distro">
 <TabItem value="debian" label="Debian / Ubuntu" default>
 
 ```bash
-sudo update-initramfs -c -k "$(make -s kernelrelease)"
+KVER=$(make -s kernelrelease LLVM=1)
+sudo update-initramfs -c -k "$KVER"
+sudo cp /boot/initrd.img-$KVER /tmp/initrd.img
 ```
 
 </TabItem>
 <TabItem value="arch" label="Arch Linux">
 
 ```bash
-sudo mkinitcpio -k "$(make -s kernelrelease)" -g /boot/initrd.img-$(make -s kernelrelease)
+KVER=$(make -s kernelrelease LLVM=1)
+sudo mkinitcpio -k "$KVER" -g /tmp/initrd.img
 ```
 
 </TabItem>
 </Tabs>
 
 ```bash
-# Back up the current kernel and initrd
 sudo mv /boot/efi/bzImage /boot/efi/bzImage.old
 sudo mv /boot/efi/initrd.img /boot/efi/initrd.img.old
-
-# Copy the new kernel and initrd
 sudo cp arch/x86/boot/bzImage /boot/efi/bzImage
-sudo cp /boot/initrd.img-$(make -s kernelrelease) /boot/efi/initrd.img
+sudo cp /tmp/initrd.img /boot/efi/initrd.img
 sync
 ```
 
-The PS5 boots from the files on the boot partition, not from `/boot`. A `make install` on its own changes nothing the loader uses, so always copy the files as shown.
-
-:::tip[Keep the initrd small]
-Install modules with stripped debug symbols, or the initrd grows very large. An unstripped `amdgpu.ko` is about 775 MB and the initrd can reach about 300 MB, which makes boot slow:
-
-```bash
-sudo make modules_install INSTALL_MOD_STRIP=1
-```
-:::
-
-If you want hardware video decode, copy `firmware/amdgpu/ps5_vcn.bin` from the patch set to `/lib/firmware/amdgpu/` before you build the initrd, see [Hardware video (VCN)](/hardware/vcn).
-
 If the new kernel doesn't boot, rename the `.old` files back from another computer (the boot partition is FAT32, so any PC can open it).
 
-### Building a kernel for Bazzite Game Mode
+## Install upstream's packaged kernel
+
+The official repository publishes `.deb`, `.pkg.tar.zst` and `.rpm` packages on its [releases page](https://github.com/ps5-linux/ps5-linux-patches/releases) for every commit on `main`; the newest is **7.2.3** (`fdc3eeb`, 2 November 2026). The easiest way to get them is the [package repository](/advanced/package-repository): it installs the kernel with your package manager, copies it to the boot partition for you and keeps it up to date. Or install a downloaded package by hand:
+
+<Tabs groupId="distro">
+<TabItem value="debian" label="Debian / Ubuntu" default>
+
+```bash
+sudo dpkg -i linux-ps5_*.deb
+```
+
+</TabItem>
+<TabItem value="arch" label="Arch Linux">
+
+```bash
+sudo pacman -U linux-ps5-*.pkg.tar.zst
+```
+
+</TabItem>
+</Tabs>
+
+With a 7.2.3 package from 1 November 2026 or later you get the fan curve and #66's GPU governor; the CPU boost still needs `ps5_control` from [ps5-linux-tools](/hardware/gpu#clocks-and-boost), the IW620 Wi-Fi needs [ps5-linux-mwifiex](/using-linux/networking/wifi) (the package repository bundles it), and the Slim's and Pro's Bluetooth fixes aren't there yet.
+
+## Build a kernel for Bazzite Game Mode
 
 Bazzite's Game Mode starts Steam through the `cardwired` service, which loads an eBPF program. That needs two kernel features:
 
-1. **The BPF LSM.** `CONFIG_BPF_LSM=y` is set in the official config, but `bpf` is missing from `CONFIG_LSM`, so it never activates. Add `bpf` to `CONFIG_LSM`, or add `lsm=landlock,lockdown,yama,integrity,apparmor,bpf` to `cmdline.txt`.
-2. **Kernel BTF.** `CONFIG_DEBUG_INFO_BTF=y` is already in the official config since July 2026. Check that `/sys/kernel/btf/vmlinux` exists; older configs need it turned on.
+1. **The BPF LSM.** `CONFIG_BPF_LSM=y` is set in both configs, but `bpf` is missing from `CONFIG_LSM`, so it never activates. Add `bpf` to `CONFIG_LSM`, or add `lsm=landlock,lockdown,yama,integrity,apparmor,bpf` to `cmdline.txt`.
+2. **Kernel BTF.** `CONFIG_DEBUG_INFO_BTF=y` is already in both configs since July 2026. Check that `/sys/kernel/btf/vmlinux` exists; older configs need it turned on.
 
 Without them, `cardwired` crash-loops with `CardwireEbpfError(LSMNotEnabled)` or `error parsing /sys/kernel/btf/vmlinux`, Gamescope is killed a second after it starts, and after five attempts Bazzite drops you to the desktop. [PS5 Bazzite Deck](/installation/bazzite-deck) applies both changes.
 
-### Recently merged and still pending
+## What is where
 
-Merged in October and November 2026, after the 7.2.3 release was cut for some of them: HDR on FLAVA3 (#49), HDMI CEC (#53), display hotplug (#43), native FRL for 4K at 120 Hz with 4:2:0 fallback and ALLM (#63, on by default since #67), USB-C DisplayPort output (#57), a PS5 Pro GPU driver (#58, #66) and the hwmon fan curve (#60). Build from `main` to get the ones that aren't in a release yet.
+Merged in October and November 2026. "Upstream" is `ps5-linux/ps5-linux-patches` `main` and its 7.2.3 packages.
 
-Still listed as to do upstream: an amdgpu SMU driver so the base PS5 reports its GPU frequency and temperature correctly.
+| Change | Upstream `main` | rmuxnet 7.3.1 | PS5 Bazzite Deck 2.0 |
+| --- | --- | --- | --- |
+| HDR on FLAVA3 (#49), HDMI CEC (#53), display hotplug (#43) | ✅ | ✅ | ✅ |
+| USB-C DisplayPort output, off by default (#57, #62) | ✅ | ✅ | ✅ |
+| PS5 Pro GPU with the Viola firmware (#58) | ✅ | ✅ | ✅ |
+| Native FRL for 4K120 with 4:2:0 fallback and ALLM (#63), on by default (#67) | ✅ | ✅ | ❌ Own 4K120 path, see [HDMI chip](/hardware/hdmi#4k120-over-hdmi-21-frl) |
+| GPU clock governor with `ps5_gpufreq.temp_limit` (#66) | ✅ | ❌ Replaced by `ps5-gpufreq`, see [GPU](/hardware/gpu#clocks-and-boost) | ✅ |
+| GFX1013 MMIO TLB flush and GFXOFF guard (#57) | ✅ | ❌ Dropped | ✅ |
+| hwmon fan driver (#60) | ✅ Curve on by default | ✅ Curve on by default | ✅ Firmware mode by default, see [Fan control](/hardware/fan) |
+| CPU and GPU clock drivers `ps5-cpufreq`, `ps5-gpufreq`, with the Pro's clock range | ❌ | ✅ | ⚠️ `ps5-cpufreq` only, the `meower` version |
+| Slim and Pro MediaTek Bluetooth, IW620 L2CAP and legacy LE fixes | ❌ Only the IW620 quirks entry | ✅ | ✅ |
+| IW620 Wi-Fi driver built with the kernel | ❌ | ✅ | ✅ |
+| UVC webcams, Logitech wheel force feedback | ❌ | ✅ | ✅ (wheels) |
+| VRR, RGB range flag, display link lock, 100 Hz test modes | ❌ | ❌ | ✅ |
+| Suspend-to-idle (upstream PR #4) | ❌ | ❌ | ✅ |
+
+Still listed as to do in both repositories: an amdgpu SMU driver so the base PS5 reports its GPU frequency and temperature correctly. Known bugs in both: the screen saver doesn't work, and HDMI audio and 1440p or 2160p output fail on some monitors.
 
 ## Kernel parameters (cmdline.txt)
 
@@ -185,7 +244,7 @@ amdgpu.force_1080p=1
 video=DP-1:1920x1080@60
 ```
 
-Other useful parameters:
+Other useful parameters. Not every kernel has every HDMI parameter; the split is on [HDMI chip](/hardware/hdmi#kernel-parameters):
 
 | Parameter | What it does | More info |
 | --- | --- | --- |
@@ -196,12 +255,16 @@ Other useful parameters:
 | `usb-storage.quirks=xxxx:yyyy:u` | Turns off UAS for one USB drive | [USB drive](/hardware/usb-storage#usb-drive-required) |
 | `rootwait rootdelay=60` | Waits up to 60 seconds for a slow USB drive before giving up on the root filesystem | [USB drive](/hardware/usb-storage#usb-drive-required) |
 | `usbcore.autosuspend=-1` | Stops USB devices from going to sleep, which can drop the drive | [USB drive](/hardware/usb-storage#usb-drive-required) |
-| `usbc_dp.enable=1` | DisplayPort output on the front USB-C port (PS5 Bazzite Deck) | [Boot options](/installation/bazzite-deck#boot-options-cmdlinetxt) |
-| `hdmi.frl_4k120=0` | Never offers 4K at 120 Hz | [HDMI chip](/hardware/hdmi#kernel-parameters) |
-| `hdmi.vrr=0` | Never offers VRR | [HDMI chip](/hardware/hdmi#vrr-on-flava3) |
-| `hdmi.rgb_range=<0,1,2>` | AVI RGB range flag: full, limited or none | [HDMI chip](/hardware/hdmi#rgb-range) |
-| `ps5_gpufreq.temp_limit=<50-95>` | Thermal limit of the GPU clock governor (upstream #66), 85 °C by default | [PS5 Pro](/hardware/ps5-pro#gpu-driver) |
-| `btusb.ps5_tx_ep=<n>` | ACL bulk OUT endpoint for the MediaTek Bluetooth on the Slim | [Bluetooth](/using-linux/bluetooth#mediatek-on-the-slim) |
+| `usbc_dp.enable=1` | DisplayPort output on the front USB-C port | [HDMI chip](/hardware/hdmi#kernel-parameters) |
+| `hdmi.frl_4k120=0` | Never offers 4K at 120 Hz (upstream and rmuxnet: turns native FRL off altogether) | [HDMI chip](/hardware/hdmi#kernel-parameters) |
+| `hdmi.hdcp_mode=<n>` | HDCP on the HDMI output (upstream and rmuxnet) | [HDMI chip](/hardware/hdmi#kernel-parameters) |
+| `hdmi.allm=<0,1,2>` | Auto low latency mode on FLAVA3 (upstream and rmuxnet) | [HDMI chip](/hardware/hdmi#kernel-parameters) |
+| `hdmi.vrr=0` | Never offers VRR (PS5 Bazzite Deck) | [HDMI chip](/hardware/hdmi#vrr-on-flava3) |
+| `hdmi.rgb_range=<0,1,2>` | AVI RGB range flag: full, limited or none (PS5 Bazzite Deck) | [HDMI chip](/hardware/hdmi#rgb-range) |
+| `amdgpu.ps5_viola_fw=0` | PS5 Pro: always use the base PS5's GPU firmware | [PS5 Pro](/hardware/ps5-pro#gpu-driver) |
+| `ps5_gpufreq.temp_limit=<50-95>` | Thermal limit of the GPU clock governor (upstream #66 and PS5 Bazzite Deck only), 85 °C by default | [PS5 Pro](/hardware/ps5-pro#gpu-driver) |
+| `btusb.ps5_tx_ep=<n>` | ACL bulk OUT endpoint for the MediaTek Bluetooth on the Slim (rmuxnet and PS5 Bazzite Deck) | [Bluetooth](/using-linux/bluetooth#mediatek-on-the-slim) |
+| `btusb.ps5_ep_resync=1` | PS5 Pro: resync the Bluetooth endpoints after the firmware setup (rmuxnet) | [Bluetooth](/using-linux/bluetooth#mediatek-on-the-pro) |
 
 `cmdline.txt` must stay a **single line**. Add options at the end, separated by a space.
 

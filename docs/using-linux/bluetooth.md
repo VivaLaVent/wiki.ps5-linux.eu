@@ -11,7 +11,7 @@ The PS5's Bluetooth is part of the Wi-Fi/Bluetooth combo chip, attached over USB
 **Credits:** Dasloh (Linux-only Bluetooth address), WizGery (MediaTek on the Slim), QuartConz (PS5 Pro), rmuxnet and Daniel Walker (IW620 LE reconnect quirk), bizkut (IW620 btusb quirks).
 
 :::info[Patch base]
-The patches linked on this page apply to Linux v7.3 plus [rmuxnet/ps5-linux-patches-1](https://github.com/rmuxnet/ps5-linux-patches-1) `meower` at commit `baee34d`, in the order of the PS5 Bazzite Deck [`build.sh`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.0/build.sh).
+The patches linked on this page apply to Linux v7.3 plus [rmuxnet/ps5-linux-patches-1](https://github.com/rmuxnet/ps5-linux-patches-1) `meower` at commit `baee34d`, in the order of the PS5 Bazzite Deck [`build.sh`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/build.sh). rmuxnet's 7.3.1 kernel (his default branch, 2 November 2026) carries all three chips' fixes, squashed from these patches, see [Kernel setup](/advanced/kernel). Upstream `ps5-linux-patches` only has the IW620 quirks entry.
 :::
 
 ## The three chips
@@ -20,7 +20,7 @@ The patches linked on this page apply to Linux v7.3 plus [rmuxnet/ps5-linux-patc
 | --- | --- | --- | --- |
 | Marvell IW620 | `1286:2059` | Original PS5, some Slims | ✅ Working with the quirks below |
 | MediaTek MT7961 | `0e8d:3603` | Most Slims | ✅ Working with the endpoint fix below |
-| MediaTek MT7925 | `0e8d:3605` | PS5 Pro | ✅ Working, confirmed on one Pro on 13.60 |
+| MediaTek MT7925 | `0e8d:3605` | PS5 Pro | ✅ Working, confirmed on Pros on 13.60; from a cold boot since PS5 Bazzite Deck 2.0.1 |
 
 Find yours:
 
@@ -36,21 +36,21 @@ Three changes to `btusb` make the IW620 usable:
 
 - **Quirks table entry.** The chip needs its own entry with the right quirks; without it `btusb` treats it as a generic adapter. In `meower` since `baee34d`. Confirmed.
 - **L2CAP connect while encryption is pending.** Controllers that connect before encryption has finished were dropped. The fix defers the connection until security is settled. In `meower` since `baee34d`. Confirmed.
-- **Legacy LE command family.** Keyboards, mice and the DualSense in LE mode failed to reconnect: the chip doesn't handle the extended LE Create Connection command family properly. [`ps5-iw620-le-reconnect.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.0/patches/ps5-iw620-le-reconnect.patch) adds `BTUSB_BROKEN_EXT_SCAN` and a new `BTUSB_BROKEN_EXT_CREATE_CONN` quirk, which sets the kernel's `HCI_QUIRK_BROKEN_EXT_CREATE_CONN` so `bluetoothd` falls back to the legacy commands.
+- **Legacy LE command family.** Keyboards, mice and the DualSense in LE mode failed to reconnect: the chip doesn't handle the extended LE Create Connection command family properly. [`ps5-iw620-le-reconnect.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/patches/ps5-iw620-le-reconnect.patch) adds `BTUSB_BROKEN_EXT_SCAN` and a new `BTUSB_BROKEN_EXT_CREATE_CONN` quirk, which sets the kernel's `HCI_QUIRK_BROKEN_EXT_CREATE_CONN` so `bluetoothd` falls back to the legacy commands.
 
 :::note[Not tested]
-The legacy LE quirk comes from `meower` `cf37af5`. It has not been confirmed on hardware by the wiki editors, and rmuxnet reports Bluetooth problems on a branch that carries the same quirk. Treat it as an experiment.
+The legacy LE quirk comes from `meower` `cf37af5` and is in rmuxnet's 7.3.1 kernel too. It has not been confirmed on hardware by the wiki editors, and rmuxnet reported Bluetooth problems on a branch that carries it. If Bluetooth on an IW620 console is worse than on PS5 Bazzite Deck 1.8.9, this is the first suspect.
 :::
 
 The IW620's Bluetooth side can also hang after a warm restart. Reloading `btusb` brings it back; if not, power off and start with the loader.
 
 ## MediaTek on the Slim
 
-The MT7961 only drains ACL data from its second bulk OUT endpoint (`0x02`). [`ps5-bluetooth.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.0/patches/ps5-bluetooth.patch) sends ACL there; the module parameter `btusb.ps5_tx_ep` overrides the endpoint (`0` = the driver's default). Confirmed on Slims by WizGery's testers.
+The MT7961 only drains ACL data from its second bulk OUT endpoint (`0x02`). [`ps5-bluetooth.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/patches/ps5-bluetooth.patch) sends ACL there; the module parameter `btusb.ps5_tx_ep` overrides the endpoint (`0` = the driver's default). Confirmed on Slims by WizGery's testers.
 
 ## MediaTek on the Pro
 
-The MT7925 (`0e8d:3605`) needs more than a table entry. [`ps5-pro-bluetooth.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.0/patches/ps5-pro-bluetooth.patch), from QuartConz's work:
+The MT7925 (`0e8d:3605`) needs more than a table entry. [`ps5-pro-bluetooth.patch`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/patches/ps5-pro-bluetooth.patch), from QuartConz's work:
 
 - binds only interface 3 (the HCI controller) and doesn't claim the ISO interface,
 - after the usual `btmtk` setup, sends the WMT activation `6f fc 06 01 06 02 00 00 01` as a class/interface request with `wIndex` 3, and routes HCI commands to `wIndex` 3 from then on,
@@ -58,9 +58,11 @@ The MT7925 (`0e8d:3605`) needs more than a table entry. [`ps5-pro-bluetooth.patc
 
 Confirmed by QuartConz on a Pro on 13.60 with kernel 7.3. Only `0e8d:3605` is touched; other consoles are unaffected.
 
+With that patch alone the adapter only worked after `btusb` was reloaded: from a cold boot the first HCI Reset raced the controller becoming ready and left a dead `hci0`. PS5 Bazzite Deck 2.0.1 retries it a few times (mfoster978, image PR #30), so the controller is there after a cold boot. rmuxnet's 7.3.1 kernel has the same Pro patch plus an optional endpoint resync after the firmware setup (`btusb.ps5_ep_resync=1`, off by default); whether it needs the reload hasn't been confirmed.
+
 ## One DualSense for the PS5 and Linux
 
-The PS5 OS and Linux share the chip, so they share its Bluetooth address, and a DualSense keeps one pairing per host address. Giving Linux a different address lets the controller keep one pairing for the PS5 OS and one for Linux, on separate profiles. The user steps are on [DualSense controller](./dualsense.md#one-dualsense-for-the-ps5-and-linux); this is how it works. Confirmed on IW620 (original PS5) and MT7961 (Slim); not supported on the Pro's chip yet.
+The PS5 OS and Linux share the chip, so they share its Bluetooth address, and a DualSense keeps one pairing per host address. Giving Linux a different address lets the controller keep one pairing for the PS5 OS and one for Linux, on separate profiles. The user steps are on [DualSense controller](./dualsense.md#one-dualsense-for-the-ps5-and-linux); this is how it works. Confirmed on IW620 (original PS5) and MT7961 (Slim). On the Pro's MT7925 it is new in PS5 Bazzite Deck 2.0.1 (mfoster978, image PR #31): [`files/ps5-bt-pro-addr`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/files/ps5-bt-pro-addr) sets it with `btmgmt` once Bluetooth is fully up, because the Pro's chip can't take the address earlier.
 
 The Linux address is the chip's own with the "locally administered" bit set in the first byte: `80:60:B7:C5:74:44` becomes `82:60:B7:C5:74:44`. How it is set depends on the chip:
 
@@ -78,7 +80,7 @@ Pitfalls found in testing:
 - **It doesn't survive a warm restart on the IW620** (see below).
 - `bluetoothctl` may still show the original address on the IW620; the chip and the controller use the new one.
 
-Source: [`files/ps5-bt-addr`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.0/files/ps5-bt-addr).
+Source: [`files/ps5-bt-addr`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/files/ps5-bt-addr).
 
 ### IW620: the Linux-only address and warm restarts
 

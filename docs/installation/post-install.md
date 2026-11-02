@@ -38,18 +38,23 @@ On Arch and Fedora, the `linux-ps5` package from the [package repository](/advan
 
 It is broken on the PS5 and can't be dismissed once it starts. Turn it off in your desktop's power settings before any long install or download. Over SSH, `sudo reboot` is the way out if it already started.
 
-## 4. Turn on the fan and boost
+## 4. Check the fan and the clocks
 
-Without this, the fan stays off and the CPU and GPU stay at their lower clocks. Install [ps5-linux-tools](https://github.com/ps5-linux/ps5-linux-tools) and enable both at every boot:
+What you do here depends on the kernel, see [Kernel setup](/advanced/kernel):
 
-```bash
-git clone https://github.com/ps5-linux/ps5-linux-tools
-cd ps5-linux-tools
-make
-sudo ./install.sh
-```
+- **rmuxnet's 7.3.1 kernel:** the fan follows a temperature curve and the GPU clock scales by itself. Turn the CPU boost on if you want it: `echo 1 | sudo tee /sys/devices/system/cpu/cpufreq/boost` (put it in a systemd unit to keep it). Don't install `ps5-linux-tools` for the boost on this kernel.
+- **Upstream kernels (the 7.2.3 packages and older):** the CPU stays at 3.2 GHz until `ps5_control --boost on`; on packages older than 28 October 2026 the fan also needs `ps5_control --fan on`, and older than 1 November the GPU clock too. Install [ps5-linux-tools](https://github.com/ps5-linux/ps5-linux-tools) and enable both at every boot:
 
-On a distro with the [package repository](/advanced/package-repository), `ps5-linux-tools` is a package that does the same. Check with `sudo systemctl status ps5fan ps5boost`. See [Fan control](/hardware/fan) and [GPU boost](/hardware/gpu#boost).
+  ```bash
+  git clone https://github.com/ps5-linux/ps5-linux-tools
+  cd ps5-linux-tools
+  make
+  sudo ./install.sh
+  ```
+
+  On a distro with the [package repository](/advanced/package-repository), `ps5-linux-tools` is a package that does the same. Check with `sudo systemctl status ps5fan ps5boost`.
+
+See [Fan control](/hardware/fan) and [Clocks and boost](/hardware/gpu#clocks-and-boost).
 
 ## 5. Set the GPU memory
 
@@ -63,7 +68,7 @@ That memory is no longer available to the rest of the system, so stay at the def
 
 ## 6. Install the Wi-Fi driver
 
-If you use the internal Wi-Fi, install the driver for your chip, see [Wi-Fi](/using-linux/networking/wifi). On the Marvell IW620 the driver is out of tree and must be reinstalled after every kernel update, unless your kernel comes from the package repository, which bundles it. Ethernet works out of the box.
+If you use the internal Wi-Fi, install the driver for your chip, see [Wi-Fi](/using-linux/networking/wifi). On the Marvell IW620 the driver is out of tree and must be reinstalled after every kernel update, unless your kernel comes from the package repository or is rmuxnet's 7.3.1 release, which both bundle it. The MediaTek chips work with the in-kernel drivers (the Slim's since the 7.2.3 packages of 30 October 2026). Ethernet works out of the box.
 
 ## 7. Tune cmdline.txt
 

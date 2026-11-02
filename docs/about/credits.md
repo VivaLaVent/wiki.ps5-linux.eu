@@ -13,7 +13,7 @@ ps5-linux is a community project. Core contributors:
 | [theflow](https://github.com/TheOfficialFloW) | ps5-linux-loader, ps5-linux-patches, ps5-linux-tools |
 | [c0w](https://github.com/c0w-ar) | ps5-linux-loader, xHCI Salina driver and btusb fixes, EMC reverse engineering for the fan, LED and buzzer drivers |
 | [resulknad](https://github.com/resulknad) | ps5-linux-image |
-| [rmuxnet](https://github.com/rmuxnet) | PS5 Ethernet driver (`mts`) and its speed and IPv6 fixes, VCN hardware video, `ahci_salina` Blu-ray AHCI driver, LED, buzzer and fan drivers, [ps5ctl](https://github.com/rmuxnet/ps5ctl) |
+| [rmuxnet](https://github.com/rmuxnet) | PS5 Ethernet driver (`mts`) and its speed and IPv6 fixes, VCN hardware video, `ahci_salina` Blu-ray AHCI driver, LED, buzzer and fan drivers, the hwmon fan curve, `ps5-cpufreq` and `ps5-gpufreq`, the [7.3.1 kernel releases](https://github.com/rmuxnet/ps5-linux-patches-1) with `build.sh` and `install.sh`, [ps5ctl](https://github.com/rmuxnet/ps5ctl) |
 | [slidybat](https://github.com/slidybat) | Ethernet driver base |
 | [buzzer-re](https://github.com/buzzer-re) | ps5-linux-loader, ps5-linux-mwifiex, systemd services in ps5-linux-tools |
 | [jspavlick](https://github.com/jspavlick) | Fan max-boost mode in ps5-linux-tools |
@@ -32,14 +32,16 @@ ps5-linux is a community project. Core contributors:
 | [Wigglez-sudo](https://github.com/Wigglez-sudo/12.xx-linux-loader) | 12.xx loader, including the PS5 Pro |
 | Lawson | VRR fix and the port of Sony's 4K120 setup over HDMI 2.1 FRL |
 | hsgodd | Captures and research on the PS5's HDMI setup |
-| Slip | HDR, SCDC, CEC and hotplug patches; 4K120 detection and fallback (#63) |
+| Slip | HDR, SCDC, CEC and hotplug patches; native FRL with 4K120 detection and fallback, ALLM (#63, #67) |
 | Tertium | USB-C display output |
 | Dasloh | Sleep support, Linux-only Bluetooth address, USB power fixes |
 | [Borchev](https://github.com/Borchev) | PS5 Pro GPU driver and clock governor (ps5-linux-patches #58, #66), hwmon fan driver Pro fix |
-| mfoster978 | Found the initrd 4-byte alignment bug for the Pro firmware; loader support for 11.60 on the Pro |
+| mfoster978 | Found the initrd 4-byte alignment bug for the Pro firmware; loader support for 11.60 on the Pro; Pro Bluetooth from a cold boot, GPU load in overlays and the Linux-only Bluetooth address on the Pro |
 | bizkut | IW620 btusb quirks |
 | Daniel Walker | IW620 legacy LE command family quirk |
 | Max | IW620 warm-restart testing |
+| Verrek | VRR report and EDID from a Panasonic OLED (open-ended VRR maximum) |
+| Shahine, Phat | Fan reports on PS5 Bazzite Deck 2.0.0 |
 | [NotHavocc](https://github.com/NotHavocc/ps5-hwcon-plugin) | PS5 hardware control plugin |
 | [cmartinespinosa](https://github.com/cmartinespinosa/decky-ps5-bazzite-updater) | PS5 Bazzite Updater plugin |
 | [abrocoma](https://github.com/abrocoma) | CachyOS notes: display link lock, DualSense reconnect, boot-to-desktop and systemd ordering fixes |

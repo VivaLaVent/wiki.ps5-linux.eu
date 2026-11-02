@@ -18,7 +18,7 @@ HDMI 2.1 output is driven by `amdgpu` and works out of the box once the driver l
 | 1440p | 120 Hz | Confirmed on Dell S3225QC |
 | 2160p (4K) | 60 Hz | Working (issues on some monitors) |
 
-1440p and 4K at 120 Hz, HDR and VRR work on consoles with the FLAVA3 HDMI chip. They are kernel patches, not an image feature: PS5 Bazzite Deck includes them by default ([VRR](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.0/patches/ps5-vrr.patch), [4K120](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.0/patches/ps5-hdmi-frl-4k120.patch)), and HDR, CEC, hotplug and native FRL were merged into `ps5-linux-patches` in October and November 2026, so other images get them with the next kernel release, see [Kernel setup](/advanced/kernel#recently-merged-and-still-pending). VRR is not upstream yet. 30 Hz is not offered.
+1440p and 4K at 120 Hz, HDR and VRR work on consoles with the FLAVA3 HDMI chip. They are kernel patches, not an image feature: PS5 Bazzite Deck includes them by default ([VRR](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/patches/ps5-vrr.patch), [4K120](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/patches/ps5-hdmi-frl-4k120.patch)), and HDR, CEC, hotplug and native FRL (4K120 with ALLM) are in kernel release 7.2.3 and in rmuxnet's 7.3.1 kernel release, see [Kernel setup](/advanced/kernel#what-is-where). VRR is PS5 Bazzite Deck only. 30 Hz is not offered.
 
 :::tip[`amdgpu.force_1080p=1` caps the refresh rate]
 This flag ships in the default `cmdline.txt` and was long assumed to be required. Testing on 2026-07-10 showed it is not needed for every monitor, and it **caps output at 60 Hz**, even on displays that support more.
