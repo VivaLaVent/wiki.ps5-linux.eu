@@ -1,12 +1,12 @@
 ---
 title: Capture cards
-sidebar_position: 9
-description: Capture card compatibility and fixes for PS5 Linux.
+sidebar_position: 11
+description: Which capture cards work with PS5 Linux, at which resolutions, and the HDCP and EDID fixes that help.
 ---
 
 # Capture cards
 
-Linux sees a capture card as just another display, so the same black screen and EDID quirks apply as with regular monitors. Work through [Display output](/using-linux/display#troubleshooting-a-black-screen) first.
+Linux sees a capture card as one more display, so the same black screen and EDID quirks apply as with regular monitors. Work through [Display output](/using-linux/display#troubleshooting-a-black-screen) first.
 
 ## AVerMedia Live Gamer Ultra (GC553)
 
@@ -22,7 +22,7 @@ Linux sees a capture card as just another display, so the same black screen and 
 
 1. In the capture card's own HDMI compatibility settings, remove every EDID profile above 1440p.
 2. Remove `video=DP-1:1920x1080@60` from `cmdline.txt`.
-3. Set `vram.txt` to `0x80000000` (2 GB).
+3. Set `vram.txt` to `80000000` (2 GB), see [VRAM](/hardware/gpu#vram).
 
 ## Elgato
 

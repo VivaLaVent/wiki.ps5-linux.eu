@@ -1,7 +1,7 @@
 ---
 title: Browser video and monitoring
 sidebar_label: Browser video
-sidebar_position: 6
+sidebar_position: 8
 description: Turn on hardware video decode in Chrome and Firefox, avoid AV1, and read GPU load without a sensor.
 ---
 

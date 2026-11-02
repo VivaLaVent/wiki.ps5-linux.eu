@@ -5,13 +5,13 @@ description: Which PS5 firmware versions can run Linux, and which one to choose.
 
 # Supported firmware
 
-:::info[Before you ask "when will the latest firmware work?"]
-Retail firmware is already past `14.xx` (the public installer shows something like `26.06-14.10.00`), but the exploit chain stops at **13.60**. There is no ETA for newer firmware, and asking on Discord will not make one appear faster.
+:::info[Before you ask about 14.xx]
+Retail firmware is already past `14.xx` (the public installer shows something like `26.06-14.10.00`), but the exploit chain stops at **13.60**. The ps5-linux project states that 14.00 and later are not going to be supported. Asking on Discord doesn't change that.
 :::
 
 ## PS5 Slim and PS5 Pro
 
-Linux also runs on the Slim and the Pro, as long as their firmware is supported. The Pro needs a loader with Pro support, see [Which loader](/installation/booting#which-loader).
+Linux also runs on the Slim and the Pro. The Slim supports the same firmware list as the original PS5. The Pro is supported from firmware 11.00 by the official loader, see [Which loader](/installation/booting#which-loader).
 
 ## Exploitable versions
 
@@ -31,6 +31,8 @@ Jailbreaking is not covered by this wiki; the exploit column is for reference on
 :::info[Why no M.2 on 3.xx?]
 On 3.xx firmware, the PS5 fails to boot when an M.2 drive is installed.
 :::
+
+**PS5 Pro:** 11.00, 11.20, 11.40, 11.60; 12.00, 12.02, 12.20, 12.40, 12.60, 12.70; 13.20, 13.40, 13.42, 13.60. All with M.2 support. The Pro's own GPU firmware ("Viola") is dumped by the loader on 13.20 and 13.60, see [Hardware overview](/hardware/overview#console-models-and-chips).
 
 ## Which firmware should I be on?
 

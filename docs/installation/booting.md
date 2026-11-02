@@ -29,14 +29,13 @@ There is no permanent jailbreak: you need to jailbreak again every time you want
 
 ## Which loader
 
-The Linux loader is the payload that boots Linux. Use the one that matches your console and firmware:
+The Linux loader is the payload that boots Linux. The [official loader](https://github.com/ps5-linux/ps5-linux-loader/releases/) now covers every supported console and firmware: the original PS5 and the Slim on 3.00 to 13.60, and the PS5 Pro on 11.00 to 13.60. The Pro support and the 12.xx and 13.xx support started as community forks and were merged upstream in 2026.
 
 | Loader | For |
 | --- | --- |
-| [ps5-linux/ps5-linux-loader](https://github.com/ps5-linux/ps5-linux-loader/releases/) | The official loader |
-| [rmuxwashere/ps5-linux-loader](https://github.com/rmuxwashere/ps5-linux-loader/releases) | Original PS5 and Slim. The loader [PS5 Bazzite Deck](/installation/bazzite-deck) is tested with, including firmware 13.60 (support by soniciso1). |
-| [gzimbric/ps5-linux-loader](https://github.com/gzimbric/ps5-linux-loader) | PS5 Pro on 11.xx (branch `ps5-pro-11xx`) |
-| [Wigglez-sudo/12.xx-linux-loader](https://github.com/Wigglez-sudo/12.xx-linux-loader) | 12.xx, including the PS5 Pro |
+| [ps5-linux/ps5-linux-loader](https://github.com/ps5-linux/ps5-linux-loader/releases/) | Everything: original PS5, Slim and Pro, firmware 3.00 to 13.60. Use this one. |
+| [rmuxwashere/ps5-linux-loader](https://github.com/rmuxwashere/ps5-linux-loader/releases) | Fork that [PS5 Bazzite Deck](/installation/bazzite-deck) is tested with. Its 13.xx and Pro fixes have been sent upstream. |
+| [gzimbric/ps5-linux-loader](https://github.com/gzimbric/ps5-linux-loader), [Wigglez-sudo/12.xx-linux-loader](https://github.com/Wigglez-sudo/12.xx-linux-loader) | Older forks for the Pro on 11.xx and for 12.xx. Merged upstream; kept here for reference. |
 
 The pinned messages in the `#loader` channel on [Discord](https://discord.gg/ps5linux) point to the current payload.
 

@@ -1,7 +1,7 @@
 ---
 title: Memory, VRAM and swap
 sidebar_label: Memory and swap
-sidebar_position: 5
+sidebar_position: 6
 description: How the PS5's shared memory is split between the CPU and GPU, what "VRAM swapping" really means, and how to add a swap file or zram.
 ---
 

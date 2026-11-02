@@ -6,7 +6,7 @@ description: Connect to your PS5 over SSH, collect logs and write a bug report t
 
 # SSH and getting help
 
-If something is broken and you want help on [Discord](https://discord.gg/ps5linux), SSH access and a proper log dump will get you a real answer much faster. This page covers both.
+If something is broken and you want help on [Discord](https://discord.gg/ps5linux), SSH access and a proper log dump get you a useful answer much faster. This page covers both.
 
 ## SSH availability by distro
 

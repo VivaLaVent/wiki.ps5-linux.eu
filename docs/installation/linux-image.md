@@ -19,17 +19,14 @@ There are three sources of ready-made images. All of them boot with the same [Li
 
 ## Official images
 
+The official builder makes four images. Debian, Proxmox, Bazzite, Batocera and the others come from [mia's builds](#community-images-mias-builds).
+
 | Distro | Desktop | Notes |
 | --- | --- | --- |
 | Ubuntu 26.04 (default) | GNOME | Recommended for beginners |
 | Arch | Sway | Low overhead, about 750 MiB RAM at idle |
 | CachyOS | Gamescope + Steam Big Picture, KDE Plasma (no SDDM) | Gaming-focused. [Currently broken](/troubleshooting/known-issues#cachyos-currently-broken). |
 | Fedora | GNOME (Wayland) | |
-| Debian 12 | Xfce | Successor to the old Kali-based image |
-| Proxmox VE 8 | None (headless) | Runs the PS5 as a hypervisor |
-| Bazzite | Gamescope + Steam | uBlue gaming Fedora, ostree-flattened |
-| Bazzite Deck | Gamescope + Steam, Steam Deck-style UI | Bazzite's Steam Deck interface variant. See also [PS5 Bazzite Deck](/installation/bazzite-deck). |
-| Batocera | Retro emulation front end | Pre-built squashfs root filesystem |
 
 You can also build a **multi-distro image** that switches between Ubuntu, Arch and CachyOS on the same USB drive using kexec.
 
@@ -131,8 +128,7 @@ git clone https://github.com/ps5-linux/ps5-linux-image
 cd ps5-linux-image
 chmod +x ./build_image.sh
 
-# Single distro: ubuntu2604, arch, cachyos, fedora, debian, proxmox,
-# bazzite, bazzite-deck, batocera
+# Single distro: ubuntu2604, arch, cachyos or fedora
 ./build_image.sh --distro ubuntu2604
 ./build_image.sh --distro cachyos
 
@@ -191,7 +187,7 @@ sync
 Double-check the target device. `dd` overwrites whatever you point it at without asking.
 :::
 
-**Windows:** use [Rufus](https://rufus.ie/). balenaEtcher has known problems flashing PS5 images.
+**Windows:** use [Rufus](https://rufus.ie/). The upstream README suggests balenaEtcher, but users have reported failed flashes with it on PS5 images, so this wiki recommends Rufus.
 
 ## Edit cmdline.txt from Windows
 

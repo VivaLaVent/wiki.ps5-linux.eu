@@ -14,13 +14,13 @@ If your install no longer boots but you have access to another Linux system (boo
 lsblk -f
 ```
 
-Look for the ext4 partition: `nvme0n1p3` for an M.2 install, or `sdXN` for a USB drive.
+Look for the ext4 partition: `nvme0n1p1` for an M.2 install made with `m2_install.sh`, or `sdXN` for a USB drive.
 
 ## Chroot into an M.2 install
 
 ```bash
 sudo mkdir -p /mnt/ps5root
-sudo mount /dev/nvme0n1p3 /mnt/ps5root
+sudo mount /dev/nvme0n1p1 /mnt/ps5root
 
 sudo mount --bind /dev  /mnt/ps5root/dev
 sudo mount --bind /proc /mnt/ps5root/proc

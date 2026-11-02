@@ -1,12 +1,12 @@
 ---
 title: LED control
-sidebar_position: 6
+sidebar_position: 8
 description: Control the PS5's front light bar and standby LEDs from Linux.
 ---
 
 # LED control
 
-The front light bar and standby LEDs are driven by the ICC (Internal Controller Chip). A preset-based driver is built into the kernel under `drivers/ps5/led/` (merged in `ps5-linux-patches` commit `6479385`).
+The front light bar and standby LEDs are driven by the ICC (Internal Controller Chip). A preset-based driver is built into the kernel under `drivers/ps5/led/` (merged in `ps5-linux-patches` #21, commit `6cfe53c`).
 
 ## Sysfs interface
 

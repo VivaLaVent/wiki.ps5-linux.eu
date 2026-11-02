@@ -30,11 +30,11 @@ Start with [Getting started](/getting-started/overview). It lists what you need 
 | GPU boost (2.23 GHz) | ✅ Working via `ps5_control` |
 | GPU CU unlock (up to 40 CUs) | ✅ Working |
 | Wi-Fi (IW620 / mwifiex) | ⚠️ Working, with some instability |
-| Wi-Fi/Bluetooth (MediaTek, Slim and Pro) | ⚠️ Only on PS5 Bazzite Deck |
-| PS5 Slim / PS5 Pro | ✅ Slim working, ⚠️ Pro first version (PS5 Bazzite Deck) |
+| Wi-Fi/Bluetooth (MediaTek, most Slims and the Pro) | ⚠️ Drivers in the official kernel since 7.2.3; confirmed on [PS5 Bazzite Deck](/installation/bazzite-deck), see [Wi-Fi](/using-linux/networking/wifi) |
+| PS5 Slim / PS5 Pro | ✅ Both supported by the official loader (Pro from firmware 11.00) |
 | Blu-ray drive (`ahci_salina`) | ✅ Working |
 | DualSense (USB) | ✅ Working |
-| Hardware video decode (VCN) | ✅ Working, kernel must be built from source |
+| Hardware video decode (VCN) | ✅ Working since kernel release 7.2.3 |
 | Hardware video encode (VCN) | ⚠️ H.264 works, HEVC only with I-frames |
 | Screen saver | ❌ Broken |
 | CachyOS | ❌ Currently broken (kernel panic) |

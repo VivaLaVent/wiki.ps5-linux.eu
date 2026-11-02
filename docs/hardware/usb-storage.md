@@ -1,6 +1,6 @@
 ---
 title: USB and storage
-sidebar_position: 4
+sidebar_position: 6
 description: USB ports, hubs, network adapters, USB drives, M.2 drives and the Gen3 NVMe unlock.
 ---
 
@@ -129,7 +129,7 @@ Ready-made dumps may not work on higher firmware. If it fails, borrow a Gen4 dri
 :::
 
 :::warning[Don't reformat the Gen3 drive on the PS5]
-Formatting it again under **Settings → Storage** wipes the unlocked header. If that happens, simply write the 2 MB header again from a PC.
+Formatting it again under **Settings → Storage** wipes the unlocked header. If that happens, write the 2 MB header again from a PC.
 :::
 
 **Firmware compatibility:** confirmed on 4.00, 4.03 and 4.51. Failures reported on 5.xx and higher are probably user error, most likely the wrong dump. If it doesn't work, make your own dump from a PS5-formatted Gen4 drive instead of using a shared one. See the [M.2 compatibility list](./m2-compatibility.md) for all results.

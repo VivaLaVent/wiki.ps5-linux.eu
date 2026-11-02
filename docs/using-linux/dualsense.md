@@ -1,7 +1,7 @@
 ---
 title: DualSense controller
 sidebar_position: 3
-description: Use the DualSense over USB, and fix Bluetooth pairing on Marvell chips.
+description: Use the DualSense over USB or Bluetooth, keep one pairing for the PS5 and Linux, and fix pairing on Marvell chips.
 ---
 
 # DualSense controller
@@ -43,12 +43,7 @@ The PS5 OS and Linux share the same Bluetooth chip, and therefore the same Bluet
 - In rest mode, both profiles can wake the PS5, but once it has started only the PS5 profile connects.
 - On consoles with the IW620 chip, restarts go through the PS5 OS instead of [warm restarts](/installation/bazzite-deck#built-in-commands) while this is on: the chip doesn't survive a warm restart with the changed address.
 
-<details>
-<summary>How it works</summary>
-
-At boot, before `bluetooth.service` starts, a service reads the chip's address, sets the "locally administered" bit of the first byte (for example `80:60:B7:C5:74:44` becomes `82:60:B7:C5:74:44`) and sends it to the chip. On the IW620 this uses the Marvell vendor command `0xFC22`; on MediaTek chips, MediaTek's own command. The chip only keeps the new address in RAM, so the PS5 OS always gets its original address back. `btmgmt public-addr` can't be used, because the kernel only sends a new public address to the chip during the adapter's first setup.
-
-</details>
+How the address is set per chip, and the pitfalls found in testing, are on [Bluetooth](./bluetooth.md#one-dualsense-for-the-ps5-and-linux).
 
 ## DualSense pairs once but won't reconnect
 
@@ -102,8 +97,8 @@ Reported on the official CachyOS image (Marvell IW620). The existing `JustWorksR
 ## Bluetooth troubleshooting
 
 - **The Bluetooth adapter disappears after a while:** the Bluetooth chips drop off USB when they enter USB power saving (U3), and stay gone until a power-off. Keep them powered with a udev rule that sets `power/control` to `on` for the IW620 Bluetooth (`1286:2059`), the MediaTek Bluetooth (`0e8d:3603`) and the Salina USB controller (`104d:9108`). PS5 Bazzite Deck does this by default.
-- **Bluetooth is gone after a warm restart (IW620):** the Bluetooth side of the chip can hang. Reloading the `btusb` driver brings it back; if not, power off and start Linux with the loader again.
-- **No `hci0` and `Host halt failed, -110` in `dmesg`:** the USB controller that carries Bluetooth did not start (`xhci_hcd 0000:40:00.6`). It affects kernels built from a ps5-linux-patches commit that disables the Salina xHCI initialisation (`xhci_salina_init()` inside `#if 0`). Rebuild the kernel with the patch `0001-xhci-pci-re-enable-salina-init.patch` applied, or remove the `#if 0` and its `#endif` by hand, see [Kernel setup](/advanced/kernel#build-from-source). Reloading modules does not help, because xHCI is built into the kernel. A `-110` error on the SATA controller (`40:00.3`) is harmless.
+- **Bluetooth is gone after a warm restart (IW620):** the Bluetooth side of the chip can hang, more so with the Linux-only address on, see [Bluetooth](./bluetooth.md#iw620-the-linux-only-address-and-warm-restarts). Reloading the `btusb` driver brings it back; if not, power off and start Linux with the loader again.
+- **No `hci0` and `Host halt failed, -110` in `dmesg`:** the USB controller that carries Bluetooth did not start (`xhci_hcd 0000:40:00.6`). This affects kernels built from `ps5-linux-patches` between 5 September and 27 October 2026, when the Salina xHCI initialisation was disabled (`xhci_salina_init()` inside `#if 0`). It was turned back on in #57, and kernel release 7.2.3 has it. Update the kernel, or if you must stay on a kernel from that range, remove the `#if 0` and its `#endif` and rebuild, see [Kernel setup](/advanced/kernel#build-from-source). Reloading modules does not help, because xHCI is built into the kernel. A `-110` error on the SATA controller (`40:00.3`) is harmless.
 - **Phantom Bluetooth adapters** (an extra `hciN` with address `00:00:00:00:00:00`): the [package repository's fix script](/advanced/package-repository#fix-scripts-for-older-images) turns them off.
 - **Pairing problems:** setting `JustWorksRepairing = always` and `PairableTimeout = 0` in `/etc/bluetooth/main.conf`, and loading the `hidp` module at boot, helps controllers pair and re-pair reliably.
 

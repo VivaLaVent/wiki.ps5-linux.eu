@@ -22,7 +22,7 @@ description: Current known issues with PS5 Linux and answers to frequently asked
 | Kernel update on M.2 causes a black screen | Workaround: stay on 7.0.10 |
 | Audio plays through the controller instead of HDMI | [Workaround available](/using-linux/audio#audio-plays-through-the-controller-instead-of-hdmi) |
 | Black screen after boot or after a mode change, Linux still running | [Lock the display link](/troubleshooting/display-link-lock) |
-| Bluetooth missing (`hci0` absent, `Host halt failed, -110`) | Kernel built without Salina xHCI init, see [Bluetooth troubleshooting](/using-linux/dualsense#bluetooth-troubleshooting) |
+| Bluetooth missing (`hci0` absent, `Host halt failed, -110`) | Kernels built between 5 Sep and 27 Oct 2026; update to 7.2.3, see [Bluetooth troubleshooting](/using-linux/dualsense#bluetooth-troubleshooting) |
 | DualSense pairs but won't reconnect | [Make the adapter connectable](/using-linux/dualsense#dualsense-pairs-once-but-wont-reconnect) |
 | Sysctl or module settings not applied after boot | [Systemd ordering cycle](/troubleshooting/modules-not-loading) |
 | Switching from Gaming Mode to the desktop kills HDMI | [Choose the session before booting](/using-linux/boot-to-desktop) |
@@ -30,7 +30,7 @@ description: Current known issues with PS5 Linux and answers to frequently asked
 
 ### CachyOS currently broken
 
-CachyOS currently doesn't boot; this has been confirmed by several users, including rmux. The kernel panics right after the orange LED stops blinking. **Use Ubuntu or Arch until this is fixed.**
+CachyOS currently doesn't boot; this has been confirmed by several users, including rmux. The kernel panics right after the orange LED stops blinking. **Use Ubuntu or Arch until this is fixed.** The [package repository](/advanced/package-repository#fix-scripts-for-older-images) has a `fix-cachyos.sh` for images that do boot.
 
 One user reported CachyOS running on firmware 13.60 with the official image and a kernel built from ps5-linux-patches (kernel 7.2.3). This has not been confirmed by the wiki editors, so treat it as a lead and not as a fix.
 
@@ -52,11 +52,11 @@ It depends on the image. The official CachyOS image uses `steam` / `steam` and t
 
 ### Which USB port do I use for the Linux drive?
 
-On the original PS5, use the front USB-C port or a rear USB-A port. The front USB-A port is USB 2.0: booting from it works but is much slower, and one user reported it not working at all. On the PS5 Slim, use the rear ports. See [USB and storage](/hardware/usb-storage#usb-ports).
+On the original PS5, use the front USB-C port or one of the rear USB-A ports. The front USB-A port is USB 2.0: booting from it works, but it is much slower. On the PS5 Slim, use the rear ports. See [USB ports](/hardware/usb-storage#usb-ports).
 
-### Does restarting Linux restart Linux?
+### What happens when I restart Linux?
 
-No. Restarting or shutting down Linux returns the PS5 to the PS5 OS. Run your jailbreak and the Linux loader again to get back in. Test a new kernel with `kexec` first when your image provides it, so a failed kernel doesn't cost you a full cycle.
+The PS5 starts the PS5 OS. There is no way to restart straight into Linux on the standard images: run your jailbreak and the Linux loader again. [PS5 Bazzite Deck](/installation/bazzite-deck#built-in-commands) has an experimental warm restart (`ps5-warm-reboot`). When you test a new kernel, try it with `kexec` first if your image provides it, so a kernel that doesn't boot doesn't cost you a full cycle.
 
 ### Why is the screen black on the first boot?
 
@@ -66,9 +66,9 @@ A black screen on the first boot is common, and Linux is usually running. Switch
 
 They are not on by default. Install `ps5-linux-tools` and enable the fan and boost services, see [Fan](/hardware/fan) and [GPU boost](/hardware/gpu#boost).
 
-### Will the PS5 Slim or newer firmware be supported?
+### Will newer firmware be supported?
 
-We don't know, and we don't want to jinx anything. See [Supported firmware](/getting-started/firmware).
+The Slim and the Pro are already supported. For firmware, the exploit chain stops at 13.60 and the ps5-linux project states that 14.00 and later won't be supported. See [Supported firmware](/getting-started/firmware).
 
 ### Can I dual-boot Linux and the PS5 OS?
 

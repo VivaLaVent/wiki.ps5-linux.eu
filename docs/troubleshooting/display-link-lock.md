@@ -49,7 +49,7 @@ A service that runs before the display manager starts keeps the link locked.
 
 Create the script:
 
-```sh title="/usr/local/bin/dp-link-lock"
+```bash title="/usr/local/bin/dp-link-lock"
 #!/bin/sh
 f=/sys/kernel/debug/dri/0/DP-1/link_settings
 mountpoint -q /sys/kernel/debug || mount -t debugfs none /sys/kernel/debug

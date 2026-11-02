@@ -9,7 +9,7 @@ import TabItem from '@theme/TabItem';
 
 # Kernel setup
 
-The ps5-linux project ships a patched kernel through [ps5-linux-patches](https://github.com/ps5-linux/ps5-linux-patches). Pre-built packages are available for Debian/Ubuntu (`.deb`) and Arch-based distros (`.pkg.tar.zst`).
+The ps5-linux project ships a patched kernel through [ps5-linux-patches](https://github.com/ps5-linux/ps5-linux-patches). Pre-built packages are available for Debian/Ubuntu (`.deb`), Arch-based distros (`.pkg.tar.zst`) and Fedora (`.rpm`). The newest release at the time of writing is **7.2.3** (1 November 2026).
 
 The loader always starts the kernel (`bzImage`) and initrd (`initrd.img`) from the FAT32 partition of the USB drive, labelled `boot` and usually mounted at `/boot/efi` (or `/efi` on Bazzite). Whatever way you install a kernel, it has to end up there.
 
@@ -148,17 +148,18 @@ If the new kernel doesn't boot, rename the `.old` files back from another comput
 
 ### Building a kernel for Bazzite Game Mode
 
-Bazzite's Game Mode starts Steam through the `cardwired` service, which loads an eBPF program. That needs two kernel features the PS5 kernel configs don't enable:
+Bazzite's Game Mode starts Steam through the `cardwired` service, which loads an eBPF program. That needs two kernel features:
 
-1. **The BPF LSM.** `CONFIG_BPF_LSM=y` is set, but `bpf` is missing from `CONFIG_LSM`, so it never activates. Add `bpf` to `CONFIG_LSM`, or add `lsm=landlock,lockdown,yama,integrity,apparmor,bpf` to `cmdline.txt`.
-2. **Kernel BTF.** Turn on `CONFIG_DEBUG_INFO_BTF` so that `/sys/kernel/btf/vmlinux` exists.
+1. **The BPF LSM.** `CONFIG_BPF_LSM=y` is set in the official config, but `bpf` is missing from `CONFIG_LSM`, so it never activates. Add `bpf` to `CONFIG_LSM`, or add `lsm=landlock,lockdown,yama,integrity,apparmor,bpf` to `cmdline.txt`.
+2. **Kernel BTF.** `CONFIG_DEBUG_INFO_BTF=y` is already in the official config since July 2026. Check that `/sys/kernel/btf/vmlinux` exists; older configs need it turned on.
 
 Without them, `cardwired` crash-loops with `CardwireEbpfError(LSMNotEnabled)` or `error parsing /sys/kernel/btf/vmlinux`, Gamescope is killed a second after it starts, and after five attempts Bazzite drops you to the desktop. [PS5 Bazzite Deck](/installation/bazzite-deck) applies both changes.
 
-### Pending in ps5-linux-patches
+### Recently merged and still pending
 
-- amdgpu SMU driver: correct GPU frequency and temperature reporting
-- HDMI converter: improvements for HDR, RGB range and 120 Hz
+Merged in October and November 2026, after the 7.2.3 release was cut for some of them: HDR on FLAVA3 (#49), HDMI CEC (#53), display hotplug (#43), native FRL for 4K at 120 Hz with 4:2:0 fallback and ALLM (#63, on by default since #67), USB-C DisplayPort output (#57), a PS5 Pro GPU driver (#58, #66) and the hwmon fan curve (#60). Build from `main` to get the ones that aren't in a release yet.
+
+Still listed as to do upstream: an amdgpu SMU driver so the base PS5 reports its GPU frequency and temperature correctly.
 
 ## Kernel parameters (cmdline.txt)
 
@@ -196,7 +197,11 @@ Other useful parameters:
 | `rootwait rootdelay=60` | Waits up to 60 seconds for a slow USB drive before giving up on the root filesystem | [USB drive](/hardware/usb-storage#usb-drive-required) |
 | `usbcore.autosuspend=-1` | Stops USB devices from going to sleep, which can drop the drive | [USB drive](/hardware/usb-storage#usb-drive-required) |
 | `usbc_dp.enable=1` | DisplayPort output on the front USB-C port (PS5 Bazzite Deck) | [Boot options](/installation/bazzite-deck#boot-options-cmdlinetxt) |
-| `hdmi.frl_4k120=0` | Never offers 4K at 120 Hz (PS5 Bazzite Deck) | [Boot options](/installation/bazzite-deck#boot-options-cmdlinetxt) |
+| `hdmi.frl_4k120=0` | Never offers 4K at 120 Hz | [HDMI chip](/hardware/hdmi#kernel-parameters) |
+| `hdmi.vrr=0` | Never offers VRR | [HDMI chip](/hardware/hdmi#vrr-on-flava3) |
+| `hdmi.rgb_range=<0,1,2>` | AVI RGB range flag: full, limited or none | [HDMI chip](/hardware/hdmi#rgb-range) |
+| `ps5_gpufreq.temp_limit=<50-95>` | Thermal limit of the GPU clock governor (upstream #66), 85 °C by default | [PS5 Pro](/hardware/ps5-pro#gpu-driver) |
+| `btusb.ps5_tx_ep=<n>` | ACL bulk OUT endpoint for the MediaTek Bluetooth on the Slim | [Bluetooth](/using-linux/bluetooth#mediatek-on-the-slim) |
 
 `cmdline.txt` must stay a **single line**. Add options at the end, separated by a space.
 

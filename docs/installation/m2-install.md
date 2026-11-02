@@ -59,7 +59,7 @@ Updating the kernel on an M.2 install can cause a black screen. Stay on kernel *
 
 ## Switching distros
 
-You don't need to reformat from the PS5 OS. Formatting the M.2 drive from the PS5 settings only does a "soft" format: it overwrites the blocks the PS5 itself needs and leaves your Linux partition alone. To switch distros, reformat the partition directly from Linux (for example `sudo mkfs.ext4 /dev/nvme1`, or your preferred filesystem) and reinstall.
+You don't need to reformat from the PS5 OS. Formatting the M.2 drive from the PS5 settings only does a "soft" format: it overwrites the blocks the PS5 itself needs and leaves your Linux partition alone. To switch distros, reformat the Linux partition from Linux (`sudo mkfs.ext4 /dev/nvme0n1p1`, the partition `m2_init` created) and reinstall.
 
 ## No 64 GB USB drive?
 

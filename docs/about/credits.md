@@ -1,7 +1,7 @@
 ---
 title: Credits
 sidebar_position: 1
-description: The people behind ps5-linux and this wiki.
+description: The people whose work makes Linux on the PS5 possible, and where to find the community.
 ---
 
 # Credits
@@ -30,11 +30,16 @@ ps5-linux is a community project. Core contributors:
 | [QuartConz](https://github.com/QuartConz/ps5-pro-viola-bluetooth) | PS5 Pro Bluetooth |
 | [gzimbric](https://github.com/gzimbric/ps5-linux-loader) | PS5 Pro loader for 11.xx |
 | [Wigglez-sudo](https://github.com/Wigglez-sudo/12.xx-linux-loader) | 12.xx loader, including the PS5 Pro |
-| Lawson | VRR and 4K120 over HDMI 2.1 FRL |
+| Lawson | VRR fix and the port of Sony's 4K120 setup over HDMI 2.1 FRL |
 | hsgodd | Captures and research on the PS5's HDMI setup |
-| Slip | HDR, SCDC, CEC and hotplug patches |
+| Slip | HDR, SCDC, CEC and hotplug patches; 4K120 detection and fallback (#63) |
 | Tertium | USB-C display output |
 | Dasloh | Sleep support, Linux-only Bluetooth address, USB power fixes |
+| [Borchev](https://github.com/Borchev) | PS5 Pro GPU driver and clock governor (ps5-linux-patches #58, #66), hwmon fan driver Pro fix |
+| mfoster978 | Found the initrd 4-byte alignment bug for the Pro firmware; loader support for 11.60 on the Pro |
+| bizkut | IW620 btusb quirks |
+| Daniel Walker | IW620 legacy LE command family quirk |
+| Max | IW620 warm-restart testing |
 | [NotHavocc](https://github.com/NotHavocc/ps5-hwcon-plugin) | PS5 hardware control plugin |
 | [cmartinespinosa](https://github.com/cmartinespinosa/decky-ps5-bazzite-updater) | PS5 Bazzite Updater plugin |
 | [abrocoma](https://github.com/abrocoma) | CachyOS notes: display link lock, DualSense reconnect, boot-to-desktop and systemd ordering fixes |

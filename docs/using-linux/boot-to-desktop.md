@@ -1,6 +1,6 @@
 ---
 title: Boot to the desktop or Gaming Mode
-sidebar_position: 5
+sidebar_position: 7
 description: Choose whether the next boot starts the KDE desktop or Steam Gaming Mode, and avoid the switch that breaks HDMI.
 ---
 

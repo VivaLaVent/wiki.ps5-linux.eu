@@ -19,9 +19,9 @@ Linux runs on the original PS5, the PS5 Slim and the PS5 Pro. Within those model
 
 On [PS5 Bazzite Deck](/installation/bazzite-deck), `ps5-report` shows all three on its first lines.
 
-- **HDMI chip:** VERDE consoles don't get 1440p at 120 Hz, 4K at 120 Hz, HDR or VRR. See [PS5 Bazzite Deck](/installation/bazzite-deck#what-works-on-your-console) for the full comparison.
-- **Wi-Fi/Bluetooth chip:** the upstream kernel only supports the IW620, see [Wi-Fi](/using-linux/networking/wifi). The MediaTek chips work on PS5 Bazzite Deck.
-- **PS5 Pro:** needs a loader with Pro support (see [Which loader](/installation/booting#which-loader)) and its own GPU firmware. Its GPU has 60 active compute units, so the [40 CU unlock](./gpu.md#40-cu-unlock) doesn't apply.
+- **HDMI chip:** VERDE consoles don't get 1440p at 120 Hz, 4K at 120 Hz, HDR or VRR. How the chip works and why is on [HDMI chip](./hdmi.md); the feature table is on [PS5 Bazzite Deck](/installation/bazzite-deck#what-works-on-your-console).
+- **Wi-Fi/Bluetooth chip:** the IW620 uses the out-of-tree `mwifiex` port, see [Wi-Fi](/using-linux/networking/wifi). The MediaTek chips use the in-kernel `mt7921e` and `mt7925e` drivers, built by the official config since kernel release 7.2.3 and confirmed on PS5 Bazzite Deck.
+- **PS5 Pro:** supported by the official loader from firmware 11.00 (see [Which loader](/installation/booting#which-loader)). Its GPU (`1002:13da`, "Viola") needs its own firmware, which the loader dumps on 13.20 and 13.60 and the kernel package stages at boot. The GPU has 60 active compute units, so the [40 CU unlock](./gpu.md#40-cu-unlock) doesn't apply. Details on [PS5 Pro](./ps5-pro.md).
 
 ## SoC (original PS5 and Slim)
 
@@ -29,7 +29,7 @@ The PS5 uses a custom **AMD Oberon** APU.
 
 - **CPU:** 8 cores / 16 threads, Zen 2 at 3.5 GHz (boost through `ps5_control`). Uses the `schedutil` cpufreq governor by default.
 - **GPU:** RDNA2, 36–40 active compute units (CUs) depending on the unit. Disabled CUs can be unlocked with a kernel parameter. PCI ID `1002:13fb`. Boosts to 2.23 GHz through `ps5_control`. See [GPU](./gpu.md).
-- **RAM:** 16 GB of unified GDDR6. About 14 GB is usable by the OS; the rest is reserved for firmware and VRAM.
+- **RAM:** 16 GB of unified GDDR6. About 14 GB is usable by the OS; the rest is reserved by the firmware. VRAM comes out of that 14 GB, see [Memory, VRAM and swap](/using-linux/memory-and-swap).
 
 ## Storage
 
@@ -59,7 +59,7 @@ dmesg | grep spcie
 | Output | Revision | Wi-Fi/Bluetooth status |
 | --- | --- | --- |
 | `0x11xxxxx` | Salina rev1 (Marvell) | ✅ Supported |
-| `0x12xxxxx` | Salina rev2 (MediaTek on most units, but some rev2 boards are still Marvell) | ❌ Not in the upstream kernel; MediaTek works on PS5 Bazzite Deck |
+| `0x12xxxxx` | Salina rev2 (MediaTek on most units, but some rev2 boards are still Marvell) | ⚠️ Drivers in the official kernel since release 7.2.3; confirmed on PS5 Bazzite Deck |
 
 ## Audio
 

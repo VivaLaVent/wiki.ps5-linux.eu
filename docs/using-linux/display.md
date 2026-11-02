@@ -18,7 +18,7 @@ HDMI 2.1 output is driven by `amdgpu` and works out of the box once the driver l
 | 1440p | 120 Hz | Confirmed on Dell S3225QC |
 | 2160p (4K) | 60 Hz | Working (issues on some monitors) |
 
-30 Hz and wider 120 Hz support may be added in the future. [PS5 Bazzite Deck](/installation/bazzite-deck#what-works-on-your-console) adds 1440p and 4K at 120 Hz, HDR and VRR on consoles with the FLAVA3 HDMI chip.
+[PS5 Bazzite Deck](/installation/bazzite-deck#what-works-on-your-console) has offered 1440p and 4K at 120 Hz, HDR and VRR on consoles with the FLAVA3 HDMI chip since mid-2026. The same features (HDR, CEC, hotplug, native FRL for 4K at 120 Hz) were merged into `ps5-linux-patches` in October and November 2026 and reach other images with the next kernel release, see [Kernel setup](/advanced/kernel#recently-merged-and-still-pending). 30 Hz is not offered.
 
 :::tip[`amdgpu.force_1080p=1` caps the refresh rate]
 This flag ships in the default `cmdline.txt` and was long assumed to be required. Testing on 2026-07-10 showed it is not needed for every monitor, and it **caps output at 60 Hz**, even on displays that support more.
@@ -98,7 +98,7 @@ If you can't update yet, toggling the resolution can recover the link without a 
 
 ### Gamescope doesn't recover from a link training failure (SteamOS/CachyOS)
 
-Symptoms: the LED is white (Linux is running), SSH works and Steam/Gamescope are running, but there is truly **no signal** on any display (not just a black picture). `dmesg` shows the link training error above repeating every 60–90 seconds.
+Symptoms: the LED is white (Linux is running), SSH works and Steam/Gamescope are running, but there is **no signal** on any display (the TV reports no input, rather than showing a black picture). `dmesg` shows the link training error above repeating every 60–90 seconds.
 
 Gamescope grabs the DRM device during its initial modeset, hits the link training failure, and never probes again, even after the PS5's HDMI driver reads the EDID successfully (`hdmi: got real edid` in `dmesg`). Running `echo detect > /sys/class/drm/card0-DP-1/status` does not help, because Gamescope already holds the device.
 

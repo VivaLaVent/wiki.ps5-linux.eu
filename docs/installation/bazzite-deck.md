@@ -139,7 +139,7 @@ All steps run on the PS5, booted from the USB drive, in a terminal (password `ps
    E=$(for d in /boot/efi /efi; do sudo test -f $d/cmdline.txt && echo $d && break; done); sudo sed -i 's/root=LABEL=bazzite-deck /root=LABEL=bazzite-deck-m2 /' $E/cmdline.txt && sudo cat $E/cmdline.txt
    ```
 
-4. **Start it:** reboot (`sudo reboot`) and run the loader as usual. It now starts the system on the M.2. You can also switch right away with `cd ~/ps5-linux-tools && sudo ./m2_exec.sh`; if it says `kexec` isn't found, just reboot instead.
+4. **Start it:** reboot (`sudo reboot`) and run the loader as usual. It now starts the system on the M.2. You can also switch right away with `cd ~/ps5-linux-tools && sudo ./m2_exec.sh`; if it says `kexec` isn't found, reboot instead.
 
 To go back to the USB system, change `bazzite-deck-m2` back to `bazzite-deck` in `cmdline.txt`.
 
@@ -184,7 +184,7 @@ E=$(for d in /boot/efi /efi; do sudo test -f $d/cmdline.txt && echo $d && break;
 
 Bazzite's Game Mode never worked on the PS5 before, and it wasn't the display or Gamescope. Bazzite starts Steam through the `cardwired` service, which loads an eBPF program and needs two kernel features that the PS5 kernel configs don't enable: the **BPF LSM** (`bpf` must be in `CONFIG_LSM`) and **kernel BTF** (`CONFIG_DEBUG_INFO_BTF`). Without them, `cardwired` crash-loops and Bazzite drops you to the desktop after five attempts. See [Kernel setup](/advanced/kernel#building-a-kernel-for-bazzite-game-mode) for details.
 
-The image is built on the [ps5-linux-image](https://github.com/ps5-linux/ps5-linux-image) builder with Linux 7.3 and rmuxnet's 7.3 PS5 patches, plus its own HDMI, Wi-Fi and Bluetooth fixes. Each release ships a `VERSIONS.md` with the exact versions used. To build it yourself (Linux or WSL with Docker and about 60 GB free; it takes a couple of hours):
+The image is built on the [ps5-linux-image](https://github.com/ps5-linux/ps5-linux-image) builder with Linux 7.3 and rmuxnet's 7.3 PS5 patches, plus its own HDMI, Wi-Fi and Bluetooth fixes. The config changes, the patch order and what each patch does are on [How the PS5 Bazzite Deck image is built](/advanced/image-build). Each release ships a `VERSIONS.md` with the exact versions used. To build it yourself (Linux or WSL with Docker and about 60 GB free; it takes a couple of hours):
 
 ```bash
 git clone https://github.com/VivaLaVent/ps5-bazzite-deck && cd ps5-bazzite-deck

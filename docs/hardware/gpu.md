@@ -1,7 +1,7 @@
 ---
 title: GPU (AMD Oberon / RDNA2)
 sidebar_label: GPU
-sidebar_position: 2
+sidebar_position: 3
 description: GPU status, boost mode, the 40 CU unlock, VRAM settings, benchmarks and performance tips.
 ---
 
@@ -60,7 +60,7 @@ Recent kernels control the fan automatically based on the APU temperature. See [
 
 ## 40 CU unlock
 
-PS5 units ship with either 36 or 38 of their 40 compute units (CUs) active; the rest are disabled ("harvested") in the silicon. How many your console actually has is **hardware-specific**: some top out at 38, others can run all 40. This is also why benchmark scores vary between units. The ps5-linux kernel patch unlocks whichever disabled CUs are present.
+PS5 units ship with either 36 or 38 of their 40 compute units (CUs) active; the rest are disabled ("harvested") in the silicon. How many your console has is **hardware-specific**: some top out at 38, others can run all 40. This is also why benchmark scores vary between units. The ps5-linux kernel patch unlocks whichever disabled CUs are present.
 
 **Kernel parameter:** `amdgpu.ps5_cu_unlock=N`
 
@@ -108,14 +108,14 @@ To turn it off again:
 E=$(for d in /boot/efi /efi; do sudo test -f $d/cmdline.txt && echo $d && break; done); sudo sed -i 's/ *amdgpu\.ps5_cu_unlock=[0-9]*//' $E/cmdline.txt && sudo cat $E/cmdline.txt
 ```
 
-The patch writes to both the CC register and the SPI. Both are needed for the unlock to actually affect dispatch (verified on the BC-250). Source: [ps5-linux-patches commit 5b0dc56](https://github.com/ps5-linux/ps5-linux-patches/commit/5b0dc56c1b37a01dd813cb0f58cd4ae2fc6ed45a).
+The patch writes to both the CC register and the SPI. Both are needed for the unlock to affect dispatch (verified on the BC-250). Source: [ps5-linux-patches commit 5b0dc56](https://github.com/ps5-linux/ps5-linux-patches/commit/5b0dc56c1b37a01dd813cb0f58cd4ae2fc6ed45a).
 
 :::info[Each shader engine needs the same CU count]
 Extra CUs are only used when both shader engines (SEs) have the same number active. 38 CUs (an uneven split across the SEs) benchmarks exactly like 36. If you see graphical glitches after unlocking, first try `RADV_DEBUG=nohiz` in the game's Steam launch options. If that doesn't help, try 38 CUs instead of 40.
 :::
 
 :::warning[Harvested CUs come in pairs, and some can be faulty]
-CUs are disabled in pairs, so a real unit always has 36, 38 or 40 usable CUs, never an odd number. If enabling all 40 causes severe visual artefacts, one of your disabled pairs may be genuinely faulty rather than just disabled for yield. You'll need trial and error to find which pair: test 38 CUs with different pairs masked off. There is no known way to predict which pair fails.
+CUs are disabled in pairs, so a real unit always has 36, 38 or 40 usable CUs, never an odd number. If enabling all 40 causes severe visual artefacts, one of your disabled pairs may be faulty rather than disabled for yield. Finding which pair takes trial and error: test 38 CUs with different pairs masked off. There is no known way to predict which pair fails.
 :::
 
 ### Runtime unlock with UMR (no kernel rebuild)
@@ -143,7 +143,7 @@ One suggestion was setting `adev->gfx.cu_info.lds_size = 128;` in `amdgpu_device
 
 ## VRAM
 
-Tools show a default allocation of 512 MB, but VRAM is **dynamic**: the driver allocates more as needed. With 16 GB of shared RAM and VRAM, the GPU can use up to about 12 GB in practice.
+Tools show a default allocation of 512 MB, but VRAM is **dynamic**: the driver takes more as needed. With the default split and about 14 GB usable, the ceiling works out at roughly 7 GB; the formula and how to raise it are below.
 
 To set a fixed minimum, edit `vram.txt` on the FAT32 USB partition. The loader reads the value as **hexadecimal bytes**, not decimal megabytes (`strtoull(buf, NULL, 16)` in `ps5-linux-loader/source/loader.c`). A decimal megabyte value silently sets VRAM to almost nothing, which is a common cause of a black screen at boot.
 
@@ -189,9 +189,9 @@ ttm.pages_limit=2621440
 
 | Configuration | Score | Notes |
 | --- | --- | --- |
-| No boost | 4,903 | GPU at 3,193 MHz |
+| No boost | 4,903 | CPU at 3,193 MHz |
 | Fan + boost, no CU unlock | ~5,150 | |
-| 40 CUs + fan + boost | 5,041 | GPU at 3,493 MHz actual, kernel 7.0.10 |
+| 40 CUs + fan + boost | 5,041 | CPU at 3,493 MHz, kernel 7.0.10 |
 | 40 CUs + fan + boost (CFI-1216A) | 5,259 | 6 nm APU |
 | No CU unlock, no boost | 5,367 | Kernel 7.3.0-rc6, 40.15 fps average, highest seen |
 

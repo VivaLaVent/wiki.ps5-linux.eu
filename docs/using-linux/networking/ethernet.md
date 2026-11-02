@@ -18,10 +18,10 @@ The PS5's Gigabit Ethernet controller is based on the MediaTek Star Ethernet MAC
 ## Kernel config
 
 ```text
-CONFIG_MTS=y
+CONFIG_MTS=m
 ```
 
-The driver is built into the ps5-linux kernel by default, so you don't need to load it manually.
+The ps5-linux kernel config builds the driver as a module, and it loads by itself at boot. You don't need to load it manually.
 
 ## Troubleshooting
 
@@ -50,6 +50,6 @@ Measured after the fix:
 - IPv6 gets a global address through router advertisements
 - Cold boot works
 
-:::note[Not in a release yet]
-No prebuilt release includes this fix yet; the newest release is still 7.1.7. Build the kernel from `ps5-linux-patches` at `9322b9d` or newer, see [Kernel setup](/advanced/kernel). Until then, a USB adapter is the way to get full gigabit speed on the release kernel.
+:::note[In release 7.2.3 and later]
+The fix is in the prebuilt kernel release **7.2.3** (1 November 2026) and later, see [Kernel setup](/advanced/kernel). On an older release kernel, update, or use a USB adapter for full gigabit speed.
 :::

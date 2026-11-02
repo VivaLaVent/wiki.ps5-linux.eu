@@ -50,6 +50,8 @@ const config: Config = {
           // Docs-only mode: the wiki lives at the site root.
           routeBasePath: '/',
           sidebarPath: './sidebars.ts',
+          // Adds the "Edit this page" link at the bottom of every doc.
+          editUrl: 'https://github.com/VivaLaVent/wiki.ps5-linux.eu/edit/main/',
         },
         blog: false,
         theme: {

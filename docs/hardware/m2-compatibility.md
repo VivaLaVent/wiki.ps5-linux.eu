@@ -1,6 +1,6 @@
 ---
 title: M.2 compatibility list
-sidebar_position: 5
+sidebar_position: 7
 description: Community-tested results for the Gen3 NVMe unlock, by firmware and drive.
 ---
 
@@ -12,22 +12,20 @@ Community-tested results for the Gen3 NVMe unlock. See [Gen3 NVMe unlock](./usb-
 Add your result with the [submission form](https://forms.gle/bu1uFZdurwUoMYTq5).
 :::
 
-## Summary
+## Results by firmware
 
-Confirmed working on firmware 4.00, 4.03 and 4.51. Failed reports on 5.xx and higher are probably user error (wrong dump or wrong procedure) rather than a firmware limitation. If it doesn't work for you, make your own dump from a PS5-formatted Gen4 drive instead of using a shared one.
+Every report on 4.xx worked. From 5.xx on, most reports fail, but there are confirmed successes on 11.60 and 13.40 with the same shared dump that failed for others, so the failures look like a wrong dump or a wrong procedure rather than a firmware block. If it doesn't work for you, make your own dump from a PS5-formatted Gen4 drive instead of using a shared one.
 
 | PS5 firmware | Gen3 unlock result |
 | --- | --- |
-| 4.00 | ✅ Confirmed working |
-| 4.03 | ✅ Confirmed working |
-| 4.51 | ✅ Confirmed working |
-| 5.02 | ⚠️ Reported failing, probably user error |
-| 5.10 | ⚠️ Reported failing, probably user error |
-| 10.01 and later | ⚠️ Reported failing, probably user error |
+| 4.00, 4.03, 4.51 | ✅ Confirmed working, every report |
+| 5.02, 5.10 | ❌ Reported failing |
+| 10.01 to 13.00 | ❌ Reported failing, apart from one success on 11.60 |
+| 13.20 to 13.40 | ⚠️ Mixed: one success on 13.40, several failures |
 
 ## All results
 
-"Dump used" says where the 2 MB header came from, for example *bringus* (Bringus Studios' shared dump) or *personal* (made by the tester). "Dump source" is the drive a personal dump was taken from, when known.
+"Dump used" says where the 2 MB header came from: *bringus* (Bringus Studios' shared dump), *netflix* (another shared dump that circulates on Discord) or *personal* (made by the tester). "Dump source" is the drive a personal dump was taken from, when known.
 
 | User | Worked | PS5 FW | Drive | Capacity | Dump used | Dump source |
 | --- | --- | --- | --- | --- | --- | --- |

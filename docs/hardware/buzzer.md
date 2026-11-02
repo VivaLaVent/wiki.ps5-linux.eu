@@ -1,7 +1,7 @@
 ---
 title: Buzzer
-sidebar_position: 8
-description: Make the PS5's built-in buzzer beep from Linux.
+sidebar_position: 10
+description: Make the PS5's built-in piezo buzzer beep from Linux through the kernel driver's sysfs interface.
 ---
 
 # Buzzer

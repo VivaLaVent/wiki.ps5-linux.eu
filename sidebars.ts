@@ -39,6 +39,7 @@ const sidebars: SidebarsConfig = {
           items: ['using-linux/networking/ethernet', 'using-linux/networking/wifi'],
         },
         'using-linux/dualsense',
+        'using-linux/bluetooth',
         'using-linux/gaming-performance',
         'using-linux/memory-and-swap',
         'using-linux/boot-to-desktop',
@@ -50,7 +51,9 @@ const sidebars: SidebarsConfig = {
       label: 'Hardware reference',
       items: [
         'hardware/overview',
+        'hardware/ps5-pro',
         'hardware/gpu',
+        'hardware/hdmi',
         'hardware/vcn',
         'hardware/usb-storage',
         'hardware/m2-compatibility',
@@ -63,7 +66,12 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Advanced',
-      items: ['advanced/kernel', 'advanced/package-repository'],
+      items: [
+        'advanced/kernel',
+        'advanced/package-repository',
+        'advanced/warm-reboot',
+        'advanced/image-build',
+      ],
     },
     {
       type: 'category',
