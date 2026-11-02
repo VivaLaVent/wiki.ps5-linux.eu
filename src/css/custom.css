@@ -1,13 +1,27 @@
 /**
- * PS5 Linux Wiki theme: Docusaurus' default dark theme with a purple accent
- * (inspired by Bazzite Deck). The site is dark-only (see colorMode in
- * docusaurus.config.ts), so the same palette is set for both modes.
- * Shades follow the Docusaurus palette generator:
- * https://docusaurus.io/docs/styling-layout#styling-your-site-with-infima
+ * PS5 Linux Wiki theme
+ * Dark-only (see colorMode in docusaurus.config.ts): near-black surfaces,
+ * white text and a blue → purple accent.
+ * Infima variables: https://infima.dev/docs/getting-started/introduction
  */
 
 :root,
 [data-theme='dark'] {
+  /* Palette */
+  --wiki-blue: #2563eb;
+  --wiki-blue-light: #60a5fa;
+  --wiki-purple: #9333ea;
+  --wiki-purple-light: #c084fc;
+  --wiki-gradient: linear-gradient(90deg, var(--wiki-blue) 0%, var(--wiki-purple) 100%);
+  --wiki-bg: #141414;
+  --wiki-surface: #1c1c1c;
+  --wiki-surface-raised: #242424;
+  --wiki-border: #2e2e33;
+  --wiki-text: #f5f5f7;
+  --wiki-text-muted: #a1a1aa;
+  --wiki-code-bg: #14152b;
+
+  /* Primary colour (links, active items): purple, shades per the Docusaurus generator */
   --ifm-color-primary: #a882ff;
   --ifm-color-primary-dark: #8d5cff;
   --ifm-color-primary-darker: #8048ff;
@@ -15,17 +29,238 @@
   --ifm-color-primary-light: #b18fff;
   --ifm-color-primary-lighter: #b595ff;
   --ifm-color-primary-lightest: #c2a7ff;
-  --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+
+  /* Surfaces and text */
+  --ifm-background-color: var(--wiki-bg);
+  --ifm-background-surface-color: var(--wiki-surface);
+  --ifm-navbar-background-color: var(--wiki-surface);
+  --ifm-footer-background-color: var(--wiki-surface);
+  --ifm-font-color-base: var(--wiki-text);
+  --ifm-heading-color: #ffffff;
+  --ifm-toc-border-color: var(--wiki-border);
+  --ifm-hr-background-color: var(--wiki-border);
+  --ifm-color-emphasis-300: var(--wiki-border);
+
+  /* Typography */
+  --ifm-font-family-base: 'DM Sans Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --ifm-heading-font-family: var(--ifm-font-family-base);
+  --ifm-font-family-monospace: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --ifm-line-height-base: 1.7;
+  --ifm-heading-font-weight: 700;
+  --ifm-code-font-size: 90%;
+
+  /* Shapes */
+  --ifm-global-radius: 10px;
+  --ifm-code-border-radius: 6px;
+  --docusaurus-highlighted-code-line-bg: rgba(147, 51, 234, 0.25);
 }
 
-/* Wide tables scroll instead of squeezing on small screens. */
+/* ---------- Navbar ---------- */
+
+.navbar {
+  box-shadow: none;
+  border-bottom: 2px solid transparent;
+  border-image: var(--wiki-gradient) 1;
+}
+
+.navbar__title {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- Headings ---------- */
+
+.markdown h1 {
+  letter-spacing: -0.02em;
+}
+
+.markdown h1::after {
+  content: '';
+  display: block;
+  width: 64px;
+  height: 4px;
+  margin-top: 0.6rem;
+  border-radius: 2px;
+  background: var(--wiki-gradient);
+}
+
+.markdown h2 {
+  letter-spacing: -0.01em;
+}
+
+/* ---------- Links ---------- */
+
+.markdown a {
+  color: var(--wiki-blue-light);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(96, 165, 250, 0.4);
+}
+
+.markdown a:hover {
+  color: var(--wiki-purple-light);
+  text-decoration-color: currentColor;
+}
+
+/* ---------- Sidebar ---------- */
+
+.menu__link--active:not(.menu__link--sublist) {
+  background: linear-gradient(90deg, rgba(37, 99, 235, 0.22) 0%, rgba(147, 51, 234, 0.22) 100%);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* ---------- Tables ---------- */
+
 .markdown table {
   display: block;
+  width: fit-content;
+  max-width: 100%;
   overflow-x: auto;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--wiki-border);
+  border-radius: 12px;
+  background: var(--wiki-surface);
 }
 
-/* Collapsible benchmark tables. */
+.markdown table thead tr {
+  background: var(--wiki-gradient);
+  border: none;
+}
+
+.markdown table th {
+  color: #ffffff;
+  font-weight: 600;
+  text-align: left;
+  border: none;
+  padding: 0.65rem 1rem;
+}
+
+.markdown table td {
+  border: none;
+  border-top: 1px solid var(--wiki-border);
+  padding: 0.6rem 1rem;
+}
+
+.markdown table tr {
+  border: none;
+  background: transparent;
+}
+
+.markdown table tbody tr:nth-child(2n) {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.markdown table tbody tr:hover {
+  background: rgba(147, 51, 234, 0.08);
+}
+
+/* ---------- Code ---------- */
+
+/* Inline code */
+.markdown :not(pre) > code {
+  background: rgba(147, 51, 234, 0.14);
+  border: 1px solid rgba(147, 51, 234, 0.3);
+  color: #e9d5ff;
+  padding: 0.1rem 0.35rem;
+}
+
+/* Code blocks: a terminal window */
+.theme-code-block {
+  border: 1px solid var(--wiki-border);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+/* Title bar ("```bash title=...") */
+.theme-code-block > div:first-child[class*='codeBlockTitle'] {
+  background: var(--wiki-surface-raised);
+  color: #ffffff;
+  font-family: var(--ifm-font-family-base);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-align: center;
+  border-bottom: 1px solid var(--wiki-border);
+}
+
+/* ---------- Admonitions (:::note, :::tip, ...) ---------- */
+
+.theme-admonition {
+  --wiki-admonition-color: var(--wiki-blue-light);
+  background: var(--wiki-surface);
+  color: var(--wiki-text);
+  border: 1px solid var(--wiki-border);
+  border-left: 4px solid var(--wiki-admonition-color);
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+.theme-admonition [class*='admonitionHeading'] {
+  color: var(--wiki-admonition-color);
+  text-transform: none;
+  font-size: 0.95rem;
+  letter-spacing: 0;
+}
+
+.theme-admonition [class*='admonitionIcon'] svg {
+  fill: var(--wiki-admonition-color);
+}
+
+.theme-admonition a {
+  color: var(--wiki-blue-light);
+}
+
+.theme-admonition-note {
+  --wiki-admonition-color: #a1a1aa;
+}
+
+.theme-admonition-info {
+  --wiki-admonition-color: var(--wiki-blue-light);
+  background: linear-gradient(90deg, rgba(37, 99, 235, 0.12), var(--wiki-surface) 60%);
+}
+
+.theme-admonition-tip {
+  --wiki-admonition-color: var(--wiki-purple-light);
+  background: linear-gradient(90deg, rgba(147, 51, 234, 0.14), var(--wiki-surface) 60%);
+}
+
+.theme-admonition-warning {
+  --wiki-admonition-color: #fbbf24;
+  background: linear-gradient(90deg, rgba(251, 191, 36, 0.1), var(--wiki-surface) 60%);
+}
+
+.theme-admonition-danger {
+  --wiki-admonition-color: #f87171;
+  background: linear-gradient(90deg, rgba(248, 113, 113, 0.12), var(--wiki-surface) 60%);
+}
+
+/* ---------- Collapsible sections (<details>) ---------- */
+
 .markdown details {
+  --docusaurus-details-decoration-color: var(--wiki-purple-light);
+  background: var(--wiki-surface);
+  border: 1px solid var(--wiki-border);
+  border-radius: 12px;
   margin-bottom: 1rem;
+}
+
+/* ---------- Search box ---------- */
+
+.navbar__search-input,
+[class*='searchBar'] input {
+  border-radius: 999px;
+  background: var(--wiki-surface-raised);
+}
+
+/* ---------- Footer ---------- */
+
+.footer {
+  border-top: 1px solid var(--wiki-border);
+}
+
+.footer__copyright {
+  color: var(--wiki-text-muted);
+  font-size: 0.85rem;
 }

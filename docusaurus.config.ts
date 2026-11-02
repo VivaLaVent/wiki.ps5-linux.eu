@@ -4,6 +4,12 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 // This runs in Node.js - don't use client-side code here (browser APIs, JSX...)
 
+// Dracula syntax colours on a deep navy "terminal" background.
+const codeTheme = {
+  ...prismThemes.dracula,
+  plain: {...prismThemes.dracula.plain, backgroundColor: '#14152b'},
+};
+
 const config: Config = {
   title: 'PS5 Linux Wiki',
   tagline: 'Guides, hardware notes and troubleshooting for running Linux on the PlayStation 5',
@@ -53,6 +59,8 @@ const config: Config = {
     ],
   ],
 
+  clientModules: ['./src/clientModules/fonts.js'],
+
   themes: [
     [
       '@easyops-cn/docusaurus-search-local',
@@ -87,8 +95,8 @@ const config: Config = {
         'Based on the <a href="https://guide.rmux.eu/">PS5 Linux Guide</a> by rmuxnet and contributors · MIT License · Not affiliated with Sony Interactive Entertainment',
     },
     prism: {
-      theme: prismThemes.dracula,
-      darkTheme: prismThemes.dracula,
+      theme: codeTheme,
+      darkTheme: codeTheme,
       additionalLanguages: ['bash', 'ini', 'diff', 'c'],
     },
   } satisfies Preset.ThemeConfig,
