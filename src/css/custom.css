@@ -218,22 +218,22 @@
 
 .theme-admonition-info {
   --wiki-admonition-color: var(--wiki-blue-light);
-  background: linear-gradient(90deg, rgba(37, 99, 235, 0.12), var(--wiki-surface) 60%);
+  background: linear-gradient(rgba(37, 99, 235, 0.12), rgba(37, 99, 235, 0.12)), var(--wiki-surface);
 }
 
 .theme-admonition-tip {
   --wiki-admonition-color: var(--wiki-purple-light);
-  background: linear-gradient(90deg, rgba(147, 51, 234, 0.14), var(--wiki-surface) 60%);
+  background: linear-gradient(rgba(147, 51, 234, 0.14), rgba(147, 51, 234, 0.14)), var(--wiki-surface);
 }
 
 .theme-admonition-warning {
   --wiki-admonition-color: #fbbf24;
-  background: linear-gradient(90deg, rgba(251, 191, 36, 0.1), var(--wiki-surface) 60%);
+  background: linear-gradient(rgba(251, 191, 36, 0.1), rgba(251, 191, 36, 0.1)), var(--wiki-surface);
 }
 
 .theme-admonition-danger {
   --wiki-admonition-color: #f87171;
-  background: linear-gradient(90deg, rgba(248, 113, 113, 0.12), var(--wiki-surface) 60%);
+  background: linear-gradient(rgba(248, 113, 113, 0.12), rgba(248, 113, 113, 0.12)), var(--wiki-surface);
 }
 
 /* Code inside a card: flat, no second window, just a darker inset */
