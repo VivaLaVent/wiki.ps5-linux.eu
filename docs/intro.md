@@ -11,9 +11,7 @@ This is a community wiki for running Linux on the **PlayStation 5**. It uses pat
 
 Linux runs from a USB drive or an M.2 SSD. The internal SSD is never touched, so you can keep using the PS5 OS normally.
 
-![Gentoo Linux running kernel 7.3-rc6 on a PS5](/img/guide/screenshot-gentoo.png)
-
-*Gentoo Linux running kernel 7.3-rc6 with [rmux's patches](https://github.com/rmuxnet/ps5-linux-patches-1).*
+It is not limited to the ready-made images either: for example, Gentoo Linux has been run on a PS5 with kernel 7.3-rc6 and [rmux's patches](https://github.com/rmuxnet/ps5-linux-patches-1).
 
 :::tip[New here?]
 Start with [Getting started](/getting-started/overview). It lists what you need and walks you through every step in order.

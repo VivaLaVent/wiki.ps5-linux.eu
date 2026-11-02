@@ -1,39 +1,22 @@
 /**
- * Global styles for the PS5 Linux Wiki.
- * Infima variables: https://infima.dev/docs/getting-started/introduction
+ * PS5 Linux Wiki theme: Docusaurus' default dark theme with a purple accent
+ * (inspired by Bazzite Deck). The site is dark-only (see colorMode in
+ * docusaurus.config.ts), so the same palette is set for both modes.
+ * Shades follow the Docusaurus palette generator:
+ * https://docusaurus.io/docs/styling-layout#styling-your-site-with-infima
  */
 
-:root {
-  --ifm-color-primary: #1f6feb;
-  --ifm-color-primary-dark: #1a63d4;
-  --ifm-color-primary-darker: #185dc8;
-  --ifm-color-primary-darkest: #144ca4;
-  --ifm-color-primary-light: #3b82f0;
-  --ifm-color-primary-lighter: #4a8cf1;
-  --ifm-color-primary-lightest: #74a7f5;
-  --ifm-code-font-size: 92%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
-}
-
+:root,
 [data-theme='dark'] {
-  --ifm-color-primary: #58a6ff;
-  --ifm-color-primary-dark: #3794ff;
-  --ifm-color-primary-darker: #278bff;
-  --ifm-color-primary-darkest: #006fef;
-  --ifm-color-primary-light: #79b8ff;
-  --ifm-color-primary-lighter: #89c1ff;
-  --ifm-color-primary-lightest: #badbff;
-  --ifm-background-color: #0d1117;
-  --ifm-navbar-background-color: #161b22;
-  --ifm-footer-background-color: #161b22;
+  --ifm-color-primary: #a882ff;
+  --ifm-color-primary-dark: #8d5cff;
+  --ifm-color-primary-darker: #8048ff;
+  --ifm-color-primary-darkest: #580eff;
+  --ifm-color-primary-light: #b18fff;
+  --ifm-color-primary-lighter: #b595ff;
+  --ifm-color-primary-lightest: #c2a7ff;
+  --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
-}
-
-/* Screenshots: keep them readable and give them a subtle frame. */
-.markdown img {
-  border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
-  margin: 0.5rem 0;
 }
 
 /* Wide tables scroll instead of squeezing on small screens. */

@@ -44,8 +44,6 @@ const config: Config = {
           // Docs-only mode: the wiki lives at the site root.
           routeBasePath: '/',
           sidebarPath: './sidebars.ts',
-          editUrl: 'https://github.com/VivaLaVent/wiki.ps5-linux.eu/edit/main/',
-          showLastUpdateTime: true,
         },
         blog: false,
         theme: {
@@ -68,10 +66,10 @@ const config: Config = {
   ],
 
   themeConfig: {
-    image: 'img/logo.svg',
     colorMode: {
       defaultMode: 'dark',
-      respectPrefersColorScheme: true,
+      disableSwitch: true,
+      respectPrefersColorScheme: false,
     },
     docs: {
       sidebar: {
@@ -79,64 +77,17 @@ const config: Config = {
         autoCollapseCategories: true,
       },
     },
-    announcementBar: {
-      id: 'firmware-limit',
-      content:
-        'Linux currently runs on PS5 firmware up to <b>13.60</b>. <a href="/getting-started/firmware">Check your firmware</a> before you start.',
-      backgroundColor: '#1f6feb',
-      textColor: '#ffffff',
-      isCloseable: true,
-    },
     navbar: {
       title: 'PS5 Linux Wiki',
-      logo: {
-        alt: 'PS5 Linux Wiki',
-        src: 'img/logo.svg',
-      },
-      items: [
-        {to: '/getting-started/overview', label: 'Start here', position: 'left'},
-        {to: '/hardware/overview', label: 'Hardware', position: 'left'},
-        {to: '/troubleshooting/known-issues', label: 'Known issues', position: 'left'},
-        {href: 'https://discord.gg/ps5linux', label: 'Discord', position: 'right'},
-        {
-          href: 'https://github.com/VivaLaVent/wiki.ps5-linux.eu',
-          label: 'GitHub',
-          position: 'right',
-        },
-      ],
+      items: [{href: 'https://discord.gg/ps5linux', label: 'Discord', position: 'right'}],
     },
     footer: {
       style: 'dark',
-      links: [
-        {
-          title: 'Wiki',
-          items: [
-            {label: 'What is this?', to: '/'},
-            {label: 'Getting started', to: '/getting-started/overview'},
-            {label: 'Known issues & FAQ', to: '/troubleshooting/known-issues'},
-            {label: 'Credits', to: '/about/credits'},
-          ],
-        },
-        {
-          title: 'Community',
-          items: [
-            {label: 'Discord', href: 'https://discord.gg/ps5linux'},
-            {label: 'Telegram', href: 'https://t.me/ps5linux'},
-          ],
-        },
-        {
-          title: 'Projects',
-          items: [
-            {label: 'ps5-linux on GitHub', href: 'https://github.com/ps5-linux'},
-            {label: 'ps5-linux-image', href: 'https://github.com/ps5-linux/ps5-linux-image'},
-            {label: 'Wiki source', href: 'https://github.com/VivaLaVent/wiki.ps5-linux.eu'},
-          ],
-        },
-      ],
-      copyright: `Community project, not affiliated with Sony Interactive Entertainment. Based on the PS5 Linux Guide by rmuxnet and contributors. Released under the MIT License.`,
+      copyright:
+        'Based on the <a href="https://guide.rmux.eu/">PS5 Linux Guide</a> by rmuxnet and contributors · MIT License · Not affiliated with Sony Interactive Entertainment',
     },
     prism: {
-      theme: prismThemes.github,
+      theme: prismThemes.dracula,
       darkTheme: prismThemes.dracula,
       additionalLanguages: ['bash', 'ini', 'diff', 'c'],
     },

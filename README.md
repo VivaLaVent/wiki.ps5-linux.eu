@@ -6,8 +6,8 @@ Source of [wiki.ps5-linux.eu](https://wiki.ps5-linux.eu), built with [Docusaurus
 
 - Pages live in `docs/`. The sidebar order is set in `sidebars.ts`.
 - `.md` files are plain Markdown. Use `.mdx` only when a page needs components such as `<Tabs>`.
+- The site is dark-only with a purple accent; colours are in `src/css/custom.css`.
 - Callouts: `:::note`, `:::tip`, `:::info`, `:::warning`, `:::danger`, optionally with a title: `:::tip[My title]`.
-- Images go in `static/img/` and are referenced as `/img/...`.
 - Scripts users can `curl` live in `static/scripts/` and are served at `https://wiki.ps5-linux.eu/scripts/...`.
 
 ## Local development

@@ -110,8 +110,6 @@ You can check the topology with `umr`, but it may still show the CUs as disabled
 
 Superposition scores are noticeably lower than BC-250 results would predict. The PS5 has 36–40 CUs against the BC-250's 24, so linear scaling suggests about 5,700–6,450 points. Actual scores are closer to 5,100–5,600, even with 40 CUs and boost. The best so far is 5,602 on Gentoo with kernel 7.3.0-rc6-PinkSoup, 40 CUs and no boost. The root cause isn't confirmed. `dmesg` reports all 36 CUs correctly, so it isn't a detection problem.
 
-![Best Superposition score so far](/img/guide/uniengine.png)
-
 At the same CU count and clock, the BC-250 consistently beats the PS5:
 
 | Configuration | PS5 (boost mode) | BC-250 |
