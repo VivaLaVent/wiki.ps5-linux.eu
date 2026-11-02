@@ -1,6 +1,6 @@
 ---
 title: Package repository
-sidebar_position: 2
+sidebar_position: 3
 description: Install and update the PS5 kernel, Wi-Fi driver and tools with your package manager (repo.etawen.dev).
 ---
 

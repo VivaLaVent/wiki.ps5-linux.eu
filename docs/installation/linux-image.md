@@ -9,15 +9,19 @@ description: Choose a distro, download or build a PS5 Linux image, and flash it 
 
 ## Choose an image
 
-Three sources, all booted by the same [Linux loader](/installation/booting). In the order most people should try them:
+Every image is a normal distro plus the same three PS5 parts: the patched kernel on the boot partition, the Wi-Fi driver and a few services. All of them are booted by the same [Linux loader](/installation/booting), and the kernel can be replaced on any of them, see [Kernel setup](/advanced/kernel). So the choice is mostly about the distro and how much is set up for you:
 
-| Source | What you get | Pick it when |
+| Source | What you get | Kernel and updates |
 | --- | --- | --- |
-| [PS5 Bazzite Deck](/installation/bazzite-deck) | Steam Gaming Mode with a KDE desktop, every PS5 fix on this wiki already applied, updates in place, Slim and Pro support. | You want to play games and not maintain a kernel. |
-| [mia's community images](#community-images-mias-builds) | Automated builds of 20 distros (Ubuntu, Debian, Fedora, Arch, Alpine, Proxmox and more) that grow the root partition by themselves and update the kernel through the [package repository](/advanced/package-repository). | You want a normal desktop or server on a distro of your choice. |
-| [Official images](#official-images) | The ps5-linux project's own builder: Ubuntu, Arch, CachyOS and Fedora. | You want to build your own image or kernel from the reference setup. |
+| [Official images](#official-images) | The ps5-linux project's own builder: Ubuntu, Arch, CachyOS and Fedora. The reference setup. | The upstream `linux-ps5` kernel; update it with the [package repository](/advanced/package-repository) or by hand. |
+| [mia's community images](#community-images-mias-builds) | Automated builds of 20 distros (Ubuntu, Debian, Fedora, Arch, Alpine, Proxmox and more) that grow the root partition by themselves. | The same upstream kernel, updated through the package repository. |
+| [PS5 Bazzite Deck](/installation/bazzite-deck) | Bazzite in Steam Deck mode with a KDE desktop, the Slim's, the Pro's and the HDMI fixes from this wiki applied, Wi-Fi and Bluetooth set up. | Its own kernel (Linux 7.3 plus rmuxnet's patches and its own), updated in place with one command. |
 
-Not sure? [Which image should I use?](/getting-started/which-image) weighs the two paths.
+:::info[Who writes this wiki]
+This wiki is maintained by Gilles (VivaLaVent), who also makes PS5 Bazzite Deck. The image exists because its kernel carries fixes (VRR, the display link lock, the Slim's and Pro's Bluetooth, the Pro's GPU firmware staging) that the official patches didn't have at the time, so for a gaming console it is the least work today. Those fixes are being merged into [ps5-linux-patches](https://github.com/ps5-linux/ps5-linux-patches) and [rmuxnet's fork](https://github.com/rmuxnet/ps5-linux-patches-1) over time, and every other image gets them with a kernel update. Nothing on this wiki needs that image: [Kernel setup](/advanced/kernel) and [Kernel sources and patches](/advanced/kernel-sources) apply to all of them.
+:::
+
+Not sure? [Which image should I use?](/getting-started/which-image) weighs the choice.
 
 ## Official images
 

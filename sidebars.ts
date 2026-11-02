@@ -70,6 +70,7 @@ const sidebars: SidebarsConfig = {
       label: 'Advanced',
       items: [
         'advanced/kernel',
+        'advanced/kernel-sources',
         'advanced/package-repository',
         'advanced/warm-reboot',
         'advanced/image-build',

@@ -1,7 +1,7 @@
 ---
 title: Restart straight into Linux
 sidebar_label: Warm reboot
-sidebar_position: 3
+sidebar_position: 4
 description: Restart into Linux without the PS5 OS and the loader, with kexec on any image, and what a warm restart leaves un-reset.
 ---
 
