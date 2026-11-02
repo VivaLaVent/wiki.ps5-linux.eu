@@ -40,6 +40,7 @@ const sidebars: SidebarsConfig = {
         },
         'using-linux/dualsense',
         'using-linux/gaming-performance',
+        'using-linux/memory-and-swap',
       ],
     },
     {
