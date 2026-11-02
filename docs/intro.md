@@ -19,34 +19,69 @@ Start with [Getting started](/getting-started/overview). It lists what you need 
 
 ## Hardware status
 
-| Component | Status |
-| --- | --- |
-| HDMI video + audio | ✅ 1080p60, 1080p120, 1440p60, 4K60 on every console |
-| USB ports | ✅ Working |
-| Ethernet (custom driver) | ✅ Working |
-| AMD GPU (amdgpu / RDNA2) | ✅ Working |
-| M.2 SSD | ✅ Working (firmware 4.00 or later) |
-| CPU boost (3.5 GHz) | ✅ Working: a cpufreq switch on rmuxnet's 7.3.1 kernel, `ps5-perf` on PS5 Bazzite Deck, `ps5_control` on older kernels, see [Clocks and boost](/hardware/gpu#clocks-and-boost) |
-| GPU boost (2.23 GHz, 2.35 GHz on the Pro) | ✅ Working: automatic on rmuxnet's 7.3.1 kernel and PS5 Bazzite Deck, `ps5_control` on older kernels |
-| Fan | ✅ Temperature curve by default on rmuxnet's 7.3.1 kernel, firmware control on PS5 Bazzite Deck, `ps5_control` on older kernels, see [Fan control](/hardware/fan) |
-| GPU CU unlock (up to 40 CUs) | ✅ Working |
-| Wi-Fi (IW620 / mwifiex) | ⚠️ Working, with some instability. Built into rmuxnet's 7.3.1 kernel and PS5 Bazzite Deck |
-| Wi-Fi/Bluetooth (MediaTek, most Slims and the Pro) | ✅ Wi-Fi drivers in kernel 7.2.3 and later, rmuxnet's 7.3.1 kernel and PS5 Bazzite Deck; the Bluetooth fixes in the last two, see [Bluetooth](/using-linux/bluetooth) |
-| PS5 Slim / PS5 Pro | ✅ Both supported by the official loader (Pro from firmware 11.00) |
-| Blu-ray drive (`ahci_salina`) | ✅ Working |
-| DualSense (USB) | ✅ Working |
-| Hardware video decode (VCN) | ✅ Working since kernel release 7.2.3, in rmuxnet's 7.3.1 kernel and PS5 Bazzite Deck |
-| Hardware video encode (VCN) | ⚠️ H.264 works, HEVC only with I-frames |
-| 1440p120 | ✅ FLAVA3 consoles. Included by default in PS5 Bazzite Deck ([patch](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/patches/ps5-hdmi-modes.patch)); upstream since Oct 2026 |
-| 4K120 over HDMI 2.1 FRL | ⚠️ FLAVA3 consoles, works on some TVs and falls back on others. PS5 Bazzite Deck ([patch](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/patches/ps5-hdmi-frl-4k120.patch)); upstream 7.2.3 and rmuxnet's 7.3.1 kernel (#63, #67, with ALLM) |
-| HDR | ✅ FLAVA3 consoles. Upstream #49, in every current kernel |
-| VRR (HDMI VRR displays) | ✅ FLAVA3 consoles. PS5 Bazzite Deck only ([patch](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/patches/ps5-vrr.patch)) |
-| HDMI CEC | ✅ Upstream #53, in every current kernel |
-| USB-C DisplayPort output | ⚠️ Upstream #57, in every current kernel, off by default (`usbc_dp.enable=1`) |
-| Restart straight into Linux (kexec) | ✅ Any image, see [Warm reboot](/advanced/warm-reboot) |
-| Sleep and wake (suspend-to-idle) | ⚠️ [ps5-linux-patches PR #4](https://github.com/ps5-linux/ps5-linux-patches/pull/4), not merged; included by default in PS5 Bazzite Deck |
+Status on 2 November 2026. "Every current kernel" means upstream 7.2.3, rmuxnet's 7.3.1 release and PS5 Bazzite Deck; see [Kernel setup](/advanced/kernel#what-is-where) for which kernel has what.
 
-Resolutions and refresh rates are detailed on [HDMI chip](/hardware/hdmi#why-only-certain-modes-exist). See [Known issues](/troubleshooting/known-issues) for details and workarounds.
+### Consoles
+
+| Model | Status | Notes |
+| --- | --- | --- |
+| Original PS5 | ✅ Working | |
+| PS5 Slim | ✅ Working | MediaTek Wi-Fi and Bluetooth on most units, see below |
+| PS5 Pro | ✅ Working | Official loader from firmware 11.00; the GPU needs its own firmware, see [PS5 Pro](/hardware/ps5-pro) |
+
+### Processor, GPU and cooling
+
+| Component | Status | Where |
+| --- | --- | --- |
+| AMD GPU (amdgpu, RDNA2) | ✅ Working | Every kernel |
+| CPU boost (3.5 GHz) | ✅ Working | A cpufreq switch on rmuxnet's 7.3.1 kernel, `ps5-perf` on PS5 Bazzite Deck, `ps5_control` on upstream kernels, see [Clocks and boost](/hardware/gpu#clocks-and-boost) |
+| GPU boost (2.23 GHz, 2.35 GHz on the Pro) | ✅ Working | Automatic on rmuxnet's 7.3.1 kernel, upstream 7.2.3 and PS5 Bazzite Deck; `ps5_control` on older kernels |
+| GPU compute unit unlock (up to 40 CUs) | ✅ Working | Every kernel, silicon lottery, see [40 CU unlock](/hardware/gpu#40-cu-unlock) |
+| Fan | ✅ Working | Temperature curve by default on rmuxnet's 7.3.1 kernel and upstream 7.2.3, firmware control on PS5 Bazzite Deck, see [Fan control](/hardware/fan) |
+
+### Display and audio
+
+| Component | Status | Where |
+| --- | --- | --- |
+| HDMI video and audio: 1080p60, 1080p120, 1440p60, 4K60 | ✅ Working | Every kernel, every console |
+| 1440p120 | ✅ FLAVA3 consoles | PS5 Bazzite Deck ([patch](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/patches/ps5-hdmi-modes.patch)); upstream since October 2026 |
+| 4K120 over HDMI 2.1 FRL | ⚠️ FLAVA3 consoles, some TVs | Works on some TVs and falls back on others. PS5 Bazzite Deck ([patch](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/patches/ps5-hdmi-frl-4k120.patch)); upstream 7.2.3 and rmuxnet's 7.3.1 kernel (#63, #67, with ALLM) |
+| HDR | ✅ FLAVA3 consoles | Every current kernel (upstream #49) |
+| VRR (HDMI VRR displays) | ✅ FLAVA3 consoles | PS5 Bazzite Deck only ([patch](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/patches/ps5-vrr.patch)) |
+| HDMI CEC | ✅ Working | Every current kernel (upstream #53) |
+| USB-C DisplayPort output | ⚠️ Off by default | Every current kernel (upstream #57), `usbc_dp.enable=1` |
+| Hardware video decode (VCN) | ✅ Working | Every current kernel, see [Hardware video](/hardware/vcn) |
+| Hardware video encode (VCN) | ⚠️ H.264 only | HEVC only with I-frames |
+
+Resolutions and refresh rates are detailed on [HDMI chip](/hardware/hdmi#why-only-certain-modes-exist).
+
+### Networking, Bluetooth and controllers
+
+| Component | Status | Where |
+| --- | --- | --- |
+| Ethernet (`mts`) | ✅ Working | Every kernel; full gigabit since upstream 7.2.3 |
+| Wi-Fi, Marvell IW620 (most original PS5s) | ⚠️ Working, some instability | Out-of-tree driver; built into rmuxnet's 7.3.1 kernel, the `linux-ps5` package and PS5 Bazzite Deck, see [Wi-Fi](/using-linux/networking/wifi) |
+| Wi-Fi, MediaTek (most Slims and the Pro) | ✅ Working | In-kernel drivers, every current kernel |
+| Bluetooth, Marvell IW620 | ✅ Working | Quirks in every current kernel; the reconnect fixes in rmuxnet's 7.3.1 kernel and PS5 Bazzite Deck, see [Bluetooth](/using-linux/bluetooth) |
+| Bluetooth, MediaTek (Slim and Pro) | ✅ Working | rmuxnet's 7.3.1 kernel and PS5 Bazzite Deck only |
+| DualSense (USB and Bluetooth) | ✅ Working | One controller for the PS5 OS and Linux, see [DualSense](/using-linux/dualsense) |
+
+### Storage and USB
+
+| Component | Status | Notes |
+| --- | --- | --- |
+| USB ports | ✅ Working | The front USB-A port is USB 2.0, see [USB and storage](/hardware/usb-storage) |
+| M.2 SSD | ✅ Working | Firmware 4.00 or later, see [Install to M.2](/installation/m2-install) |
+| Blu-ray drive (`ahci_salina`) | ✅ Working | Every kernel |
+
+### Power
+
+| Feature | Status | Where |
+| --- | --- | --- |
+| Restart straight into Linux (kexec) | ✅ Working | Any image, see [Warm reboot](/advanced/warm-reboot) |
+| Sleep and wake (suspend-to-idle) | ⚠️ Not upstream | [ps5-linux-patches PR #4](https://github.com/ps5-linux/ps5-linux-patches/pull/4), not merged; PS5 Bazzite Deck includes it |
+
+See [Known issues](/troubleshooting/known-issues) for details and workarounds.
 
 ## Resources
 
