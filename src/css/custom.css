@@ -236,6 +236,33 @@
   background: linear-gradient(90deg, rgba(248, 113, 113, 0.12), var(--wiki-surface) 60%);
 }
 
+/* Code inside a card: flat, no second window, just a darker inset */
+.theme-admonition .theme-code-block,
+.markdown details .theme-code-block {
+  border: 0;
+  border-radius: 8px;
+  box-shadow: none;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.theme-admonition .theme-code-block pre,
+.markdown details .theme-code-block pre {
+  background: transparent !important;
+}
+
+.theme-admonition .theme-code-block > div:first-child[class*='codeBlockTitle'] {
+  background: transparent;
+  border-bottom: 1px solid var(--wiki-border);
+  text-align: left;
+  padding-left: 1rem;
+}
+
+/* Inline code in a card: drop the chip border */
+.theme-admonition :not(pre) > code {
+  border: 0;
+  background: rgba(0, 0, 0, 0.3);
+}
+
 /* ---------- Collapsible sections (<details>) ---------- */
 
 .markdown details {
