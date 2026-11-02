@@ -24,7 +24,7 @@ On Bazzite, pair the controller over Bluetooth in **Game Mode only**. Pairing fr
 
 The PS5 OS and Linux share the same Bluetooth chip, and therefore the same Bluetooth address. A DualSense with pairing profiles keeps one pairing per host address, so pairing it with Linux replaces the PS5 pairing, and the other way around. Normally you'd have to pair again every time you switch systems.
 
-[PS5 Bazzite Deck](/installation/bazzite-deck) solves this by giving Linux its own Bluetooth address (on by default from v1.8.9). The DualSense then keeps one pairing for the PS5 on one profile, and one for Linux on another. No re-pairing and no USB cable are needed when you switch.
+Giving Linux its own Bluetooth address solves this. It is a boot-time service ([`ps5-bt-addr`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.0/files/ps5-bt-addr)) that any image can run; PS5 Bazzite Deck includes it by default. The DualSense then keeps one pairing for the PS5 on one profile, and one for Linux on another. No re-pairing and no USB cable are needed when you switch.
 
 **Pair the DualSense with Linux** (make sure it is already paired with the PS5 OS on one profile):
 

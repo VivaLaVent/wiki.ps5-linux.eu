@@ -17,7 +17,7 @@ description: Current known issues with PS5 Linux and answers to frequently asked
 | No HDMI audio on some monitors | Open, see [Audio](/using-linux/audio) |
 | 1440p/2160p display problems on some monitors | Open, see [Display output](/using-linux/display) |
 | CachyOS doesn't boot (kernel panic) | Reported on Discord, no tracked issue; use Ubuntu, Arch or PS5 Bazzite Deck |
-| MediaTek Wi-Fi/Bluetooth (most Slims, PS5 Pro) not in the official kernel | Use [PS5 Bazzite Deck](/installation/bazzite-deck) or a USB adapter |
+| MediaTek Wi-Fi/Bluetooth (most Slims, PS5 Pro) | Drivers in kernel 7.2.3 and later; the Slim's Bluetooth needs a [btusb patch](/using-linux/bluetooth#mediatek-on-the-slim), included by default in PS5 Bazzite Deck |
 | No picture after choosing a display mode | See [Display recovery](/troubleshooting/display-recovery) |
 | Kernel update on M.2 causes a black screen | Reported on Discord, no tracked issue; workaround: stay on 7.0.10 |
 | Audio plays through the controller instead of HDMI | [Workaround available](/using-linux/audio#audio-plays-through-the-controller-instead-of-hdmi) |

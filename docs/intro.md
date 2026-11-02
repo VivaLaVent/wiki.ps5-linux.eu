@@ -21,7 +21,7 @@ Start with [Getting started](/getting-started/overview). It lists what you need 
 
 | Component | Status |
 | --- | --- |
-| HDMI 4K60 video + audio | ✅ Working |
+| HDMI video + audio | ✅ 1080p60, 1080p120, 1440p60, 4K60 on every console |
 | USB ports | ✅ Working |
 | Ethernet (custom driver) | ✅ Working |
 | AMD GPU (amdgpu / RDNA2) | ✅ Working |
@@ -36,13 +36,15 @@ Start with [Getting started](/getting-started/overview). It lists what you need 
 | DualSense (USB) | ✅ Working |
 | Hardware video decode (VCN) | ✅ Working since kernel release 7.2.3 |
 | Hardware video encode (VCN) | ⚠️ H.264 works, HEVC only with I-frames |
-| 1440p120, 4K120, HDR, VRR, HDMI CEC | ✅ FLAVA3 consoles, on PS5 Bazzite Deck; merged upstream in Oct/Nov 2026, see [HDMI chip](/hardware/hdmi) |
+| 1440p120 | ✅ FLAVA3 consoles. Included by default in PS5 Bazzite Deck ([patch](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.0/patches/ps5-hdmi-modes.patch)); upstream since Oct 2026 |
+| 4K120 over HDMI 2.1 FRL | ⚠️ FLAVA3 consoles, works on some TVs and falls back on others. Included by default in PS5 Bazzite Deck ([patch](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.0/patches/ps5-hdmi-frl-4k120.patch)); upstream #63, #67 |
+| HDR | ✅ FLAVA3 consoles. Upstream #49; included by default in PS5 Bazzite Deck |
+| VRR (HDMI VRR displays) | ✅ FLAVA3 consoles. Included by default in PS5 Bazzite Deck ([patch](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.0/patches/ps5-vrr.patch)); not upstream yet |
+| HDMI CEC | ✅ Upstream #53; included by default in PS5 Bazzite Deck |
 | Restart straight into Linux (kexec) | ✅ Any image, see [Warm reboot](/advanced/warm-reboot) |
-| Sleep and wake (suspend-to-idle) | ⚠️ PS5 Bazzite Deck only (ps5-linux-patches PR #4) |
-| Screen saver | ❌ Broken |
-| CachyOS official image | ⚠️ Kernel panic reported on Discord, not tracked |
+| Sleep and wake (suspend-to-idle) | ⚠️ [ps5-linux-patches PR #4](https://github.com/ps5-linux/ps5-linux-patches/pull/4), not merged; included by default in PS5 Bazzite Deck |
 
-See [Known issues](/troubleshooting/known-issues) for details and workarounds.
+Resolutions and refresh rates are detailed on [HDMI chip](/hardware/hdmi#why-only-certain-modes-exist). See [Known issues](/troubleshooting/known-issues) for details and workarounds.
 
 ## Resources
 

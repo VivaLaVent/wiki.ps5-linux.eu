@@ -13,7 +13,7 @@ description: Install, configure and troubleshoot the PS5's internal Wi-Fi.
 :::warning[MediaTek chips (most PS5 Slims and the PS5 Pro)]
 Some consoles use a MediaTek chip instead of the Marvell IW620 covered on this page: the MT7961 (`14c3:7961`) on most Slims and the MT7925 (`14c3:7925`) on the PS5 Pro. See [Console models and chips](/hardware/overview#console-models-and-chips) for how to check which one you have.
 
-Since 30 October 2026 the official kernel config builds the `mt7921e` and `mt7925e` drivers (`CONFIG_MT7921E=m`, `CONFIG_MT7925E=m`), and the ps5-linux README states that the MT7925 on the Pro works out of the box. Kernel release 7.2.3 and later include this. [PS5 Bazzite Deck](/installation/bazzite-deck) has shipped the drivers for longer and is where MediaTek Wi-Fi and Bluetooth on the Slim are confirmed. If your image is older, use a [USB Wi-Fi adapter](/hardware/usb-storage#usb-network-adapters).
+Since 30 October 2026 the official kernel config builds the `mt7921e` and `mt7925e` drivers (`CONFIG_MT7921E=m`, `CONFIG_MT7925E=m`), and the ps5-linux README states that the MT7925 on the Pro works out of the box. Kernel release 7.2.3 and later include this. The Slim's MediaTek Bluetooth also needs a `btusb` endpoint fix, see [Bluetooth](/using-linux/bluetooth#mediatek-on-the-slim); PS5 Bazzite Deck includes both by default, which is where they were confirmed. If your image is older, use a [USB Wi-Fi adapter](/hardware/usb-storage#usb-network-adapters).
 :::
 
 :::tip[Using the package repository?]

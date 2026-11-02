@@ -1,7 +1,7 @@
 ---
 title: Display output
 sidebar_position: 1
-description: Supported resolutions, confirmed monitors and TVs, and black screen troubleshooting.
+description: Supported resolutions and refresh rates, monitors that needed a cmdline change, and black screen troubleshooting.
 ---
 
 # Display output
@@ -18,7 +18,7 @@ HDMI 2.1 output is driven by `amdgpu` and works out of the box once the driver l
 | 1440p | 120 Hz | Confirmed on Dell S3225QC |
 | 2160p (4K) | 60 Hz | Working (issues on some monitors) |
 
-[PS5 Bazzite Deck](/installation/bazzite-deck#what-works-on-your-console) has offered 1440p and 4K at 120 Hz, HDR and VRR on consoles with the FLAVA3 HDMI chip since mid-2026. The same features (HDR, CEC, hotplug, native FRL for 4K at 120 Hz) were merged into `ps5-linux-patches` in October and November 2026 and reach other images with the next kernel release, see [Kernel setup](/advanced/kernel#recently-merged-and-still-pending). 30 Hz is not offered.
+1440p and 4K at 120 Hz, HDR and VRR work on consoles with the FLAVA3 HDMI chip. They are kernel patches, not an image feature: PS5 Bazzite Deck includes them by default ([VRR](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.0/patches/ps5-vrr.patch), [4K120](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.0/patches/ps5-hdmi-frl-4k120.patch)), and HDR, CEC, hotplug and native FRL were merged into `ps5-linux-patches` in October and November 2026, so other images get them with the next kernel release, see [Kernel setup](/advanced/kernel#recently-merged-and-still-pending). VRR is not upstream yet. 30 Hz is not offered.
 
 :::tip[`amdgpu.force_1080p=1` caps the refresh rate]
 This flag ships in the default `cmdline.txt` and was long assumed to be required. Testing on 2026-07-10 showed it is not needed for every monitor, and it **caps output at 60 Hz**, even on displays that support more.
@@ -45,18 +45,8 @@ These work without any `cmdline.txt` changes unless noted:
 - AOC Q27G4 (remove the `video=DP-1:...` line and add `amdgpu.force_1080p=1`)
 - ASUS TUF Gaming VG289Q (4K at 60 Hz, sound working)
 
-## Confirmed working TVs
-
-- LG C1 OLED (4K at 60 Hz)
-- LG C2 (4K at 60 Hz, default `cmdline.txt`, HDCP on)
-- LG C4 48" (4K at 60 Hz; audio delay is a separate known issue, see [Audio](./audio.md#hdmi-audio-delay))
-- TCL 4K 55" (4K at 60 Hz, Wi-Fi and Bluetooth also working, kernel 7.1.2 or later)
-- Hisense 58A7100F (4K, 1440p and 1080p at 60 Hz all confirmed)
-- Hisense 6 Series 55" (4K, after a TV firmware update; before that it was stuck at 1080p)
-- Xiaomi TV A 50 (2025 model)
-
 :::info[The same model can still behave differently]
-It is not unusual for the exact same monitor or TV to work for one person and show a black screen for another. Panel revision, firmware version and cable quality all seem to matter. Treat these lists as "known to work for someone", not as a guarantee.
+It is not unusual for the exact same monitor to work for one person and show a black screen for another. Panel revision, firmware version and cable quality all seem to matter. Treat this list as "known to work for someone", not as a guarantee.
 :::
 
 ## Troubleshooting a black screen
