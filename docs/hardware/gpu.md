@@ -1,0 +1,188 @@
+---
+title: GPU (AMD Oberon / RDNA2)
+sidebar_label: GPU
+sidebar_position: 2
+description: GPU status, boost mode, the 40 CU unlock, VRAM settings, benchmarks and performance tips.
+---
+
+# GPU (AMD Oberon / RDNA2)
+
+**PCI ID:** `1002:13fb`
+
+## Status
+
+- `amdgpu` loads and drives HDMI output: **working**.
+- Hardware video decode and encode (VCN): **working**; HEVC encoding only works with I-frames. See [Hardware video (VCN)](./vcn.mdx).
+
+:::danger[Required modprobe options for a working display]
+The known-working distro images ship `/etc/modprobe.d/ps5-amdgpu.conf` with:
+
+```text title="/etc/modprobe.d/ps5-amdgpu.conf"
+options amdgpu dpm=0 gpu_recovery=0
+```
+
+Ports without this file (seen on a work-in-progress Fedora build) end up with no video or a black screen. If you are porting a new distro or building one from scratch, add this file before chasing any other display problem.
+:::
+
+## Boost
+
+By default, the GPU clock is lower than in the PS5 OS. Use `ps5_control` from [ps5-linux-tools](https://github.com/ps5-linux/ps5-linux-tools) to unlock full speed:
+
+```bash
+cd ps5-linux-tools
+sudo ./ps5_control --fan on
+sudo ./ps5_control --boost on
+```
+
+Always turn the fan on together with boost; this matches how the PS5 OS behaves.
+
+For heavier loads, or if you want to sustain higher boost clocks, `--fan max` runs the fan harder than `on`:
+
+```bash
+sudo ./ps5_control --fan max
+```
+
+To apply both at every boot:
+
+```bash
+sudo ./install.sh
+```
+
+This installs `ps5fan.service` and `ps5boost.service` as systemd units.
+
+:::warning[PinkSoup kernel: don't use boost]
+If you use rmux's PinkSoup kernel, don't enable boost mode. It locks the clocks at maximum (you need a full restart to get dynamic clocks back), and it doesn't improve frame rates or performance.
+:::
+
+:::tip
+Recent kernels control the fan automatically based on the APU temperature. See [Fan control](./fan.md).
+:::
+
+## 40 CU unlock
+
+PS5 units ship with either 36 or 38 of their 40 compute units (CUs) active; the rest are disabled ("harvested") in the silicon. How many your console actually has is **hardware-specific**: some top out at 38, others can run all 40. This is also why benchmark scores vary between units. The ps5-linux kernel patch unlocks whichever disabled CUs are present.
+
+**Kernel parameter:** `amdgpu.ps5_cu_unlock=N`
+
+| Value | Behaviour |
+| --- | --- |
+| 0 | Off (default) |
+| 1 | Probe |
+| 2 | Unlock SE0/SH0 only |
+| 3 | Unlock all harvested CUs |
+| 4 | Probe all |
+
+Without the parameter, `dmesg` reports the hardware default (2 × 2 × 10 = 40 physical CUs, 36 active on this unit):
+
+```text
+amdgpu: SE 2, SH per SE 2, CU per SH 10, active_cu_number 36
+```
+
+To unlock all CUs, add this to `cmdline.txt` on the FAT32 USB partition:
+
+```text title="cmdline.txt"
+amdgpu.ps5_cu_unlock=3
+```
+
+Check the result after rebooting:
+
+```bash
+sudo dmesg | grep active_cu_number
+```
+
+The patch writes to both the CC register and the SPI. Both are needed for the unlock to actually affect dispatch (verified on the BC-250). Source: [ps5-linux-patches commit 5b0dc56](https://github.com/ps5-linux/ps5-linux-patches/commit/5b0dc56c1b37a01dd813cb0f58cd4ae2fc6ed45a).
+
+:::info[Each shader engine needs the same CU count]
+Extra CUs are only used when both shader engines (SEs) have the same number active. 38 CUs (an uneven split across the SEs) benchmarks exactly like 36. If you see graphical glitches after unlocking, first try `RADV_DEBUG=nohiz` in the game's Steam launch options. If that doesn't help, try 38 CUs instead of 40.
+:::
+
+:::warning[Harvested CUs come in pairs, and some can be faulty]
+CUs are disabled in pairs, so a real unit always has 36, 38 or 40 usable CUs, never an odd number. If enabling all 40 causes severe visual artefacts, one of your disabled pairs may be genuinely faulty rather than just disabled for yield. You'll need trial and error to find which pair: test 38 CUs with different pairs masked off. There is no known way to predict which pair fails.
+:::
+
+### Runtime unlock with UMR (no kernel rebuild)
+
+[UMR](https://gitlab.freedesktop.org/tomstdenis/umr), the AMD GPU register debugger, can enable the extra CUs at runtime without a kernel patch or rebuild. It is handy for testing before you commit to the kernel-level unlock. It is available from the AUR on Arch and as an RPM on Fedora and Bazzite; on Debian-based distros, build it from source.
+
+You can check the topology with `umr`, but it may still show the CUs as disabled even when the runtime unlock is active. Check your benchmark scores to confirm it worked instead of relying on the topology output.
+
+## Slower than the BC-250 (open investigation)
+
+Superposition scores are noticeably lower than BC-250 results would predict. The PS5 has 36–40 CUs against the BC-250's 24, so linear scaling suggests about 5,700–6,450 points. Actual scores are closer to 5,100–5,600, even with 40 CUs and boost. The best so far is 5,602 on Gentoo with kernel 7.3.0-rc6-PinkSoup, 40 CUs and no boost. The root cause isn't confirmed. `dmesg` reports all 36 CUs correctly, so it isn't a detection problem.
+
+![Best Superposition score so far](/img/guide/uniengine.png)
+
+At the same CU count and clock, the BC-250 consistently beats the PS5:
+
+| Configuration | PS5 (boost mode) | BC-250 |
+| --- | --- | --- |
+| 36 CUs at ~2,200 MHz | 5,040 points | 5,330 points |
+| 40 CUs at ~2,200 MHz | 5,290 points | 5,530 points |
+
+The leading theory is that boost mode doesn't hold a constant clock; without boost, the two platforms score much closer.
+
+:::danger[Unconfirmed: caused a black screen when tested]
+One suggestion was setting `adev->gfx.cu_info.lds_size = 128;` in `amdgpu_device.c`. A tester who tried it got a black screen with no `amdgpu` output after rebuilding; the cause is unclear. This is **not** a working fix. It is listed here so nobody repeats the same dead end.
+:::
+
+## VRAM
+
+Tools show a default allocation of 512 MB, but VRAM is **dynamic**: the driver allocates more as needed. With 16 GB of shared RAM and VRAM, the GPU can use up to about 12 GB in practice.
+
+To set a fixed minimum, edit `vram.txt` on the FAT32 USB partition. The loader reads the value as **hexadecimal bytes**, not decimal megabytes (`strtoull(buf, NULL, 16)` in `ps5-linux-loader/source/loader.c`). A decimal megabyte value silently sets VRAM to almost nothing, which is a common cause of a black screen at boot.
+
+The default (512 MB) is:
+
+```text title="vram.txt"
+20000000
+```
+
+| Size | `vram.txt` value |
+| --- | --- |
+| 512 MB (default) | `20000000` |
+| 1 GB | `40000000` |
+| 2 GB | `80000000` |
+| 4 GB | `100000000` |
+| 8 GB | `200000000` |
+
+:::warning[What vram.txt actually controls]
+Every VRAM split is dynamic; 512 MB is **not** a special "fully dynamic" mode. The `vram.txt` value only sets the *minimum* amount of reserved VRAM, not the maximum. The real ceiling for dynamic allocation is:
+
+```text
+(vram.txt split) + (remaining RAM not in that split) / 2
+```
+
+That is why some games that use just over 8 GB of VRAM (Final Fantasy VII Remake is a known example) crash with `amdgpu_vm_validate() failed / Not enough memory for command submission`, even though plenty of RAM seems to be free.
+
+**The real fix:** raise the GTT ceiling with the `ttm.pages_limit` kernel parameter instead of (or as well as) raising `vram.txt`:
+
+```text
+ttm.pages_limit = (desired GTT size in GB) × 1024 × 1024 / 4
+```
+
+Best practice is to leave `vram.txt` at the 512 MB default and raise `ttm.pages_limit` instead. You get the same ceiling without permanently locking that RAM away from the rest of the system when you are not gaming.
+
+Example for a 10 GB GTT ceiling:
+
+```text title="cmdline.txt"
+ttm.pages_limit=2621440
+```
+:::
+
+## Benchmarks (Superposition 1080p Extreme)
+
+| Configuration | Score | Notes |
+| --- | --- | --- |
+| No boost | 4,903 | GPU at 3,193 MHz |
+| Fan + boost, no CU unlock | ~5,150 | |
+| 40 CUs + fan + boost | 5,041 | GPU at 3,493 MHz actual, kernel 7.0.10 |
+| 40 CUs + fan + boost (CFI-1216A) | 5,259 | 6 nm APU |
+| No CU unlock, no boost | 5,367 | Kernel 7.3.0-rc6, 40.15 fps average, highest seen |
+
+BC-250 reference: 36 CUs at 2,200 MHz ≈ 5,336; 40 CUs at 2,200 MHz ≈ 5,530. Depending on temperatures, boost mode on the PS5 may not always hold its full clock speed.
+
+## Performance tips
+
+- **Micro-stuttering?** Remove `idle=halt` from `cmdline.txt`. theflow asked the community to test this.
+- **Graphical glitches in games?** Set `RADV_DEBUG=nohiz`, the same advice as for the AMD BC-250. Set it globally in your shell profile or environment rather than per game: several games have problems without it, and it is easy to forget on a new Steam library entry.
+- Many tips from the [AMD BC-250 documentation](https://elektricm.github.io/amd-bc250-docs/) also apply to the PS5. Double-check anything about VRAM or GTT allocation against the [VRAM](#vram) section above, though: that site has been reported to contain inaccurate, LLM-generated information about how the VRAM split works.

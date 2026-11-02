@@ -1,0 +1,122 @@
+---
+title: Kernel setup
+sidebar_position: 1
+description: Install or build the patched PS5 kernel, and the kernel parameters in cmdline.txt.
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Kernel setup
+
+The ps5-linux project ships a patched kernel through [ps5-linux-patches](https://github.com/ps5-linux/ps5-linux-patches). Pre-built `.deb` packages are available for Debian and Ubuntu.
+
+## Install a pre-built kernel
+
+Download a package from the [ps5-linux-patches releases](https://github.com/ps5-linux/ps5-linux-patches/releases) and install it:
+
+```bash
+# Debian/Ubuntu
+sudo dpkg -i ps5-linux-*.deb
+```
+
+:::warning[M.2 installs]
+Updating the kernel on an M.2 install can cause a black screen. Stay on **7.0.10** for now, see [Known issues](/troubleshooting/known-issues#kernel-update-breaks-m2-boot).
+:::
+
+## Build from source
+
+Build your own kernel to get fixes that aren't in a release yet, such as [hardware video (VCN)](/hardware/vcn) and the [Ethernet speed fix](/using-linux/networking/ethernet#slow-speed-high-cpu-use-and-no-ipv6-fixed).
+
+### Dependencies
+
+GCC works, but Clang/LLVM is recommended.
+
+<Tabs groupId="distro">
+<TabItem value="arch" label="Arch Linux" default>
+
+```bash
+# Clang (recommended)
+sudo pacman -S clang llvm lld pahole bison flex bc cpio python openssl
+
+# GCC
+sudo pacman -S gcc pahole bison flex bc cpio python openssl
+```
+
+</TabItem>
+<TabItem value="debian" label="Debian / Ubuntu">
+
+```bash
+# Clang (recommended)
+sudo apt install clang llvm lld dwarves bison flex bc cpio python3 libssl-dev libelf-dev
+
+# GCC
+sudo apt install gcc dwarves bison flex bc cpio python3 libssl-dev libelf-dev
+```
+
+</TabItem>
+</Tabs>
+
+### Build
+
+Clone `ps5-linux-patches` and `linux` side by side, then build:
+
+```bash
+git clone https://github.com/ps5-linux/ps5-linux-patches
+git clone https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+cd linux
+git checkout "tags/v$(grep -m1 '^# Linux/' ../ps5-linux-patches/.config | awk '{print $3}')"
+git apply ../ps5-linux-patches/linux.patch
+cp ../ps5-linux-patches/.config .config
+
+# With Clang (recommended)
+make LLVM=1 LLVM_IAS=1 -j$(nproc)
+
+# Or with GCC
+make -j$(nproc)
+
+sudo make modules_install
+sudo make install
+```
+
+### Pending in ps5-linux-patches
+
+- amdgpu SMU driver: correct GPU frequency and temperature reporting
+- HDMI converter: improvements for HDR, RGB range and 120 Hz
+
+## Kernel parameters (cmdline.txt)
+
+The kernel command line is stored in `cmdline.txt` on the FAT32 partition of your USB drive. Edit it to pass your own parameters. From Windows, see [Edit cmdline.txt from Windows](/installation/linux-image#edit-cmdlinetxt-from-windows).
+
+The default command line looks like this (it varies slightly between images):
+
+```text title="cmdline.txt"
+root=LABEL=__DISTRO__ rw rootwait console=ttyTitania0 console=tty0 mitigations=off idle=halt preempt=full
+```
+
+- `console=ttyTitania0`: Sony's internal name for the UART serial console. Useful when debugging headless over UART.
+- `mitigations=off`: Spectre/Meltdown mitigations are off by default for performance. Change it to `mitigations=auto` if you want them back.
+- `idle=halt`: try removing it if you notice micro-stuttering, see [GPU performance tips](/hardware/gpu#performance-tips).
+
+Common display-related parameters:
+
+```text
+# Force 1080p if the display isn't detected correctly
+amdgpu.force_1080p=1
+
+# Remove this if you get a black screen
+video=DP-1:1920x1080@60
+```
+
+Other useful parameters:
+
+| Parameter | What it does | More info |
+| --- | --- | --- |
+| `amdgpu.ps5_cu_unlock=3` | Unlocks all disabled GPU compute units | [40 CU unlock](/hardware/gpu#40-cu-unlock) |
+| `ttm.pages_limit=...` | Raises the GPU memory (GTT) ceiling | [VRAM](/hardware/gpu#vram) |
+| `video=HDMI-A-1:3840x2160@60` | Forces a 4K mode | [4K black screen](/using-linux/display#4k-display-black-screen-after-login) |
+| `drm.edid_firmware=...` | Loads a custom EDID file | [Custom EDID](/using-linux/display#custom-edid-injection) |
+
+## VRAM (vram.txt)
+
+The default VRAM allocation is 512 MB and dynamic. To change it, edit `vram.txt` on the FAT32 partition. The value is a **hexadecimal byte count**, not decimal megabytes. See [VRAM](/hardware/gpu#vram) for the correct format and a table of sizes, and the [AMD BC-250 docs](https://elektricm.github.io/amd-bc250-docs/bios/flashing/#why-flash-the-bios) for background.

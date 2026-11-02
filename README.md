@@ -1,43 +1,24 @@
-# Website
+# PS5 Linux Wiki
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+Source of [wiki.ps5-linux.eu](https://wiki.ps5-linux.eu), built with [Docusaurus](https://docusaurus.io/) and deployed by Cloudflare Pages on every push to `main`.
 
-## Installation
+## Editing
 
-```bash
-npm install
-```
+- Pages live in `docs/`. The sidebar order is set in `sidebars.ts`.
+- `.md` files are plain Markdown. Use `.mdx` only when a page needs components such as `<Tabs>`.
+- Callouts: `:::note`, `:::tip`, `:::info`, `:::warning`, `:::danger`, optionally with a title: `:::tip[My title]`.
+- Images go in `static/img/` and are referenced as `/img/...`.
+- Scripts users can `curl` live in `static/scripts/` and are served at `https://wiki.ps5-linux.eu/scripts/...`.
 
-**Note**: feel free to use the package manager of your choice.
-
-## Local Development
-
-```bash
-npm run start
-```
-
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
-
-## Build
+## Local development
 
 ```bash
-npm run build
+npm ci
+npm start        # live preview on http://localhost:3000
+npm run build    # production build into build/
 ```
 
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
+## Credits
 
-## Deployment
-
-Using SSH:
-
-```bash
-USE_SSH=true npm run deploy
-```
-
-Not using SSH:
-
-```bash
-GIT_USER=<Your GitHub username> npm run deploy
-```
-
-If you are using GitHub Pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+Content based on the [PS5 Linux Guide](https://guide.rmux.eu/) by rmuxnet and contributors (MIT License).
+Community project, not affiliated with Sony Interactive Entertainment.

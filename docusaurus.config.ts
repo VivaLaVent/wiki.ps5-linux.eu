@@ -2,34 +2,35 @@ import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
-// This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
+// This runs in Node.js - don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
   title: 'PS5 Linux Wiki',
-  tagline: 'Documentation, guides and resources for Linux on PlayStation 5',
-  favicon: 'img/favicon.ico',
+  tagline: 'Guides, hardware notes and troubleshooting for running Linux on the PlayStation 5',
+  favicon: 'img/logo.svg',
 
-  // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
-    v4: true, // Improve compatibility with the upcoming Docusaurus v4
+    v4: true,
   },
 
-  // Set the production url of your site here
   url: 'https://wiki.ps5-linux.eu',
-  // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
 
-  // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'VivaLaVent',
+  projectName: 'wiki.ps5-linux.eu',
 
   onBrokenLinks: 'throw',
+  onBrokenAnchors: 'warn',
 
-  // Even if you don't use internationalization, you can use this field to set
-  // useful metadata like html lang. For example, if your site is Chinese, you
-  // may want to replace "en" with "zh-Hans".
+  markdown: {
+    // .md files are plain CommonMark (safe for "<username>" style text),
+    // .mdx files can use React components such as <Tabs>.
+    format: 'detect',
+    hooks: {
+      onBrokenMarkdownLinks: 'throw',
+    },
+  },
+
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
@@ -40,27 +41,13 @@ const config: Config = {
       'classic',
       {
         docs: {
+          // Docs-only mode: the wiki lives at the site root.
+          routeBasePath: '/',
           sidebarPath: './sidebars.ts',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+          editUrl: 'https://github.com/VivaLaVent/wiki.ps5-linux.eu/edit/main/',
+          showLastUpdateTime: true,
         },
-        blog: {
-          showReadingTime: true,
-          feedOptions: {
-            type: ['rss', 'atom'],
-            xslt: true,
-          },
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-          // Useful options to enforce blogging best practices
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
-        },
+        blog: false,
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -68,28 +55,51 @@ const config: Config = {
     ],
   ],
 
+  themes: [
+    [
+      '@easyops-cn/docusaurus-search-local',
+      {
+        hashed: true,
+        indexBlog: false,
+        docsRouteBasePath: '/',
+        highlightSearchTermsOnTargetPage: true,
+      },
+    ],
+  ],
+
   themeConfig: {
-    // Replace with your project's social card
-    image: 'img/docusaurus-social-card.jpg',
+    image: 'img/logo.svg',
     colorMode: {
+      defaultMode: 'dark',
       respectPrefersColorScheme: true,
     },
+    docs: {
+      sidebar: {
+        hideable: true,
+        autoCollapseCategories: true,
+      },
+    },
+    announcementBar: {
+      id: 'firmware-limit',
+      content:
+        'Linux currently runs on PS5 firmware up to <b>13.60</b>. <a href="/getting-started/firmware">Check your firmware</a> before you start.',
+      backgroundColor: '#1f6feb',
+      textColor: '#ffffff',
+      isCloseable: true,
+    },
     navbar: {
-      title: 'My Site',
+      title: 'PS5 Linux Wiki',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'PS5 Linux Wiki',
         src: 'img/logo.svg',
       },
       items: [
+        {to: '/getting-started/overview', label: 'Start here', position: 'left'},
+        {to: '/hardware/overview', label: 'Hardware', position: 'left'},
+        {to: '/troubleshooting/known-issues', label: 'Known issues', position: 'left'},
+        {href: 'https://discord.gg/ps5linux', label: 'Discord', position: 'right'},
         {
-          type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
-          position: 'left',
-          label: 'Tutorial',
-        },
-        {to: '/blog', label: 'Blog', position: 'left'},
-        {
-          href: 'https://github.com/facebook/docusaurus',
+          href: 'https://github.com/VivaLaVent/wiki.ps5-linux.eu',
           label: 'GitHub',
           position: 'right',
         },
@@ -99,50 +109,36 @@ const config: Config = {
       style: 'dark',
       links: [
         {
-          title: 'Docs',
+          title: 'Wiki',
           items: [
-            {
-              label: 'Tutorial',
-              to: '/docs/intro',
-            },
+            {label: 'What is this?', to: '/'},
+            {label: 'Getting started', to: '/getting-started/overview'},
+            {label: 'Known issues & FAQ', to: '/troubleshooting/known-issues'},
+            {label: 'Credits', to: '/about/credits'},
           ],
         },
         {
           title: 'Community',
           items: [
-            {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-            },
-            {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
-            {
-              label: 'X',
-              href: 'https://x.com/docusaurus',
-            },
+            {label: 'Discord', href: 'https://discord.gg/ps5linux'},
+            {label: 'Telegram', href: 'https://t.me/ps5linux'},
           ],
         },
         {
-          title: 'More',
+          title: 'Projects',
           items: [
-            {
-              label: 'Blog',
-              to: '/blog',
-            },
-            {
-              label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
-            },
+            {label: 'ps5-linux on GitHub', href: 'https://github.com/ps5-linux'},
+            {label: 'ps5-linux-image', href: 'https://github.com/ps5-linux/ps5-linux-image'},
+            {label: 'Wiki source', href: 'https://github.com/VivaLaVent/wiki.ps5-linux.eu'},
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Community project, not affiliated with Sony Interactive Entertainment. Based on the PS5 Linux Guide by rmuxnet and contributors. Released under the MIT License.`,
     },
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
+      additionalLanguages: ['bash', 'ini', 'diff', 'c'],
     },
   } satisfies Preset.ThemeConfig,
 };
