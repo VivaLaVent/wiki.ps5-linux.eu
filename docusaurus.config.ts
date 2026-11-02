@@ -85,6 +85,14 @@ const config: Config = {
         autoCollapseCategories: true,
       },
     },
+    announcementBar: {
+      id: 'other-guide',
+      content:
+        '<a href="/img/other-guide.jpg" target="_blank" rel="noopener noreferrer">Why you shouldn\'t use the other guide</a>',
+      backgroundColor: '#8d5cff',
+      textColor: '#ffffff',
+      isCloseable: false,
+    },
     navbar: {
       title: 'PS5 Linux Wiki',
       items: [{href: 'https://discord.gg/ps5linux', label: 'Discord', position: 'right'}],
