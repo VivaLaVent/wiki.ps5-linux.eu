@@ -111,37 +111,7 @@ CTA-861 codes the field as 0 default, 1 limited, 2 full. A first version wrote t
 
 ## Kernel parameters
 
-In every current kernel (upstream `main`, rmuxnet's kernel, PS5 Bazzite Deck):
-
-| Parameter | What it does |
-| --- | --- |
-| `amdgpu.force_1080p=1` | Only allows 1080p60. A safe mode to get a picture back, see [Display recovery](#display-recovery). |
-| `hdmi.frl_4k120=0` | Never offers 4K at 120 Hz. For a TV where 4K120 misbehaves. |
-| `ps5_cec.one_touch_play=0` | Don't turn the TV on and switch it to the console at boot. |
-| `usbc_dp.enable=1` | DisplayPort output on the front USB-C port, for USB-C displays and the PS VR2. Off by default because programming the port's policy can reset a boot drive plugged in there. |
-
-Upstream `main` and rmuxnet's kernel (the native FRL work; not in PS5 Bazzite Deck, which has its own 4K120 path):
-
-| Parameter | What it does |
-| --- | --- |
-| `hdmi.frl_yuv420=<0,1,2>` | 4:2:0 over native FRL: 0 off, 1 as a fallback (default), 2 preferred when the mode permits it. |
-| `hdmi.frl_recovery=0` | Turns off the bounded retries after a failed FRL link. |
-| `hdmi.allm=<0,1,2>` | Auto low latency mode on FLAVA3 for TVs that support it: 0 off, 1 while the content type is Game (default), 2 always. |
-| `hdmi.hdcp_mode=<n>` | HDCP on the HDMI output, applied at the next mode set: 0 on, 1 off, 2 on with HDCP 2.2, 3 off with the HDCP 2.2 bit set (default), -1 keep. |
-| `hdmi.extended_modes=<0,1,2>` | The modes the chip has setups for but the EDID doesn't list: 0 off, 1 offered (default), 2 offered and preferred. |
-
-Read-only state in `/sys/module/hdmi/parameters/`: `frl_rate` and `frl_rate_max` (the chip's FRL rates), `frl_failed` (write `N` to try FRL again on this display), `allm_sink`, `allm_active` and `recovery_status`.
-
-PS5 Bazzite Deck only:
-
-| Parameter | What it does |
-| --- | --- |
-| `hdmi.vrr=0` | Never offers VRR. |
-| `hdmi.rgb_range=<0,1,2>` | AVI RGB quantization flag: 1 full (default), 2 limited, 0 none. |
-| `hdmi.icc_trace=1` | Logs every message to the chip and its reply. Debugging only, very noisy. |
-| `hdmi.vrr_measure=1` | Logs the measured frame intervals every 2 seconds while VRR is on. Debugging only. |
-
-All of them go in `cmdline.txt`, see [Kernel parameters](/advanced/kernel#kernel-parameters-cmdlinetxt).
+The display and HDMI parameters, with which kernel has which, are on **[Boot options](/post-install/boot-options#display-and-hdmi)**.
 
 ## Display settings {#display-settings}
 
@@ -491,7 +461,7 @@ The output shows `Preferred: 4 0x1e` when the lock is active. A few `CR` errors 
 
 ### Use a safe mode as well
 
-Keep `video=DP-1:1920x1080@60` in `cmdline.txt` so the first mode set at boot is one every display accepts. Change the resolution from the desktop once Linux is running. See [Kernel setup](/advanced/kernel#kernel-parameters-cmdlinetxt).
+Keep `video=DP-1:1920x1080@60` in `cmdline.txt` so the first mode set at boot is one every display accepts. Change the resolution from the desktop once Linux is running. See [Kernel setup](/post-install/boot-options).
 
 ## Next steps
 

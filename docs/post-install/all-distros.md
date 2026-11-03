@@ -74,7 +74,7 @@ If you use the internal Wi-Fi, install the driver for your chip, see [Wi-Fi](/ha
 
 ## 7. Tune cmdline.txt
 
-Two parameters on the boot partition are worth a look, see [Kernel parameters](/advanced/kernel#kernel-parameters-cmdlinetxt):
+Two parameters on the boot partition are worth a look, see [Kernel parameters](/post-install/boot-options):
 
 - `video=DP-1:1920x1080@60`: the safe boot mode. Keep it, and set your real resolution from the desktop.
 - `amdgpu.force_1080p=1`: caps output at 1080p60. Remove it unless you need it to get a picture at all.
@@ -277,6 +277,8 @@ sudo sysctl vm.swappiness=10
 To make it permanent, put `vm.swappiness=10` in a file under `/etc/sysctl.d/`. With zram, a higher value is normal, so leave the default if you use it.
 
 ## Next steps
+
+**[Boot options (cmdline.txt)](/post-install/boot-options)**: the reference for every kernel parameter. Then:
 
 - **PS5 Bazzite Deck:** [After installing: PS5 Bazzite Deck](/post-install/bazzite)
 - **Official or self-built images:** [Other images](/post-install/not-bazzite-deck), then [Distro notes](/post-install/distro-notes)

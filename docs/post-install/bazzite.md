@@ -29,19 +29,7 @@ Sleep (suspend-to-idle) is built in: a short press of the power button or Steam'
 
 ## Boot options (cmdline.txt)
 
-
-`cmdline.txt` is on the USB drive's small FAT32 partition and must stay **one single line**. To add an option, add it at the end with a space in front of it; delete it again to undo. Leave the existing entries as they are.
-
-| Option | What it does | When to use it |
-| --- | --- | --- |
-| `amdgpu.force_1080p=1` | Only allows 1080p60 | A black or garbled picture you can't get past, for example after choosing a resolution your display can't show. Remove it once you've set a working resolution, see [Display recovery](/hardware/hdmi#display-recovery). |
-| `usb-storage.quirks=xxxx:yyyy:u` | Turns off UAS for one USB drive (`xxxx:yyyy` from `lsusb`) | USB-C SSDs or enclosures that disconnect, freeze or show I/O errors (many have buggy UAS) |
-| `usbc_dp.enable=1` | Turns on DisplayPort output on the front USB-C port | USB-C displays and the PS VR2. Not when your boot drive is in the front USB-C port. |
-| `hdmi.frl_4k120=0` | Never offers 4K at 120 Hz | A TV where 4K120 misbehaves |
-
-To turn off VRR, use Steam's setting (Settings → Display). To stop the TV from turning on with the console, turn off HDMI-CEC in the TV's settings (SIMPLINK, Anynet+, BRAVIA Sync…).
-
-The commands on this wiki that edit `cmdline.txt` find it by themselves: on Bazzite the boot partition is mounted at `/efi`, on most other images at `/boot/efi`.
+All options, PS5 Bazzite Deck's default line and how to edit it are on **[Boot options](/post-install/boot-options)**. The ones you're most likely to need: `amdgpu.force_1080p=1` for a picture you can't get past, `usb-storage.quirks=…` for a USB drive that disconnects, `usbc_dp.enable=1` for a USB-C display. To turn off VRR, use Steam's setting (Settings → Display). To stop the TV from turning on with the console, turn off HDMI-CEC in the TV's settings.
 
 ## 40 GPU compute units
 

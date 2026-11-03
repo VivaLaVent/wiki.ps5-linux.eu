@@ -40,6 +40,7 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'post-install/all-distros',
+        'post-install/boot-options',
         'post-install/not-bazzite-deck',
         'post-install/distro-notes',
         'post-install/bazzite',

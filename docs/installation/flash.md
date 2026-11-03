@@ -40,7 +40,7 @@ Use a fast port, see [USB ports](/hardware/storage#usb-ports); the slow USB 2.0 
 ## Optional: edit cmdline.txt from Windows
 
 
-The kernel command line lives in `cmdline.txt` on the FAT32 partition of the USB drive. See [Kernel parameters](/advanced/kernel#kernel-parameters-cmdlinetxt) for what you can put in it.
+The kernel command line lives in `cmdline.txt` on the FAT32 partition of the USB drive. See [Kernel parameters](/post-install/boot-options) for what you can put in it.
 
 **Without WSL:** use [Explorer++](https://explorerplusplus.com/) (run it as administrator). It can open the FAT32 EFI partition where `cmdline.txt` lives.
 

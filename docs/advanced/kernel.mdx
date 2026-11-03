@@ -225,55 +225,7 @@ Still listed as to do in both repositories: an amdgpu SMU driver so the base PS5
 
 ## Kernel parameters (cmdline.txt)
 
-The kernel command line is stored in `cmdline.txt` on the FAT32 partition of your USB drive. Edit it to pass your own parameters. From Windows, see [Edit cmdline.txt from Windows](/installation/flash#optional-edit-cmdlinetxt-from-windows).
-
-The default command line looks like this (it varies slightly between images):
-
-```text title="cmdline.txt"
-root=LABEL=__DISTRO__ rw rootwait console=ttyTitania0 console=tty0 mitigations=off idle=halt preempt=full
-```
-
-- `console=ttyTitania0`: the console's UART, under Sony's name for it. Only matters when you debug over a serial cable.
-- `mitigations=off`: the CPU vulnerability mitigations are off for speed. Set `mitigations=auto` to turn them back on.
-- `idle=halt`: try removing it if you notice micro-stuttering, see [GPU performance tips](/hardware/gpu#performance-tips).
-
-Common display-related parameters:
-
-```text
-# Force 1080p if the display isn't detected correctly
-amdgpu.force_1080p=1
-
-# Remove this if you get a black screen
-video=DP-1:1920x1080@60
-```
-
-Other useful parameters. Not every kernel has every HDMI parameter; the split is on [HDMI chip](/hardware/hdmi#kernel-parameters):
-
-| Parameter | What it does | More info |
-| --- | --- | --- |
-| `amdgpu.ps5_cu_unlock=3` | Unlocks all disabled GPU compute units | [40 CU unlock](/hardware/gpu#40-cu-unlock) |
-| `ttm.pages_limit=...` | Raises the GPU memory (GTT) ceiling | [VRAM](/hardware/gpu#vram) |
-| `video=HDMI-A-1:3840x2160@60` | Forces a 4K mode | [4K black screen](/hardware/hdmi#4k-display-black-screen-after-login) |
-| `drm.edid_firmware=...` | Loads a custom EDID file | [Custom EDID](/hardware/hdmi#custom-edid-injection) |
-| `usb-storage.quirks=xxxx:yyyy:u` | Turns off UAS for one USB drive | [USB drive](/hardware/storage#usb-drive-required) |
-| `rootwait rootdelay=60` | Waits up to 60 seconds for a slow USB drive before giving up on the root filesystem | [USB drive](/hardware/storage#usb-drive-required) |
-| `usbcore.autosuspend=-1` | Stops USB devices from going to sleep, which can drop the drive | [USB drive](/hardware/storage#usb-drive-required) |
-| `usbc_dp.enable=1` | DisplayPort output on the front USB-C port | [HDMI chip](/hardware/hdmi#kernel-parameters) |
-| `hdmi.frl_4k120=0` | Never offers 4K at 120 Hz (upstream and rmuxnet: turns native FRL off altogether) | [HDMI chip](/hardware/hdmi#kernel-parameters) |
-| `hdmi.hdcp_mode=<n>` | HDCP on the HDMI output (upstream and rmuxnet) | [HDMI chip](/hardware/hdmi#kernel-parameters) |
-| `hdmi.allm=<0,1,2>` | Auto low latency mode on FLAVA3 (upstream and rmuxnet) | [HDMI chip](/hardware/hdmi#kernel-parameters) |
-| `hdmi.vrr=0` | Never offers VRR (PS5 Bazzite Deck) | [HDMI chip](/hardware/hdmi#vrr-on-flava3) |
-| `hdmi.rgb_range=<0,1,2>` | AVI RGB range flag: full, limited or none (PS5 Bazzite Deck) | [HDMI chip](/hardware/hdmi#rgb-range) |
-| `amdgpu.ps5_viola_fw=0` | PS5 Pro: always use the base PS5's GPU firmware | [PS5 Pro](/hardware/ps5-pro#gpu-driver) |
-| `ps5_gpufreq.temp_limit=<50-95>` | Thermal limit of the GPU clock governor (upstream and PS5 Bazzite Deck), 85 °C by default | [PS5 Pro](/hardware/ps5-pro#gpu-driver) |
-| `btusb.ps5_tx_ep=<n>` | ACL bulk OUT endpoint for the MediaTek Bluetooth on the Slim (rmuxnet and PS5 Bazzite Deck) | [Bluetooth](/hardware/wifi-bluetooth#mediatek-on-the-slim) |
-| `btusb.ps5_ep_resync=1` | PS5 Pro: resync the Bluetooth endpoints after the firmware setup (rmuxnet) | [Bluetooth](/hardware/wifi-bluetooth#mediatek-on-the-pro) |
-
-`cmdline.txt` must stay a **single line**. Add options at the end, separated by a space.
-
-## VRAM (vram.txt)
-
-The default VRAM allocation is 512 MB and dynamic. To change it, edit `vram.txt` on the FAT32 partition. The value is a **hexadecimal byte count**, not decimal megabytes. See [VRAM](/hardware/gpu#vram) for the correct format and a table of sizes.
+All kernel parameters, the default lines and how to edit `cmdline.txt` and `vram.txt` are on **[Boot options](/post-install/boot-options)**.
 
 ## Next steps
 
