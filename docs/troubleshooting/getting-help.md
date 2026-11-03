@@ -51,7 +51,7 @@ Accept the host key prompt the first time you connect. From here you can trouble
 ## Collect logs for a bug report
 
 :::tip[PS5 Bazzite Deck]
-Run `ps5-report` instead: it collects your hardware details and the relevant logs into one file. Ask in `#bazzite-problems` on the [Bazzite Deck Discord](https://discord.gg/qGcuTgBBYU). For display problems, see [Reporting a display problem](./display-recovery.md#reporting-a-display-problem).
+Run `ps5-report` instead: it collects your hardware details and the relevant logs into one file. Ask in `#bazzite-problems` on the [Bazzite Deck Discord](https://discord.gg/ps5linux). For display problems, see [Reporting a display problem](./display-recovery.md#reporting-a-display-problem).
 :::
 
 One command gathers everything a helper will ask for:

@@ -134,7 +134,7 @@ For a black screen, a picture that blinks or reconnects, VRR that doesn't work, 
    It only reads. It saves `display-log-<time>.txt` in your home folder, plus a copy on the drive's small FAT32 partition, so without a network you can take it from there on a PC.
 
 3. **Get the picture back** (see the sections above).
-4. **Post it** on [Discord](https://discord.gg/ps5linux) (PS5 Bazzite Deck: `#bazzite-problems` on [its Discord](https://discord.gg/qGcuTgBBYU)) with the file attached, and include:
+4. **Post it** on [Discord](https://discord.gg/ps5linux) (PS5 Bazzite Deck: `#bazzite-problems` on [its Discord](https://discord.gg/ps5linux)) with the file attached, and include:
    - the **TV or monitor model**, and which HDMI port and cable you use,
    - **what you chose** (resolution, refresh rate, VRR on/off, HDR on/off) and **what you saw** (black, blinking, reconnecting, wrong colours),
    - the display's own settings: VRR/FreeSync/Adaptive-Sync, HDMI enhanced format/Deep Colour, game mode,

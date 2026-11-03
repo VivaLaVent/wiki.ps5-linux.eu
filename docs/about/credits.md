@@ -45,7 +45,6 @@ ps5-linux is a community project. Core contributors:
 | the_tales, Dvelaren, ciaccio | PS5 Pro testing: loader builds, GPU firmware staging, governor and fan reports |
 | AdiX, wfelix | Diagnosis and fix for a controller refused in a loop |
 | [NotHavocc](https://github.com/NotHavocc/ps5-hwcon-plugin) | PS5 hardware control plugin |
-| [cmartinespinosa](https://github.com/cmartinespinosa/decky-ps5-bazzite-updater) | PS5 Bazzite Updater plugin |
 | [abrocoma](https://github.com/abrocoma) | CachyOS notes: display link lock, DualSense reconnect, boot-to-desktop and systemd ordering fixes |
 | [Gilles (VivaLaVent)](https://github.com/VivaLaVent) | [PS5 Bazzite Deck](/installation/bazzite-deck) and this wiki |
 
@@ -56,5 +55,4 @@ ps5-linux is a community project. Core contributors:
 
 ## Community
 
-- [Discord](https://discord.gg/ps5linux): help, tips, development and bug reports
-- [PS5 Bazzite Deck Discord](https://discord.gg/qGcuTgBBYU): help and testing for PS5 Bazzite Deck
+- [Discord](https://discord.gg/ps5linux): help, tips, development and bug reports; PS5 Bazzite Deck help and testing in `#bazzite-problems` and `#bazzite-general`

@@ -28,6 +28,8 @@ The PS5 OS and Linux share the same Bluetooth chip, and therefore the same Bluet
 
 Giving Linux its own Bluetooth address solves this. It is a boot-time service ([`ps5-bt-addr`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/files/ps5-bt-addr), and [`ps5-bt-pro-addr`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/files/ps5-bt-pro-addr) for the PS5 Pro) that any image can run; PS5 Bazzite Deck includes both and turns them on by default. The DualSense then keeps one pairing for the PS5 on one profile, and one for Linux on another. No re-pairing and no USB cable are needed when you switch.
 
+Pairing profiles came to the DualSense with its software version **0630**, released with PS5 system software 12.00. A controller on older software has no profiles: PS + Square or Triangle does nothing. A jailbroken console on older system software can't update the controller, but a PC can: Sony's [DualSense firmware updater](https://controller.dl.playstation.net/controller/lang/en/fwupdater.html) for Windows, over USB. Check the version in the PS5 OS under Settings → Accessories → Controller (General) → Wireless Controller Device Software.
+
 **Pair the DualSense with Linux** (make sure it is already paired with the PS5 OS on one profile):
 
 1. Start Linux.
