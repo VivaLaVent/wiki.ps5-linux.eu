@@ -71,6 +71,7 @@ const config: Config = {
         indexBlog: false,
         docsRouteBasePath: '/',
         highlightSearchTermsOnTargetPage: true,
+        searchBarShortcutHint: false,
       },
     ],
   ],
