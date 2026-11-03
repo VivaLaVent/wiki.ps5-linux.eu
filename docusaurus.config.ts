@@ -14,6 +14,11 @@ const config: Config = {
   title: 'PS5 Linux Wiki',
   tagline: 'Guides, hardware notes and troubleshooting for running Linux on the PlayStation 5',
   favicon: 'img/logo.svg',
+  // PNG/ICO fallbacks: some browsers ignore or long-cache an SVG favicon
+  headTags: [
+    {tagName: 'link', attributes: {rel: 'icon', type: 'image/png', sizes: '32x32', href: '/img/favicon-32.png'}},
+    {tagName: 'link', attributes: {rel: 'apple-touch-icon', href: '/img/apple-touch-icon.png'}},
+  ],
 
   future: {
     v4: true,
@@ -62,6 +67,34 @@ const config: Config = {
   ],
 
   clientModules: ['./src/clientModules/fonts.js'],
+
+  plugins: [
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        // pages merged in the November 2026 restructure; old links keep working
+        redirects: [
+          {from: '/using-linux/display', to: '/hardware/hdmi'},
+          {from: '/troubleshooting/display-recovery', to: '/hardware/hdmi'},
+          {from: '/troubleshooting/display-link-lock', to: '/hardware/hdmi'},
+          {from: '/hardware/vcn', to: '/hardware/gpu'},
+          {from: '/using-linux/networking/wifi', to: '/hardware/wifi-bluetooth'},
+          {from: '/using-linux/networking/ethernet', to: '/hardware/wifi-bluetooth'},
+          {from: '/using-linux/bluetooth', to: '/hardware/wifi-bluetooth'},
+          {from: '/hardware/usb-storage', to: '/hardware/storage'},
+          {from: '/hardware/m2-compatibility', to: '/hardware/storage'},
+          {from: '/hardware/led', to: '/hardware/peripherals'},
+          {from: '/hardware/buzzer', to: '/hardware/peripherals'},
+          {from: '/hardware/capture-cards', to: '/hardware/peripherals'},
+          {from: '/using-linux/gaming-performance', to: '/post-install/all-distros'},
+          {from: '/using-linux/memory-and-swap', to: '/post-install/all-distros'},
+          {from: '/installation/post-install', to: '/post-install/all-distros'},
+          {from: '/getting-started/firmware', to: '/getting-started/prerequisites'},
+          {from: '/hardware/overview', to: '/hardware/matrix'},
+        ],
+      },
+    ],
+  ],
 
   themes: [
     [

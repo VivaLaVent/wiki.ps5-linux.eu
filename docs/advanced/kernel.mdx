@@ -2,6 +2,8 @@
 title: Kernel setup
 sidebar_position: 1
 description: Install or build the patched PS5 kernel, which patch set to use, and the kernel parameters in cmdline.txt.
+hardware: [original, slim, pro]
+applies_to: not-bazzite-deck
 ---
 
 import Tabs from '@theme/Tabs';
@@ -38,7 +40,7 @@ Then **cold boot** the PS5 (power off, start it, run the loader). The script:
 
 - copies the modules to `/lib/modules/<version>` and the kernel to `/boot`,
 - builds the initrd with `mkinitcpio`, `update-initramfs` or `dracut`, whichever the distro has,
-- writes `/etc/modprobe.d/ps5-iw620.conf` for the Marvell IW620 Wi-Fi driver that comes with the kernel, and copies its firmware from the boot partition (`lib/nxp/pcieuartiw620_combo_v1.bin`) to `/lib/firmware/nxp/` when it is there, so the internal Wi-Fi works without [ps5-linux-mwifiex](/using-linux/networking/wifi),
+- writes `/etc/modprobe.d/ps5-iw620.conf` for the Marvell IW620 Wi-Fi driver that comes with the kernel, and copies its firmware from the boot partition (`lib/nxp/pcieuartiw620_combo_v1.bin`) to `/lib/firmware/nxp/` when it is there, so the internal Wi-Fi works without [ps5-linux-mwifiex](/hardware/wifi-bluetooth#wifi),
 - finds the mounted partition that holds `bzImage` and asks you to confirm it (or pass the path: `sudo ./install.sh /boot/efi`),
 - backs the old `bzImage` and `initrd.img` up to `/boot/efi-backup/<date>` (the last three are kept) and copies the new ones in.
 
@@ -105,7 +107,7 @@ The Wi-Fi driver for the Marvell IW620 (NXP `mwifiex`, already patched for the k
 
 ### Build by hand
 
-Without the script, the steps are the usual ones. The `.config` is made with Clang, so always pass `LLVM=1`, and keep the folder name `ps5-linux-patches`: the config loads the [VCN firmware](/hardware/vcn) from `../ps5-linux-patches/firmware`. Use the kernel tag named in the first lines of `.config`.
+Without the script, the steps are the usual ones. The `.config` is made with Clang, so always pass `LLVM=1`, and keep the folder name `ps5-linux-patches`: the config loads the [VCN firmware](/hardware/gpu#video-engine) from `../ps5-linux-patches/firmware`. Use the kernel tag named in the first lines of `.config`.
 
 ```bash
 git clone https://github.com/rmuxnet/ps5-linux-patches-1 ps5-linux-patches
@@ -187,7 +189,7 @@ sudo pacman -U linux-ps5-*.pkg.tar.zst
 </TabItem>
 </Tabs>
 
-A current package brings the fan curve and the GPU governor; the CPU boost still needs `ps5_control` from [ps5-linux-tools](/hardware/gpu#clocks-and-boost), the IW620 Wi-Fi needs [ps5-linux-mwifiex](/using-linux/networking/wifi) (the package repository bundles it), and the Slim's and Pro's Bluetooth fixes aren't upstream.
+A current package brings the fan curve and the GPU governor; the CPU boost still needs `ps5_control` from [ps5-linux-tools](/hardware/gpu#clocks-and-boost), the IW620 Wi-Fi needs [ps5-linux-mwifiex](/hardware/wifi-bluetooth#wifi) (the package repository bundles it), and the Slim's and Pro's Bluetooth fixes aren't upstream.
 
 ## Build a kernel for Bazzite Game Mode
 
@@ -251,11 +253,11 @@ Other useful parameters. Not every kernel has every HDMI parameter; the split is
 | --- | --- | --- |
 | `amdgpu.ps5_cu_unlock=3` | Unlocks all disabled GPU compute units | [40 CU unlock](/hardware/gpu#40-cu-unlock) |
 | `ttm.pages_limit=...` | Raises the GPU memory (GTT) ceiling | [VRAM](/hardware/gpu#vram) |
-| `video=HDMI-A-1:3840x2160@60` | Forces a 4K mode | [4K black screen](/using-linux/display#4k-display-black-screen-after-login) |
-| `drm.edid_firmware=...` | Loads a custom EDID file | [Custom EDID](/using-linux/display#custom-edid-injection) |
-| `usb-storage.quirks=xxxx:yyyy:u` | Turns off UAS for one USB drive | [USB drive](/hardware/usb-storage#usb-drive-required) |
-| `rootwait rootdelay=60` | Waits up to 60 seconds for a slow USB drive before giving up on the root filesystem | [USB drive](/hardware/usb-storage#usb-drive-required) |
-| `usbcore.autosuspend=-1` | Stops USB devices from going to sleep, which can drop the drive | [USB drive](/hardware/usb-storage#usb-drive-required) |
+| `video=HDMI-A-1:3840x2160@60` | Forces a 4K mode | [4K black screen](/hardware/hdmi#4k-display-black-screen-after-login) |
+| `drm.edid_firmware=...` | Loads a custom EDID file | [Custom EDID](/hardware/hdmi#custom-edid-injection) |
+| `usb-storage.quirks=xxxx:yyyy:u` | Turns off UAS for one USB drive | [USB drive](/hardware/storage#usb-drive-required) |
+| `rootwait rootdelay=60` | Waits up to 60 seconds for a slow USB drive before giving up on the root filesystem | [USB drive](/hardware/storage#usb-drive-required) |
+| `usbcore.autosuspend=-1` | Stops USB devices from going to sleep, which can drop the drive | [USB drive](/hardware/storage#usb-drive-required) |
 | `usbc_dp.enable=1` | DisplayPort output on the front USB-C port | [HDMI chip](/hardware/hdmi#kernel-parameters) |
 | `hdmi.frl_4k120=0` | Never offers 4K at 120 Hz (upstream and rmuxnet: turns native FRL off altogether) | [HDMI chip](/hardware/hdmi#kernel-parameters) |
 | `hdmi.hdcp_mode=<n>` | HDCP on the HDMI output (upstream and rmuxnet) | [HDMI chip](/hardware/hdmi#kernel-parameters) |
@@ -264,8 +266,8 @@ Other useful parameters. Not every kernel has every HDMI parameter; the split is
 | `hdmi.rgb_range=<0,1,2>` | AVI RGB range flag: full, limited or none (PS5 Bazzite Deck) | [HDMI chip](/hardware/hdmi#rgb-range) |
 | `amdgpu.ps5_viola_fw=0` | PS5 Pro: always use the base PS5's GPU firmware | [PS5 Pro](/hardware/ps5-pro#gpu-driver) |
 | `ps5_gpufreq.temp_limit=<50-95>` | Thermal limit of the GPU clock governor (upstream and PS5 Bazzite Deck), 85 °C by default | [PS5 Pro](/hardware/ps5-pro#gpu-driver) |
-| `btusb.ps5_tx_ep=<n>` | ACL bulk OUT endpoint for the MediaTek Bluetooth on the Slim (rmuxnet and PS5 Bazzite Deck) | [Bluetooth](/using-linux/bluetooth#mediatek-on-the-slim) |
-| `btusb.ps5_ep_resync=1` | PS5 Pro: resync the Bluetooth endpoints after the firmware setup (rmuxnet) | [Bluetooth](/using-linux/bluetooth#mediatek-on-the-pro) |
+| `btusb.ps5_tx_ep=<n>` | ACL bulk OUT endpoint for the MediaTek Bluetooth on the Slim (rmuxnet and PS5 Bazzite Deck) | [Bluetooth](/hardware/wifi-bluetooth#mediatek-on-the-slim) |
+| `btusb.ps5_ep_resync=1` | PS5 Pro: resync the Bluetooth endpoints after the firmware setup (rmuxnet) | [Bluetooth](/hardware/wifi-bluetooth#mediatek-on-the-pro) |
 
 `cmdline.txt` must stay a **single line**. Add options at the end, separated by a space.
 

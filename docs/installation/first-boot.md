@@ -2,6 +2,8 @@
 title: First boot
 sidebar_position: 4
 description: What to expect the first time Linux starts on the PS5, and the one thing to do before anything else on Ubuntu.
+hardware: [original, slim, pro]
+applies_to: all
 ---
 
 # First boot
@@ -13,12 +15,12 @@ The Ubuntu image creates its user during the first-boot setup. Until that is don
 :::
 
 1. Create your user account and password where the image asks for it, and remember them.
-2. If the screen stays black for more than a few minutes, switch TTY (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F2</kbd>, wait, <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F1</kbd>) before assuming the boot failed, see [Display recovery](/troubleshooting/display-recovery).
-3. Check that the root partition has grown: `df -h /` should show the drive's size, not a few GB. If not, see [USB and storage](/hardware/usb-storage#usb-drive-required).
+2. If the screen stays black for more than a few minutes, switch TTY (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F2</kbd>, wait, <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F1</kbd>) before assuming the boot failed, see [Display recovery](/hardware/hdmi#display-recovery).
+3. Check that the root partition has grown: `df -h /` should show the drive's size, not a few GB. If not, see [USB and storage](/hardware/storage#usb-drive-required).
 
-Then work through the [Post-install checklist](./post-install.md): it holds the PS5-specific steps (kernel hold, fan and boost, GPU memory, Wi-Fi driver) that every image needs.
+Then work through the [Post-install checklist](/post-install/all-distros): it holds the PS5-specific steps (kernel hold, fan and boost, GPU memory, Wi-Fi driver) that every image needs.
 
 ## Where to go next
 
-- [Post-install checklist](./post-install.md)
-- [Move Linux to an M.2 SSD](./m2-install.md)
+- [Post-install checklist](/post-install/all-distros)
+- [Move Linux to an M.2 SSD](/installation/m2-install)

@@ -2,6 +2,8 @@
 title: DualSense controller
 sidebar_position: 3
 description: Use the DualSense over USB or Bluetooth, keep one pairing for the PS5 and Linux, and fix pairing on Marvell chips.
+hardware: [original, slim, pro]
+applies_to: all
 ---
 
 # DualSense controller
@@ -28,6 +30,8 @@ The PS5 OS and Linux share the same Bluetooth chip, and therefore the same Bluet
 
 Giving Linux its own Bluetooth address solves this. It is a boot-time service ([`ps5-bt-addr`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/files/ps5-bt-addr), and [`ps5-bt-pro-addr`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/files/ps5-bt-pro-addr) for the PS5 Pro) that any image can run; PS5 Bazzite Deck includes both and turns them on by default. The DualSense then keeps one pairing for the PS5 on one profile, and one for Linux on another. No re-pairing and no USB cable are needed when you switch.
 
+Pairing profiles came to the DualSense with its software version **0630**, released with PS5 system software 12.00. A controller on older software has no profiles: PS + Square or Triangle does nothing. A jailbroken console on older system software can't update the controller, but a PC can: Sony's [DualSense firmware updater](https://controller.dl.playstation.net/controller/lang/en/fwupdater.html) for Windows, over USB. Check the version in the PS5 OS under Settings → Accessories → Controller (General) → Wireless Controller Device Software.
+
 **Pair the DualSense with Linux** (make sure it is already paired with the PS5 OS on one profile):
 
 1. Start Linux.
@@ -44,9 +48,9 @@ Giving Linux its own Bluetooth address solves this. It is a boot-time service ([
 - `bluetoothctl` and the Bluetooth settings still show the original address. The chip and the DualSense use the new one.
 - In rest mode, both profiles can wake the PS5, but once it has started only the PS5 profile connects.
 - On consoles with the IW620 chip, restarts go through the PS5 OS instead of [warm restarts](/installation/bazzite-deck#built-in-commands) while this is on: the chip doesn't survive a warm restart with the changed address.
-- With the feature **off**, a controller paired with the PS5 OS connects to Linux by itself and is refused in a loop, see [Controller refused in a loop](./bluetooth.md#controller-refused-in-a-loop).
+- With the feature **off**, a controller paired with the PS5 OS connects to Linux by itself and is refused in a loop, see [Controller refused in a loop](/hardware/wifi-bluetooth#controller-refused-in-a-loop).
 
-How the address is set per chip, and the pitfalls found in testing, are on [Bluetooth](./bluetooth.md#one-dualsense-for-the-ps5-and-linux).
+How the address is set per chip, and the pitfalls found in testing, are on [Bluetooth](/hardware/wifi-bluetooth#one-dualsense-for-the-ps5-and-linux).
 
 ## DualSense pairs once but won't reconnect
 
@@ -100,18 +104,18 @@ Reported on the official CachyOS image with a Marvell IW620. The `JustWorksRepai
 ## Bluetooth troubleshooting
 
 - **The Bluetooth adapter disappears after a while:** the Bluetooth chips drop off USB when they enter USB power saving (U3), and stay gone until a power-off. Keep them powered with a udev rule that sets `power/control` to `on` for the IW620 Bluetooth (`1286:2059`), the MediaTek Bluetooth (`0e8d:3603`, `0e8d:3605`) and the Salina USB controller (`104d:9108`). PS5 Bazzite Deck does this by default.
-- **Bluetooth is gone after a warm restart (IW620):** the Bluetooth side of the chip can hang, more so with the Linux-only address on, see [Bluetooth](./bluetooth.md#iw620-the-linux-only-address-and-warm-restarts). Reloading the `btusb` driver brings it back; if not, power off and start Linux with the loader again.
+- **Bluetooth is gone after a warm restart (IW620):** the Bluetooth side of the chip can hang, more so with the Linux-only address on, see [Bluetooth](/hardware/wifi-bluetooth#iw620-the-linux-only-address-and-warm-restarts). Reloading the `btusb` driver brings it back; if not, power off and start Linux with the loader again.
 - **No `hci0` and `Host halt failed, -110` in `dmesg`:** the USB controller that carries Bluetooth did not start (`xhci_hcd 0000:40:00.6`). Kernels built from upstream during a few weeks had the Salina xHCI start disabled (`xhci_salina_init()` inside `#if 0`); every current kernel has it back. Update the kernel, or if you must stay on such a build, remove the `#if 0` and its `#endif` and rebuild, see [Kernel setup](/advanced/kernel#build-by-hand). Reloading modules does not help, because xHCI is built into the kernel. A `-110` error on the SATA controller (`40:00.3`) is harmless.
 - **Phantom Bluetooth adapters** (an extra `hciN` with address `00:00:00:00:00:00`): the [package repository's fix script](/advanced/package-repository#fix-scripts-for-older-images) turns them off.
 - **Pairing problems:** setting `JustWorksRepairing = always` and `PairableTimeout = 0` in `/etc/bluetooth/main.conf`, and loading the `hidp` module at boot, helps controllers pair and re-pair reliably.
-- **The settings find no new devices on an original PS5:** a kernel quirk that mixes the LE command families, see [Bluetooth](./bluetooth.md#iw620-marvell). On PS5 Bazzite Deck, update to the current release.
+- **The settings find no new devices on an original PS5:** a kernel quirk that mixes the LE command families, see [Bluetooth](/hardware/wifi-bluetooth#iw620-marvell). On PS5 Bazzite Deck, update to the current release.
 
 ## Bluetooth on Marvell chips (Arch fix script)
 
-If a DualSense won't connect over Bluetooth on a console with the Marvell IW620, the script below applies the power, TLP and BlueZ settings that have fixed it for most people. It is for **Marvell** consoles; on MediaTek consoles it doesn't change anything, and the fix there is in the kernel, see [Bluetooth](./bluetooth.md#mediatek-on-the-slim).
+If a DualSense won't connect over Bluetooth on a console with the Marvell IW620, the script below applies the power, TLP and BlueZ settings that have fixed it for most people. It is for **Marvell** consoles; on MediaTek consoles it doesn't change anything, and the fix there is in the kernel, see [Bluetooth](/hardware/wifi-bluetooth#mediatek-on-the-slim).
 
 :::warning[Marvell only]
-Not sure which chip you have? See [Console models and chips](/hardware/overview#console-models-and-chips).
+Not sure which chip you have? See [Console models and chips](/hardware/matrix#console-models-and-chips).
 :::
 
 ### Step 1: Run the fix script

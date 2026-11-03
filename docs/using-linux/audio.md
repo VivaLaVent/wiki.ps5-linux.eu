@@ -2,6 +2,8 @@
 title: Audio
 sidebar_position: 2
 description: HDMI audio status on PS5 Linux, and fixes for audio going to the controller, delay and periodic hiccups.
+hardware: [original, slim, pro]
+applies_to: all
 ---
 
 # Audio

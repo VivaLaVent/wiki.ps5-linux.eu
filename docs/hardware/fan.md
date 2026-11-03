@@ -2,6 +2,8 @@
 title: Fan control
 sidebar_position: 9
 description: How the PS5 fan is controlled under Linux on each kernel, the hwmon driver's curve and temperatures, and how to adjust them.
+hardware: [original, slim, pro]
+applies_to: all
 ---
 
 # Fan control
@@ -132,6 +134,6 @@ cat /sys/class/hwmon/hwmon*/temp*_label   # find Tctl
 cat /sys/class/hwmon/hwmon*/temp*_input   # value in millidegrees Celsius
 ```
 
-On a PS5 Pro the SMU backend adds a GPU temperature of its own, see [PS5 Pro](./ps5-pro.md#gpu-driver).
+On a PS5 Pro the SMU backend adds a GPU temperature of its own, see [PS5 Pro](/hardware/ps5-pro#gpu-driver).
 
 The GPU clock is reported by the devfreq driver of your kernel: look under `/sys/class/devfreq/` for the device name (`ps5-gpufreq` on current kernels) and read its `cur_freq`. At idle the clock sits at the governor's minimum.

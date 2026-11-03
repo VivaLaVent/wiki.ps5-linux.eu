@@ -3,6 +3,8 @@ title: Get and flash a Linux image
 sidebar_label: Get a Linux image
 sidebar_position: 1
 description: Choose a distro, download or build a PS5 Linux image, and flash it to a USB drive.
+hardware: [original, slim, pro]
+applies_to: not-bazzite-deck
 ---
 
 # Get and flash a Linux image
@@ -19,9 +21,9 @@ Every image is a normal distro plus the same three PS5 parts: the patched kernel
 
 | Source | What you get | Kernel and updates |
 | --- | --- | --- |
-| [Official images](#official-images) | The ps5-linux project's own builder: Ubuntu, Arch, CachyOS and Fedora. The reference setup. | The upstream `linux-ps5` kernel; update it with the [package repository](/advanced/package-repository) or by hand. |
-| [mia's community images](#community-images-mias-builds) | Automated builds of around 20 distros (Ubuntu, Debian, Fedora, Arch, Alpine, Proxmox and more) that grow the root partition by themselves. | The same upstream kernel, updated through the package repository. |
-| [PS5 Bazzite Deck](/installation/bazzite-deck) | Bazzite in Steam Deck mode with a KDE desktop, the Slim's, the Pro's and the HDMI fixes from this wiki applied, Wi-Fi and Bluetooth set up. | Its own kernel (a recent stable kernel plus rmuxnet's patches and its own), updated in place with one command. |
+| [PS5 Bazzite Deck](/installation/bazzite-deck) (recommended) | Bazzite in Steam Deck mode with a KDE desktop; Wi-Fi, Bluetooth, the Slim's, the Pro's and the HDMI fixes from this wiki set up. | Its own kernel, updated in place with one command. |
+| [Official images](#official-images) | The ps5-linux project's own builder: Ubuntu, Arch, CachyOS, Fedora, Debian and two Bazzite variants. The reference setup for other distros. | The upstream `linux-ps5` kernel; update it with the [package repository](/advanced/package-repository). |
+| [Build your own](#build-your-own-image) | Any of the official images, built from current sources. | Whatever you build. |
 
 :::info[Who writes this wiki]
 This wiki is maintained by Gilles (VivaLaVent), who also makes PS5 Bazzite Deck. The image exists because its kernel carries fixes (VRR, the display link lock, the Slim's and Pro's Bluetooth, the Pro's GPU firmware staging) that the official patches didn't have at the time, so for a gaming console it is the least work. Those fixes are being merged into [ps5-linux-patches](https://github.com/ps5-linux/ps5-linux-patches) and [rmuxnet's fork](https://github.com/rmuxnet/ps5-linux-patches-1) over time, and every other image gets them with a kernel update. Nothing on this wiki needs that image: [Kernel setup](/advanced/kernel) and [Kernel sources and patches](/advanced/kernel-sources) apply to all of them.
@@ -31,14 +33,21 @@ Not sure? [Which image should I use?](/getting-started/which-image) weighs the c
 
 ## Official images
 
-The official builder makes four images. Debian, Proxmox, Bazzite, Batocera and the others come from [mia's builds](#community-images-mias-builds).
+The [ps5-linux-image release](https://github.com/ps5-linux/ps5-linux-image/releases/tag/latest) has these images:
 
 | Distro | Desktop | Notes |
 | --- | --- | --- |
-| Ubuntu (default) | GNOME | The usual first choice |
+| Ubuntu 26.04 | GNOME | The usual first choice |
 | Arch | Sway | The lightest: a few hundred MB of RAM at idle |
 | CachyOS | Gamescope + Steam Big Picture, KDE Plasma (no SDDM) | Gaming-focused. [Currently broken](/troubleshooting/known-issues#cachyos-image-doesnt-boot). |
-| Fedora | GNOME (Wayland) | |
+| Fedora 44 | GNOME (Wayland) | |
+| Debian 12 | | |
+| Bazzite (KDE gaming) | KDE Plasma | Upstream's Bazzite build |
+| Bazzite Deck UI | Steam Gaming Mode | Upstream's own build, **not** [PS5 Bazzite Deck](/installation/bazzite-deck) |
+
+:::warning[Update the kernel after installing]
+The release images are not rebuilt often: the current set was built on 31 July 2026 with kernel 7.1.4, which predates the PS5 Pro's GPU support and the Slim's Wi-Fi. After the first boot, update the kernel with the [package repository](/advanced/package-repository#update-the-kernel-later).
+:::
 
 The builder can also make a **multi-distro image** with Ubuntu, Arch and CachyOS side by side on one drive, switched with kexec.
 
@@ -48,60 +57,11 @@ The builder can also make a **multi-distro image** with Ubuntu, Arch and CachyOS
 
 **CachyOS:** `sudo pacman -S cachyos-handheld` converts a plain CachyOS install into the Gamescope-first setup with a "switch to desktop" option, so you don't have to put it together by hand.
 
-**Batocera:** a Batocera build that gets a network connection but no picture is running a Mesa without the PS5 display patches. That is a missing driver patch in the distro, not a `cmdline.txt` or EDID problem; wait for a build with a patched Mesa, or rebuild Mesa yourself with the PS5 patches applied.
-
 **Autologin on tty1 straight into Gamescope** (no display manager): add a systemd getty drop-in that logs in on tty1 only, and make `~/.bash_profile` check for `/dev/tty1`, kill any leftover Steam helpers and `exec` Gamescope with `steam -gamepadui`. Because the check is limited to tty1, SSH and other logins aren't touched. This sidesteps the black screen that session switches through SDDM can cause.
 
 ## Download a pre-built image
 
 Download an image from the [ps5-linux-image releases](https://github.com/ps5-linux/ps5-linux-image/releases/tag/latest). Pick the `.img.xz` file for your distro and decompress it.
-
-## Community images (mia's builds)
-
-These come from [mia's fork of ps5-linux-image](https://git.etawen.dev/mia/ps5-linux-image). They all use the same `linux-ps5` kernel and firmware setup, and they grow the root partition to fill the drive on the first boot. The links always point to the latest build.
-
-**Debian-based:**
-
-| Image | Notes |
-| --- | --- |
-| [ps5-ubuntu2604.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-ubuntu2604.img.xz) | Ubuntu, GNOME |
-| [ps5-mint22-cinnamon.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-mint22-cinnamon.img.xz) | Linux Mint, Cinnamon |
-| [ps5-debian13-server.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-debian13-server.img.xz) | Debian, server profile with no desktop |
-| [ps5-debian13-xfce.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-debian13-xfce.img.xz) | Debian, Xfce |
-| [ps5-debian13-gnome.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-debian13-gnome.img.xz) | Debian, GNOME |
-| [ps5-debian13-kde.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-debian13-kde.img.xz) | Debian, KDE Plasma |
-| [ps5-debian13-proxmox.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-debian13-proxmox.img.xz) | Debian with Proxmox VE, for running VMs on the PS5 |
-| [ps5-devuan-sway.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-devuan-sway.img.xz) | Devuan (no systemd), Sway |
-
-**Arch-based:**
-
-| Image | Notes |
-| --- | --- |
-| [ps5-arch.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-arch.img.xz) | Plain Arch Linux |
-| [ps5-cachyos.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-cachyos.img.xz) | CachyOS (performance-tuned Arch), KDE |
-| [ps5-artix-openrc.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-artix-openrc.img.xz) | Artix Linux (no systemd), OpenRC |
-| [ps5-artix-runit.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-artix-runit.img.xz) | Artix Linux, runit |
-| [ps5-miaos.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-miaos.img.xz) | MiaOS: Arch with KDE, Steam and Gamescope, console mode by default |
-
-**Fedora-based:**
-
-| Image | Notes |
-| --- | --- |
-| [ps5-fedora-gnome.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-fedora-gnome.img.xz) | Fedora Workstation (GNOME) |
-| [ps5-fedora-kde.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-fedora-kde.img.xz) | Fedora Kinoite (KDE Plasma) |
-| [ps5-bazzite-deck.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-bazzite-deck.img.xz) | Bazzite with the Steam Deck interface. Not the same as [PS5 Bazzite Deck](/installation/bazzite-deck). |
-
-**Other:**
-
-| Image | Notes |
-| --- | --- |
-| [ps5-alpine.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-alpine.img.xz) | Alpine Linux (musl, OpenRC): small, server and command line |
-| [ps5-batocera.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-batocera.img.xz) | Batocera (retro emulation) |
-| [ps5-tinycore.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-tinycore.img.xz) | Tiny Core: minimal live image, useful for rescue and testing |
-
-To build one yourself, each distro has a `distros/<name>/` folder in the [repository](https://git.etawen.dev/mia/ps5-linux-image). Run `build_image.sh --distro <name>` on any x86_64 Linux host with Docker. The shared kernel is built by the separate [kernel builder](https://git.etawen.dev/mia/ps5-linux-image-kernel).
-
-To install or update the kernel on these images with your package manager, see [Package repository](/advanced/package-repository).
 
 ## Build your own image
 

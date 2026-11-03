@@ -2,6 +2,8 @@
 title: Modules or sysctl settings not loading
 sidebar_position: 4
 description: Fix random failures after boot caused by a systemd ordering cycle that skips module loading and sysctl.
+hardware: [original, slim, pro]
+applies_to: not-bazzite-deck
 ---
 
 # Modules or sysctl settings not loading

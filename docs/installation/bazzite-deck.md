@@ -2,6 +2,8 @@
 title: PS5 Bazzite Deck
 sidebar_position: 2
 description: Install PS5 Bazzite Deck, a Bazzite image that boots the PS5 straight into Steam Gaming Mode.
+hardware: [original, slim, pro]
+applies_to: bazzite-deck
 ---
 
 # PS5 Bazzite Deck
@@ -11,7 +13,7 @@ description: Install PS5 Bazzite Deck, a Bazzite image that boots the PS5 straig
 It runs from a USB drive (or the M.2 slot) and is started by the Linux loader, like any other image. The PS5 itself is not modified: when you restart or power off, the PS5 starts its own system again, even with the drive still plugged in.
 
 - **Download:** [releases](https://github.com/VivaLaVent/ps5-bazzite-deck/releases)
-- **Help and testing:** [Discord](https://discord.gg/qGcuTgBBYU), channel `#bazzite-problems`
+- **Help and testing:** [Discord](https://discord.gg/ps5linux), channel `#bazzite-problems`
 - **Support the project:** [Ko-fi](https://ko-fi.com/vivalavent)
 
 :::tip[Which version?]
@@ -20,7 +22,7 @@ Use the release marked **Latest**. Releases marked **Pre-release** are test buil
 
 ## What works on your console
 
-One image runs on every supported PS5. What you get depends on three parts of the console; `ps5-report` shows all three. See [Hardware overview](/hardware/overview#console-models-and-chips) for how to check them by hand.
+One image runs on every supported PS5. What you get depends on three parts of the console; `ps5-report` shows all three. See [Hardware overview](/hardware/matrix#console-models-and-chips) for how to check them by hand.
 
 **By HDMI chip:**
 
@@ -57,7 +59,7 @@ Both chips support 1080p60, 1080p120, 1440p60 and 4K60, when the display can do 
 1. **Download** all `ps5-bazzite-deck-vX.Y.Z.img.7z.00*` files from the latest [release](https://github.com/VivaLaVent/ps5-bazzite-deck/releases) into one folder.
 2. **Extract** the `.001` file with [7-Zip](https://7-zip.org) (Windows), Keka (macOS) or `7z x` (Linux). You get `ps5-bazzite-deck.img`.
 3. **Flash** it to the USB drive with [Rufus](https://rufus.ie): select the drive, select the `.img` file and click **Start**. This erases the drive.
-4. **Plug** the drive into a fast port, see [USB ports](/hardware/usb-storage#usb-ports). Use the slow USB 2.0 port for a controller or keyboard.
+4. **Plug** the drive into a fast port, see [USB ports](/hardware/storage#usb-ports). Use the slow USB 2.0 port for a controller or keyboard.
 5. **Jailbreak and send the loader** as described in [Booting Linux](/installation/booting). Wait until the orange light stops blinking, then press the power button. A **white light** means Linux is booting.
 6. **Be patient on the first boot.** The screen can stay black for a few minutes.
 
@@ -92,7 +94,7 @@ Sleep (suspend-to-idle) is built in: a short press of the power button or Steam'
 
 | Option | What it does | When to use it |
 | --- | --- | --- |
-| `amdgpu.force_1080p=1` | Only allows 1080p60 | A black or garbled picture you can't get past, for example after choosing a resolution your display can't show. Remove it once you've set a working resolution, see [Display recovery](/troubleshooting/display-recovery). |
+| `amdgpu.force_1080p=1` | Only allows 1080p60 | A black or garbled picture you can't get past, for example after choosing a resolution your display can't show. Remove it once you've set a working resolution, see [Display recovery](/hardware/hdmi#display-recovery). |
 | `usb-storage.quirks=xxxx:yyyy:u` | Turns off UAS for one USB drive (`xxxx:yyyy` from `lsusb`) | USB-C SSDs or enclosures that disconnect, freeze or show I/O errors (many have buggy UAS) |
 | `usbc_dp.enable=1` | Turns on DisplayPort output on the front USB-C port | USB-C displays and the PS VR2. Not when your boot drive is in the front USB-C port. |
 | `hdmi.frl_4k120=0` | Never offers 4K at 120 Hz | A TV where 4K120 misbehaves |
@@ -164,24 +166,23 @@ These are community-made and not part of the image. They need [Decky Loader](htt
 | Plugin | What it does |
 | --- | --- |
 | [PS5 hardware control](https://github.com/NotHavocc/ps5-hwcon-plugin) | Fan target or curve, live temperatures, CPU and GPU governors and clocks, LED presets. It sets the same things as `ps5-perf`: whichever was set last applies. Use a current image release: one pre-release had the fan modes swapped, and in some releases the fan target fell back to 50 °C after sleep (both fixed). There is also a desktop version, [ps5-hwcon-gui](https://github.com/NotHavocc/ps5-hwcon-gui). |
-| [PS5 Bazzite Updater](https://github.com/cmartinespinosa/decky-ps5-bazzite-updater) | Shows when a new release is out with its notes, installs it (the same update as in the release notes) and then powers off. Unofficial; full releases only. |
 
 ## Troubleshooting
 
-Ask in `#bazzite-problems` on [Discord](https://discord.gg/qGcuTgBBYU) and attach the report from `ps5-report`. Without a network connection, copy the report to the USB drive's FAT32 partition and take it from there on your PC:
+Ask in `#bazzite-problems` on [Discord](https://discord.gg/ps5linux) and attach the report from `ps5-report`. Without a network connection, copy the report to the USB drive's FAT32 partition and take it from there on your PC:
 
 ```bash
 E=$(for d in /boot/efi /efi; do sudo test -f $d/cmdline.txt && echo $d && break; done); sudo cp ~/ps5-report-*.txt $E/
 ```
 
-- **The console runs but there's no picture** (wrong mode, or a mode the TV doesn't accept): see [Display recovery](/troubleshooting/display-recovery).
+- **The console runs but there's no picture** (wrong mode, or a mode the TV doesn't accept): see [Display recovery](/hardware/hdmi#display-recovery).
 - **White light but black screen:** check that HDMI Device Link is off, try another HDMI port or TV, toggle HDCP in the PS5 settings. As a last resort, add `amdgpu.force_1080p=1` to `cmdline.txt`.
 - **Black screen, but the PS5 is running:** press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F2</kbd>, wait 2–3 seconds, then <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F1</kbd>. Over SSH: `sudo chvt 2; sleep 3; sudo chvt 1`.
 - **It boots back into the PS5 menu:** you pressed the power button before the orange light stopped blinking, USB power in rest mode isn't set to **Always**, or the console's rest mode was blocked, see [Known issues](/troubleshooting/known-issues#rest-mode-error-back-to-the-ps5-login-screen).
 - **Artefacts, green dots or crashes:** turn the [40 CU unlock](/hardware/gpu#40-cu-unlock) off again. For glitches in a single game, use the launch option `RADV_DEBUG=nohiz %command%`.
 - **VRR:** no "Enable VRR" option means a VERDE console, a display without HDMI VRR (FreeSync-only monitors), VRR turned off for that input on the TV, or an old image release with a TV that announces no VRR maximum (update). If the screen goes dark for 2 seconds in menus, use VRR per game instead (quick access menu → Performance). OLED flicker on the desktop: set Adaptive Sync to **Automatic**, not Always.
-- **Bluetooth settings find no new devices** (IW620 consoles): a bug in some earlier releases; a DualSense that was already paired kept working. Update to the current release. If a controller is refused in a loop instead, see [Bluetooth](/using-linux/bluetooth#controller-refused-in-a-loop).
-- **HEVC video with broken colours or a red screen** (recording, streaming with Sunshine or Moonlight): the PS5's video engine gets HEVC P-frames wrong. Use **H.264**, or encode HEVC with I-frames only (see [VCN](/hardware/vcn#using-it-with-ffmpeg)). As a Moonlight client: use H.264, or "Force software decoding" for HEVC.
+- **Bluetooth settings find no new devices** (IW620 consoles): a bug in some earlier releases; a DualSense that was already paired kept working. Update to the current release. If a controller is refused in a loop instead, see [Bluetooth](/hardware/wifi-bluetooth#controller-refused-in-a-loop).
+- **HEVC video with broken colours or a red screen** (recording, streaming with Sunshine or Moonlight): the PS5's video engine gets HEVC P-frames wrong. Use **H.264**, or encode HEVC with I-frames only (see [VCN](/hardware/gpu#using-it-with-ffmpeg)). As a Moonlight client: use H.264, or "Force software decoding" for HEVC.
 - **Won't boot from an SSD in a USB enclosure:** some enclosures don't work with the loader. Try another one.
 - **PS5 Pro reports 36 compute units:** the Pro's GPU firmware isn't in use yet. After every update, start Linux twice: the first start adds the firmware to the initrd, the second runs on it. If it stays at 36, the loader didn't dump the firmware, see [PS5 Pro](/hardware/ps5-pro#gpu-firmware).
 

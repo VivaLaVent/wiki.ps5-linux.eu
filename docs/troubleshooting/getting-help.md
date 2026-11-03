@@ -2,6 +2,8 @@
 title: SSH and getting help
 sidebar_position: 5
 description: Connect to your PS5 over SSH, collect logs and write a bug report that gets answers.
+hardware: [original, slim, pro]
+applies_to: all
 ---
 
 # SSH and getting help
@@ -46,12 +48,12 @@ Without a picture, look in your router's list of connected devices for a host na
 ssh <your-username>@<ps5-ip>
 ```
 
-Accept the host key prompt the first time you connect. From here you can troubleshoot even if the display is black, see [Black screen, but SSH works](/using-linux/display#black-screen-but-ssh-works).
+Accept the host key prompt the first time you connect. From here you can troubleshoot even if the display is black, see [Black screen, but SSH works](/hardware/hdmi#black-screen-but-ssh-works).
 
 ## Collect logs for a bug report
 
 :::tip[PS5 Bazzite Deck]
-Run `ps5-report` instead: it collects your hardware details and the relevant logs into one file. Ask in `#bazzite-problems` on the [Bazzite Deck Discord](https://discord.gg/qGcuTgBBYU). For display problems, see [Reporting a display problem](./display-recovery.md#reporting-a-display-problem).
+Run `ps5-report` instead: it collects your hardware details and the relevant logs into one file. Ask in `#bazzite-problems` on the [Bazzite Deck Discord](https://discord.gg/ps5linux). For display problems, see [Reporting a display problem](/hardware/hdmi#reporting-a-display-problem).
 :::
 
 One command gathers everything a helper will ask for:

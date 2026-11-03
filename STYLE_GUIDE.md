@@ -210,3 +210,11 @@ The wiki has **no images**. Describe things in text, tables and code blocks. If 
 - [ ] Every claim is confirmed, or marked as not tested.
 - [ ] The page is in `sidebars.ts`.
 - [ ] `npm run build` passes with no broken links.
+
+## Structure (November 2026)
+
+- **One source of truth per topic.** Each hardware component has one page under Hardware reference; its setup and troubleshooting live there. Other pages link to it instead of repeating it. Status changes go into the table on [Hardware status](docs/hardware/matrix.md) first.
+- **After installing has three layers:** All distros (applies everywhere), Other images (what PS5 Bazzite Deck already does), Distro notes (package-manager differences only), plus a PS5 Bazzite Deck page that points to docs.bazzite.gg for plain-Bazzite topics.
+- **Moving or merging a page:** add a redirect in `docusaurus.config.ts` (`@docusaurus/plugin-client-redirects`) so old links keep working.
+- **Front matter on every page:** `title`, `description` (quote both if they contain `: `), `hardware` (`[original, slim, pro]` or a subset) and `applies_to` (`all`, `bazzite-deck` or `not-bazzite-deck`). No firmware or kernel version fields: they go stale within weeks.
+- **Tone, after docs.bazzite.gg:** task-named pages, hub pages with bold link lists, one idea per paragraph, numbered steps, and "order reflects the recommendation" where options are ranked.

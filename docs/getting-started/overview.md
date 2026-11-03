@@ -3,6 +3,8 @@ title: Getting started
 sidebar_label: Overview
 description: What you need to run Linux on a PS5 and the steps to get there.
 sidebar_position: 1
+hardware: [original, slim, pro]
+applies_to: all
 ---
 
 # Getting started
@@ -14,30 +16,30 @@ This wiki assumes your PS5 is **already jailbroken**. It covers everything after
 :::
 
 :::info[Check your firmware first]
-Linux only runs on exploitable system software versions. Read [Supported firmware](./firmware.md) before you buy anything or change any settings.
+Linux only runs on exploitable system software versions. Read [Supported firmware](/getting-started/prerequisites#firmware) before you buy anything or change any settings.
 :::
 
 ## What you need
 
 **Required:**
 
-- A PS5 on a [supported firmware](./firmware.md)
+- A PS5 on a [supported firmware](/getting-started/prerequisites#firmware)
 - A USB drive of **64 GB or more** (32 GB for [PS5 Bazzite Deck](/installation/bazzite-deck)); an external SSD is much faster than a flash drive
 - A USB keyboard and mouse
 
 **Optional:**
 
-- An M.2 SSD for a dedicated Linux install (not on the oldest firmware, see [Supported firmware](./firmware.md))
+- An M.2 SSD for a dedicated Linux install (not on the oldest firmware, see [Supported firmware](/getting-started/prerequisites#firmware))
 - A USB Wi-Fi adapter, for internet access before the internal Wi-Fi driver is set up
 
 ## Steps
 
-1. [Configure your PS5 settings](./prerequisites.md)
-2. [Choose an image](./which-image.md): a distro of your choice, or the ready-made gaming image
+1. [Configure your PS5 settings](/getting-started/prerequisites)
+2. [Choose an image](/getting-started/which-image): a distro of your choice, or the ready-made gaming image
 3. [Get and flash the image](/installation/linux-image)
 4. Jailbreak your PS5 (not covered by this wiki)
 5. [Send the Linux loader payload](/installation/booting#send-the-linux-loader)
-6. [First boot](/installation/first-boot), then the [Post-install checklist](/installation/post-install)
+6. [First boot](/installation/first-boot), then the [Post-install checklist](/post-install/all-distros)
 
 [PS5 Bazzite Deck](/installation/bazzite-deck) has its own, shorter install steps and skips most of the post-install work.
 

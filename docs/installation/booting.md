@@ -2,6 +2,8 @@
 title: Booting Linux
 sidebar_position: 3
 description: Plug in the USB drive, send the Linux loader and read the boot LED.
+hardware: [original, slim, pro]
+applies_to: all
 ---
 
 # Booting Linux
@@ -19,7 +21,7 @@ Every PS5 has one slow USB 2.0 port (on the original PS5, the front USB-A port).
 
 ## Jailbreak the PS5
 
-Jailbreak your PS5 with the exploit for your firmware (see [Supported firmware](/getting-started/firmware)). Jailbreaking itself is not covered by this wiki.
+Jailbreak your PS5 with the exploit for your firmware (see [Supported firmware](/getting-started/prerequisites#firmware)). Jailbreaking itself is not covered by this wiki.
 
 :::danger[Send the Linux loader as the only payload]
 etaHEN, kstuff and other payloads change the console in ways the Linux loader can't undo, so Linux doesn't boot after them. If one has already run, **restart the PS5**, jailbreak again and send only the Linux loader.
@@ -76,7 +78,7 @@ If you are testing repeatedly, you can wake the PS5 from rest mode with a DualSe
 | White straight to solid orange, no blinking | Rest mode was refused; the power button starts the PS5 OS, see [Known issues](/troubleshooting/known-issues#rest-mode-error-back-to-the-ps5-login-screen) |
 | Back to the PS5 OS | You pressed the power button too early, or USB power in rest mode is not enabled |
 
-The front light bar can also be controlled from Linux, see [LED control](/hardware/led).
+The front light bar can also be controlled from Linux, see [LED control](/hardware/peripherals#led).
 
 ## Black screen?
 
@@ -86,8 +88,8 @@ Try these first:
 - Add `amdgpu.force_1080p=1` to `cmdline.txt`.
 - Turn HDCP off in the PS5 settings, or on if it was off.
 - Try a different monitor or capture card.
-- Ask on [Discord](https://discord.gg/ps5linux) and include your EDID, see [Display recovery](/troubleshooting/display-recovery#decode-the-edid).
+- Ask on [Discord](https://discord.gg/ps5linux) and include your EDID, see [Display recovery](/hardware/hdmi#decode-the-edid).
 
-See [Display output](/using-linux/display#troubleshooting-a-black-screen) for the full troubleshooting list.
+See [Display output](/hardware/hdmi#troubleshooting-a-black-screen) for the full troubleshooting list.
 
 Next: [First boot](/installation/first-boot).

@@ -1,7 +1,9 @@
 import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
 
 // The sidebar follows the order a new user goes through:
-// before you install → install → after installing (using Linux) → hardware reference → advanced → fix problems.
+// before you install → install → after installing → hardware reference → advanced → fix problems.
+// "After installing" has three layers: all distros, the other images, distro notes; plus PS5 Bazzite Deck.
+
 const sidebars: SidebarsConfig = {
   wikiSidebar: [
     'intro',
@@ -9,12 +11,7 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Before you install',
       collapsed: false,
-      items: [
-        'getting-started/overview',
-        'getting-started/prerequisites',
-        'getting-started/firmware',
-        'getting-started/which-image',
-      ],
+      items: ['getting-started/overview', 'getting-started/prerequisites', 'getting-started/which-image'],
     },
     {
       type: 'category',
@@ -31,38 +28,30 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'After installing',
+      collapsed: false,
       items: [
-        'installation/post-install',
-        'using-linux/display',
-        'using-linux/audio',
-        {
-          type: 'category',
-          label: 'Networking',
-          items: ['using-linux/networking/ethernet', 'using-linux/networking/wifi'],
-        },
+        'post-install/all-distros',
+        'post-install/not-bazzite-deck',
+        'post-install/distro-notes',
+        'post-install/bazzite',
         'using-linux/dualsense',
-        'using-linux/bluetooth',
-        'using-linux/gaming-performance',
-        'using-linux/memory-and-swap',
-        'using-linux/boot-to-desktop',
+        'using-linux/audio',
         'using-linux/browser-video',
+        'using-linux/boot-to-desktop',
       ],
     },
     {
       type: 'category',
       label: 'Hardware reference',
       items: [
-        'hardware/overview',
-        'hardware/ps5-pro',
-        'hardware/gpu',
+        'hardware/matrix',
         'hardware/hdmi',
-        'hardware/vcn',
-        'hardware/usb-storage',
-        'hardware/m2-compatibility',
-        'hardware/led',
+        'hardware/gpu',
+        'hardware/ps5-pro',
+        'hardware/wifi-bluetooth',
         'hardware/fan',
-        'hardware/buzzer',
-        'hardware/capture-cards',
+        'hardware/storage',
+        'hardware/peripherals',
       ],
     },
     {
@@ -72,20 +61,18 @@ const sidebars: SidebarsConfig = {
         'advanced/kernel',
         'advanced/kernel-sources',
         'advanced/package-repository',
-        'advanced/warm-reboot',
         'advanced/image-build',
+        'advanced/warm-reboot',
       ],
     },
     {
       type: 'category',
       label: 'Troubleshooting & help',
       items: [
-        'troubleshooting/known-issues',
-        'troubleshooting/display-recovery',
-        'troubleshooting/display-link-lock',
-        'troubleshooting/modules-not-loading',
         'troubleshooting/getting-help',
+        'troubleshooting/known-issues',
         'troubleshooting/recovery',
+        'troubleshooting/modules-not-loading',
       ],
     },
     {

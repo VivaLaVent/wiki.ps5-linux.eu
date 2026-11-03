@@ -2,6 +2,8 @@
 title: Kernel sources and patches
 sidebar_position: 2
 description: Where the PS5 kernel comes from, what the version strings and branches mean, and how to apply a patch set or single patches by hand on any image.
+hardware: [original, slim, pro]
+applies_to: not-bazzite-deck
 ---
 
 # Kernel sources and patches
@@ -50,7 +52,7 @@ cat /proc/version
 | | other branches | Work in progress. Not for users. |
 | [Slip-Up/ps5-linux-patches](https://github.com/Slip-Up/ps5-linux-patches) | | The native FRL, 4:2:0, ALLM and recovery work, merged upstream. |
 | [VivaLaVent/ps5-bazzite-deck](https://github.com/VivaLaVent/ps5-bazzite-deck) | tags `vX.Y.Z` | The image. `patches/` holds its kernel patches, each with a description at the top; `build.sh` section 3 is the order; `CHANGELOG.md` says what changed when and what is untested. |
-| [ps5-linux/ps5-linux-image](https://github.com/ps5-linux/ps5-linux-image), [mia's fork](https://git.etawen.dev/mia/ps5-linux-image) | | The image builders. They take the patch set as a `--patches-ref` (branch, tag or commit) and build the kernel packages the images ship. |
+| [ps5-linux/ps5-linux-image](https://github.com/ps5-linux/ps5-linux-image) | | The image builders. They take the patch set as a `--patches-ref` (branch, tag or commit) and build the kernel packages the images ship. |
 
 Which feature is in which of them is on [Kernel setup](/advanced/kernel#what-is-where). rmuxnet's README sets the rules for his repository: changes go in as pull requests only, work taken from it is credited, and renamed forks of the kernel are not allowed.
 
@@ -103,4 +105,4 @@ Nothing in the distro has to change for a new kernel except its modules and init
 3. Back up `bzImage` and `initrd.img` on the boot partition and copy the new ones over them. `cmdline.txt` and `vram.txt` stay.
 4. Cold boot and start with the loader. To test a kernel without a cold boot, use [kexec](/advanced/warm-reboot).
 
-If the new kernel doesn't boot, put the backed-up files back from any PC (the partition is FAT32). What a kernel needs beyond that is the same for every image: the IW620 Wi-Fi driver built for it (bundled in the `linux-ps5` package and in rmuxnet's release, otherwise [reinstall it](/using-linux/networking/wifi#after-a-kernel-update)), and on an image with Steam Gaming Mode the [BPF LSM and BTF](/advanced/kernel#build-a-kernel-for-bazzite-game-mode) options.
+If the new kernel doesn't boot, put the backed-up files back from any PC (the partition is FAT32). What a kernel needs beyond that is the same for every image: the IW620 Wi-Fi driver built for it (bundled in the `linux-ps5` package and in rmuxnet's release, otherwise [reinstall it](/hardware/wifi-bluetooth#after-a-kernel-update)), and on an image with Steam Gaming Mode the [BPF LSM and BTF](/advanced/kernel#build-a-kernel-for-bazzite-game-mode) options.

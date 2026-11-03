@@ -2,6 +2,8 @@
 title: Recovery via chroot
 sidebar_position: 6
 description: Fix an install that no longer boots by chrooting into it from another Linux system.
+hardware: [original, slim, pro]
+applies_to: not-bazzite-deck
 ---
 
 # Recovery via chroot

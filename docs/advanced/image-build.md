@@ -3,6 +3,8 @@ title: How the PS5 Bazzite Deck image is built
 sidebar_label: Building an image
 sidebar_position: 5
 description: What a PS5 image builder has to change in the kernel config and which patches it applies, using PS5 Bazzite Deck as the worked example.
+hardware: [original, slim, pro]
+applies_to: not-bazzite-deck
 ---
 
 # How the PS5 Bazzite Deck image is built
@@ -54,12 +56,12 @@ The order matters: later patches are written against the tree state the earlier 
 The exact list with one-line descriptions is in [`build.sh`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/build.sh), section 3; every patch file starts with a description of what it does and why.
 
 :::warning[Not in the image any more: the IW620 legacy LE workaround]
-rmuxnet's repository has a change that marks the IW620's extended LE commands as broken so keyboards and mice reconnect. On that chip it stops Bluetooth from finding new devices, because the scan then uses the legacy commands while advertising still uses the extended ones, see [Bluetooth](/using-linux/bluetooth#iw620-marvell). The image dropped it; an image that takes rmuxnet's patch set as is inherits it.
+rmuxnet's repository has a change that marks the IW620's extended LE commands as broken so keyboards and mice reconnect. On that chip it stops Bluetooth from finding new devices, because the scan then uses the legacy commands while advertising still uses the extended ones, see [Bluetooth](/hardware/wifi-bluetooth#iw620-marvell). The image dropped it; an image that takes rmuxnet's patch set as is inherits it.
 :::
 
 ## Files baked into the image
 
-Not kernel changes, but an image needs them too: a stable MAC for NetworkManager on the IW620, udev rules that keep the Bluetooth chips and the Salina xHCI powered, the `DefaultDependencies=no` drop-in for `ps5-stage-firmware.service` (see [Modules or sysctl settings not loading](/troubleshooting/modules-not-loading)), the Linux-only Bluetooth address and connectable services (see [Bluetooth](/using-linux/bluetooth)), `hidp` loaded at boot, the warm-reboot units (see [Restart straight into Linux](./warm-reboot.md)), and the Pro firmware staging (see [PS5 Pro](/hardware/ps5-pro#gpu-firmware)). All under [`files/`](https://github.com/VivaLaVent/ps5-bazzite-deck/tree/main/files).
+Not kernel changes, but an image needs them too: a stable MAC for NetworkManager on the IW620, udev rules that keep the Bluetooth chips and the Salina xHCI powered, the `DefaultDependencies=no` drop-in for `ps5-stage-firmware.service` (see [Modules or sysctl settings not loading](/troubleshooting/modules-not-loading)), the Linux-only Bluetooth address and connectable services (see [Bluetooth](/hardware/wifi-bluetooth#bluetooth)), `hidp` loaded at boot, the warm-reboot units (see [Restart straight into Linux](/advanced/warm-reboot)), and the Pro firmware staging (see [PS5 Pro](/hardware/ps5-pro#gpu-firmware)). All under [`files/`](https://github.com/VivaLaVent/ps5-bazzite-deck/tree/main/files).
 
 ## Upstream repositories to track
 

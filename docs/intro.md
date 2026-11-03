@@ -3,6 +3,8 @@ slug: /
 sidebar_label: What is this?
 title: Linux on the PlayStation 5
 description: A community wiki for running a full Linux desktop on the PlayStation 5.
+hardware: [original, slim, pro]
+applies_to: all
 ---
 
 # Linux on the PlayStation 5
@@ -50,7 +52,7 @@ Start with [Getting started](/getting-started/overview). It lists what you need 
 | VRR (HDMI VRR displays) | ✅ FLAVA3 consoles | PS5 Bazzite Deck only |
 | HDMI CEC | ✅ Working | Every current kernel |
 | USB-C DisplayPort output | ⚠️ Off by default | Every current kernel, `usbc_dp.enable=1` |
-| Hardware video decode (VCN) | ✅ Working | Every current kernel, see [Hardware video](/hardware/vcn) |
+| Hardware video decode (VCN) | ✅ Working | Every current kernel, see [Hardware video](/hardware/gpu#video-engine) |
 | Hardware video encode (VCN) | ⚠️ H.264 only | HEVC only with I-frames |
 
 Resolutions and refresh rates are detailed on [HDMI chip](/hardware/hdmi#why-only-certain-modes-exist).
@@ -60,9 +62,9 @@ Resolutions and refresh rates are detailed on [HDMI chip](/hardware/hdmi#why-onl
 | Component | Status | Where |
 | --- | --- | --- |
 | Ethernet (`mts`) | ✅ Working | Every kernel; full gigabit in every current kernel |
-| Wi-Fi, Marvell IW620 (most original PS5s) | ⚠️ Working, some instability | Out-of-tree driver; built into rmuxnet's kernel, the `linux-ps5` package and PS5 Bazzite Deck, see [Wi-Fi](/using-linux/networking/wifi) |
+| Wi-Fi, Marvell IW620 (most original PS5s) | ⚠️ Working, some instability | Out-of-tree driver; built into rmuxnet's kernel, the `linux-ps5` package and PS5 Bazzite Deck, see [Wi-Fi](/hardware/wifi-bluetooth#wifi) |
 | Wi-Fi, MediaTek (most Slims and the Pro) | ✅ Working | In-kernel drivers, every current kernel including the official one |
-| Bluetooth, Marvell IW620 | ✅ Working | Quirks in every current kernel; the reconnect fixes in rmuxnet's kernel and PS5 Bazzite Deck, see [Bluetooth](/using-linux/bluetooth) |
+| Bluetooth, Marvell IW620 | ✅ Working | Quirks in every current kernel; the reconnect fixes in rmuxnet's kernel and PS5 Bazzite Deck, see [Bluetooth](/hardware/wifi-bluetooth#bluetooth) |
 | Bluetooth, MediaTek (Slim and Pro) | ✅ Working | PS5 Bazzite Deck. rmuxnet's kernel carries a different Bluetooth patch that its author reports as broken |
 | DualSense (USB and Bluetooth) | ✅ Working | Bluetooth on every chip; one controller for the PS5 OS and Linux, see [DualSense](/using-linux/dualsense) |
 
@@ -70,7 +72,7 @@ Resolutions and refresh rates are detailed on [HDMI chip](/hardware/hdmi#why-onl
 
 | Component | Status | Notes |
 | --- | --- | --- |
-| USB ports | ✅ Working | One port on every model is USB 2.0, see [USB and storage](/hardware/usb-storage) |
+| USB ports | ✅ Working | One port on every model is USB 2.0, see [USB and storage](/hardware/storage#usb-drives) |
 | M.2 SSD | ✅ Working | Not on the oldest firmware, see [Install to M.2](/installation/m2-install) |
 | Blu-ray drive (`ahci_salina`) | ✅ Working | Every kernel |
 
@@ -92,7 +94,6 @@ See [Known issues](/troubleshooting/known-issues) for details and workarounds.
 - [ps5-linux-tools](https://github.com/ps5-linux/ps5-linux-tools): fan, boost and M.2 tools
 - [ps5-linux-mwifiex](https://github.com/ps5-linux/ps5-linux-mwifiex): internal Wi-Fi driver
 - [ps5-linux-image](https://github.com/ps5-linux/ps5-linux-image): ready-made distro images
-- [ps5-linux-image (mia's builds)](https://git.etawen.dev/mia/ps5-linux-image): many more distros
 - [PS5 Bazzite Deck](https://github.com/VivaLaVent/ps5-bazzite-deck): Bazzite with Steam Gaming Mode
 - [repo.etawen.dev](https://repo.etawen.dev): package repository for the kernel and tools
 - [Discord server](https://discord.gg/ps5linux): help, tips, development and bug reports
