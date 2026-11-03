@@ -9,7 +9,7 @@ description: Stop black screens caused by DisplayPort link training failures by 
 If the screen goes black after boot, or when the resolution changes, but Linux is still running (white LED, SSH works), the cause is often the link between the GPU and the HDMI converter. This page explains the cause and shows how to lock the link so it stays stable.
 
 :::note[Not tested]
-This fix was reported on firmware 13.60 with the official CachyOS image, kernel 7.2.3 and a 1 TB USB SSD. It writes to `debugfs`, which is not a stable interface, so the path may change between kernels. Share your results on [Discord](https://discord.gg/ps5linux).
+This fix was reported on the official CachyOS image with an upstream kernel. It writes to `debugfs`, which is not a stable interface, so the path may change between kernels. Share your results on [Discord](https://discord.gg/ps5linux).
 :::
 
 ## Why it happens

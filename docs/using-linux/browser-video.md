@@ -30,7 +30,7 @@ The GPU has no AV1 decoder, so AV1 video falls back to the CPU and can stutter. 
 
 ## Read GPU load
 
-The GPU has no load sensor in the kernel, so KDE's system monitor shows no GPU usage. Use `nvtop` in a terminal instead.
+On the original PS5 and the Slim the GPU has no load sensor in the kernel, so KDE's system monitor shows no GPU usage; `nvtop` in a terminal shows what the driver does know. On the PS5 Pro the SMU backend provides `gpu_busy_percent`, and overlays such as MangoHud show the load.
 
 :::note[Not tested]
 The Chrome flags were reported on the official CachyOS image. The encoder flag turns on hardware encode, which only works well with H.264, see [Using it with FFmpeg](/hardware/vcn#using-it-with-ffmpeg).

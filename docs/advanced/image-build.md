@@ -7,12 +7,10 @@ description: What a PS5 image builder has to change in the kernel config and whi
 
 # How the PS5 Bazzite Deck image is built
 
-[PS5 Bazzite Deck](/installation/bazzite-deck) is built with the official [ps5-linux-image](https://github.com/ps5-linux/ps5-linux-image) builder, a kernel from Linux v7.3 plus rmuxnet's 7.3 patch set, and its own patches on top. This page is for anyone making an image: the kernel config changes it needs, the patch order, and the upstream repositories it tracks. Users don't need any of it.
-
-**Credits:** Dasloh (suspend-to-idle, `ps5-linux-patches` PR #4), the ps5-linux project for the builder and the kernel.
+[PS5 Bazzite Deck](/installation/bazzite-deck) is built with the official [ps5-linux-image](https://github.com/ps5-linux/ps5-linux-image) builder, a recent stable kernel with rmuxnet's PS5 patch set, and its own patches on top. This page is for anyone making an image: the kernel config changes it needs, the patch order, and the upstream repositories it tracks. Users don't need any of it.
 
 :::info[Patch base]
-Linux v7.3 plus [rmuxnet/ps5-linux-patches-1](https://github.com/rmuxnet/ps5-linux-patches-1) `meower` at commit `baee34d`, then the image's patches in the order of [`build.sh`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/build.sh). Each release ships a `VERSIONS.md` with the exact pins and a `local-changes.diff` with the changes to the builder.
+The stable kernel named in the patch set's `.config`, plus [rmuxnet/ps5-linux-patches-1](https://github.com/rmuxnet/ps5-linux-patches-1) at a pinned commit, then the image's patches in the order of [`build.sh`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/build.sh). Each release ships a `VERSIONS.md` with the exact pins and a `local-changes.diff` with the changes to the builder.
 :::
 
 ## Why Game Mode needs the BPF LSM and kernel BTF
@@ -35,38 +33,41 @@ Applied to the patch set's `.config` before the build:
 | `CONFIG_LSM` | `landlock,lockdown,yama,integrity,apparmor,bpf` | Game Mode, above |
 | `CONFIG_DEBUG_INFO_BTF` | `y` | Game Mode, above |
 | `CONFIG_MODULE_ALLOW_BTF_MISMATCH` | `y` | Hotfix kernels keep loading release modules |
-| `CONFIG_MT7921E` | `m` | MediaTek Wi-Fi on the Slim (the official config has it since 30 October 2026) |
+| `CONFIG_MT7921E` | `m` | MediaTek Wi-Fi on the Slim (the official config has it now too) |
 | `CONFIG_USB_AUTOSUSPEND_DELAY` | `-1` | USB never sleeps: the Bluetooth chips and the Salina xHCI don't survive it |
 | `CONFIG_LOG_BUF_SHIFT` | `20` | 1 MiB boot log, so the early HDMI chip and Pro firmware lines don't scroll out of reports |
-| `CONFIG_PS5_GPUFREQ` | not set | rmuxnet's GPU clock driver, replaced by upstream #66's governor |
+| `CONFIG_PS5_GPUFREQ` | not set | rmuxnet's GPU clock driver, replaced by the upstream governor |
 | `CONFIG_LOGITECH_FF` and the other Logitech `_FF` options | `y` | Wheel force feedback |
 
 ## Patch order
 
 The order matters: later patches are written against the tree state the earlier ones leave. Grouped as `build.sh` applies them:
 
-1. **Builder and Wi-Fi driver:** the out-of-tree IW620 driver gets its kernel 7.2 and 7.3 compatibility patches, and the builder mounts the patches directory so the VCN firmware is found.
-2. **Base kernel:** `linux.patch` from `meower`, with `ps5-linux-patches` PR #4 (suspend-to-idle) applied to the patch set first.
-3. **Bluetooth:** MediaTek endpoint fix.
+1. **Builder and Wi-Fi driver:** the out-of-tree IW620 driver gets its compatibility patches for the kernel version, and the builder mounts the patches directory so the VCN firmware is found.
+2. **Base kernel:** `linux.patch` from rmuxnet's repository, with the suspend-to-idle pull request applied to the patch set first.
+3. **Bluetooth:** MediaTek endpoint fix for the Slim.
 4. **HDMI:** upstream HDR/SCDC/hotplug port, re-arm, output fixes, modes, debug log, link lock, CEC, sleep mute, SCDC Source Version, USB-C DP, RGB range, EDID fallback and keep, VERDE game content, session switch, RGB range encoding, USB-C DP opt-in. Explained on [HDMI chip](/hardware/hdmi).
-5. **Fan and GPU overlay:** hwmon fan driver (firmware mode by default, `pwm1_enable` `3`, since v2.0.1 with upstream's numbering), `gpu_busy_percent` and a temperature for overlays. See [Fan control](/hardware/fan#hwmon-driver).
-6. **VRR and FRL:** VRR, its stock-setup, follow-guard, 48 Hz floor and HDMI-only rules, the open-ended `VRRmax` and HF-SCDB range (v2.0.1); 4K120 over FRL and its guard; the 100 Hz test modes; SCDC `TMDS_Config`.
-7. **PS5 Pro:** GPU (#58), Bluetooth (with the cold-boot retry since v2.0.1), no frequency drivers, upstream #66, GPU telemetry (v2.0.1). See [PS5 Pro](/hardware/ps5-pro).
-8. **IW620 LE reconnect.**
+5. **Fan and GPU overlay:** hwmon fan driver (firmware mode by default, `pwm1_enable` `3`, with upstream's numbering), `gpu_busy_percent` and a temperature for overlays. See [Fan control](/hardware/fan#hwmon-driver).
+6. **VRR and FRL:** VRR, its stock-setup, follow-guard, 48 Hz floor and HDMI-only rules, the open-ended `VRRmax` and HF-SCDB range; 4K120 over FRL and its guard; the 100 Hz test modes; SCDC `TMDS_Config`.
+7. **PS5 Pro:** GPU driver and governor (the upstream ports), Bluetooth with the cold-boot retry, no frequency drivers on the Pro, GPU telemetry. See [PS5 Pro](/hardware/ps5-pro).
 
-The exact list with one-line descriptions is in [`build.sh`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/build.sh), section 3; every patch file starts with a description of what it does and why.
+The exact list with one-line descriptions is in [`build.sh`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/build.sh), section 3; every patch file starts with a description of what it does and why.
+
+:::warning[Not in the image any more: the IW620 legacy LE workaround]
+rmuxnet's repository has a change that marks the IW620's extended LE commands as broken so keyboards and mice reconnect. On that chip it stops Bluetooth from finding new devices, because the scan then uses the legacy commands while advertising still uses the extended ones, see [Bluetooth](/using-linux/bluetooth#iw620-marvell). The image dropped it; an image that takes rmuxnet's patch set as is inherits it.
+:::
 
 ## Files baked into the image
 
-Not kernel changes, but an image needs them too: a stable MAC for NetworkManager on the IW620, udev rules that keep the Bluetooth chips and the Salina xHCI powered, the `DefaultDependencies=no` drop-in for `ps5-stage-firmware.service` (see [Modules or sysctl settings not loading](/troubleshooting/modules-not-loading)), the Linux-only Bluetooth address and connectable services (see [Bluetooth](/using-linux/bluetooth)), `hidp` loaded at boot, the warm-reboot units (see [Restart straight into Linux](./warm-reboot.md)), and the Pro firmware staging (see [PS5 Pro](/hardware/ps5-pro#gpu-firmware)). All under [`files/`](https://github.com/VivaLaVent/ps5-bazzite-deck/tree/v2.0.1/files).
+Not kernel changes, but an image needs them too: a stable MAC for NetworkManager on the IW620, udev rules that keep the Bluetooth chips and the Salina xHCI powered, the `DefaultDependencies=no` drop-in for `ps5-stage-firmware.service` (see [Modules or sysctl settings not loading](/troubleshooting/modules-not-loading)), the Linux-only Bluetooth address and connectable services (see [Bluetooth](/using-linux/bluetooth)), `hidp` loaded at boot, the warm-reboot units (see [Restart straight into Linux](./warm-reboot.md)), and the Pro firmware staging (see [PS5 Pro](/hardware/ps5-pro#gpu-firmware)). All under [`files/`](https://github.com/VivaLaVent/ps5-bazzite-deck/tree/main/files).
 
 ## Upstream repositories to track
 
 | Repository | What it carries |
 | --- | --- |
-| [ps5-linux/ps5-linux-patches](https://github.com/ps5-linux/ps5-linux-patches) | The official kernel patches (7.2.3, a package per commit): Pro GPU, fan curve, HDMI work, VCN |
-| [rmuxnet/ps5-linux-patches-1](https://github.com/rmuxnet/ps5-linux-patches-1) | `meower` at `baee34d` is the 7.3 port the image builds on. His default branch has moved on to 7.3.1 with the fan curve on by default, reworked clock drivers, the Bluetooth fixes merged and `build.sh`, see [Kernel setup](/advanced/kernel#what-is-where) |
-| [Slip-Up/ps5-linux-patches](https://github.com/Slip-Up/ps5-linux-patches) | Slip's HDMI work: native FRL, ALLM, modes |
+| [ps5-linux/ps5-linux-patches](https://github.com/ps5-linux/ps5-linux-patches) | The official kernel patches, a package per commit: Pro GPU and governor, fan curve, HDMI work, VCN |
+| [rmuxnet/ps5-linux-patches-1](https://github.com/rmuxnet/ps5-linux-patches-1) | The port to the newer stable kernel the image builds on. His default branch has the fan curve on by default, reworked clock drivers, his Bluetooth patches and `build.sh`, see [Kernel setup](/advanced/kernel#what-is-where) |
+| [Slip-Up/ps5-linux-patches](https://github.com/Slip-Up/ps5-linux-patches) | The HDMI work: native FRL, ALLM, modes |
 | [ps5-linux/ps5-linux-mwifiex](https://github.com/ps5-linux/ps5-linux-mwifiex) | The IW620 Wi-Fi driver |
 | [ps5-linux/ps5-linux-image](https://github.com/ps5-linux/ps5-linux-image) | The image builder, including Pro GPU firmware staging |
 | [QuartConz/ps5-pro-viola-bluetooth](https://github.com/QuartConz/ps5-pro-viola-bluetooth), [WizGery/ps5-mediatek-fixes](https://github.com/WizGery/ps5-mediatek-fixes) | Pro and Slim Bluetooth |
@@ -81,4 +82,4 @@ cd ps5-bazzite-deck
 bash build.sh
 ```
 
-The output lands in `~/ps5-build-7.3/output/`.
+The script prints the output folder at the end.

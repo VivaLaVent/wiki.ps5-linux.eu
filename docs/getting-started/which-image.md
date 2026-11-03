@@ -17,7 +17,7 @@ This wiki is maintained by Gilles (VivaLaVent), who also makes [PS5 Bazzite Deck
 
 Pick Ubuntu, Arch, Fedora, Debian, Alpine, Proxmox or any of the other [images](/installation/linux-image), and you get a normal Linux system that happens to run on a PS5. This is the right choice if you want a server, a desktop that isn't built around Steam, a specific distro, or to build your own kernel.
 
-You apply the PS5-specific pieces yourself. The [Post-install checklist](/installation/post-install) lists them in order; most take a few minutes each. On apt, pacman and dnf systems the [package repository](/advanced/package-repository) installs and updates the upstream kernel with the Wi-Fi driver, and [rmuxnet's 7.3.1 release](/advanced/kernel#install-the-731-pinksoup-release) installs with one script on any of them.
+You apply the PS5-specific pieces yourself. The [Post-install checklist](/installation/post-install) lists them in order; most take a few minutes each. On apt, pacman and dnf systems the [package repository](/advanced/package-repository) installs and updates the upstream kernel with the Wi-Fi driver, and [rmuxnet's release](/advanced/kernel#install-rmuxnets-release) installs with one script on any of them.
 
 ## A ready-made gaming image: PS5 Bazzite Deck
 
@@ -25,27 +25,28 @@ You apply the PS5-specific pieces yourself. The [Post-install checklist](/instal
 
 ## What is bundled where
 
-Most differences are kernel differences, so the third column says where the same thing stands for the other images (2 November 2026):
+Most differences are kernel differences, so the third column says where the same thing stands for the other images:
 
-| Topic | PS5 Bazzite Deck 2.0.1 | Other images |
+| Topic | PS5 Bazzite Deck | Other images |
 | --- | --- | --- |
-| Internal Wi-Fi (IW620) | Built in | In the `linux-ps5` package and in rmuxnet's 7.3.1 release; by hand on other kernels, and again after a kernel update |
-| MediaTek Wi-Fi (Slim, Pro) | Built in | In every kernel since 7.2.3 (Slim since 30 October 2026) |
-| MediaTek Bluetooth (Slim, Pro) | Built in | In rmuxnet's 7.3.1 release; not upstream yet |
-| Fan | Firmware control, 80 °C | Curve by default in rmuxnet's 7.3.1 release and upstream 7.2.3 since 28 October 2026 |
-| CPU boost | On (`ps5-perf`) | A sysfs switch on rmuxnet's 7.3.1 release; `ps5_control` on upstream kernels |
+| Internal Wi-Fi (IW620) | Built in | In the `linux-ps5` package and in rmuxnet's release; by hand on other kernels, and again after a kernel update |
+| MediaTek Wi-Fi (Slim, Pro) | Built in | In every current kernel |
+| MediaTek Bluetooth (Slim, Pro) | Built in | rmuxnet's release carries a different patch, reported broken by its author; not upstream |
+| Fan | Firmware control, 80 °C | Curve by default in rmuxnet's release and in the current upstream packages |
+| CPU boost | On (`ps5-perf`) | A sysfs switch on rmuxnet's release; `ps5_control` on upstream kernels |
+| GPU clock | Governor with a thermal limit | The same governor upstream; rmuxnet's own driver on his release |
 | DualSense reconnects, one controller for the PS5 OS and Linux | Set up | Services from the image repository that run on any distro, see [DualSense](/using-linux/dualsense) |
-| 4K120, HDR, HDMI CEC | On FLAVA3 consoles | In every kernel since 7.2.3 and rmuxnet's 7.3.1 release |
+| 4K120, HDR, HDMI CEC | On FLAVA3 consoles | In every current kernel |
 | VRR, display link lock | On FLAVA3 consoles | Not upstream yet |
 | PS5 Pro GPU firmware | Staged into the initrd automatically | The `linux-ps5` package stages it; by hand otherwise, see [PS5 Pro](/hardware/ps5-pro#gpu-firmware) |
-| Sleep and wake | Suspend-to-idle | Upstream PR #4, not merged |
+| Sleep and wake | Suspend-to-idle | An open pull request on rmuxnet's repository |
 | Kernel updates | In place, one command, with an undo | Package repository on apt, pacman and dnf; rmuxnet's `install.sh`; or by hand |
 
 You still need a jailbreak and the loader, whichever image you pick.
 
 ## Recommendation
 
-- **A Steam console with the least setup today:** PS5 Bazzite Deck.
+- **A Steam console with the least setup:** PS5 Bazzite Deck.
 - **A desktop or a server:** one of mia's [community images](/installation/linux-image#community-images-mias-builds), which grow the root partition by themselves and take kernel updates from the package repository. Ubuntu is the usual first choice.
 - **Your own distro, image or kernel:** start from the [official builder](/installation/linux-image#official-images), then [Kernel setup](/advanced/kernel) and [Kernel sources and patches](/advanced/kernel-sources).
 

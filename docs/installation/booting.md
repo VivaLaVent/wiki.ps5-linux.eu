@@ -6,42 +6,44 @@ description: Plug in the USB drive, send the Linux loader and read the boot LED.
 
 # Booting Linux
 
+With the image on the drive, booting is three things: the drive in the right port, a jailbreak, and the Linux loader sent to the console. The LED tells you what the console is doing.
+
 ## Plug the USB drive into the PS5
 
-Use one of the supported boot ports:
+Use one of the fast ports:
 
 - **Original PS5:** the **front USB-C** port or the two **rear USB-A** ports.
 - **PS5 Slim:** the two **rear USB-A** ports. One of the two front USB-C ports is the slow one, so the rear ports are the safe choice.
 
-Every PS5 has one slow USB 2.0 port (on the original PS5, the front USB-A port). It works, but booting and loading are much slower; use it for a controller or keyboard instead.
+Every PS5 has one slow USB 2.0 port (on the original PS5, the front USB-A port). It boots too, but everything that reads from the drive takes much longer; use it for a controller or keyboard instead. Keep hubs, keyboards and mice off the fast ports until Linux is running: they can stop the console from entering rest mode, see [Known issues](/troubleshooting/known-issues#rest-mode-error-back-to-the-ps5-login-screen).
 
 ## Jailbreak the PS5
 
 Jailbreak your PS5 with the exploit for your firmware (see [Supported firmware](/getting-started/firmware)). Jailbreaking itself is not covered by this wiki.
 
 :::danger[Send the Linux loader as the only payload]
-Do not run etaHEN, kstuff or any other payload before the Linux loader. If you already have, **restart the PS5** and jailbreak again from scratch. Running other payloads first stops Linux from booting.
+etaHEN, kstuff and other payloads change the console in ways the Linux loader can't undo, so Linux doesn't boot after them. If one has already run, **restart the PS5**, jailbreak again and send only the Linux loader.
 
-If you use an autoloader, point `autoloader.txt` at the Linux loader `.elf` only. Version **0.4** of the autoloader is more stable than 0.7 on some setups.
+With an autoloader, put only the Linux loader `.elf` in `autoloader.txt`. Some setups are more reliable with an older autoloader version than with the newest.
 :::
 
-There is no permanent jailbreak: you need to jailbreak again every time you want to boot into Linux. Once the exploit has run, the PS5 listens on port `9021` for the Linux loader.
+There is no permanent jailbreak: the console starts clean every time, so every Linux session begins with the exploit. Once the exploit has run, the PS5 listens on port `9021` for the Linux loader.
 
 ## Which loader
 
-The Linux loader is the payload that boots Linux. The [official loader](https://github.com/ps5-linux/ps5-linux-loader/releases/) now covers every supported console and firmware: the original PS5 and the Slim on 3.00 to 13.60, and the PS5 Pro on 11.00 to 13.60. The Pro support and the 12.xx and 13.xx support started as community forks and were merged upstream in 2026.
+The Linux loader is the payload that boots Linux. The [official loader](https://github.com/ps5-linux/ps5-linux-loader/releases/) covers every supported console and firmware: the original PS5, the Slim and the Pro. Its README lists the versions; the Pro support and the newer firmware versions began as community forks and have been merged.
 
 | Loader | For |
 | --- | --- |
-| [ps5-linux/ps5-linux-loader](https://github.com/ps5-linux/ps5-linux-loader/releases/) | Everything: original PS5, Slim and Pro, firmware 3.00 to 13.60. Use this one. |
-| [rmuxwashere/ps5-linux-loader](https://github.com/rmuxwashere/ps5-linux-loader/releases) | Fork that [PS5 Bazzite Deck](/installation/bazzite-deck) is tested with. Its 13.xx and Pro fixes have been sent upstream. |
-| [gzimbric/ps5-linux-loader](https://github.com/gzimbric/ps5-linux-loader), [Wigglez-sudo/12.xx-linux-loader](https://github.com/Wigglez-sudo/12.xx-linux-loader) | Older forks for the Pro on 11.xx and for 12.xx. Merged upstream; kept here for reference. |
+| [ps5-linux/ps5-linux-loader](https://github.com/ps5-linux/ps5-linux-loader/releases/) | Everything: original PS5, Slim and Pro. Use this one. For a PS5 Pro, build it from `main`: only `main` dumps the Pro's GPU firmware, see [PS5 Pro](/hardware/ps5-pro#gpu-firmware). |
+| [rmuxwashere/ps5-linux-loader](https://github.com/rmuxwashere/ps5-linux-loader/releases) | Fork that [PS5 Bazzite Deck](/installation/bazzite-deck) was tested with. Its newer-firmware and Pro fixes have been sent upstream; it doesn't dump the Pro's GPU firmware. |
+| [gzimbric/ps5-linux-loader](https://github.com/gzimbric/ps5-linux-loader), [Wigglez-sudo/12.xx-linux-loader](https://github.com/Wigglez-sudo/12.xx-linux-loader) | Older forks for the Pro and for newer firmware. Merged upstream; kept here for reference. |
 
 The pinned messages in the `#loader` channel on [Discord](https://discord.gg/ps5linux) point to the current payload.
 
 ## Send the Linux loader
 
-Download `ps5-linux-loader.elf` from one of the loaders above, or build the official one yourself:
+Download `ps5-linux-loader.elf` from one of the loaders above, or build the official one yourself (the same commit always gives the same file, so the SHA-256 of your build can be compared with one someone else tested):
 
 ```bash
 # ARM64 hosts only: install the cross-compilation tools first
@@ -71,6 +73,7 @@ If you are testing repeatedly, you can wake the PS5 from rest mode with a DualSe
 | Orange, blinking | Going into rest mode, wait |
 | Orange, solid | Ready: press the power button now |
 | White | Linux has booted |
+| White straight to solid orange, no blinking | Rest mode was refused; the power button starts the PS5 OS, see [Known issues](/troubleshooting/known-issues#rest-mode-error-back-to-the-ps5-login-screen) |
 | Back to the PS5 OS | You pressed the power button too early, or USB power in rest mode is not enabled |
 
 The front light bar can also be controlled from Linux, see [LED control](/hardware/led).
@@ -81,9 +84,9 @@ Try these first:
 
 - Remove `video=DP-1:1920x1080@60` from `cmdline.txt` on the FAT32 partition.
 - Add `amdgpu.force_1080p=1` to `cmdline.txt`.
-- Toggle HDCP on and off in the PS5 settings (try both).
+- Turn HDCP off in the PS5 settings, or on if it was off.
 - Try a different monitor or capture card.
-- Ask on [Discord](https://discord.gg/ps5linux) and include your EDID information.
+- Ask on [Discord](https://discord.gg/ps5linux) and include your EDID, see [Display recovery](/troubleshooting/display-recovery#decode-the-edid).
 
 See [Display output](/using-linux/display#troubleshooting-a-black-screen) for the full troubleshooting list.
 

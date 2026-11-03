@@ -6,7 +6,7 @@ description: Make the PS5's built-in piezo buzzer beep from Linux through the ke
 
 # Buzzer
 
-The PS5's built-in piezo buzzer has a kernel driver that talks to it over the ICC (the same indicator service the LED uses). Merged in `ps5-linux-patches` #12.
+The small piezo speaker in the console, the one that beeps when you press the power button, can be driven from Linux. The PS5 kernel's buzzer driver sends the request over the ICC, the same path the LED driver uses.
 
 ## Sysfs interface
 
@@ -29,7 +29,7 @@ echo 2 | sudo tee /sys/class/misc/ps5_buzzer/beep   # error
 echo 3 | sudo tee /sys/class/misc/ps5_buzzer/beep   # long
 ```
 
-There is also a `stop` attribute. It cancels a pattern started through the driver's ioctl-based pattern player (`/dev/ps5_buzzer`, `PS5_BUZZER_PLAY`). You don't need it for the basic beeps above.
+A second attribute, `stop`, exists for the driver's pattern player (`/dev/ps5_buzzer` with the `PS5_BUZZER_PLAY` ioctl) and interrupts a pattern that is playing. The three beeps above don't need it.
 
 ```bash
 echo 1 | sudo tee /sys/class/misc/ps5_buzzer/stop
@@ -37,7 +37,7 @@ echo 1 | sudo tee /sys/class/misc/ps5_buzzer/stop
 
 ## ps5ctl
 
-[ps5ctl](https://github.com/rmuxnet/ps5ctl) exposes the three beep levels by name:
+[ps5ctl](https://github.com/rmuxnet/ps5ctl) names the three levels:
 
 ```bash
 sudo ps5ctl --buzz --list      # Short, Error, Long

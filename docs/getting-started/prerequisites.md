@@ -6,9 +6,11 @@ sidebar_position: 3
 
 # Prerequisites
 
+Two console settings, a drive, and a PC to prepare it: that is all Linux on the PS5 needs. Get the settings right first, because a wrong one costs you the most time later.
+
 ## Required PS5 settings
 
-Set these **before** you jailbreak and send the Linux loader. If you reset your PS5 settings or reinstall the firmware, set them again. Forgetting them is the most common reason Linux fails to boot.
+Change these in the PS5 OS **before** you jailbreak and send the Linux loader. A settings reset or a firmware reinstall clears them, so check them again after either. A missing setting here is behind most "Linux won't boot" reports.
 
 1. **Supply power to USB in rest mode** (required to boot):
    **Settings → System → Power Saving → Features Available in Rest Mode → Supply Power to USB Ports → Always**
@@ -22,13 +24,13 @@ Set these **before** you jailbreak and send the Linux loader. If you reset your 
 
 ## Hardware
 
-- A USB drive of 64 GB or more (an external SSD is preferred). Flashing the image replaces whatever is on it, so it doesn't matter how it is formatted now.
-- A USB keyboard and mouse
+- A USB drive of 64 GB or more for the official and community images (32 GB for [PS5 Bazzite Deck](/installation/bazzite-deck)). An external SSD boots and loads much faster than a flash drive. Flashing erases the drive, so its current contents and format don't matter.
+- A USB keyboard and mouse for the first setup.
 
 ## Host machine
 
-You need a Linux PC, or a Windows PC with WSL, to prepare the image and send the loader. Make sure `dd` and `socat` are installed. Docker is only needed if you [build an image yourself](/installation/linux-image#build-your-own-image).
+A PC that can write the image to the drive and send the loader: Linux, or Windows with WSL. You need `dd` (or Rufus on Windows) for the image and `socat` for the loader. Docker is only needed if you [build an image yourself](/installation/linux-image#build-your-own-image).
 
 ## Linux knowledge
 
-This wiki assumes you are comfortable with the Linux command line. If you are new to Linux, work through a basic tutorial first; it saves a lot of frustration later. [learnshell.org](https://www.learnshell.org/) is a good free, interactive place to start.
+You will spend time in a terminal: editing a file on the boot partition, running an install script, reading a log. Nothing here needs more than the command line basics, but if those are new to you, an introductory shell tutorial such as [learnshell.org](https://www.learnshell.org/) pays for itself before you start.

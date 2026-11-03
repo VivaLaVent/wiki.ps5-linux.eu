@@ -13,7 +13,7 @@ Choosing **Switch to Desktop** inside Steam's Gaming Mode can leave the display 
 :::
 
 :::note[Not tested]
-This section was reported on firmware 13.60 with the official CachyOS image. [PS5 Bazzite Deck](/installation/bazzite-deck) has its own session handling, see [Built-in commands](/installation/bazzite-deck#built-in-commands).
+This was reported on the official CachyOS image. [PS5 Bazzite Deck](/installation/bazzite-deck) has its own session handling, see [Built-in commands](/installation/bazzite-deck#built-in-commands).
 :::
 
 ## Choose the next session

@@ -7,6 +7,8 @@ description: Choose a distro, download or build a PS5 Linux image, and flash it 
 
 # Get and flash a Linux image
 
+Three sources make PS5 images, and all of them boot the same way. This page helps you pick one, get it onto a drive, and edit its boot settings.
+
 ## Choose an image
 
 Every image is a normal distro plus the same three PS5 parts: the patched kernel on the boot partition, the Wi-Fi driver and a few services. All of them are booted by the same [Linux loader](/installation/booting), and the kernel can be replaced on any of them, see [Kernel setup](/advanced/kernel). So the choice is mostly about the distro and how much is set up for you:
@@ -14,11 +16,11 @@ Every image is a normal distro plus the same three PS5 parts: the patched kernel
 | Source | What you get | Kernel and updates |
 | --- | --- | --- |
 | [Official images](#official-images) | The ps5-linux project's own builder: Ubuntu, Arch, CachyOS and Fedora. The reference setup. | The upstream `linux-ps5` kernel; update it with the [package repository](/advanced/package-repository) or by hand. |
-| [mia's community images](#community-images-mias-builds) | Automated builds of 20 distros (Ubuntu, Debian, Fedora, Arch, Alpine, Proxmox and more) that grow the root partition by themselves. | The same upstream kernel, updated through the package repository. |
-| [PS5 Bazzite Deck](/installation/bazzite-deck) | Bazzite in Steam Deck mode with a KDE desktop, the Slim's, the Pro's and the HDMI fixes from this wiki applied, Wi-Fi and Bluetooth set up. | Its own kernel (Linux 7.3 plus rmuxnet's patches and its own), updated in place with one command. |
+| [mia's community images](#community-images-mias-builds) | Automated builds of around 20 distros (Ubuntu, Debian, Fedora, Arch, Alpine, Proxmox and more) that grow the root partition by themselves. | The same upstream kernel, updated through the package repository. |
+| [PS5 Bazzite Deck](/installation/bazzite-deck) | Bazzite in Steam Deck mode with a KDE desktop, the Slim's, the Pro's and the HDMI fixes from this wiki applied, Wi-Fi and Bluetooth set up. | Its own kernel (a recent stable kernel plus rmuxnet's patches and its own), updated in place with one command. |
 
 :::info[Who writes this wiki]
-This wiki is maintained by Gilles (VivaLaVent), who also makes PS5 Bazzite Deck. The image exists because its kernel carries fixes (VRR, the display link lock, the Slim's and Pro's Bluetooth, the Pro's GPU firmware staging) that the official patches didn't have at the time, so for a gaming console it is the least work today. Those fixes are being merged into [ps5-linux-patches](https://github.com/ps5-linux/ps5-linux-patches) and [rmuxnet's fork](https://github.com/rmuxnet/ps5-linux-patches-1) over time, and every other image gets them with a kernel update. Nothing on this wiki needs that image: [Kernel setup](/advanced/kernel) and [Kernel sources and patches](/advanced/kernel-sources) apply to all of them.
+This wiki is maintained by Gilles (VivaLaVent), who also makes PS5 Bazzite Deck. The image exists because its kernel carries fixes (VRR, the display link lock, the Slim's and Pro's Bluetooth, the Pro's GPU firmware staging) that the official patches didn't have at the time, so for a gaming console it is the least work. Those fixes are being merged into [ps5-linux-patches](https://github.com/ps5-linux/ps5-linux-patches) and [rmuxnet's fork](https://github.com/rmuxnet/ps5-linux-patches-1) over time, and every other image gets them with a kernel update. Nothing on this wiki needs that image: [Kernel setup](/advanced/kernel) and [Kernel sources and patches](/advanced/kernel-sources) apply to all of them.
 :::
 
 Not sure? [Which image should I use?](/getting-started/which-image) weighs the choice.
@@ -29,44 +31,22 @@ The official builder makes four images. Debian, Proxmox, Bazzite, Batocera and t
 
 | Distro | Desktop | Notes |
 | --- | --- | --- |
-| Ubuntu 26.04 (default) | GNOME | Recommended for beginners |
-| Arch | Sway | Low overhead, about 750 MiB RAM at idle |
-| CachyOS | Gamescope + Steam Big Picture, KDE Plasma (no SDDM) | Gaming-focused. [Currently broken](/troubleshooting/known-issues#cachyos-currently-broken). |
+| Ubuntu (default) | GNOME | The usual first choice |
+| Arch | Sway | The lightest: a few hundred MB of RAM at idle |
+| CachyOS | Gamescope + Steam Big Picture, KDE Plasma (no SDDM) | Gaming-focused. [Currently broken](/troubleshooting/known-issues#cachyos-image-doesnt-boot). |
 | Fedora | GNOME (Wayland) | |
 
-You can also build a **multi-distro image** that switches between Ubuntu, Arch and CachyOS on the same USB drive using kexec.
+The builder can also make a **multi-distro image** with Ubuntu, Arch and CachyOS side by side on one drive, switched with kexec.
 
 ### Distro-specific notes
 
-**Arch:** the lowest-overhead option. With Sway as the window manager, idle RAM usage stays around 750 MiB, which leaves the most headroom for games and applications.
+**Arch:** the image with the least running in the background. Sway as the window manager leaves the most memory for games and applications.
 
-```text title="fastfetch on a PS5 running Arch"
-                  -`                     ps5@archlinux
-                 .o+`                    OS: Arch Linux x86_64
-                `ooo/                    Host: PlayStation 5 (CFI-1016B 01Y)
-               `+oooo:                   Kernel: Linux 7.1.0
-              `+oooooo:                  Packages: 719 (pacman)
-              -+oooooo+:                 Shell: fish 4.7.1
-            `/:-:++oooo+:                CPU: 100-000000189 (16) @ 3.49 GHz
-           `/++++/+++++++:               GPU: AMD Device 13FB
-          `/++++++++++++++:              Memory: 750.04 MiB / 15.00 GiB (5%)
-         `/+++ooooooooooooo/`            Disk (/): 29.04 GiB / 468.33 GiB (6%)
-        ./ooosssso++osssssso+`           Local IP (wlp64s0f7): 192.168.1.81/24
-       .oossssso-````/ossssss+`
-      -osssssso.      :ssssssso.
-     :osssssss/        osssso+++.
-    /ossssssss/        +ssssooo/-
-  `/ossssso+/:-        -:/+osssso+-
- `+sso+:-`                 `.-/+oso:
-`++:.                           `-/+/
-.`                                 `/
-```
+**CachyOS:** `sudo pacman -S cachyos-handheld` converts a plain CachyOS install into the Gamescope-first setup with a "switch to desktop" option, so you don't have to put it together by hand.
 
-**CachyOS:** running `sudo pacman -S cachyos-handheld` turns a normal CachyOS install into a Gamescope-first handheld setup with a "switch to desktop" option, so you don't have to set it up by hand.
+**Batocera:** a Batocera build that gets a network connection but no picture is running a Mesa without the PS5 display patches. That is a missing driver patch in the distro, not a `cmdline.txt` or EDID problem; wait for a build with a patched Mesa, or rebuild Mesa yourself with the PS5 patches applied.
 
-**Batocera:** if you get a network connection but no display output on v43, that release ships Mesa 25.3.6 **without** the PS5 display patches. Either wait for a Batocera build with a newer Mesa, or rebuild Mesa yourself with the PS5 patches applied. This is a missing driver patch in the distro, not a `cmdline.txt` or EDID problem.
-
-**Autologin on tty1 straight into Gamescope** (no SDDM or other display manager): add a systemd getty drop-in that autologins on tty1 only. Then make `~/.bash_profile` check that it is running on `/dev/tty1`, kill any leftover Steam helpers, and `exec` Gamescope with `steam -gamepadui`. Because the check is limited to tty1, SSH and other logins are unaffected. This avoids the black screen that some desktop-mode setups hit when switching sessions through SDDM.
+**Autologin on tty1 straight into Gamescope** (no display manager): add a systemd getty drop-in that logs in on tty1 only, and make `~/.bash_profile` check for `/dev/tty1`, kill any leftover Steam helpers and `exec` Gamescope with `steam -gamepadui`. Because the check is limited to tty1, SSH and other logins aren't touched. This sidesteps the black screen that session switches through SDDM can cause.
 
 ## Download a pre-built image
 
@@ -74,46 +54,46 @@ Download an image from the [ps5-linux-image releases](https://github.com/ps5-lin
 
 ## Community images (mia's builds)
 
-These come from [mia's fork of ps5-linux-image](https://git.etawen.dev/mia/ps5-linux-image). They all use the same `linux-ps5` kernel and firmware setup, and they grow the root partition to fill the drive on the first boot. The links always point to the latest build. Sizes are compressed.
+These come from [mia's fork of ps5-linux-image](https://git.etawen.dev/mia/ps5-linux-image). They all use the same `linux-ps5` kernel and firmware setup, and they grow the root partition to fill the drive on the first boot. The links always point to the latest build.
 
 **Debian-based:**
 
-| Image | Size | Notes |
-| --- | --- | --- |
-| [ps5-ubuntu2604.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-ubuntu2604.img.xz) | 1.7 GB | Ubuntu 26.04, GNOME |
-| [ps5-mint22-cinnamon.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-mint22-cinnamon.img.xz) | 1.8 GB | Linux Mint 22, Cinnamon (Ubuntu 24.04 base) |
-| [ps5-debian13-server.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-debian13-server.img.xz) | 683 MB | Debian 13 (Trixie), server profile with no desktop |
-| [ps5-debian13-xfce.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-debian13-xfce.img.xz) | 924 MB | Debian 13, Xfce |
-| [ps5-debian13-gnome.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-debian13-gnome.img.xz) | 1.3 GB | Debian 13, GNOME |
-| [ps5-debian13-kde.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-debian13-kde.img.xz) | 1.5 GB | Debian 13, KDE Plasma |
-| [ps5-debian13-proxmox.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-debian13-proxmox.img.xz) | 1.0 GB | Debian 13 with Proxmox VE 9, for running VMs on the PS5 |
-| [ps5-devuan-sway.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-devuan-sway.img.xz) | 581 MB | Devuan (no systemd), Sway |
+| Image | Notes |
+| --- | --- |
+| [ps5-ubuntu2604.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-ubuntu2604.img.xz) | Ubuntu, GNOME |
+| [ps5-mint22-cinnamon.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-mint22-cinnamon.img.xz) | Linux Mint, Cinnamon |
+| [ps5-debian13-server.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-debian13-server.img.xz) | Debian, server profile with no desktop |
+| [ps5-debian13-xfce.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-debian13-xfce.img.xz) | Debian, Xfce |
+| [ps5-debian13-gnome.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-debian13-gnome.img.xz) | Debian, GNOME |
+| [ps5-debian13-kde.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-debian13-kde.img.xz) | Debian, KDE Plasma |
+| [ps5-debian13-proxmox.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-debian13-proxmox.img.xz) | Debian with Proxmox VE, for running VMs on the PS5 |
+| [ps5-devuan-sway.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-devuan-sway.img.xz) | Devuan (no systemd), Sway |
 
 **Arch-based:**
 
-| Image | Size | Notes |
-| --- | --- | --- |
-| [ps5-arch.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-arch.img.xz) | 1.2 GB | Plain Arch Linux |
-| [ps5-cachyos.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-cachyos.img.xz) | 1.7 GB | CachyOS (performance-tuned Arch), KDE |
-| [ps5-artix-openrc.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-artix-openrc.img.xz) | 1.7 GB | Artix Linux (no systemd), OpenRC |
-| [ps5-artix-runit.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-artix-runit.img.xz) | 1.7 GB | Artix Linux, runit |
-| [ps5-miaos.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-miaos.img.xz) | 1.6 GB | MiaOS: Arch with KDE, Steam and Gamescope, console mode by default |
+| Image | Notes |
+| --- | --- |
+| [ps5-arch.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-arch.img.xz) | Plain Arch Linux |
+| [ps5-cachyos.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-cachyos.img.xz) | CachyOS (performance-tuned Arch), KDE |
+| [ps5-artix-openrc.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-artix-openrc.img.xz) | Artix Linux (no systemd), OpenRC |
+| [ps5-artix-runit.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-artix-runit.img.xz) | Artix Linux, runit |
+| [ps5-miaos.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-miaos.img.xz) | MiaOS: Arch with KDE, Steam and Gamescope, console mode by default |
 
 **Fedora-based:**
 
-| Image | Size | Notes |
-| --- | --- | --- |
-| [ps5-fedora-gnome.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-fedora-gnome.img.xz) | 1.0 GB | Fedora 44 Workstation (GNOME) |
-| [ps5-fedora-kde.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-fedora-kde.img.xz) | 1.3 GB | Fedora 44 Kinoite (KDE Plasma) |
-| [ps5-bazzite-deck.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-bazzite-deck.img.xz) | 5.1 GB | Bazzite with the Steam Deck interface. Not the same as [PS5 Bazzite Deck](/installation/bazzite-deck). |
+| Image | Notes |
+| --- | --- |
+| [ps5-fedora-gnome.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-fedora-gnome.img.xz) | Fedora Workstation (GNOME) |
+| [ps5-fedora-kde.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-fedora-kde.img.xz) | Fedora Kinoite (KDE Plasma) |
+| [ps5-bazzite-deck.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-bazzite-deck.img.xz) | Bazzite with the Steam Deck interface. Not the same as [PS5 Bazzite Deck](/installation/bazzite-deck). |
 
 **Other:**
 
-| Image | Size | Notes |
-| --- | --- | --- |
-| [ps5-alpine.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-alpine.img.xz) | 814 MB | Alpine Linux (musl, OpenRC): small, server and command line |
-| [ps5-batocera.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-batocera.img.xz) | 3.0 GB | Batocera (retro emulation) |
-| [ps5-tinycore.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-tinycore.img.xz) | 53 MB | Tiny Core: minimal live image, useful for rescue and testing |
+| Image | Notes |
+| --- | --- |
+| [ps5-alpine.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-alpine.img.xz) | Alpine Linux (musl, OpenRC): small, server and command line |
+| [ps5-batocera.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-batocera.img.xz) | Batocera (retro emulation) |
+| [ps5-tinycore.img.xz](https://git.etawen.dev/mia/ps5-linux-image/releases/download/latest/ps5-tinycore.img.xz) | Tiny Core: minimal live image, useful for rescue and testing |
 
 To build one yourself, each distro has a `distros/<name>/` folder in the [repository](https://git.etawen.dev/mia/ps5-linux-image). Run `build_image.sh --distro <name>` on any x86_64 Linux host with Docker. The shared kernel is built by the separate [kernel builder](https://git.etawen.dev/mia/ps5-linux-image-kernel).
 
@@ -148,7 +128,7 @@ chmod +x ./build_image.sh
 ./build_image.sh --distro arch --patches-ref main
 ```
 
-Images are written to `output/`; kernel-only builds go to `linux-bin/`. Later runs reuse the cached kernel and root filesystem automatically. Add `--clean` to wipe the cache and start fresh.
+Images are written to `output/`; kernel-only builds go to `linux-bin/`. A second run reuses the kernel and root filesystem from the cache; `--clean` starts from scratch.
 
 :::tip[WSL running out of memory during the build?]
 Create or edit `C:\Users\<you>\.wslconfig` and raise the memory limit:
@@ -163,7 +143,7 @@ Then restart WSL with `wsl --shutdown`.
 
 ## Verify the download
 
-A corrupt download is a common cause of an image that won't boot. Compare the checksum of your file with the one on the release page.
+An image that won't boot is often an image that didn't download completely. Compare the checksum of your file with the one on the release page.
 
 ```bash
 sha256sum ps5-ubuntu2604.img.xz
@@ -173,7 +153,7 @@ On Windows, run `Get-FileHash ps5-ubuntu2604.img.xz -Algorithm SHA256` in PowerS
 
 ## Flash the image to USB
 
-The drive must be **64 GB or larger**. An external SSD is strongly recommended.
+The drive must be **64 GB or larger**, and an external SSD makes everything faster.
 
 **Linux or macOS:**
 
@@ -193,7 +173,7 @@ sync
 Double-check the target device. `dd` overwrites whatever you point it at without asking.
 :::
 
-**Windows:** use [Rufus](https://rufus.ie/). The upstream README suggests balenaEtcher, but users have reported failed flashes with it on PS5 images, so this wiki recommends Rufus.
+**Windows:** use [Rufus](https://rufus.ie/). balenaEtcher, which some READMEs suggest, has produced drives that don't boot with these images.
 
 ## Edit cmdline.txt from Windows
 

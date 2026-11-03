@@ -9,7 +9,7 @@ description: What to expect the first time Linux starts on the PS5, and the one 
 The first start takes longer than later ones: the root partition grows to fill the drive, and some images run a setup screen for the time zone, host name and password.
 
 :::warning[Ubuntu: black screen before you create a user]
-Ubuntu has no default user. If the screen goes black before you finish setup, you cannot SSH in, because there is no account to log in with. Create a user from another Linux system with chroot, see [Recovery via chroot](/troubleshooting/recovery).
+The Ubuntu image creates its user during the first-boot setup. Until that is done there is no account, so if the screen goes black before you finish, you can't SSH in either. The way out is to create the user from another Linux system with chroot, see [Recovery via chroot](/troubleshooting/recovery).
 :::
 
 1. Create your user account and password where the image asks for it, and remember them.

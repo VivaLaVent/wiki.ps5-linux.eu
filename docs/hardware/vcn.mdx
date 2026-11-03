@@ -6,7 +6,7 @@ description: Hardware video decoding and encoding on the PS5 GPU, how to enable 
 
 # Hardware video (VCN)
 
-VCN works since [ps5-linux-patches #38](https://github.com/ps5-linux/ps5-linux-patches/pull/38) (commit `8081cd8`, 8 Oct 2026). The PS5 has VCN 2.0 (IP 2.0.3), driven by `vcn_v2_0`.
+The GPU's video engine (VCN 2.0, IP 2.0.3, driver `vcn_v2_0`) decodes and encodes video in hardware in every current PS5 kernel. This page lists what it handles, how it was made to work, and measured results.
 
 | What | Status |
 | --- | --- |
@@ -17,11 +17,11 @@ VCN works since [ps5-linux-patches #38](https://github.com/ps5-linux/ps5-linux-p
 | Encode HEVC, normal GOP with P-frames | ❌ Broken: corrupt colours at every tested bitrate |
 | Decode H.264 High 10, AV1, VP8, Theora, MPEG-4 Part 2 | ❌ Not supported by the hardware |
 
-Tested sizes: H.264 up to 4096×2304, HEVC and VP9 up to 8192×4352. H.264 at 4096×4096 is advertised but fails.
+Frame sizes that decode: H.264 up to 4096×2304, HEVC and VP9 up to 8192×4352. The engine advertises H.264 at 4096×4096 but fails on it.
 
 ## How it works
 
-The PS5 runs AMD's Navi 10 VCN firmware with a small patch. The stock firmware waits for an SMU handshake at boot that the PS5 never answers, so the patch skips it. The patched firmware ships in the patches repository as `firmware/amdgpu/ps5_vcn.bin` and is built into the kernel.
+The video engine runs AMD's Navi 10 VCN firmware with one change: as shipped, that firmware waits at boot for a handshake from the SMU, which never comes on the PS5, so the patched copy doesn't wait. It lives in the patch set repository as `firmware/amdgpu/ps5_vcn.bin` and is compiled into the kernel.
 
 On `1002:13fb`, the driver also:
 
@@ -31,8 +31,8 @@ On `1002:13fb`, the driver also:
 
 ## Getting it
 
-:::note[In release 7.2.3 and later]
-VCN is in the prebuilt kernel release **7.2.3** (1 November 2026) and later, in rmuxnet's 7.3.1 release and in PS5 Bazzite Deck. On an older release kernel, update, or build from `ps5-linux-patches` at `8081cd8` or newer, see [Kernel setup](/advanced/kernel).
+:::note[Which kernels have it]
+Every current kernel: the upstream packages, rmuxnet's release and PS5 Bazzite Deck. On an old kernel, update or build from the current patch set, see [Kernel setup](/advanced/kernel).
 :::
 
 The repository's `.config` sets:
@@ -52,7 +52,7 @@ Install `libva-utils` (Arch) or `vainfo` (Debian/Ubuntu), then run:
 vainfo
 ```
 
-It should list H.264, HEVC, VP9, MPEG-2 and VC-1 decoding, plus H.264 and HEVC encoding. This was verified with Mesa 26.2.4 on kernel 7.2.4.
+It lists H.264, HEVC, VP9, MPEG-2 and VC-1 decoding, plus H.264 and HEVC encoding, when the engine is up.
 
 ## Using it with FFmpeg
 
@@ -68,25 +68,25 @@ Transcode to H.264:
 ffmpeg -hwaccel vaapi -hwaccel_output_format vaapi -i input.mkv -c:v h264_vaapi -b:v 12M output.mkv
 ```
 
-HEVC encoding only produces a clean picture with I-frames only; with P-frames, the colours are corrupted. Force I-frame-only output with `-g 1 -bf 0`:
+HEVC comes out clean only when every frame is an I-frame; with P-frames the colours are wrong. Force I-frames with `-g 1 -bf 0`:
 
 ```bash
 ffmpeg -hwaccel vaapi -hwaccel_output_format vaapi -i input.mkv -c:v hevc_vaapi -g 1 -bf 0 -b:v 25M output.mkv
 ```
 
-I-frame-only encoding needs a much higher bitrate for the same quality. Use `h264_vaapi` when file size matters.
+An all-I-frame stream needs a much higher bitrate for the same quality, so when file size matters, `h264_vaapi` is the better encoder.
 
 ## Browsers and streaming
 
-Firefox uses VCN for video through VAAPI. Tested on Firefox 157 with Mesa 26.2.4: H.264 at 720p60, 1080p and 4K, HEVC and HEVC Main 10 at 1080p, and VP9 at 1080p all played without errors, with at most 2 dropped frames in 20-second clips. To see which codecs Firefox decodes in hardware, open `about:support` and look under **Media**.
+Firefox decodes through VAAPI by itself: H.264 at 720p, 1080p and 4K, HEVC and HEVC Main 10 at 1080p, and VP9 at 1080p all play without dropped frames. `about:support`, under **Media**, shows which codecs are decoded in hardware. Chrome needs flags, see [Browser video](/using-linux/browser-video).
 
 Moonlight streaming from the PS5 works through Sunshine with H.264 VCN encoding, see [Game streaming](/using-linux/gaming-performance#game-streaming).
 
 ## Results
 
-In short: hardware decoding uses around 1% of a CPU core where software decoding uses up to 84% (HEVC Main 10 at 4K), and H.264 hardware transcoding runs at full speed at about 1–2.5% CPU.
+The short version: decoding in hardware costs around 1% of one CPU core, where software decoding of the heaviest streams (HEVC Main 10 at 4K) costs most of a core, and H.264 hardware transcoding runs at full frame rate at about 1 to 2.5% of a core.
 
-CPU use is measured with 100% = one logical CPU, as FFmpeg's CPU use between seconds 2 and 9.5.
+CPU figures are FFmpeg's CPU use between seconds 2 and 9.5 of each run, where 100% is one logical CPU.
 
 <details>
 <summary>Decoding: CPU use</summary>

@@ -1,46 +1,41 @@
 ---
 title: Capture cards
 sidebar_position: 11
-description: Which capture cards work with PS5 Linux, at which resolutions, and the HDCP and EDID fixes that help.
+description: What to expect from HDMI capture cards with PS5 Linux, which modes tend to work, and the EDID and HDCP settings that help.
 ---
 
 # Capture cards
 
-Linux sees a capture card as one more display, so the same black screen and EDID quirks apply as with regular monitors. Work through [Display output](/using-linux/display#troubleshooting-a-black-screen) first.
+To the kernel a capture card is a display: it reads the card's EDID and offers the modes the card announces, so a card that shows nothing has the same causes as a monitor that shows nothing. Work through [Troubleshooting a black screen](/using-linux/display#troubleshooting-a-black-screen) first.
 
-## AVerMedia Live Gamer Ultra (GC553)
+## Which modes work
 
-| Resolution | Status |
+Cards differ in which of the console's modes they accept. The pattern across reports:
+
+| Mode | Typical result |
 | --- | --- |
-| 1920×1080 at 60 Hz | ✅ Working |
-| 1920×1080 at 120 Hz | ❌ Black screen |
-| 2560×1440 at 60 Hz | ✅ Working (with the fix below) |
-| 2560×1440 at 120 Hz | ❌ Black screen |
-| 3840×2160 at 60 Hz | ❌ Black screen |
+| 1080p60 | Works on every card that works at all |
+| 1440p60 | Works on cards that announce it, often only after trimming the card's EDID (below) |
+| 1080p120, 1440p120, 4K60, HDR | Mixed: some 4K cards take them, many show nothing, and a card that handles 4K60 HDR from the PS5 OS can still only take 1080p60 from Linux |
 
-**Getting 1440p at 60 Hz working** (fixes a black screen with the default settings):
+If a card is black at a higher mode, pick a lower one from a shell, see [Display recovery](/troubleshooting/display-recovery), and leave `video=DP-1:1920x1080@60` in `cmdline.txt` so each boot starts at 1080p60.
 
-1. In the capture card's own HDMI compatibility settings, remove every EDID profile above 1440p.
-2. Remove `video=DP-1:1920x1080@60` from `cmdline.txt`.
-3. Set `vram.txt` to `80000000` (2 GB), see [VRAM](/hardware/gpu#vram).
+## Trim the card's EDID
 
-## Elgato
+Most cards let you choose which EDID profiles they present to the source. A black screen at 1440p60 with the defaults has been fixed by:
 
-Results vary a lot between models and firmware versions. HDCP handling in particular seems inconsistent from one unit to the next.
+1. removing every profile above 1440p in the card's own HDMI or EDID settings,
+2. removing `video=DP-1:1920x1080@60` from `cmdline.txt`, so the desktop can switch to 1440p,
+3. giving the GPU more reserved memory, `vram.txt` at `80000000` (2 GB), see [VRAM](/hardware/gpu#vram).
 
-- **Elgato 4K X:** works with the default configuration for some users and gives a black screen for others with the same model. A firmware difference is suspected, so update the capture card's firmware if you have problems.
-- **Elgato HD60 X:** shows 4K60 HDR correctly in the PS5 OS, but Linux only outputs 1080p60. Switching to 4K60 or enabling HDR in Linux causes a black screen. Unresolved.
+## Firmware of the card
+
+The same card model works for one person and stays black for another. The difference is often the card's own firmware. Update it from the vendor's tool before you look for the cause on the console.
 
 ## HDCP
 
-Whether a capture card needs HDCP on, off, or an HDCP-stripping splitter varies between devices and setups. Some users need a splitter before their card picks up any signal; others have it working fine without one. If you're stuck, try both HDCP settings on the PS5 and, if you have one, an HDCP stripper.
+Whether a card wants HDCP on, HDCP off, or an HDCP-stripping splitter in front of it depends on the card. Try both HDCP settings in the PS5 OS first; if the card still sees no signal, a splitter that removes HDCP usually gets it through.
 
-## Switching between a TV and a capture card without rebooting
+## Switching between a TV and a capture card
 
-If you use both a TV or monitor and a capture card, `arandr` (a graphical front end for `xrandr`) has let some users switch between them without a full reboot:
-
-```bash
-sudo apt install arandr
-```
-
-Results are mixed: some users still can't get a picture back after switching and have to reboot anyway.
+With both a display and a capture card connected through a switch, moving the output from one to the other at runtime works some of the time. On an X11 desktop, `arandr` (a graphical front end for `xrandr`) lets you re-enable the output after a switch; on Wayland, use the desktop's display settings or `kscreen-doctor` over SSH, see [Display recovery](/troubleshooting/display-recovery#3-change-the-mode-from-a-desktop). When the picture doesn't come back, a restart is the reliable way.

@@ -6,39 +6,39 @@ description: Connect to your PS5 over SSH, collect logs and write a bug report t
 
 # SSH and getting help
 
-If something is broken and you want help on [Discord](https://discord.gg/ps5linux), SSH access and a proper log dump get you a useful answer much faster. This page covers both.
+A question on [Discord](https://discord.gg/ps5linux) gets answered quickly when it comes with a log, and a log is easiest to collect over SSH. This page sets up both.
 
 ## SSH availability by distro
 
 | Distro | SSH on by default | Root login | Password login |
 | --- | --- | --- | --- |
-| Ubuntu 26.04 | Yes | No (use your user and `sudo`) | Yes |
+| Ubuntu | Yes | No (use your user and `sudo`) | Yes |
 | Arch | Yes | No | Yes |
 | CachyOS | Yes | No | Yes |
 | Fedora | Yes | No | Yes |
-| Debian 12 | **No**: disabled by default because the default credentials are public | No | Yes |
+| Debian | **No**: off because the default credentials are public | No | Yes |
 | Proxmox VE | Yes | **Yes** (`root@pam`, headless hypervisor) | Yes |
 | PS5 Bazzite Deck | Yes | No (user `ps5`, password `ps5`: change it!) | Yes |
 
-On Debian, enable SSH yourself once you reach the desktop:
+On Debian, turn SSH on once you have a desktop:
 
 ```bash
 sudo systemctl enable --now ssh.service
 ```
 
-On every other distro it is already running: log in with the user account you created on first boot.
+The other images start it at boot; log in with the user you created on the first boot.
 
 ## Find your PS5's IP address
 
-On the PS5, open a terminal and run:
+In a terminal on the PS5:
 
 ```bash
 ip -brief a
 ```
 
-Look for an interface that is `UP` and has an address in your local network range (`wlp*` for Wi-Fi, `enp*` for Ethernet).
+The interface that is `UP` with an address from your home network is the one (`wlp*` for Wi-Fi, `enp*` for Ethernet).
 
-No display? Check your router's list of DHCP clients for a device named after your distro (for example `ubuntu` or `archlinux`).
+Without a picture, look in your router's list of connected devices for a host named after the distro (`ubuntu`, `archlinux`, `ps5` and so on).
 
 ## Connect over SSH
 
@@ -54,7 +54,7 @@ Accept the host key prompt the first time you connect. From here you can trouble
 Run `ps5-report` instead: it collects your hardware details and the relevant logs into one file. Ask in `#bazzite-problems` on the [Bazzite Deck Discord](https://discord.gg/qGcuTgBBYU). For display problems, see [Reporting a display problem](./display-recovery.md#reporting-a-display-problem).
 :::
 
-Before posting on Discord, collect everything relevant in one go:
+One command gathers everything a helper will ask for:
 
 ```bash
 {
@@ -75,16 +75,16 @@ Copy the file to your PC with `scp`:
 scp <user>@<ps5-ip>:ps5-log-*.txt .
 ```
 
-Post the file on Discord (or upload it to a paste service and share the link), together with:
+Attach the file on Discord (or upload it to a paste service and share the link), and say:
 
-- what you expected to happen and what actually happened,
-- your distro, kernel version (`uname -r`) and PS5 firmware version,
-- for display problems, your monitor and cable. Include the EDID if asked:
+- what you did, what you expected and what happened instead,
+- which image and kernel (`uname -r`) and which PS5 model and firmware,
+- for display problems, the display and the cable, with the EDID if asked:
 
   ```bash
   cat /sys/class/drm/card*/card*-*/edid > edid.bin
   ```
 
 :::tip
-Vague reports without logs are the number one reason people don't get help quickly.
+A report without a log usually gets a request for the log first, so send it with the question.
 :::

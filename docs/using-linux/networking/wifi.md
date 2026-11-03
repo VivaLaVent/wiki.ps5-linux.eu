@@ -7,17 +7,16 @@ description: Install, configure and troubleshoot the PS5's internal Wi-Fi.
 
 # Wi-Fi (IW620 / mwifiex)
 
-- **Internal chip:** `40:00.7` Marvell Technology Group Ltd. Device `[1b4b:2b56]` (rev 02)
-- **Driver:** NXP mwifiex fork, patched for the PS5's IW620
+Most original PS5s have a Marvell IW620 Wi-Fi/Bluetooth chip (`40:00.7`, PCI ID `1b4b:2b56`). Its Linux driver is an NXP `mwifiex` fork patched for the PS5, which is not part of the stock kernel; this page covers getting it in and keeping it working.
 
 :::warning[MediaTek chips (most PS5 Slims and the PS5 Pro)]
 Some consoles use a MediaTek chip instead of the Marvell IW620 covered on this page: the MT7961 (`14c3:7961`) on most Slims and the MT7925 (`14c3:7925`) on the PS5 Pro. See [Console models and chips](/hardware/overview#console-models-and-chips) for how to check which one you have.
 
-The kernel config builds the in-tree drivers for both: `mt7925e` for the Pro since the start, `mt7921e` for the Slim since 30 October 2026 (upstream 7.2.3 packages from that date, rmuxnet's 7.3.1 kernel, PS5 Bazzite Deck). The ps5-linux README states that the MT7925 on the Pro works out of the box. The Slim's MediaTek Bluetooth also needs a `btusb` endpoint fix, see [Bluetooth](/using-linux/bluetooth#mediatek-on-the-slim); PS5 Bazzite Deck and rmuxnet's 7.3.1 kernel include it, and PS5 Bazzite Deck is where both were confirmed. If your kernel is older, use a [USB Wi-Fi adapter](/hardware/usb-storage#usb-network-adapters).
+Both work with the drivers already in the kernel (`mt7921e` for the Slim, `mt7925e` for the Pro), and every current kernel builds them, the official one included; nothing on this page applies to them. Their Bluetooth is a different story, see [Bluetooth](/using-linux/bluetooth). On an old kernel without the drivers, use a [USB Wi-Fi adapter](/hardware/usb-storage#usb-network-adapters).
 :::
 
 :::tip[Kernels that bring the driver along]
-The `linux-ps5` kernel package from the [package repository](/advanced/package-repository) already includes this driver, and so does [rmuxnet's 7.3.1 kernel](/advanced/kernel#install-the-731-pinksoup-release): the driver is built with the kernel, and `install.sh` (and `build.sh`) write `/etc/modprobe.d/ps5-iw620.conf` and copy the firmware from the boot partition. On both, Wi-Fi works without the install steps below.
+The `linux-ps5` kernel package from the [package repository](/advanced/package-repository) includes this driver, and so does [rmuxnet's kernel](/advanced/kernel#install-rmuxnets-release): the driver is built with the kernel, and `install.sh` (and `build.sh`) write `/etc/modprobe.d/ps5-iw620.conf` and copy the firmware from the boot partition. On both, Wi-Fi works without the install steps below.
 :::
 
 ## Install
@@ -57,7 +56,7 @@ make CONFIG_OBJTOOL=
 
 ## Set up Wi-Fi before the first boot
 
-No Ethernet, but you need Wi-Fi on the first boot? You can add your network credentials from another Linux PC before you plug the USB drive into the PS5. Replace `/dev/sdX1` with the root filesystem partition of the flashed drive.
+Without Ethernet, you can still have Wi-Fi on the first boot by writing the connection into the image from another Linux PC before the drive goes into the PS5. Replace `/dev/sdX1` with the root filesystem partition of the flashed drive.
 
 ```bash
 # Mount the root filesystem partition of the flashed USB drive
@@ -95,7 +94,7 @@ sudo umount "$MNT"
 
 ## After a kernel update
 
-A driver built with `install.sh` is built for the kernel that was running at the time. Run `sudo ./install.sh` again after every kernel update, or Wi-Fi disappears. The `linux-ps5` package from the [package repository](/advanced/package-repository) and rmuxnet's 7.3.1 kernel carry the driver, so they don't need this.
+`install.sh` builds the driver for the kernel that is running at the time. After a kernel update, run `sudo ./install.sh` again, or there is no Wi-Fi. The `linux-ps5` package from the [package repository](/advanced/package-repository) and rmuxnet's kernel carry the driver, so they don't need this.
 
 ## Check that it works
 
@@ -116,25 +115,23 @@ nmcli device status
 
 ### Arch: install fails (missing headers or wrong headers path)
 
-If `./install.sh` fails on Arch, first make sure the kernel headers are installed:
+When `./install.sh` fails on an Arch-based image, install the kernel headers first:
 
 ```bash
 sudo pacman -U linux-bin/linux-ps5-headers_*.pkg.tar.zst
 ```
 
-The headers package is in the same `linux-bin/` folder as the kernel package. You can also download it from the [ps5-linux-patches releases](https://github.com/ps5-linux/ps5-linux-patches/releases).
+The headers package sits next to the kernel package in `linux-bin/`, and is also on the [ps5-linux-patches releases](https://github.com/ps5-linux/ps5-linux-patches/releases).
 
-If it still fails, you may have hit a known packaging bug that installs the headers to `/usr/usr/include` instead of `/usr/include`. Fix it with:
+If the build still fails, a packaging bug in some header packages put the files under `/usr/usr/include` instead of `/usr/include`. Copy them where the build looks:
 
 ```bash
 sudo cp -r /usr/usr/include/* /usr/include/
 ```
 
-Confirmed working on a CachyOS (Arch-based) install.
-
 ### Adapter shows as UNCLAIMED: the driver loads but never binds
 
-Symptoms: `lspci` shows the Marvell chip, `moal` is listed under kernel modules, but the interface never comes up. `dmesg` shows the driver recognising the card and then giving up silently, without any firmware errors:
+Symptoms: `lspci` lists the Marvell chip, `moal` is loaded, but no interface appears, and `dmesg` shows the driver finding the card and then stopping without a firmware error:
 
 ```text
 Attach moal handle ops, card interface type: 0x207
@@ -142,46 +139,46 @@ Enable moal_recv_amsdu_packet
 Attach mlan adapter operations.card_type is 0x207.
 ```
 
-This was a bug in the install script: `install.sh` put the firmware in `/lib/` instead of `/lib/firmware/`, and the kernel only looks in `/lib/firmware/`. Check where the file ended up:
+The firmware is in the wrong place. An older `install.sh` copied it to `/lib/` instead of `/lib/firmware/nxp/`, and the kernel only looks under `/lib/firmware/`. Find it:
 
 ```bash
 find /lib -iname "pcieuartiw620_combo_v1.bin"
 ```
 
-If it is in `/lib/` instead of `/lib/firmware/nxp/`, move it:
+Move it if needed:
 
 ```bash
 sudo mkdir -p /lib/firmware/nxp
 sudo mv /lib/pcieuartiw620_combo_v1.bin /lib/firmware/nxp/
 ```
 
-Reload the driver and the interface should come up straight away.
+Reload the driver; the interface appears at once.
 
 ### Package manager installs (Fedora/Debian): common failures
 
-If your distro uses the `ps5-linux-mwifiex` package instead of the manual `install.sh` above, two failures come up often.
+With the `ps5-linux-mwifiex` package instead of the manual `install.sh`, two things go wrong regularly.
 
 **Kernel version pin:**
 
 ```text
-ps5-linux-mwifiex : Depends: linux-ps5 (= 7.1.1) but 7.1.2 is to be installed
+ps5-linux-mwifiex : Depends: linux-ps5 (= X.Y.Z) but X.Y.W is to be installed
 ```
 
-The mwifiex package requires one exact kernel version. Install the matching `linux-ps5` version instead of upgrading the kernel first. Before fighting the package manager, check whether your kernel already has the driver built in:
+The driver package is built against one exact kernel version. Install that `linux-ps5` version rather than upgrading the kernel first. Before you fight the package manager, check whether the kernel already has the driver built in:
 
 ```bash
 dmesg | grep -iE 'moal|mlan|mwifiex'
 ```
 
-**Kernel/GCC/pahole mismatch while building:**
+**Compiler mismatch while building:**
 
 ```text
 warning: kernel built on gcc 13, using gcc 15
 ```
 
-The toolchain that builds the module must match the one that built the kernel. Don't combine a distro-upgraded GCC with an older prebuilt `linux-ps5` kernel package.
+The module has to be built with the same toolchain as the kernel. A distro upgrade that brings a newer GCC breaks the build against an older prebuilt `linux-ps5`; update the kernel package as well.
 
-**Confirmed working install (rpm-ostree/Bazzite):**
+**rpm-ostree/Bazzite images from the official builder:**
 
 ```bash
 sudo dnf upgrade -y linux-ps5 --setopt=gpgcheck=0
@@ -189,11 +186,11 @@ sudo rpm-ostree install ps5-linux-mwifiex ps5-linux-tools
 sudo systemctl reboot
 ```
 
-If apt or dnf reports conflicts between cached package files with the same names, use the manual `install.sh` method instead.
+If apt or dnf complains about cached package files with the same names, fall back to the manual `install.sh` method.
 
 ### Bazzite: no Wi-Fi networks
 
-Bazzite uses `iwd` as NetworkManager's Wi-Fi backend by default, which doesn't work with the IW620 driver. Switch back to `wpa_supplicant` with `ujust toggle-iwd` (choose "disable iwd"), then run `sudo systemctl restart NetworkManager`. Newer images already include this fix.
+Bazzite uses `iwd` as NetworkManager's Wi-Fi backend by default, which doesn't work with the IW620 driver. Switch back to `wpa_supplicant` with `ujust toggle-iwd` (choose "disable iwd"), then run `sudo systemctl restart NetworkManager`. Current images already do this.
 
 ### The interface shows as unavailable
 
@@ -210,7 +207,7 @@ If the `linux-ps5` package installed a `moal.conf` in `/etc/modprobe.d/` and you
 
 ### Wi-Fi doesn't connect or drops under load
 
-Wi-Fi may need to be turned off and on again after the first boot before it connects. If it drops under load (a known issue), reload the driver:
+Right after the first boot the connection sometimes only comes up after Wi-Fi is switched off and on once. If it drops under load, reload the driver:
 
 ```bash
 sudo modprobe -r moal mlan
@@ -221,7 +218,7 @@ sudo insmod ./moal.ko fw_name=nxp/pcieuartiw620_combo_v1.bin pcie_int_mode=1 drv
 
 ### Driver stuck under sustained load
 
-If `dmesg` shows a pattern like this during heavy traffic, the driver is stuck in a reset loop:
+When `dmesg` shows this pattern during heavy traffic, the driver is caught in a reset loop:
 
 ```text
 num_cmd_timeout = 1
@@ -231,4 +228,4 @@ Block woal_cfg80211_deauthenticate in abnormal driver state
 PCIe In-band Reset Fail
 ```
 
-Power-save cycling is the suspected trigger. Replace `ps_mode=2` with **`ps_mode=0`** (power saving off) in the `insmod` command above. Users report that this holds up under sustained load where `ps_mode=2` did not.
+The chip's power saving seems to set it off. Load the driver with **`ps_mode=0`** (power saving off) instead of `ps_mode=2`: with that, the connection holds under sustained load. PS5 Bazzite Deck ships this setting.

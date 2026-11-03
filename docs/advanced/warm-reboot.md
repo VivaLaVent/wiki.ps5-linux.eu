@@ -9,8 +9,6 @@ description: Restart into Linux without the PS5 OS and the loader, with kexec on
 
 A normal restart returns the PS5 to the PS5 OS, and you run the jailbreak and the loader again. A warm restart skips that: the running kernel loads the next one with `kexec` and jumps straight to it. This works on any PS5 Linux image; it is the same mechanism the multi-distro image uses to switch distros and `m2_exec.sh` uses to start the M.2 install.
 
-**Credits:** the ps5-linux project (`ps5-linux-warm-reboot.sh`), Dasloh (USB power and sleep work around it).
-
 ## Restart with kexec
 
 Install `kexec-tools` from your distro (`kexec-tools` on Debian, Ubuntu, Arch and Fedora). Then either run the script that ships with [ps5-linux-tools](https://github.com/ps5-linux/ps5-linux-tools):
@@ -48,5 +46,5 @@ A warm restart starts the new kernel without the console's firmware resetting an
 Giving Linux its own Bluetooth address (the [one DualSense for both systems](/using-linux/bluetooth#one-dualsense-for-the-ps5-and-linux) feature) sends a vendor command to the IW620 at every boot. With that on, a warm restart can leave the chip hung: Bluetooth gone, sometimes Wi-Fi too, until a power-off and a start with the loader. There is no fix yet, see [the research notes](/using-linux/bluetooth#iw620-the-linux-only-address-and-warm-restarts). Don't use both at once on an IW620 console.
 
 :::note[PS5 Bazzite Deck]
-The image has no `kexec-tools`, so it uses the `kexec_file_load` system call from a small script and hooks it into `reboot.target`, which makes a plain `sudo reboot` a warm restart once `ps5-warm-reboot on` is set. That is an implementation detail of the image, not a requirement: on other images the two commands above are all you need. `ps5-reboot-to-ps5` restarts into the PS5 OS once. Source: [`files/ps5-kexec`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/files/ps5-kexec).
+The image has no `kexec-tools`, so it uses the `kexec_file_load` system call from a small script and hooks it into `reboot.target`, which makes a plain `sudo reboot` a warm restart once `ps5-warm-reboot on` is set. That is an implementation detail of the image, not a requirement: on other images the two commands above are all you need. `ps5-reboot-to-ps5` restarts into the PS5 OS once. Source: [`files/ps5-kexec`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/files/ps5-kexec).
 :::

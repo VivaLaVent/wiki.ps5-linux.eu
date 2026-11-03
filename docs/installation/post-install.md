@@ -42,8 +42,8 @@ It is broken on the PS5 and can't be dismissed once it starts. Turn it off in yo
 
 What you do here depends on the kernel, see [Kernel setup](/advanced/kernel):
 
-- **rmuxnet's 7.3.1 kernel:** the fan follows a temperature curve and the GPU clock scales by itself. Turn the CPU boost on if you want it: `echo 1 | sudo tee /sys/devices/system/cpu/cpufreq/boost` (put it in a systemd unit to keep it). Don't install `ps5-linux-tools` for the boost on this kernel.
-- **Upstream kernels (the 7.2.3 packages and older):** the CPU stays at 3.2 GHz until `ps5_control --boost on`; on packages older than 28 October 2026 the fan also needs `ps5_control --fan on`, and older than 1 November the GPU clock too. Install [ps5-linux-tools](https://github.com/ps5-linux/ps5-linux-tools) and enable both at every boot:
+- **rmuxnet's kernel:** the fan follows a temperature curve and the GPU clock scales by itself. Turn the CPU boost on if you want it: `echo 1 | sudo tee /sys/devices/system/cpu/cpufreq/boost` (put it in a systemd unit to keep it). Don't install `ps5-linux-tools` for the boost on this kernel.
+- **Upstream kernels:** the CPU stays at 3.2 GHz until `ps5_control --boost on`. Current packages run the fan curve and the GPU governor by themselves; older ones also need `ps5_control --fan on`. Install [ps5-linux-tools](https://github.com/ps5-linux/ps5-linux-tools) and enable both at every boot:
 
   ```bash
   git clone https://github.com/ps5-linux/ps5-linux-tools
@@ -68,7 +68,7 @@ That memory is no longer available to the rest of the system, so stay at the def
 
 ## 6. Install the Wi-Fi driver
 
-If you use the internal Wi-Fi, install the driver for your chip, see [Wi-Fi](/using-linux/networking/wifi). On the Marvell IW620 the driver is out of tree and must be reinstalled after every kernel update, unless your kernel comes from the package repository or is rmuxnet's 7.3.1 release, which both bundle it. The MediaTek chips work with the in-kernel drivers (the Slim's since the 7.2.3 packages of 30 October 2026). Ethernet works out of the box.
+If you use the internal Wi-Fi, install the driver for your chip, see [Wi-Fi](/using-linux/networking/wifi). On the Marvell IW620 the driver is out of tree and must be reinstalled after every kernel update, unless your kernel comes from the package repository or is rmuxnet's release, which both bundle it. The MediaTek chips work with the in-kernel drivers in every current kernel. Ethernet works out of the box.
 
 ## 7. Tune cmdline.txt
 
@@ -81,9 +81,9 @@ Two parameters on the boot partition are worth a look, see [Kernel parameters](/
 
 - **40 CU unlock:** more GPU power on units whose disabled compute units are good; artefacts on units where they aren't. Original PS5 and Slim only, see [40 CU unlock](/hardware/gpu#40-cu-unlock).
 - **Swap or zram:** a desktop with Steam open can fill the 14 GB that is left, see [Memory, VRAM and swap](/using-linux/memory-and-swap).
-- **Graphical glitches in games:** set `RADV_DEBUG=nohiz` globally, see [GPU performance tips](/hardware/gpu#performance-tips).
+- **Graphical glitches in a game:** add `RADV_DEBUG=nohiz %command%` to that game's Steam launch options. Don't set it globally: it costs performance in every game, and most don't need it, see [GPU performance tips](/hardware/gpu#performance-tips).
 - **Steam:** not the Snap package, see [Gaming performance](/using-linux/gaming-performance#steam-and-proton).
-- **Updated Mesa:** the PS5's GPU (GFX1013) gets fixes in newer Mesa releases. On Ubuntu, the kisak PPA is the usual source: `sudo add-apt-repository ppa:kisak/kisak-mesa` then `sudo apt upgrade`.
+- **Newer Mesa (Ubuntu only):** the PS5's GPU (GFX1013) picks up fixes in newer Mesa releases, and Ubuntu's own packages lag behind. The kisak PPA is the usual source there: `sudo add-apt-repository ppa:kisak/kisak-mesa` then `sudo apt upgrade`. Arch and Fedora ship recent Mesa already, and on Bazzite it comes with the image.
 
 ## Where to go next
 

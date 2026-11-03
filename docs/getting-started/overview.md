@@ -7,12 +7,14 @@ sidebar_position: 1
 
 # Getting started
 
+Linux on the PS5 is six steps: set two console settings, pick and flash an image, jailbreak, send the loader, and finish the first boot. This page is the map; each step has its own page.
+
 :::note[Scope of this wiki]
 This wiki assumes your PS5 is **already jailbroken**. It covers everything after that: booting Linux and getting the hardware working properly.
 :::
 
 :::info[Check your firmware first]
-Linux currently runs on PS5 firmware **13.60 or lower**. Read [Supported firmware](./firmware.md) before you buy anything or change any settings.
+Linux only runs on exploitable system software versions. Read [Supported firmware](./firmware.md) before you buy anything or change any settings.
 :::
 
 ## What you need
@@ -20,12 +22,12 @@ Linux currently runs on PS5 firmware **13.60 or lower**. Read [Supported firmwar
 **Required:**
 
 - A PS5 on a [supported firmware](./firmware.md)
-- A USB drive of **64 GB or more** (an external SSD is strongly recommended)
+- A USB drive of **64 GB or more** (32 GB for [PS5 Bazzite Deck](/installation/bazzite-deck)); an external SSD is much faster than a flash drive
 - A USB keyboard and mouse
 
 **Optional:**
 
-- An M.2 SSD for a dedicated Linux install (firmware 4.00 or later only)
+- An M.2 SSD for a dedicated Linux install (not on the oldest firmware, see [Supported firmware](./firmware.md))
 - A USB Wi-Fi adapter, for internet access before the internal Wi-Fi driver is set up
 
 ## Steps

@@ -46,7 +46,7 @@ If a game crashes with `amdgpu_vm_validate() failed / Not enough memory for comm
 
 Swap helps the **system** when normal RAM is full: browsers, launchers, shader compilation and similar background work. With only 14 GB usable and the GPU taking its share from the same pool, a Linux desktop with Steam running can fill up.
 
-What this wiki does **not** claim is that swap raises the GPU memory ceiling. The ceiling formula above only involves `vram.txt` and the remaining RAM. If a game crashes with the error above, change `ttm.pages_limit`; adding swap is not the documented fix.
+What this wiki does **not** claim is that swap raises the GPU memory ceiling. The ceiling formula above only involves `vram.txt` and the remaining RAM. If a game crashes with the error above, change `ttm.pages_limit`; adding swap is not the documented fix. A different error under memory pressure, `Failed to pin framebuffer: -ENOMEM`, has gone away for one user after adding more zram; that is a lead, not a confirmed fix.
 
 :::note[Not tested]
 How the GPU driver behaves when the whole system is deep into swap has not been documented on the PS5 yet. If you test it, share your results on [Discord](https://discord.gg/ps5linux).

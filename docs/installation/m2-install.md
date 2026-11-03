@@ -7,7 +7,7 @@ description: Move your Linux install to the PS5's M.2 slot for better speed and 
 
 # Install to an M.2 SSD
 
-Requires firmware **4.00 or later**. The M.2 drive is used for Linux only: you cannot store PS5 games on it at the same time.
+An NVMe drive in the console's M.2 slot gives Linux a fast, large home. It needs a firmware with M.2 support (every version except the oldest, see [Supported firmware](/getting-started/firmware)), and while Linux lives on the drive the PS5 OS can't use it for games.
 
 Before you buy a drive, read [M.2 drives](/hardware/usb-storage#m2-drives): only NVMe drives work, and Gen3 drives need an [unlock](/hardware/usb-storage#gen3-nvme-unlock).
 
@@ -29,7 +29,7 @@ sudo ./m2_init
 sudo reboot
 ```
 
-If the PS5 asks you to format the M.2 drive again after the reboot, report it on [Discord](https://discord.gg/ps5linux) with the drive's model and size.
+Should the PS5 OS ask to format the drive again after that reboot, say so on [Discord](https://discord.gg/ps5linux) with the drive's model and size: that combination hasn't been seen before.
 
 ## 3. Install the Linux image onto the drive
 
@@ -50,17 +50,17 @@ sudo ./m2_exec.sh
 To boot from M.2 every time, edit `/boot/efi/cmdline.txt` and change `root=LABEL=ubuntu2604` to `root=LABEL=ubuntu2604-m2`.
 
 :::note
-You still need the USB drive plugged in: the loader reads its FAT32 partition at boot.
+The USB drive stays in the console: the loader reads the kernel from its FAT32 partition at every boot.
 :::
 
 :::warning[Kernel updates on M.2]
-Updating the kernel on an M.2 install can cause a black screen. Stay on kernel **7.0.10** for now, see [Known issues](/troubleshooting/known-issues#kernel-update-breaks-m2-boot).
+A kernel update on an M.2 install has left some users with a black screen or a kernel that doesn't match its modules. Read [Known issues](/troubleshooting/known-issues#kernel-update-breaks-m2-boot) before you update.
 :::
 
 ## Switching distros
 
-You don't need to reformat from the PS5 OS. Formatting the M.2 drive from the PS5 settings only does a "soft" format: it overwrites the blocks the PS5 itself needs and leaves your Linux partition alone. To switch distros, reformat the Linux partition from Linux (`sudo mkfs.ext4 /dev/nvme0n1p1`, the partition `m2_init` created) and reinstall.
+There is no need to format the drive from the PS5 OS again. The PS5's format only rewrites the blocks it uses itself and leaves the Linux partition as it is. To change distro, format the Linux partition from Linux (`sudo mkfs.ext4 /dev/nvme0n1p1`, the partition `m2_init` created) and install the new image.
 
 ## No 64 GB USB drive?
 
-If your USB drive is too small for the full image, use the community rsync-based script instead of `m2_install.sh`: [github.com/g4caos/ps5-linux-script](https://github.com/g4caos/ps5-linux-script). It copies your running Linux session straight onto the M.2 drive, so you don't need a pre-built image file.
+A USB drive too small for the full image can still get you onto the M.2: the community script at [github.com/g4caos/ps5-linux-script](https://github.com/g4caos/ps5-linux-script) copies the running Linux system to the M.2 drive with rsync, so no image file is needed on the USB side.

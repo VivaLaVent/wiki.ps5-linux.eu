@@ -135,7 +135,7 @@ For a black screen, a picture that blinks or reconnects, VRR that doesn't work, 
 
 3. **Get the picture back** (see the sections above).
 4. **Post it** on [Discord](https://discord.gg/ps5linux) (PS5 Bazzite Deck: `#bazzite-problems` on [its Discord](https://discord.gg/qGcuTgBBYU)) with the file attached, and include:
-   - the **exact TV or monitor model**, and which HDMI port and cable you use,
+   - the **TV or monitor model**, and which HDMI port and cable you use,
    - **what you chose** (resolution, refresh rate, VRR on/off, HDR on/off) and **what you saw** (black, blinking, reconnecting, wrong colours),
    - the display's own settings: VRR/FreeSync/Adaptive-Sync, HDMI enhanced format/Deep Colour, game mode,
-   - whether it worked on an earlier version, and which one.
+   - whether it worked on an earlier release, and which one.

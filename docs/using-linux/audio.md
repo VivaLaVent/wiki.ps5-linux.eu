@@ -6,32 +6,22 @@ description: HDMI audio status on PS5 Linux, and fixes for audio going to the co
 
 # Audio
 
-HDMI audio works on most monitors and TVs, but not all of them. On displays where it doesn't work at all, there is no fix yet.
+Sound goes out over HDMI together with the picture, and on most TVs and monitors that is all there is to it. The cases where it isn't are below.
 
 ## Audio plays through the controller instead of HDMI
 
-If a DualSense is connected over USB, Linux may pick the controller as the default audio output.
+A DualSense on a USB cable is also a sound card, and some desktops make it the default output. Pick the HDMI output in the sound settings instead; on GNOME that is **Settings → Sound → Output**, on KDE **System Settings → Sound**. If the desktop keeps switching back, remove the DualSense from the list of outputs in the sound settings, or connect it over Bluetooth, where it carries no audio.
 
-**Fix (Ubuntu/GNOME):**
-
-1. Press the Super key and type "Sound".
-2. Open the **Sound** settings.
-3. Under **Output**, select your HDMI device.
-
-**Alternative:** switching from PipeWire to native PulseAudio has fixed audio issues for some users.
+If the HDMI output is listed but stays silent, switching the sound server from PipeWire to PulseAudio has helped on some images.
 
 ## No HDMI audio at all
 
-Some monitors don't receive HDMI audio from the PS5. This is a known issue with no fix yet. Use a USB or Bluetooth audio device instead.
+A few monitors get no sound from the console at all, while the same cable and the same mode give sound on a TV. There is no fix for this yet. Use a USB or Bluetooth audio device on those monitors.
 
 ## Audio hiccup every 40 seconds (DP-to-HDMI adapters)
 
-If you use an active DisplayPort-to-HDMI adapter and hear a short audio hiccup roughly every 40 seconds, the cause is a clock mismatch in the amdgpu display clock manager: the driver expects a DP audio clock of 5988740, but the hardware runs at 6000000.
-
-A two-line fix to `dcn201_clk_mgr.c` has been merged into `ps5-linux-patches`. Update your kernel and the problem should be gone.
+A short dropout about every 40 seconds with an active DisplayPort-to-HDMI adapter came from amdgpu's display clock manager, which assumed a DP audio clock of 5988740 where the hardware runs at 6000000. The fix is in `dcn201_clk_mgr.c` in every current kernel; update if you still hear it.
 
 ## HDMI audio delay
 
-A kernel fix for HDMI audio delay and desync has been merged, so update your kernel first.
-
-Some users also needed to change the output format afterwards, which is especially noticeable during video playback. Open the **Sound** settings and switch from **Digital Stereo (HDMI)** to **Digital Surround 5.1 (HDMI)**.
+Sound that lags behind the picture was a kernel bug and has been fixed in the PS5 patch set; update first. If the lag remains, change the output format in the sound settings from **Digital Stereo (HDMI)** to **Digital Surround 5.1 (HDMI)**, which has cured the remaining cases, most noticeably in video playback.

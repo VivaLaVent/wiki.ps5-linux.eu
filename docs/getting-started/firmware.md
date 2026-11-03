@@ -6,17 +6,19 @@ sidebar_position: 2
 
 # Supported firmware
 
-:::info[Before you ask about 14.xx]
-Retail firmware is already past `14.xx` (the public installer shows something like `26.06-14.10.00`), but the exploit chain stops at **13.60**. The ps5-linux project states that 14.00 and later are not going to be supported. Asking on Discord doesn't change that.
+Whether your PS5 can run Linux depends on its system software version, because the jailbreak and the Linux loader need an exploitable version. Check yours before you change anything on the console.
+
+:::info[Newer firmware]
+Sony's current retail firmware is beyond the newest exploitable version, and the ps5-linux project has said that versions past the current exploit chain won't be supported. If your console is already on a newer version, there is nothing to do but wait for a new exploit; asking on Discord won't speed that up.
 :::
 
 ## PS5 Slim and PS5 Pro
 
-Linux also runs on the Slim and the Pro. The Slim supports the same firmware list as the original PS5. The Pro is supported from firmware 11.00 by the official loader, see [Which loader](/installation/booting#which-loader).
+The Slim runs the same firmware versions as the original PS5 and is supported on all of them. The Pro shipped with newer firmware, so its list starts later; the official loader covers it, see [Which loader](/installation/booting#which-loader). The Pro's GPU firmware is dumped by the loader on the versions it has offsets for, see [PS5 Pro](/hardware/ps5-pro#gpu-firmware).
 
 ## Exploitable versions
 
-Jailbreaking is not covered by this wiki; the exploit column is for reference only.
+The authoritative list is the README of the [Linux loader](https://github.com/ps5-linux/ps5-linux-loader). At the time of writing it reads as follows; jailbreaking itself is not covered by this wiki, and the exploit column is for orientation only.
 
 | Firmware | M.2 support | Exploit |
 | --- | --- | --- |
@@ -30,23 +32,22 @@ Jailbreaking is not covered by this wiki; the exploit column is for reference on
 | 13.00, 13.20, 13.40, 13.42, 13.60 | ✅ | Y2JB Relapse / WebKit Relapse |
 
 :::info[Why no M.2 on 3.xx?]
-On 3.xx firmware, the PS5 fails to boot when an M.2 drive is installed.
+A console on 3.xx firmware doesn't start with a drive in the M.2 slot, so Linux on 3.xx is USB only.
 :::
 
-**PS5 Pro:** 11.00, 11.20, 11.40, 11.60; 12.00, 12.02, 12.20, 12.40, 12.60, 12.70; 13.20, 13.40, 13.42, 13.60. All with M.2 support. The Pro's own GPU firmware ("Viola") is dumped by the loader on 13.20 and 13.60, see [Hardware overview](/hardware/overview#console-models-and-chips).
+**PS5 Pro:** 11.00, 11.20, 11.40, 11.60; 12.00, 12.02, 12.20, 12.40, 12.60, 12.70; 13.20, 13.40, 13.42, 13.60. All with M.2 support.
 
 ## Which firmware should I be on?
 
-There is **no performance difference** for Linux between any of the supported firmware versions. These are the community recommendations:
+Linux runs the same on every supported version: there is nothing to gain for Linux by updating or by staying low. The choice is about what else you want from the console:
 
 | Goal | Recommended firmware |
 | --- | --- |
-| Linux only, no M.2 | **3.00**: stay as low as possible |
-| M.2 + PS5 games + Linux + FPKG | **4.03**: community favourite, full jailbreak support, backports, M.2 drives up to 4 TB, FPKG support |
-| M.2 + PS5 games + Linux + FPKG | **5.00–7.61**: fine to stay, no downsides for Linux |
-| M.2 + PS5 games + Linux | **8.00–10.60**: update to 11.00–11.60 if you want Linux and FPKG as soon as possible |
-| M.2 + PS5 games + Linux + FPKG | **11.00–11.60**: fine to stay, no downsides for Linux |
-| M.2 + PS5 games + Linux | **12.00–13.60**: fine to stay, no downsides for Linux |
+| Linux only, no M.2 | The lowest version you have; 3.xx is fine |
+| M.2, PS5 games, Linux and FPKG | 4.03 is the community's long-time favourite: full jailbreak support, backports, M.2 drives up to 4 TB |
+| Already on 5.xx to 7.xx | Stay. No downside for Linux |
+| On 8.xx to 10.xx | Update to the 11.xx version you want: Linux and FPKG both work there |
+| Already on 11.xx to 13.xx | Stay. No downside for Linux |
 
 ## Check your firmware
 
@@ -54,8 +55,8 @@ Go to **Settings → System → System Software → System Software Version**.
 
 ## Update to a specific firmware
 
-Download the matching PUP file from [darthsternie.net/ps5-firmwares](https://darthsternie.net/ps5-firmwares/) and follow [Sony's official reinstall guide](https://www.playstation.com/en-us/support/hardware/reinstall-playstation-system-software-safe-mode).
+Download the matching PUP file from [darthsternie.net/ps5-firmwares](https://darthsternie.net/ps5-firmwares/) and follow [Sony's reinstall guide](https://www.playstation.com/en-us/support/hardware/reinstall-playstation-system-software-safe-mode).
 
 :::warning
-You cannot downgrade. Only ever update to the exact version you want.
+A PS5 can't be downgraded. Only ever update to the exact version you want.
 :::

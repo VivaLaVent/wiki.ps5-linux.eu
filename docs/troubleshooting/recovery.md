@@ -38,7 +38,7 @@ sudo umount /mnt/ps5root
 
 ## Common fixes inside the chroot
 
-- **Reinstall the kernel:** `dpkg -i /tmp/linux-ps5_*.deb`
+- **Reinstall the kernel:** `dpkg -i /tmp/linux-ps5_*.deb` (the package you want to go back to)
 - **Create a user** (for example when Ubuntu went black before setup finished):
 
   ```bash
@@ -62,12 +62,12 @@ sudo mount --bind /proc     /mnt/usb/proc
 sudo mount --bind /sys      /mnt/usb/sys
 sudo mount --bind /run      /mnt/usb/run
 
-sudo cp ./linux-ps5_7.0.10_amd64.deb /mnt/usb/tmp/
+sudo cp ./linux-ps5_<version>_amd64.deb /mnt/usb/tmp/
 
 sudo chroot /mnt/usb /bin/bash
 
 cd /tmp
-dpkg -i linux-ps5_7.0.10_amd64.deb
+dpkg -i linux-ps5_<version>_amd64.deb
 ```
 
 When you're done, `exit` the chroot and unmount everything in reverse order, as in the M.2 example above.

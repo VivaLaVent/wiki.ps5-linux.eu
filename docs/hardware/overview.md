@@ -7,6 +7,8 @@ description: The PS5's SoC, storage, video, networking, audio and USB hardware, 
 
 # Hardware overview
 
+What is inside the console, which parts differ between units, and where each one stands under Linux.
+
 ## Console models and chips
 
 Linux runs on the original PS5, the PS5 Slim and the PS5 Pro. Within those models, three parts decide what works:
@@ -15,51 +17,52 @@ Linux runs on the original PS5, the PS5 Slim and the PS5 Pro. Within those model
 | --- | --- | --- |
 | **HDMI chip** | FLAVA3 (most consoles), VERDE (some later models) | `sudo dmesg \| grep "HDMI IC Type"` |
 | **Wi-Fi/Bluetooth chip** | Marvell IW620 (most original PS5s, `1b4b:2b56`), MediaTek MT7961 (most Slims, `14c3:7961`), MediaTek MT7925 (PS5 Pro, `14c3:7925`) | `lspci -nn \| grep -i -e 1b4b -e 14c3` |
-| **Model** | PS5 or Slim, PS5 Pro (GPU `1002:13da`) | `lspci -nn \| grep 1002:13da` |
+| **Model** | PS5 or Slim, PS5 Pro (GPU `1002:13da` or `1002:13dc`) | `lspci -nn \| grep -e 1002:13da -e 1002:13dc` |
 
 On [PS5 Bazzite Deck](/installation/bazzite-deck), `ps5-report` shows all three on its first lines.
 
 - **HDMI chip:** VERDE consoles don't get 1440p at 120 Hz, 4K at 120 Hz, HDR or VRR. How the chip works and why is on [HDMI chip](./hdmi.md); the feature table is on [PS5 Bazzite Deck](/installation/bazzite-deck#what-works-on-your-console).
-- **Wi-Fi/Bluetooth chip:** the IW620 uses the out-of-tree `mwifiex` port, built into rmuxnet's 7.3.1 kernel and PS5 Bazzite Deck, see [Wi-Fi](/using-linux/networking/wifi). The MediaTek chips use the in-kernel `mt7925e` (Pro) and `mt7921e` (Slim, in the configs since 30 October 2026) drivers; their Bluetooth also needs fixes, see [Bluetooth](/using-linux/bluetooth), which rmuxnet's 7.3.1 kernel and PS5 Bazzite Deck include.
-- **PS5 Pro:** supported by the official loader from firmware 11.00 (see [Which loader](/installation/booting#which-loader)). Its GPU (`1002:13da`, "Viola") needs its own firmware, which only the official loader built from `main` (2 November 2026 or later) dumps, on 13.20, 13.60 and 11.60; the kernel package and PS5 Bazzite Deck stage it at boot. The GPU has 60 active compute units, so the [40 CU unlock](./gpu.md#40-cu-unlock) doesn't apply. Details on [PS5 Pro](./ps5-pro.md).
+- **Wi-Fi/Bluetooth chip:** the IW620 uses the out-of-tree `mwifiex` port, built into rmuxnet's kernel, the `linux-ps5` package and PS5 Bazzite Deck, see [Wi-Fi](/using-linux/networking/wifi). The MediaTek chips use the in-kernel `mt7921e` (Slim) and `mt7925e` (Pro) drivers, which every current kernel builds; their Bluetooth needs fixes that PS5 Bazzite Deck has, see [Bluetooth](/using-linux/bluetooth).
+- **PS5 Pro:** supported by the official loader (see [Which loader](/installation/booting#which-loader)). Its GPU ("Viola") needs its own firmware, which the loader dumps when it is built from the official repository's `main` branch; the kernel package and PS5 Bazzite Deck stage it into the initrd at boot. The GPU has 60 active compute units, so the [40 CU unlock](./gpu.md#40-cu-unlock) doesn't apply. Details on [PS5 Pro](./ps5-pro.md).
 
 ## SoC (original PS5 and Slim)
 
-The PS5 uses a custom **AMD Oberon** APU.
+The console is built around a custom AMD APU called **Oberon**: CPU, GPU and memory controller on one die.
 
-- **CPU:** 8 cores / 16 threads, Zen 2 at 3.2 GHz, 3.5 GHz with boost (`ps5-cpufreq` on rmuxnet's 7.3.1 kernel, `ps5_control` on older ones). Uses the `schedutil` cpufreq governor by default.
-- **GPU:** RDNA2, 36–40 active compute units (CUs) depending on the unit. Disabled CUs can be unlocked with a kernel parameter. PCI ID `1002:13fb`. Up to 2.23 GHz, see [Clocks and boost](./gpu.md#clocks-and-boost).
-- **RAM:** 16 GB of unified GDDR6. About 14 GB is usable by the OS; the rest is reserved by the firmware. VRAM comes out of that 14 GB, see [Memory, VRAM and swap](/using-linux/memory-and-swap).
+- **CPU:** eight Zen 2 cores with 16 threads. The firmware starts it at 3.2 GHz; the boost to 3.5 GHz is a kernel driver (`ps5-cpufreq`) on rmuxnet's kernel and PS5 Bazzite Deck, and `ps5_control` on upstream kernels, see [Clocks and boost](./gpu.md#clocks-and-boost). The `schedutil` governor is the default.
+- **GPU:** RDNA2 with 36 to 40 active compute units depending on the unit, PCI ID `1002:13fb`, up to 2.23 GHz. The disabled compute units can be switched on with a kernel parameter.
+- **RAM:** 16 GB of GDDR6 shared by CPU and GPU. About 14 GB is left for the operating system; the firmware keeps the rest. The GPU's memory comes out of those 14 GB, see [Memory, VRAM and swap](/using-linux/memory-and-swap).
+
+The PS5 Pro has a bigger GPU and a different wireless chip, see [PS5 Pro](./ps5-pro.md).
 
 ## Storage
 
-- **Internal NVMe:** 825 GB. Not touched by a Linux install.
-- **M.2 slot:** takes standard NVMe SSDs (firmware 4.00 or later only). See [Install to M.2](/installation/m2-install).
-- **Blu-ray drive:** Salina AHCI controller (`104d:9105` / `104d:9106`) with the `ahci_salina` driver. Working.
+- **Internal NVMe:** the console's own drive. Linux never writes to it.
+- **M.2 slot:** takes standard NVMe SSDs on every firmware except the oldest, which can't boot with a drive in the slot. See [Install to M.2](/installation/m2-install) and [M.2 drives](./usb-storage.md#m2-drives).
+- **Blu-ray drive:** on a Salina AHCI controller (`104d:9105` / `104d:9106`) with the `ahci_salina` driver. Working.
 
 ## Video
 
-- **HDMI 2.1:** 1080p, 1440p and 2160p at 60 Hz are broadly supported. 1440p at 120 Hz is confirmed on a Dell S3225QC.
-- The `amdgpu` driver handles display output. See [Display output](/using-linux/display).
-- **Hardware video decode and encode (VCN):** working; HEVC encoding only works with I-frames. See [Hardware video (VCN)](./vcn.mdx).
+- **HDMI 2.1 through the console's HDMI chip:** 1080p and 1440p at 60 and 120 Hz and 4K at 60 Hz on FLAVA3 consoles, 4K at 120 Hz on TVs that take the console's FRL link; VERDE consoles stop at 1080p120, 1440p60 and 4K60. See [Display output](/using-linux/display) and [HDMI chip](./hdmi.md).
+- **Hardware video decode and encode (VCN):** working; HEVC encoding only with I-frames. See [Hardware video (VCN)](./vcn.mdx).
 
 ## Networking
 
-- **Ethernet:** MediaTek Star GbE / Salina GBE (`104d:9104`) with the `mts` driver. Works out of the box. See [Ethernet](/using-linux/networking/ethernet).
-- **Wi-Fi:** Marvell IW620 (`1b4b:2b56`) with the `moal` driver. See [Wi-Fi](/using-linux/networking/wifi).
+- **Ethernet:** MediaTek Star GbE / Salina GBE (`104d:9104`) with the `mts` driver, full gigabit, works out of the box. See [Ethernet](/using-linux/networking/ethernet).
+- **Wi-Fi:** Marvell IW620 (`1b4b:2b56`) with the `moal` driver on most original PS5s, MediaTek on most Slims and the Pro. See [Wi-Fi](/using-linux/networking/wifi).
 
 ### Salina chip revision
 
-Boards use one of two revisions of the Salina chip for wireless. This is not tied to a specific console model; it varies from unit to unit. Check yours with:
+The wireless combo chip hangs off one of two revisions of the Salina chip, and the revision is not tied to the model: it varies from unit to unit. Check yours with:
 
 ```bash
 dmesg | grep spcie
 ```
 
-| Output | Revision | Wi-Fi/Bluetooth status |
+| Output | Revision | Wi-Fi/Bluetooth |
 | --- | --- | --- |
-| `0x11xxxxx` | Salina rev1 (Marvell) | ✅ Supported |
-| `0x12xxxxx` | Salina rev2 (MediaTek on most units, but some rev2 boards are still Marvell) | ⚠️ Drivers in kernel 7.2.3 and later (the Slim's since 30 October 2026); confirmed on PS5 Bazzite Deck |
+| `0x11xxxxx` | Salina rev1 (Marvell) | ✅ Supported with the out-of-tree Wi-Fi driver and the Bluetooth quirks |
+| `0x12xxxxx` | Salina rev2 (MediaTek on most units, Marvell on some) | ✅ Wi-Fi with the in-kernel drivers in every current kernel; Bluetooth with the fixes in PS5 Bazzite Deck |
 
 ## Audio
 
@@ -80,5 +83,5 @@ See [USB and storage](./usb-storage.md) for port speeds, hubs and adapters.
 
 | Component | Roughly equivalent to |
 | --- | --- |
-| GPU | AMD Radeon RX 6700 (non-XT): 36 CUs, similar clocks |
-| CPU | AMD Ryzen 7 2700 (a down-clocked Zen 2, 8 cores / 16 threads) |
+| GPU | A 36 CU RDNA2 desktop card of the RX 6700 class, at similar clocks |
+| CPU | An eight-core Zen 2 desktop CPU at reduced clocks |

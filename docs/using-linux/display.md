@@ -1,53 +1,30 @@
 ---
 title: Display output
 sidebar_position: 1
-description: Supported resolutions and refresh rates, monitors that needed a cmdline change, and black screen troubleshooting.
+description: Supported resolutions and refresh rates, what to try when a monitor stays black, and how to load a custom EDID.
 ---
 
 # Display output
 
-HDMI 2.1 output is driven by `amdgpu` and works out of the box once the driver loads. Both Wayland and X11 work; Wayland (Sway, Weston) is recommended.
+The HDMI port is driven by `amdgpu` through the console's HDMI chip, and a picture appears as soon as the driver loads. Wayland and X11 both work; the ready-made images use Wayland sessions. What the chip can and can't output, and why, is on [HDMI chip](/hardware/hdmi).
 
 ## Supported resolutions
 
-| Resolution | Refresh rate | Status |
+| Resolution | Refresh rate | Consoles |
 | --- | --- | --- |
-| 1080p | 60 Hz | Working |
-| 1080p | 120 Hz | Confirmed on ASUS VY249HGR (see below) |
-| 1440p | 60 Hz | Working (issues on some monitors) |
-| 1440p | 120 Hz | Confirmed on Dell S3225QC |
-| 2160p (4K) | 60 Hz | Working (issues on some monitors) |
+| 1080p | 60 Hz, 120 Hz | Every console |
+| 1440p | 60 Hz | Every console |
+| 1440p | 120 Hz | FLAVA3 HDMI chip |
+| 2160p (4K) | 60 Hz | Every console |
+| 2160p (4K) | 120 Hz | FLAVA3 HDMI chip, HDMI 2.1 TVs that accept the console's FRL link |
 
-1440p and 4K at 120 Hz, HDR and VRR work on consoles with the FLAVA3 HDMI chip. They are kernel patches, not an image feature: PS5 Bazzite Deck includes them by default ([VRR](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/patches/ps5-vrr.patch), [4K120](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/v2.0.1/patches/ps5-hdmi-frl-4k120.patch)), and HDR, CEC, hotplug and native FRL (4K120 with ALLM) are in kernel release 7.2.3 and in rmuxnet's 7.3.1 kernel release, see [Kernel setup](/advanced/kernel#what-is-where). VRR is PS5 Bazzite Deck only. 30 Hz is not offered.
+HDR and VRR also need the FLAVA3 chip; VRR is PS5 Bazzite Deck only. Nothing else is possible: 30 Hz, 165 Hz, ultrawide and other resolutions have no setup in the HDMI chip, see [Why only certain modes exist](/hardware/hdmi#why-only-certain-modes-exist). Whether a mode is offered also depends on the display: the kernel reads its EDID and drops what the display doesn't accept.
 
 :::tip[`amdgpu.force_1080p=1` caps the refresh rate]
-This flag ships in the default `cmdline.txt` and was long assumed to be required. Testing on 2026-07-10 showed it is not needed for every monitor, and it **caps output at 60 Hz**, even on displays that support more.
-
-Confirmed on an ASUS VY249HGR (native 1920×1080 at 120 Hz, FreeSync 48–120 Hz according to its EDID): capped at 60 Hz with the flag, full 120 Hz without it. A Lenovo T23d-10 (a 60 Hz panel) also worked fine without the flag.
-
-If your monitor shows nothing at all, the flag is still worth trying (see below). If it works without it, leave it out, especially on a high refresh rate panel.
+Some images ship this parameter in `cmdline.txt` as a safety net. It isn't needed for most displays, and it **limits the output to 1080p60**, including on panels that could do 120 Hz. If you get a picture without it, leave it out; keep it only for a display that shows nothing otherwise, see [Troubleshooting a black screen](#troubleshooting-a-black-screen).
 :::
 
-## Confirmed working monitors
-
-These work without any `cmdline.txt` changes unless noted:
-
-- MSI MAG274Q QD E2 (1440p at 60 Hz)
-- Dell S2721DGF (1440p at 60 Hz)
-- Dell U2515H (1440p at 60 Hz)
-- LG 27GL850 (reported)
-- Lenovo Legion Y27q (reported)
-- ViewSonic Elite XG270QG (reported)
-- ASUS VY249HGR (1080p at 120 Hz over HDMI; **remove** `amdgpu.force_1080p=1` to get 120 Hz)
-- Lenovo T23d-10 (1080p at 60 Hz over HDMI)
-- Gigabyte M27UP (1440p and 4K at 60 Hz both confirmed, HDMI and sound working)
-- Samsung Odyssey G50D 27" (1440p at 60 Hz)
-- AOC Q27G4 (remove the `video=DP-1:...` line and add `amdgpu.force_1080p=1`)
-- ASUS TUF Gaming VG289Q (4K at 60 Hz, sound working)
-
-:::info[The same model can still behave differently]
-It is not unusual for the exact same monitor to work for one person and show a black screen for another. Panel revision, firmware version and cable quality all seem to matter. Treat this list as "known to work for someone", not as a guarantee.
-:::
+Monitors behave less predictably than TVs. 1440p and 4K at 60 Hz work on most, but some models show nothing at those modes, get no audio, or need a parameter change. The same model can also work for one person and stay black for another: panel revision, the monitor's firmware and the cable all play a part. If your monitor needs a particular setting, the HDMI driver's log says what it saw, see [Display recovery](/troubleshooting/display-recovery#read-the-hdmi-drivers-log).
 
 ## Troubleshooting a black screen
 
@@ -55,16 +32,16 @@ It is not unusual for the exact same monitor to work for one person and show a b
 If Linux is running (white LED) but you chose a mode your display can't show, see [Display recovery](/troubleshooting/display-recovery) to get a shell and change the mode by command.
 :::
 
-**Try these in order:**
+Work down this list; stop as soon as you have a picture:
 
 1. Remove `video=DP-1:1920x1080@60` from `cmdline.txt` on the FAT32 partition.
 2. Add `amdgpu.force_1080p=1` to `cmdline.txt`.
-3. Toggle HDCP on and off in the PS5 settings (try both).
-4. Try a different monitor or cable.
-5. Try an **HDMI-to-VGA adapter**. This has got some problematic monitors working.
-6. Switch to tty2 and back to tty1.
+3. Turn HDCP off in the PS5 settings (and if it was already off, turn it on): some displays only sync one way.
+4. Try another cable, another HDMI input, or another display.
+5. Put an HDMI-to-VGA adapter in between. It has worked on monitors that refuse the direct connection.
+6. Switch TTY: <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F2</kbd>, wait a few seconds, <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F1</kbd>.
 
-**Kernel-level fix (advanced):** some users fixed a persistent black screen by commenting out these calls in `drivers/ps5/hdmi.c` and rebuilding the kernel:
+**Kernel-level fix (advanced):** a black screen that survives everything above has been cured by taking three steps out of the HDMI driver's setup sequence in `drivers/ps5/hdmi.c` and rebuilding the kernel:
 
 ```c title="drivers/ps5/hdmi.c"
 // sceSetBackToUnpluggedSequence();
@@ -76,23 +53,23 @@ See [Kernel setup](/advanced/kernel) for how to rebuild.
 
 ### Link training error (the most common cause)
 
-This is by far the most common root cause of black screens across many monitor models. Check `dmesg` for:
+Most black screens, across all kinds of displays, come down to one thing: the internal DisplayPort link between the GPU and the HDMI chip fails to train. `dmesg` shows:
 
 ```text
 amdgpu 0000:20:00.0: [drm] *ERROR* perform_8b_10b_clock_recovery_sequence: Link Training Error, could not get CR after 100 tries. Possibly voltage swing issue
 ```
 
-It is fixed by [ps5-linux-patches commit fe852d3](https://github.com/ps5-linux/ps5-linux-patches/commit/fe852d3cdb82cd6994072bfdb29d4b7dea803f13). Update to a kernel that includes it before trying anything else on this page.
+Current kernels carry the fix ([ps5-linux-patches commit fe852d3](https://github.com/ps5-linux/ps5-linux-patches/commit/fe852d3cdb82cd6994072bfdb29d4b7dea803f13)). Update before you try anything else on this page.
 
-If you can't update yet, toggling the resolution can recover the link without a reboot. For example, with `kscreen-doctor` (KDE), switch to 1080p and back to your target resolution a few seconds later.
+On a kernel you can't update yet, changing the resolution and changing it back retrains the link without a reboot: with `kscreen-doctor` (KDE), for example, switch to 1080p and then back a few seconds later. [Lock the display link](/troubleshooting/display-link-lock) stops it from recurring.
 
 ### Gamescope doesn't recover from a link training failure (SteamOS/CachyOS)
 
-Symptoms: the LED is white (Linux is running), SSH works and Steam/Gamescope are running, but there is **no signal** on any display (the TV reports no input, rather than showing a black picture). `dmesg` shows the link training error above repeating every 60–90 seconds.
+Symptoms: white LED, SSH works, Steam and Gamescope are running, but the display reports **no signal** (as opposed to a black picture), and `dmesg` repeats the link training error every minute or two.
 
-Gamescope grabs the DRM device during its initial modeset, hits the link training failure, and never probes again, even after the PS5's HDMI driver reads the EDID successfully (`hdmi: got real edid` in `dmesg`). Running `echo detect > /sys/class/drm/card0-DP-1/status` does not help, because Gamescope already holds the device.
+Gamescope takes the DRM device during its first mode set, runs into the training failure and never probes the display again, not even after the HDMI driver has read the EDID (`hdmi: got real edid` in `dmesg`). Writing `detect` to `/sys/class/drm/card0-DP-1/status` doesn't help because Gamescope already holds the device.
 
-There is no known fix on CachyOS or SteamOS-based images yet. Workaround: use an Ubuntu-based image, which handles this correctly.
+There is no fix inside the Gamescope-based images for this. A desktop-based image (Ubuntu, for example) recovers by itself, and so does a kernel with the link training fix above.
 
 ### 4K display: black screen after login
 
@@ -105,11 +82,11 @@ If Linux boots but the screen turns black or blue after the login screen on a 4K
    video=HDMI-A-1:3840x2160@60
    ```
 
-3. If the desktop still doesn't appear, SSH in and switch to another desktop environment. GNOME works for some users where other desktops fail.
+3. If the desktop still doesn't appear, SSH in and try another desktop environment: the problem can be in the session, not in the output.
 
 ### Black screen when switching to desktop mode (SteamOS/Bazzite)
 
-The system boots fine into Game Mode, but the screen flashes and goes black when you switch to Desktop Mode. `dmesg` may show:
+The system boots into Game Mode, but the screen flashes and goes black when you switch to Desktop Mode. `dmesg` may show:
 
 ```text
 [drm] Failed to add display topology, DTM TA is not initialized.
@@ -121,7 +98,7 @@ SSH in and force the desktop session:
 steamos-session-select plasma
 ```
 
-This is a confirmed fix on SteamOS and Bazzite installs. If the problem persists, update to the latest image first; newer builds alone have also fixed it.
+If it keeps happening, update the image first: newer builds have fixed it on their own. To avoid the switch altogether, choose the session before you boot, see [Boot to the desktop or Gaming Mode](./boot-to-desktop.md).
 
 ### Black screen, but SSH works
 
@@ -136,9 +113,9 @@ Then create a full log dump as described in [Getting help](/troubleshooting/gett
 
 ## Custom EDID injection
 
-If your monitor's EDID is not read or parsed correctly (common on some 4K and ultrawide displays), you can load a known-good EDID dump manually:
+When a display's EDID is not read or parsed correctly (it happens on some 4K and ultrawide displays), you can hand the kernel a known-good copy:
 
-1. Dump your monitor's EDID from another PC. On Windows, use one of the free EDID tools. On Linux, run `cat /sys/class/drm/card*/edid` while the monitor is connected.
+1. Dump the EDID from another PC. On Windows, use one of the free EDID tools. On Linux, run `cat /sys/class/drm/card*/edid` while the monitor is connected.
 2. Copy the `.bin` file to `/lib/firmware/edid/my_edid.bin` on the Linux partition.
 3. Add this to `cmdline.txt`:
 
@@ -146,8 +123,8 @@ If your monitor's EDID is not read or parsed correctly (common on some 4K and ul
    drm.edid_firmware=DP-1:edid/my_edid.bin
    ```
 
-The connector name (`DP-1` here) must match your actual output. Check `/sys/class/drm/` for the exact name.
+The connector name (`DP-1` here) must match your output. Check `/sys/class/drm/` for the exact name.
 
 ## Capture cards
 
-Capture cards behave like any other display. See [Capture cards](/hardware/capture-cards).
+A capture card is just another display to the kernel, see [Capture cards](/hardware/capture-cards).
