@@ -10,7 +10,7 @@ Steam and Proton run on the PS5 as on any Linux PC with a mid-range RDNA2 GPU. T
 
 ## Steam and Proton
 
-:::warning[Don't use the Snap version of Steam]
+:::warning[Don't use the Snap version of Steam (Ubuntu)]
 Ubuntu's Snap package of Steam runs in a sandbox that gets in the way on the PS5 images. Install Steam from apt instead (or the `.deb` from [store.steampowered.com/about](https://store.steampowered.com/about/)):
 
 ```bash

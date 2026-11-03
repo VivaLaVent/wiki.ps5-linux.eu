@@ -9,6 +9,10 @@ description: Choose a distro, download or build a PS5 Linux image, and flash it 
 
 Three sources make PS5 images, and all of them boot the same way. This page helps you pick one, get it onto a drive, and edit its boot settings.
 
+:::note[Not for PS5 Bazzite Deck]
+This page is about the other images. PS5 Bazzite Deck users: your image has its own page, [PS5 Bazzite Deck](/installation/bazzite-deck).
+:::
+
 ## Choose an image
 
 Every image is a normal distro plus the same three PS5 parts: the patched kernel on the boot partition, the Wi-Fi driver and a few services. All of them are booted by the same [Linux loader](/installation/booting), and the kernel can be replaced on any of them, see [Kernel setup](/advanced/kernel). So the choice is mostly about the distro and how much is set up for you:

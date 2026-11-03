@@ -108,6 +108,18 @@ exit
 
 From then on the controller connects to Linux on that profile and to the PS5 OS on its original one.
 
+### Is the Linux-only address actually applied?
+
+"On" in `ps5-bt-address status` means the setting; whether the chip took the address shows in the address itself. The Linux address has the `0x02` bit set in its first byte, so its second character changes (`9C:…` becomes `9E:…`, `EC:…` would become `EE:…`). If the first byte didn't change, the address wasn't applied this boot, Linux runs with the PS5 OS's address, and the controller's two pairings collide:
+
+```bash
+cat /sys/class/bluetooth/hci0/address
+journalctl -u ps5-bt-addr -b --no-pager | tail -5   # why it wasn't applied
+sudo systemctl restart ps5-bt-addr; sleep 3; cat /sys/class/bluetooth/hci0/address
+```
+
+`ps5-report` prints this as `linux-only BT address: on, applied` or `on, NOT applied`.
+
 ### IW620: the Linux-only address and warm restarts
 
 Status: no fix yet. With the address on, a [warm restart](/advanced/warm-reboot) can leave the IW620 hung: its Bluetooth side stops answering on USB (`device descriptor read/64, error -110`, `device not accepting address`), and sometimes Wi-Fi is gone too (`wlan_pcie ... probe ... failed`). Only a power-off and a start with the loader brings it back. With the address off, Bluetooth survives a warm restart. A cold start always works, with or without the address.

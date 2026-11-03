@@ -8,6 +8,10 @@ description: Fix an install that no longer boots by chrooting into it from anoth
 
 If your install no longer boots but you have access to another Linux system (booted from another USB drive, or another machine), you can chroot into your install to fix it.
 
+:::note[Not for PS5 Bazzite Deck]
+This page is for installs you manage with a package manager. PS5 Bazzite Deck users: your image repairs itself with its update command, see [PS5 Bazzite Deck](/installation/bazzite-deck#troubleshooting).
+:::
+
 ## Find your partition
 
 ```bash

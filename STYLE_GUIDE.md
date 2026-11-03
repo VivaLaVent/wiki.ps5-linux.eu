@@ -136,7 +136,9 @@ Rules:
 - **At most one or two callouts per `##` section.** If everything is a warning, nothing is.
 - The title is short (under about 50 characters) and in sentence case. It states the subject or the risk, not "Warning" or "Note".
 - Don't nest callouts. Code blocks inside callouts are fine.
-- Use a `:::note[PS5 Bazzite Deck]` or `:::tip[PS5 Bazzite Deck]` callout when a page's instructions differ for that image, and link to its own steps.
+- Two callouts mark the image distinction, and only these two:
+  - `:::tip[PS5 Bazzite Deck]` when a page's instructions differ for that image (what's already done there, or its own steps), with a link.
+  - `:::note[Not for PS5 Bazzite Deck]` at the top of a page or section that only applies to the other images (Ubuntu, Arch, Fedora, CachyOS, Debian), so Bazzite Deck readers can skip it.
 - Callouts that point to a unit-specific condition name it in the title: `:::warning[Original PS5 and Slim only]`.
 
 ## 8. Tables, lists and status symbols

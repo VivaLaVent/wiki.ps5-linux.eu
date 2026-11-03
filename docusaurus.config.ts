@@ -97,12 +97,25 @@ const config: Config = {
     },
     navbar: {
       title: 'PS5 Linux Wiki',
-      items: [{href: 'https://discord.gg/ps5linux', label: 'Discord', position: 'right'}],
+      items: [
+        {href: 'https://discord.gg/ps5linux', label: 'Discord', position: 'right'},
+        {href: 'https://ko-fi.com/vivalavent', label: 'Donate', position: 'right'},
+      ],
     },
     footer: {
       style: 'dark',
+      links: [
+        {
+          title: 'Community',
+          items: [
+            {label: 'Discord', href: 'https://discord.gg/ps5linux'},
+            {label: 'PS5 Bazzite Deck on GitHub', href: 'https://github.com/VivaLaVent/ps5-bazzite-deck'},
+            {label: 'Support the project on Ko-fi', href: 'https://ko-fi.com/vivalavent'},
+          ],
+        },
+      ],
       copyright:
-        'Community project · MIT License · Not affiliated with Sony Interactive Entertainment',
+        'Maintained by Gilles (VivaLaVent) with the PS5 Linux community · MIT License · Not affiliated with Sony Interactive Entertainment or the Bazzite project',
     },
     prism: {
       theme: codeTheme,

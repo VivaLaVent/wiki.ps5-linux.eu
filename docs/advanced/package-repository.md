@@ -8,6 +8,10 @@ description: Install and update the PS5 kernel, Wi-Fi driver and tools with your
 
 [repo.etawen.dev](https://repo.etawen.dev) is an unofficial, community-run package repository for pacman, apt and dnf, hosted by [etawen.dev](https://etawen.dev). It provides the PS5 kernel, the Wi-Fi driver, fan/boost controls and the payload SDK, so you can install and update them with your package manager instead of running install scripts by hand.
 
+:::note[Not for PS5 Bazzite Deck]
+The repository serves Ubuntu, Arch and Fedora installs. PS5 Bazzite Deck users: your kernel and drivers come with the image and its updates; don't add this repository there.
+:::
+
 ## Add the repository (once)
 
 ### Quickest (any distro)

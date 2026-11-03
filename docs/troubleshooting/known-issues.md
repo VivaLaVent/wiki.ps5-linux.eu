@@ -35,7 +35,7 @@ What is known to be broken or limited, with the workaround where there is one, a
 | Sysctl or module settings not applied after boot | [Systemd ordering cycle](/troubleshooting/modules-not-loading) |
 | Switching from Gaming Mode to the desktop kills HDMI | [Choose the session before booting](/using-linux/boot-to-desktop) |
 | GPU fault when switching sessions at 4K120 (some TVs) | A compositor-side bug. Keep the desktop at 4K60, see [Known limits](/using-linux/gaming-performance#known-limits) |
-| PS5 Pro: a GPU fault isn't recovered (`GPU Recovery Failed`), black screen until a restart | Open, see [PS5 Pro](/hardware/ps5-pro#starting-linux-fails-on-the-pro) |
+| PS5 Pro: a GPU fault isn't recovered (`GPU Recovery Failed`), black screen until a restart | Open: a full GPU reset fails on this hardware even with the base firmware (the DMA engines don't come back). Restart over SSH with the sysrq sequence on [PS5 Pro](/hardware/ps5-pro#starting-linux-fails-on-the-pro) rather than holding the power button, which can damage the filesystem |
 | `Failed to pin framebuffer: -ENOMEM` under memory pressure | Open. More zram or swap helped in one report, see [Memory and swap](/using-linux/memory-and-swap) |
 | VRR refused on a TV that announces no VRR maximum | Old PS5 Bazzite Deck releases; fixed, see [HDMI chip](/hardware/hdmi#vrr-on-flava3) |
 | 165 Hz, ultrawide and other refresh rates | Not possible: the HDMI chip has no setup for them, see [HDMI chip](/hardware/hdmi#why-only-certain-modes-exist) |

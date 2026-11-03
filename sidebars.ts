@@ -1,38 +1,38 @@
 import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
 
 // The sidebar follows the order a new user goes through:
-// get ready → install → use Linux → hardware reference → fix problems.
+// before you install → install → after installing (using Linux) → hardware reference → advanced → fix problems.
 const sidebars: SidebarsConfig = {
   wikiSidebar: [
     'intro',
     {
       type: 'category',
-      label: 'Getting started',
+      label: 'Before you install',
       collapsed: false,
       items: [
         'getting-started/overview',
-        'getting-started/firmware',
         'getting-started/prerequisites',
+        'getting-started/firmware',
         'getting-started/which-image',
       ],
     },
     {
       type: 'category',
-      label: 'Installation',
+      label: 'Install',
       collapsed: false,
       items: [
-        'installation/linux-image',
         'installation/bazzite-deck',
+        'installation/linux-image',
         'installation/booting',
         'installation/first-boot',
-        'installation/post-install',
         'installation/m2-install',
       ],
     },
     {
       type: 'category',
-      label: 'Using Linux',
+      label: 'After installing',
       items: [
+        'installation/post-install',
         'using-linux/display',
         'using-linux/audio',
         {

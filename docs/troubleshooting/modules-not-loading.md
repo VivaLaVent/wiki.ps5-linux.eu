@@ -8,6 +8,10 @@ description: Fix random failures after boot caused by a systemd ordering cycle t
 
 Things fail at random after boot: a driver is missing, `/etc/sysctl.d` values are not applied, or a service behaves differently from one boot to the next.
 
+:::note[Not for PS5 Bazzite Deck]
+This concerns distros where you manage the kernel and services yourself. PS5 Bazzite Deck users: not seen on that image; report it in #bazzite-problems if you think you hit it.
+:::
+
 ## Cause
 
 `ps5-stage-firmware.service` can create a systemd ordering cycle. To break the cycle, systemd skips one of the units in it, and the ones skipped can be `systemd-sysctl` and `systemd-modules-load`. Nothing visible fails, so the symptom is only that settings are missing.

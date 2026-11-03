@@ -71,3 +71,9 @@ The clock drivers on a Pro have not been confirmed on hardware by the wiki edito
 The loader depends on the PS5 OS's rest mode. If the console goes from white to steady orange without blinking and then starts the PS5 OS instead of Linux, rest mode was refused or interrupted. The same thing happens on every model; it is listed under [Known issues](/troubleshooting/known-issues#rest-mode-error-back-to-the-ps5-login-screen) with the usual causes (USB hubs, keyboards and mice on the fast ports, leftover state from a failed attempt) and the fix.
 
 A GPU fault on a Pro is not recovered: the log shows `GPU Recovery Failed` and the screen stays black until a restart. Save the coredump before you restart if you want it looked at, see [Known limits](/using-linux/gaming-performance#known-limits).
+
+A deliberate reset (`cat /sys/kernel/debug/dri/0/amdgpu_gpu_recover`) fails the same way with the Pro's firmware and with the base firmware (`amdgpu.ps5_viola_fw=0`): after the full reset, the GPU's DMA engines don't pass their test (`ring sdma0/sdma1 test failed`). So it isn't the Pro firmware; the full GPU reset doesn't recover on this hardware. On the original PS5 and the Slim, the lighter per-ring reset usually handles a fault before it gets that far. After a failed recovery, `sudo reboot` may hang; holding the power button then risks filesystem damage. Over SSH, restart safely with:
+
+```bash
+sudo sync; echo s | sudo tee /proc/sysrq-trigger; echo u | sudo tee /proc/sysrq-trigger; echo b | sudo tee /proc/sysrq-trigger
+```
