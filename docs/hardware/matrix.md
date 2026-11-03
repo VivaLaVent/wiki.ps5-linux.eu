@@ -33,7 +33,7 @@ One table for every component, then what is inside the console. Each row links t
 | Bluetooth | ✅ IW620 | ✅ BD | ✅ BD | [Wi-Fi, Ethernet and Bluetooth](/hardware/wifi-bluetooth#bluetooth) |
 | One DualSense for the PS5 OS and Linux | ✅ BD | ✅ BD | ✅ BD | [DualSense](/using-linux/dualsense) |
 | Fan control | ✅ | ✅ | ✅ | [Fan control](/hardware/fan) |
-| Sleep (suspend-to-idle) | ✅ BD; 🚧 elsewhere | ✅ BD; 🚧 elsewhere | ✅ BD | [PS5 Bazzite Deck](/installation/bazzite-deck) |
+| Sleep (suspend-to-idle) | ✅ BD; 🚧 elsewhere | ✅ BD; 🚧 elsewhere | ✅ BD | [PS5 Bazzite Deck](/choose/bazzite-deck) |
 | Restart straight into Linux (warm reboot) | 🧪 | 🧪 | 🧪 | [Restart straight into Linux](/advanced/warm-reboot) |
 | USB drives, internal M.2 | ✅ | ✅ | ✅ | [Storage](/hardware/storage) |
 | Blu-ray drive | ✅ | ✅ (disc models) | ✅ (disc drive attached) | below |
@@ -50,9 +50,9 @@ Linux runs on the original PS5, the PS5 Slim and the PS5 Pro. Within those model
 | **Wi-Fi/Bluetooth chip** | Marvell IW620 (most original PS5s, `1b4b:2b56`), MediaTek MT7961 (most Slims, `14c3:7961`), MediaTek MT7925 (PS5 Pro, `14c3:7925`) | `lspci -nn \| grep -i -e 1b4b -e 14c3` |
 | **Model** | PS5 or Slim, PS5 Pro (GPU `1002:13da` or `1002:13dc`) | `lspci -nn \| grep -e 1002:13da -e 1002:13dc` |
 
-On [PS5 Bazzite Deck](/installation/bazzite-deck), `ps5-report` shows all three on its first lines.
+On [PS5 Bazzite Deck](/choose/bazzite-deck), `ps5-report` shows all three on its first lines.
 
-- **HDMI chip:** VERDE consoles don't get 1440p at 120 Hz, 4K at 120 Hz, HDR or VRR. How the chip works and why is on [HDMI chip](/hardware/hdmi); the feature table is on [PS5 Bazzite Deck](/installation/bazzite-deck#what-works-on-your-console).
+- **HDMI chip:** VERDE consoles don't get 1440p at 120 Hz, 4K at 120 Hz, HDR or VRR. How the chip works and why is on [HDMI chip](/hardware/hdmi); the feature table is on [PS5 Bazzite Deck](/choose/bazzite-deck#what-works-on-your-console).
 - **Wi-Fi/Bluetooth chip:** the IW620 uses the out-of-tree `mwifiex` port, built into rmuxnet's kernel, the `linux-ps5` package and PS5 Bazzite Deck, see [Wi-Fi](/hardware/wifi-bluetooth#wifi). The MediaTek chips use the in-kernel `mt7921e` (Slim) and `mt7925e` (Pro) drivers, which every current kernel builds; their Bluetooth needs fixes that PS5 Bazzite Deck has, see [Bluetooth](/hardware/wifi-bluetooth#bluetooth).
 - **PS5 Pro:** supported by the official loader (see [Which loader](/installation/booting#which-loader)). Its GPU ("Viola") needs its own firmware, which the loader dumps when it is built from the official repository's `main` branch; the kernel package and PS5 Bazzite Deck stage it into the initrd at boot. The GPU has 60 active compute units, so the [40 CU unlock](/hardware/gpu#40-cu-unlock) doesn't apply. Details on [PS5 Pro](/hardware/ps5-pro).
 
@@ -116,3 +116,9 @@ See [USB and storage](/hardware/storage#usb-drives) for port speeds, hubs and ad
 | --- | --- |
 | GPU | A 36 CU RDNA2 desktop card of the RX 6700 class, at similar clocks |
 | CPU | An eight-core Zen 2 desktop CPU at reduced clocks |
+
+## Next steps
+
+- [Hardware status](/hardware/matrix): what works on each model
+- [After installing](/post-install/all-distros)
+- [Troubleshooting & help](/troubleshooting/getting-help)

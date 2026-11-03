@@ -9,7 +9,7 @@ applies_to: not-bazzite-deck
 
 # How the PS5 Bazzite Deck image is built
 
-[PS5 Bazzite Deck](/installation/bazzite-deck) is built with the official [ps5-linux-image](https://github.com/ps5-linux/ps5-linux-image) builder, a recent stable kernel with rmuxnet's PS5 patch set, and its own patches on top. This page is for anyone making an image: the kernel config changes it needs, the patch order, and the upstream repositories it tracks. Users don't need any of it.
+[PS5 Bazzite Deck](/choose/bazzite-deck) is built with the official [ps5-linux-image](https://github.com/ps5-linux/ps5-linux-image) builder, a recent stable kernel with rmuxnet's PS5 patch set, and its own patches on top. This page is for anyone making an image: the kernel config changes it needs, the patch order, and the upstream repositories it tracks. Users don't need any of it.
 
 :::info[Patch base]
 The stable kernel named in the patch set's `.config`, plus [rmuxnet/ps5-linux-patches-1](https://github.com/rmuxnet/ps5-linux-patches-1) at a pinned commit, then the image's patches in the order of [`build.sh`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/build.sh). Each release ships a `VERSIONS.md` with the exact pins and a `local-changes.diff` with the changes to the builder.
@@ -85,3 +85,9 @@ bash build.sh
 ```
 
 The script prints the output folder at the end.
+
+## Next steps
+
+- [Hardware status](/hardware/matrix): what works on each model
+- [After installing](/post-install/all-distros)
+- [Troubleshooting & help](/troubleshooting/getting-help)

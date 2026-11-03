@@ -396,3 +396,9 @@ Test plan for an IW620 console with both on: cold start and check `ps5-bt-addres
 :::note[PS5 Bazzite Deck]
 While the address is on, the image replaces warm restarts with normal ones on IW620 consoles. `ps5-bt-address off` turns the address off instead.
 :::
+
+## Next steps
+
+- [Hardware status](/hardware/matrix): what works on each model
+- [After installing](/post-install/all-distros)
+- [Troubleshooting & help](/troubleshooting/getting-help)

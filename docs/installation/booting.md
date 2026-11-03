@@ -1,6 +1,6 @@
 ---
 title: Booting Linux
-sidebar_position: 3
+sidebar_position: 2
 description: Plug in the USB drive, send the Linux loader and read the boot LED.
 hardware: [original, slim, pro]
 applies_to: all
@@ -38,7 +38,7 @@ The Linux loader is the payload that boots Linux. The [official loader](https://
 | Loader | For |
 | --- | --- |
 | [ps5-linux/ps5-linux-loader](https://github.com/ps5-linux/ps5-linux-loader/releases/) | Everything: original PS5, Slim and Pro. Use this one. For a PS5 Pro, build it from `main`: only `main` dumps the Pro's GPU firmware, see [PS5 Pro](/hardware/ps5-pro#gpu-firmware). |
-| [rmuxwashere/ps5-linux-loader](https://github.com/rmuxwashere/ps5-linux-loader/releases) | Fork that [PS5 Bazzite Deck](/installation/bazzite-deck) was tested with. Its newer-firmware and Pro fixes have been sent upstream; it doesn't dump the Pro's GPU firmware. |
+| [rmuxwashere/ps5-linux-loader](https://github.com/rmuxwashere/ps5-linux-loader/releases) | Fork that [PS5 Bazzite Deck](/choose/bazzite-deck) was tested with. Its newer-firmware and Pro fixes have been sent upstream; it doesn't dump the Pro's GPU firmware. |
 | [gzimbric/ps5-linux-loader](https://github.com/gzimbric/ps5-linux-loader), [Wigglez-sudo/12.xx-linux-loader](https://github.com/Wigglez-sudo/12.xx-linux-loader) | Older forks for the Pro and for newer firmware. Merged upstream; kept here for reference. |
 
 The pinned messages in the `#loader` channel on [Discord](https://discord.gg/ps5linux) point to the current payload.
@@ -93,3 +93,7 @@ Try these first:
 See [Display output](/hardware/hdmi#troubleshooting-a-black-screen) for the full troubleshooting list.
 
 Next: [First boot](/installation/first-boot).
+
+## Next steps
+
+**[First boot](/installation/first-boot)**.

@@ -1,6 +1,6 @@
 ---
 title: First boot
-sidebar_position: 4
+sidebar_position: 3
 description: What to expect the first time Linux starts on the PS5, and the one thing to do before anything else on Ubuntu.
 hardware: [original, slim, pro]
 applies_to: all
@@ -20,7 +20,24 @@ The Ubuntu image creates its user during the first-boot setup. Until that is don
 
 Then work through the [Post-install checklist](/post-install/all-distros): it holds the PS5-specific steps (kernel hold, fan and boost, GPU memory, Wi-Fi driver) that every image needs.
 
-## Where to go next
+## PS5 Bazzite Deck
 
-- [Post-install checklist](/post-install/all-distros)
-- [Move Linux to an M.2 SSD](/installation/m2-install)
+
+- The default password is **`ps5`**. You need it for anything that requires admin rights. SSH is on: `ssh ps5@<your PS5's IP>`.
+
+  :::warning
+  **Change the password** with `passwd`: anyone on your network can try `ps5`.
+  :::
+
+- **After you join Wi-Fi, Steam updates itself** in the background, often behind a blank screen with a blinking cursor that looks frozen, for several minutes. Don't power off during this: it is the most common cause of a broken first start. The console can also restart once by itself after the network setup; cold boot and run the loader again.
+- The first start is at **1080p60**. Choose your resolution under Game Mode → Settings → Display; it is remembered.
+- Set **RGB range** to **Full**, both in Game Mode and on the desktop.
+
+- **Be patient:** the first start can stay black for a few minutes.
+
+## Next steps
+
+Continue with **[After installing: all distros](/post-install/all-distros)**, then:
+
+- **PS5 Bazzite Deck:** [After installing: PS5 Bazzite Deck](/post-install/bazzite)
+- **Official or self-built images:** [Other images](/post-install/not-bazzite-deck) and [Distro notes](/post-install/distro-notes)

@@ -106,3 +106,9 @@ Nothing in the distro has to change for a new kernel except its modules and init
 4. Cold boot and start with the loader. To test a kernel without a cold boot, use [kexec](/advanced/warm-reboot).
 
 If the new kernel doesn't boot, put the backed-up files back from any PC (the partition is FAT32). What a kernel needs beyond that is the same for every image: the IW620 Wi-Fi driver built for it (bundled in the `linux-ps5` package and in rmuxnet's release, otherwise [reinstall it](/hardware/wifi-bluetooth#after-a-kernel-update)), and on an image with Steam Gaming Mode the [BPF LSM and BTF](/advanced/kernel#build-a-kernel-for-bazzite-game-mode) options.
+
+## Next steps
+
+- [Hardware status](/hardware/matrix): what works on each model
+- [After installing](/post-install/all-distros)
+- [Troubleshooting & help](/troubleshooting/getting-help)

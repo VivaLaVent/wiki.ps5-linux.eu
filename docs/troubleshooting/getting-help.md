@@ -90,3 +90,9 @@ Attach the file on Discord (or upload it to a paste service and share the link),
 :::tip
 A report without a log usually gets a request for the log first, so send it with the question.
 :::
+
+## Next steps
+
+- [Hardware status](/hardware/matrix): what works on each model
+- [After installing](/post-install/all-distros)
+- [Troubleshooting & help](/troubleshooting/getting-help)

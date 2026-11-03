@@ -15,7 +15,7 @@ Choosing **Switch to Desktop** inside Steam's Gaming Mode can leave the display 
 :::
 
 :::note[Not tested]
-This was reported on the official CachyOS image. [PS5 Bazzite Deck](/installation/bazzite-deck) has its own session handling, see [Built-in commands](/installation/bazzite-deck#built-in-commands).
+This was reported on the official CachyOS image. [PS5 Bazzite Deck](/choose/bazzite-deck) has its own session handling, see [Built-in commands](/post-install/bazzite#built-in-commands).
 :::
 
 ## Choose the next session
@@ -43,3 +43,9 @@ While the drive is connected to a PC with a Linux system, mount the root partiti
 Logging out of Plasma returns to Gaming Mode and resets the file to `gamescope`. Write `plasma` to the file again before the next boot. A restart or shutdown from the desktop keeps the setting.
 
 Steam Big Picture still runs inside the desktop session.
+
+## Next steps
+
+- [Hardware status](/hardware/matrix): what works on each model
+- [After installing](/post-install/all-distros)
+- [Troubleshooting & help](/troubleshooting/getting-help)

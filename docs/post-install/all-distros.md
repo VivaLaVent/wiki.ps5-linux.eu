@@ -11,7 +11,7 @@ applies_to: all
 Linux is running. These are the steps every PS5 Linux user ends up doing, in the order that avoids the most trouble. None of them are generic Linux setup; for your distro's own first steps, use its documentation.
 
 :::tip[PS5 Bazzite Deck]
-All of this is already done on [PS5 Bazzite Deck](/installation/bazzite-deck) apart from changing the password and the optional items. Skip to [Set the GPU memory](#5-set-the-gpu-memory) if you want more than the default.
+All of this is already done on [PS5 Bazzite Deck](/choose/bazzite-deck) apart from changing the password and the optional items. Skip to [Set the GPU memory](#5-set-the-gpu-memory) if you want more than the default.
 :::
 
 ## 1. Change the password and check SSH
@@ -86,12 +86,6 @@ Two parameters on the boot partition are worth a look, see [Kernel parameters](/
 - **Graphical glitches in a game:** add `RADV_DEBUG=nohiz %command%` to that game's Steam launch options. Don't set it globally: it costs performance in every game, and most don't need it, see [GPU performance tips](/hardware/gpu#performance-tips).
 - **Steam:** not the Snap package, see [Gaming performance](#steam-and-proton).
 - **Newer Mesa (Ubuntu only):** the PS5's GPU (GFX1013) picks up fixes in newer Mesa releases, and Ubuntu's own packages lag behind. The kisak PPA is the usual source there: `sudo add-apt-repository ppa:kisak/kisak-mesa` then `sudo apt upgrade`. Arch and Fedora ship recent Mesa already, and on Bazzite it comes with the image.
-
-## Where to go next
-
-- [Move Linux to an M.2 SSD](/installation/m2-install)
-- [Display output](/hardware/hdmi#display-settings)
-- [Gaming performance](#gaming-performance)
 
 ## Gaming performance {#gaming-performance}
 
@@ -281,3 +275,8 @@ sudo sysctl vm.swappiness=10
 ```
 
 To make it permanent, put `vm.swappiness=10` in a file under `/etc/sysctl.d/`. With zram, a higher value is normal, so leave the default if you use it.
+
+## Next steps
+
+- **PS5 Bazzite Deck:** [After installing: PS5 Bazzite Deck](/post-install/bazzite)
+- **Official or self-built images:** [Other images](/post-install/not-bazzite-deck), then [Distro notes](/post-install/distro-notes)

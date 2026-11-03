@@ -26,12 +26,12 @@ Change these in the PS5 OS **before** you jailbreak and send the Linux loader. A
 
 ## Hardware
 
-- A USB drive of 64 GB or more for the official and community images (32 GB for [PS5 Bazzite Deck](/installation/bazzite-deck)). An external SSD boots and loads much faster than a flash drive. Flashing erases the drive, so its current contents and format don't matter.
+- A USB drive of 64 GB or more for the official and community images (32 GB for [PS5 Bazzite Deck](/choose/bazzite-deck)). An external SSD boots and loads much faster than a flash drive. Flashing erases the drive, so its current contents and format don't matter.
 - A USB keyboard and mouse for the first setup.
 
 ## Host machine
 
-A PC that can write the image to the drive and send the loader: Linux, or Windows with WSL. You need `dd` (or Rufus on Windows) for the image and `socat` for the loader. Docker is only needed if you [build an image yourself](/installation/linux-image#build-your-own-image).
+A PC that can write the image to the drive and send the loader: Linux, or Windows with WSL. You need `dd` (or Rufus on Windows) for the image and `socat` for the loader. Docker is only needed if you [build an image yourself](/choose/build-your-own).
 
 ## Linux knowledge
 
@@ -93,3 +93,7 @@ Download the matching PUP file from [darthsternie.net/ps5-firmwares](https://dar
 :::warning
 A PS5 can't be downgraded. Only ever update to the exact version you want.
 :::
+
+## Next steps
+
+**[Choose your image](/getting-started/which-image)**.

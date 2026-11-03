@@ -48,3 +48,7 @@ Details and troubleshooting: [Wi-Fi, Ethernet and Bluetooth](/hardware/wifi-blue
 ## 4. PS5 Pro: the GPU firmware
 
 The Pro's GPU needs its own firmware in the initrd. The `linux-ps5` package stages it; otherwise see [PS5 Pro](/hardware/ps5-pro).
+
+## Next steps
+
+**[Distro notes](/post-install/distro-notes)**: the commands for your package manager.

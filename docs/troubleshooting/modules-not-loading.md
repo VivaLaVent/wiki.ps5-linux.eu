@@ -44,3 +44,9 @@ DefaultDependencies=no
 ```
 
 Reboot, then run the check again. It should print nothing.
+
+## Next steps
+
+- [Hardware status](/hardware/matrix): what works on each model
+- [After installing](/post-install/all-distros)
+- [Troubleshooting & help](/troubleshooting/getting-help)

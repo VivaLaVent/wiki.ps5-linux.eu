@@ -13,7 +13,7 @@ The console's embedded controller (EMC) runs the fan through its own "autoservo"
 | Kernel | Default | Interface |
 | --- | --- | --- |
 | Upstream (current packages) and [rmuxnet's kernel](/advanced/kernel) | Kernel curve, on at boot. Nothing to install. | hwmon `ps5_fan`; `pwm1_enable` `2` is the curve. |
-| [PS5 Bazzite Deck](/installation/bazzite-deck) | Firmware control toward an 80 °C target, set by the driver at boot; `ps5-perf` can change it. | hwmon `ps5_fan` plus `target_temp`; `pwm1_enable` `2` is the curve, `3` the firmware. |
+| [PS5 Bazzite Deck](/choose/bazzite-deck) | Firmware control toward an 80 °C target, set by the driver at boot; `ps5-perf` can change it. | hwmon `ps5_fan` plus `target_temp`; `pwm1_enable` `2` is the curve, `3` the firmware. |
 | Older upstream kernels | Firmware control toward `target_temp`, 80 °C by default. The oldest kernels had no fan driver at all and left the fan off until `ps5_control --fan on`. | `target_temp` only. |
 
 ## hwmon driver
@@ -137,3 +137,9 @@ cat /sys/class/hwmon/hwmon*/temp*_input   # value in millidegrees Celsius
 On a PS5 Pro the SMU backend adds a GPU temperature of its own, see [PS5 Pro](/hardware/ps5-pro#gpu-driver).
 
 The GPU clock is reported by the devfreq driver of your kernel: look under `/sys/class/devfreq/` for the device name (`ps5-gpufreq` on current kernels) and read its `cur_freq`. At idle the clock sits at the governor's minimum.
+
+## Next steps
+
+- [Hardware status](/hardware/matrix): what works on each model
+- [After installing](/post-install/all-distros)
+- [Troubleshooting & help](/troubleshooting/getting-help)

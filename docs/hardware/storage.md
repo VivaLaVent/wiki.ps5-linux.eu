@@ -42,7 +42,7 @@ An external GPU on an M.2-to-PCIe riser does not work on the PS5. The question c
 
 ### USB drive (required)
 
-Use a drive of **64 GB or more** for the official and community images (32 GB for [PS5 Bazzite Deck](/installation/bazzite-deck)). If you only have a small drive, see [No 64 GB USB drive?](/installation/m2-install#no-64-gb-usb-drive).
+Use a drive of **64 GB or more** for the official and community images (32 GB for [PS5 Bazzite Deck](/choose/bazzite-deck)). If you only have a small drive, see [No 64 GB USB drive?](/installation/m2-install#no-64-gb-usb-drive).
 
 An external SSD is much faster than a flash drive. If an SSD in an enclosure isn't detected, change the cable (USB 3.x) and the port before you suspect the drive.
 
@@ -190,3 +190,9 @@ Every report on 4.xx worked. On later firmware most reports fail, but the same s
 | ✅ | 13.40 | KingSpec Series NX-4TB 2280 | 4 TB | bringus | |
 | ❌ | 13.40 | SK hynix HFM256GDHTNI-87A0B | 256 GB | bringus | |
 | ❌ | 13.40 | SK hynix HFM256GDHTNI-87A0B | 256 GB | personal | SSSTC CL4-3D512-Q11 |
+
+## Next steps
+
+- [Hardware status](/hardware/matrix): what works on each model
+- [After installing](/post-install/all-distros)
+- [Troubleshooting & help](/troubleshooting/getting-help)

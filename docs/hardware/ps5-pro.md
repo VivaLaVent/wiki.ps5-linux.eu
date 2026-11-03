@@ -79,3 +79,9 @@ A deliberate reset (`cat /sys/kernel/debug/dri/0/amdgpu_gpu_recover`) fails the 
 ```bash
 sudo sync; echo s | sudo tee /proc/sysrq-trigger; echo u | sudo tee /proc/sysrq-trigger; echo b | sudo tee /proc/sysrq-trigger
 ```
+
+## Next steps
+
+- [Hardware status](/hardware/matrix): what works on each model
+- [After installing](/post-install/all-distros)
+- [Troubleshooting & help](/troubleshooting/getting-help)

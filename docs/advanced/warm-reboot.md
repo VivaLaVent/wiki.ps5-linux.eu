@@ -50,3 +50,9 @@ Giving Linux its own Bluetooth address (the [one DualSense for both systems](/ha
 :::note[PS5 Bazzite Deck]
 The image has no `kexec-tools`, so it uses the `kexec_file_load` system call from a small script and hooks it into `reboot.target`, which makes a plain `sudo reboot` a warm restart once `ps5-warm-reboot on` is set. That is an implementation detail of the image, not a requirement: on other images the two commands above are all you need. `ps5-reboot-to-ps5` restarts into the PS5 OS once. Source: [`files/ps5-kexec`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/files/ps5-kexec).
 :::
+
+## Next steps
+
+- [Hardware status](/hardware/matrix): what works on each model
+- [After installing](/post-install/all-distros)
+- [Troubleshooting & help](/troubleshooting/getting-help)

@@ -45,7 +45,7 @@ What is known to be broken or limited, with the workaround where there is one, a
 
 ### CachyOS image doesn't boot
 
-The official CachyOS image can panic right after the orange LED stops blinking. Nobody has filed an issue with the panic text yet; if it happens to you, open one on [ps5-linux-image](https://github.com/ps5-linux/ps5-linux-image/issues) so it can be linked here. Until then, use Ubuntu, Arch or [PS5 Bazzite Deck](/installation/bazzite-deck). The [package repository](/advanced/package-repository#fix-scripts-for-older-images) has a `fix-cachyos.sh` for images that do boot.
+The official CachyOS image can panic right after the orange LED stops blinking. Nobody has filed an issue with the panic text yet; if it happens to you, open one on [ps5-linux-image](https://github.com/ps5-linux/ps5-linux-image/issues) so it can be linked here. Until then, use Ubuntu, Arch or [PS5 Bazzite Deck](/choose/bazzite-deck). The [package repository](/advanced/package-repository#fix-scripts-for-older-images) has a `fix-cachyos.sh` for images that do boot.
 
 Individual reports of CachyOS running with a current upstream kernel exist, but the wiki editors haven't confirmed one. Treat them as a lead, not as a fix.
 
@@ -61,7 +61,7 @@ Two different problems get reported under this name.
 
 **Official and community images:** some users who updated the kernel on an M.2 install got a black screen afterwards and had to go back to the kernel the image shipped with. There is no tracked issue and no confirmed cause, and it hasn't been re-tested with the current upstream packages. If you hit it, report it on [ps5-linux-patches](https://github.com/ps5-linux/ps5-linux-patches/issues) with `dmesg`. To go back, reinstall the previous kernel package through a chroot, see [Recovery via chroot](/troubleshooting/recovery).
 
-**PS5 Bazzite Deck:** the kernel and initrd always have to come from the USB drive's `boot` partition, which is where the update script puts them. A loader that takes `bzImage` and `initrd.img` from somewhere else (a second drive, a copy on the M.2) starts the **old kernel with the new modules**: the network is gone and the log is full of `disagrees about version of symbol`. Boot with only the USB drive's boot partition in reach of the loader, see [Install to the internal M.2](/installation/bazzite-deck#install-to-the-internal-m2).
+**PS5 Bazzite Deck:** the kernel and initrd always have to come from the USB drive's `boot` partition, which is where the update script puts them. A loader that takes `bzImage` and `initrd.img` from somewhere else (a second drive, a copy on the M.2) starts the **old kernel with the new modules**: the network is gone and the log is full of `disagrees about version of symbol`. Boot with only the USB drive's boot partition in reach of the loader, see [Install to the internal M.2](/installation/m2-install#ps5-bazzite-deck).
 
 ### Rest mode error, back to the PS5 login screen
 
@@ -76,7 +76,7 @@ Fix: plug the boot drive directly into a fast port, with nothing else on the fas
 
 ### What are the default username and password?
 
-It depends on the image. The official CachyOS image logs in as `steam` with the password `steam` and the hostname `ps5`. [PS5 Bazzite Deck](/installation/bazzite-deck) uses `ps5` for both. Ubuntu asks you to create a user on the first boot, see [First boot](/installation/first-boot). Change the password with `passwd` right after the first login: SSH with password login is on by default on most images.
+It depends on the image. The official CachyOS image logs in as `steam` with the password `steam` and the hostname `ps5`. [PS5 Bazzite Deck](/choose/bazzite-deck) uses `ps5` for both. Ubuntu asks you to create a user on the first boot, see [First boot](/installation/first-boot). Change the password with `passwd` right after the first login: SSH with password login is on by default on most images.
 
 ### Which USB port do I use for the Linux drive?
 
@@ -104,7 +104,7 @@ Not in the usual sense. Nothing is installed on the console: you run the exploit
 
 ### Can I use rest mode or sleep with Linux?
 
-Shutting Linux down puts the PS5 into rest mode, and the next power-up starts the PS5 OS; Linux can't resume from the console's rest mode. What does exist: suspend-to-idle (sleep and wake without leaving Linux), an open pull request on rmuxnet's repository that [PS5 Bazzite Deck](/installation/bazzite-deck) ships, and the warm restart (`kexec`) that skips the PS5 OS and the loader, see [Restart straight into Linux](/advanced/warm-reboot). Both are experimental.
+Shutting Linux down puts the PS5 into rest mode, and the next power-up starts the PS5 OS; Linux can't resume from the console's rest mode. What does exist: suspend-to-idle (sleep and wake without leaving Linux), an open pull request on rmuxnet's repository that [PS5 Bazzite Deck](/choose/bazzite-deck) ships, and the warm restart (`kexec`) that skips the PS5 OS and the loader, see [Restart straight into Linux](/advanced/warm-reboot). Both are experimental.
 
 ### Does Linux change the internal SSD?
 
@@ -129,3 +129,9 @@ Either the power button was pressed before the orange LED stopped blinking, USB 
 ### Linux won't boot after running the exploit
 
 Send the Linux loader as the only payload. If etaHEN, kstuff or anything else ran first, restart the PS5, jailbreak again and send only the loader, see [Booting Linux](/installation/booting#send-the-linux-loader).
+
+## Next steps
+
+- [Hardware status](/hardware/matrix): what works on each model
+- [After installing](/post-install/all-distros)
+- [Troubleshooting & help](/troubleshooting/getting-help)

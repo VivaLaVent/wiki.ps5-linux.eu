@@ -11,15 +11,24 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Before you install',
       collapsed: false,
-      items: ['getting-started/overview', 'getting-started/prerequisites', 'getting-started/which-image'],
+      items: [
+        'getting-started/overview',
+        'getting-started/prerequisites',
+        {
+          type: 'category',
+          label: 'Choose your image',
+          link: {type: 'doc', id: 'getting-started/which-image'},
+          collapsed: false,
+          items: ['choose/bazzite-deck', 'choose/official-images', 'choose/build-your-own'],
+        },
+      ],
     },
     {
       type: 'category',
       label: 'Install',
       collapsed: false,
       items: [
-        'installation/bazzite-deck',
-        'installation/linux-image',
+        'installation/flash',
         'installation/booting',
         'installation/first-boot',
         'installation/m2-install',

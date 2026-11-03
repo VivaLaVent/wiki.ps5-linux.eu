@@ -113,7 +113,7 @@ sudo dnf upgrade -y linux-ps5 ps5-linux-tools --setopt=gpgcheck=0
 ```
 
 :::note
-[PS5 Bazzite Deck](/installation/bazzite-deck) has its own kernel and update process; follow its release notes instead.
+[PS5 Bazzite Deck](/choose/bazzite-deck) has its own kernel and update process; follow its release notes instead.
 :::
 
 ## Update the kernel later
@@ -176,3 +176,9 @@ One-line fixes for older images, or when something wasn't set up properly on the
 **`/boot/efi exists but is not mounted, attempting to mount...` during install:** this is normal. If you also see `ERROR: could not mount EFI partition; aborting`, mount `/dev/disk/by-label/boot` at `/boot/efi` yourself and run the install again.
 
 **No Wi-Fi networks on Bazzite (NetworkManager stuck):** Bazzite uses `iwd` as the Wi-Fi backend by default, which doesn't work with the IW620 driver. Switch back to `wpa_supplicant` with `ujust toggle-iwd` (choose "disable iwd"), then run `sudo systemctl restart NetworkManager`. Current images already include the fix.
+
+## Next steps
+
+- [Hardware status](/hardware/matrix): what works on each model
+- [After installing](/post-install/all-distros)
+- [Troubleshooting & help](/troubleshooting/getting-help)

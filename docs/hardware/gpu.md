@@ -435,3 +435,9 @@ Higher is better. HEVC VCN results use a normal GOP with P-frames, which is why 
 | File bitrate | Includes container overhead. |
 | Repeats | Decoding and 12 Mbps tests: two runs. Other bitrates: one run. |
 | Exact frames | Decoded pixels match software decoding exactly. |
+
+## Next steps
+
+- [Hardware status](/hardware/matrix): what works on each model
+- [After installing](/post-install/all-distros)
+- [Troubleshooting & help](/troubleshooting/getting-help)

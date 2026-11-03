@@ -48,7 +48,7 @@ ps5-linux is a community project. Core contributors:
 | AdiX, wfelix | Diagnosis and fix for a controller refused in a loop |
 | [NotHavocc](https://github.com/NotHavocc/ps5-hwcon-plugin) | PS5 hardware control plugin |
 | [abrocoma](https://github.com/abrocoma) | CachyOS notes: display link lock, DualSense reconnect, boot-to-desktop and systemd ordering fixes |
-| [Gilles (VivaLaVent)](https://github.com/VivaLaVent) | [PS5 Bazzite Deck](/installation/bazzite-deck) and this wiki |
+| [Gilles (VivaLaVent)](https://github.com/VivaLaVent) | [PS5 Bazzite Deck](/choose/bazzite-deck) and this wiki |
 
 ## Upstreamed kernel and Mesa changes
 
@@ -58,3 +58,9 @@ ps5-linux is a community project. Core contributors:
 ## Community
 
 - [Discord](https://discord.gg/ps5linux): help, tips, development and bug reports; PS5 Bazzite Deck help and testing in `#bazzite-problems` and `#bazzite-general`
+
+## Next steps
+
+- [Hardware status](/hardware/matrix): what works on each model
+- [After installing](/post-install/all-distros)
+- [Troubleshooting & help](/troubleshooting/getting-help)

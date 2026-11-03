@@ -27,3 +27,9 @@ A short dropout about every 40 seconds with an active DisplayPort-to-HDMI adapte
 ## HDMI audio delay
 
 Sound that lags behind the picture was a kernel bug and has been fixed in the PS5 patch set; update first. If the lag remains, change the output format in the sound settings from **Digital Stereo (HDMI)** to **Digital Surround 5.1 (HDMI)**, which has cured the remaining cases, most noticeably in video playback.
+
+## Next steps
+
+- [Hardware status](/hardware/matrix): what works on each model
+- [After installing](/post-install/all-distros)
+- [Troubleshooting & help](/troubleshooting/getting-help)

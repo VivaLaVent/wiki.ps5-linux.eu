@@ -11,7 +11,7 @@ applies_to: not-bazzite-deck
 If your install no longer boots but you have access to another Linux system (booted from another USB drive, or another machine), you can chroot into your install to fix it.
 
 :::note[Not for PS5 Bazzite Deck]
-This page is for installs you manage with a package manager. PS5 Bazzite Deck users: your image repairs itself with its update command, see [PS5 Bazzite Deck](/installation/bazzite-deck#troubleshooting).
+This page is for installs you manage with a package manager. PS5 Bazzite Deck users: your image repairs itself with its update command, see [PS5 Bazzite Deck](/post-install/bazzite#troubleshooting).
 :::
 
 ## Find your partition
@@ -77,3 +77,9 @@ dpkg -i linux-ps5_<version>_amd64.deb
 ```
 
 When you're done, `exit` the chroot and unmount everything in reverse order, as in the M.2 example above.
+
+## Next steps
+
+- [Hardware status](/hardware/matrix): what works on each model
+- [After installing](/post-install/all-distros)
+- [Troubleshooting & help](/troubleshooting/getting-help)

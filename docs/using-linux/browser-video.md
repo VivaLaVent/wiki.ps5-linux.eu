@@ -37,3 +37,9 @@ On the original PS5 and the Slim the GPU has no load sensor in the kernel, so KD
 :::note[Not tested]
 The Chrome flags were reported on the official CachyOS image. The encoder flag turns on hardware encode, which only works well with H.264, see [Using it with FFmpeg](/hardware/gpu#using-it-with-ffmpeg).
 :::
+
+## Next steps
+
+- [Hardware status](/hardware/matrix): what works on each model
+- [After installing](/post-install/all-distros)
+- [Troubleshooting & help](/troubleshooting/getting-help)

@@ -270,7 +270,7 @@ A capture card is just another display to the kernel, see [Capture cards](/hardw
 
 ## Black screen and display recovery {#display-recovery}
 
-When the console is running but the TV shows nothing (a wrong mode, or a mode the TV doesn't accept), you can still reach it and change the mode. This page works on any image; the parts that only apply to [PS5 Bazzite Deck](/installation/bazzite-deck) are marked.
+When the console is running but the TV shows nothing (a wrong mode, or a mode the TV doesn't accept), you can still reach it and change the mode. This page works on any image; the parts that only apply to [PS5 Bazzite Deck](/choose/bazzite-deck) are marked.
 
 ### 1. Get a shell
 
@@ -492,3 +492,9 @@ The output shows `Preferred: 4 0x1e` when the lock is active. A few `CR` errors 
 ### Use a safe mode as well
 
 Keep `video=DP-1:1920x1080@60` in `cmdline.txt` so the first mode set at boot is one every display accepts. Change the resolution from the desktop once Linux is running. See [Kernel setup](/advanced/kernel#kernel-parameters-cmdlinetxt).
+
+## Next steps
+
+- [Hardware status](/hardware/matrix): what works on each model
+- [After installing](/post-install/all-distros)
+- [Troubleshooting & help](/troubleshooting/getting-help)
