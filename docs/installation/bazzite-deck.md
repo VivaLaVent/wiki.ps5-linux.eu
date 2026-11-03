@@ -11,7 +11,7 @@ description: Install PS5 Bazzite Deck, a Bazzite image that boots the PS5 straig
 It runs from a USB drive (or the M.2 slot) and is started by the Linux loader, like any other image. The PS5 itself is not modified: when you restart or power off, the PS5 starts its own system again, even with the drive still plugged in.
 
 - **Download:** [releases](https://github.com/VivaLaVent/ps5-bazzite-deck/releases)
-- **Help and testing:** [Discord](https://discord.gg/ps5linux), channel `#bazzite-problems`
+- **Help and testing:** [Discord](https://discord.gg/qGcuTgBBYU), channel `#bazzite-problems`
 - **Support the project:** [Ko-fi](https://ko-fi.com/vivalavent)
 
 :::tip[Which version?]
@@ -164,10 +164,11 @@ These are community-made and not part of the image. They need [Decky Loader](htt
 | Plugin | What it does |
 | --- | --- |
 | [PS5 hardware control](https://github.com/NotHavocc/ps5-hwcon-plugin) | Fan target or curve, live temperatures, CPU and GPU governors and clocks, LED presets. It sets the same things as `ps5-perf`: whichever was set last applies. Use a current image release: one pre-release had the fan modes swapped, and in some releases the fan target fell back to 50 °C after sleep (both fixed). There is also a desktop version, [ps5-hwcon-gui](https://github.com/NotHavocc/ps5-hwcon-gui). |
+| [PS5 Bazzite Updater](https://github.com/cmartinespinosa/decky-ps5-bazzite-updater) | Shows when a new release is out with its notes, installs it (the same update as in the release notes) and then powers off. Unofficial; full releases only. |
 
 ## Troubleshooting
 
-Ask in `#bazzite-problems` on [Discord](https://discord.gg/ps5linux) and attach the report from `ps5-report`. Without a network connection, copy the report to the USB drive's FAT32 partition and take it from there on your PC:
+Ask in `#bazzite-problems` on [Discord](https://discord.gg/qGcuTgBBYU) and attach the report from `ps5-report`. Without a network connection, copy the report to the USB drive's FAT32 partition and take it from there on your PC:
 
 ```bash
 E=$(for d in /boot/efi /efi; do sudo test -f $d/cmdline.txt && echo $d && break; done); sudo cp ~/ps5-report-*.txt $E/

@@ -14,11 +14,6 @@ const config: Config = {
   title: 'PS5 Linux Wiki',
   tagline: 'Guides, hardware notes and troubleshooting for running Linux on the PlayStation 5',
   favicon: 'img/logo.svg',
-  // PNG/ICO fallbacks: some browsers ignore or long-cache an SVG favicon
-  headTags: [
-    {tagName: 'link', attributes: {rel: 'icon', type: 'image/png', sizes: '32x32', href: '/img/favicon-32.png'}},
-    {tagName: 'link', attributes: {rel: 'apple-touch-icon', href: '/img/apple-touch-icon.png'}},
-  ],
 
   future: {
     v4: true,
@@ -76,7 +71,6 @@ const config: Config = {
         indexBlog: false,
         docsRouteBasePath: '/',
         highlightSearchTermsOnTargetPage: true,
-        searchBarShortcutHint: false,
       },
     ],
   ],

@@ -55,14 +55,6 @@
   --docusaurus-highlighted-code-line-bg: rgba(147, 51, 234, 0.25);
 }
 
-/* ---------- Footer: the same surface as the navbar ---------- */
-
-.footer--dark {
-  --ifm-footer-background-color: var(--wiki-surface);
-  border-top: 2px solid transparent;
-  border-image: var(--wiki-gradient) 1;
-}
-
 /* ---------- Navbar ---------- */
 
 .navbar {
