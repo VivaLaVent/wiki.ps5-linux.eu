@@ -13,7 +13,12 @@ The PS5-specific steps (first boot, built-in commands, updates, troubleshooting)
 
 ## Updating
 
-A full release updates an installed console from any earlier version in one command; each release's notes have it. Use the release marked **Latest**; releases marked **Pre-release** are test builds.
+Use the release marked **Latest**; releases marked **Pre-release** are test builds. How you update depends on the [form you run](/choose/bazzite-deck#legacy-or-bootc); `ps5-report` shows it on its **Install** line.
+
+- **Legacy:** run the update command from the release's notes, on the PS5 in a terminal or over SSH. It makes a backup, installs the new kernel, drivers and settings, and prints an undo command. Then power off and start with the loader.
+- **bootc:** Steam's update button (**Settings → System**), or `sudo bootc upgrade` in a terminal. The new version downloads in the background and takes over at the next start. Restart, then start with **bazzite-bootc-loader**. `sudo bootc rollback` goes back to the previous version.
+
+If the Latest release gives you trouble, the previous stable version is [v1.8.9](https://github.com/VivaLaVent/ps5-bazzite-deck/releases/tag/v1.8.9): on Legacy, run the update command with `v1.8.9` instead of the newer version, or flash its image.
 
 ## Built-in commands
 
@@ -22,7 +27,7 @@ A full release updates an installed console from any earlier version in one comm
 | --- | --- |
 | `ps5-report` | Collects your hardware details and the relevant logs into one file for a bug report. It only reads. |
 | `ps5-perf` | CPU boost and the fan target (the console's firmware control, 80 °C by default). `ps5-perf status` shows the fan mode and speed, see [Fan control](/hardware/fan). |
-| `ps5-warm-reboot` | Restarts straight back into Linux, without the PS5 OS and the loader. Experimental, `on`/`off`. |
+| `ps5-warm-reboot` | Restarts straight back into Linux, without the PS5 OS and the loader. Off by default, `on`/`off`/`status`, see [Warm restarts](/post-install/bazzite-warm-reboot). |
 | `ps5-bt-address` | One DualSense for the PS5 and Linux, on by default. `status`, `on`, `off`. |
 
 Sleep (suspend-to-idle) is built in: a short press of the power button or Steam's **Sleep** puts the console to sleep and wakes it again. The GPU stays powered, so the saving is modest; it is not the PS5 OS's rest mode, and a DualSense can't wake the console.
@@ -87,8 +92,8 @@ The output folder is printed at the end of the build.
 | [Steam Gaming Mode quirks](https://docs.bazzite.gg/Handheld_and_HTPC_edition/quirks/) | Yes |
 | [Installing software](https://docs.bazzite.gg/Installing_and_Managing_Software/): Bazaar (Flatpak), Homebrew, Distrobox, AppImage | Yes |
 | [ujust commands](https://docs.bazzite.gg/Installing_and_Managing_Software/ujust/) | Mostly; skip the ones about updates and the bootloader |
-| [Updates, rollbacks and rebasing](https://docs.bazzite.gg/Installing_and_Managing_Software/Updates_Rollbacks_and_Rebasing/), `rpm-ostree`, Bazzite Updater | **No.** PS5 Bazzite Deck isn't an ostree install ("This system was not booted via libostree"). Update with its own command, see [PS5 Bazzite Deck](/choose/bazzite-deck) |
-| [Installation guides](https://docs.bazzite.gg/General/Installation_Guide/) | **No.** Install from the PS5 Bazzite Deck image |
+| [Updates, rollbacks and rebasing](https://docs.bazzite.gg/Installing_and_Managing_Software/Updates_Rollbacks_and_Rebasing/), `rpm-ostree`, Bazzite Updater | **Legacy: no.** It isn't an ostree install ("This system was not booted via libostree"); update with its own command. **bootc: partly.** `sudo bootc upgrade`, `sudo bootc rollback`, `sudo bootc status` and `rpm-ostree kargs` work; don't rebase to Bazzite's own images, they can't start on the PS5. See [Updating](#updating) |
+| [Installation guides](https://docs.bazzite.gg/General/Installation_Guide/) | **No.** Install from a PS5 Bazzite Deck image, see [Legacy or bootc](/choose/bazzite-deck#legacy-or-bootc) |
 
 PS5 Bazzite Deck is a community project, not made or supported by the Bazzite project. Ask PS5 questions on [Discord](https://discord.gg/ps5linux), not in Bazzite's channels.
 

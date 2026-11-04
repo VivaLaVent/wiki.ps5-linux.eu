@@ -38,7 +38,8 @@ The Linux loader is the payload that boots Linux. The [official loader](https://
 | Loader | For |
 | --- | --- |
 | [ps5-linux/ps5-linux-loader](https://github.com/ps5-linux/ps5-linux-loader/releases/) | Everything: original PS5, Slim and Pro. Use this one. For a PS5 Pro, build it from `main`: only `main` dumps the Pro's GPU firmware, see [PS5 Pro](/hardware/ps5-pro#gpu-firmware). |
-| [rmuxwashere/ps5-linux-loader](https://github.com/rmuxwashere/ps5-linux-loader/releases) | Fork that [PS5 Bazzite Deck](/choose/bazzite-deck) was tested with. Its newer-firmware and Pro fixes have been sent upstream; it doesn't dump the Pro's GPU firmware. |
+| **bazzite-bootc-loader**, on every [PS5 Bazzite Deck release](https://github.com/VivaLaVent/ps5-bazzite-deck/releases) since v2.5 | The official loader built from `main` for each release, plus support for the boot entries of PS5 Bazzite Deck's bootc form. Needed for bootc; starts every other image like the official loader. |
+| [rmuxwashere/ps5-linux-loader](https://github.com/rmuxwashere/ps5-linux-loader/releases) | Fork that PS5 Bazzite Deck was tested with up to v1.8.9. Its newer-firmware and Pro fixes have been sent upstream; it doesn't dump the Pro's GPU firmware. |
 | [gzimbric/ps5-linux-loader](https://github.com/gzimbric/ps5-linux-loader), [Wigglez-sudo/12.xx-linux-loader](https://github.com/Wigglez-sudo/12.xx-linux-loader) | Older forks for the Pro and for newer firmware. Merged upstream; kept here for reference. |
 
 The pinned messages in the `#loader` channel on [Discord](https://discord.gg/ps5linux) point to the current payload.

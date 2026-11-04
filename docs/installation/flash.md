@@ -9,9 +9,9 @@ applies_to: all
 
 # Flash the image to USB
 
-You have an image file from [Choose your image](/getting-started/which-image): `ps5-bazzite-deck.img`, or an official `.img.xz`.
+You have an image file from [Choose your image](/getting-started/which-image): a PS5 Bazzite Deck `.img`, or an official `.img.xz`.
 
-The drive must be **32 GB or larger for PS5 Bazzite Deck, 64 GB or larger for the official images**; an external SSD makes everything faster. Flashing erases the drive.
+The drive must be **32 GB or larger for PS5 Bazzite Deck (Legacy), 64 GB or larger for its bootc form and for the official images**; an external SSD makes everything faster. Flashing erases the drive.
 
 **Linux or macOS:**
 
@@ -31,7 +31,7 @@ sync
 Double-check the target device. `dd` overwrites whatever you point it at without asking.
 :::
 
-**Windows:** use [Rufus](https://rufus.ie/). balenaEtcher, which some READMEs suggest, has produced drives that don't boot with these images.
+**Windows:** use [Rufus](https://rufus.ie/). If it asks how to write the image, choose **DD Image mode**. balenaEtcher, which some READMEs suggest, has produced drives that don't boot with these images.
 
 ## Plug the drive into the PS5
 
@@ -39,10 +39,48 @@ Use a fast port, see [USB ports](/hardware/storage#usb-ports); the slow USB 2.0 
 
 ## Optional: edit cmdline.txt from Windows
 
+The kernel command line lives in `cmdline.txt` on the small FAT32 boot partition of the USB drive. See [Boot options](/post-install/boot-options) for what you can put in it.
 
-The kernel command line lives in `cmdline.txt` on the FAT32 partition of the USB drive. See [Kernel parameters](/post-install/boot-options) for what you can put in it.
+Windows doesn't give that partition a drive letter, and File Explorer refuses to open it even when it has one (on the bootc form it is an EFI system partition). Give it a letter with `diskpart`, then edit it with Explorer++.
 
-**Without WSL:** use [Explorer++](https://explorerplusplus.com/) (run it as administrator). It can open the FAT32 EFI partition where `cmdline.txt` lives.
+:::warning[Windows offers to format the drive]
+When you plug in a Linux drive, Windows may ask to format a disk it can't read. Always choose **Cancel**: formatting erases the Linux install.
+:::
+
+1. **Open diskpart.** Start → type `cmd` → **Run as administrator**, then:
+
+   ```text
+   diskpart
+   list disk
+   ```
+
+2. **Select the USB drive.** Find it in the list by its size, and use its number in place of `<n>`:
+
+   ```text
+   select disk <n>
+   list partition
+   ```
+
+   Check the size twice: selecting the wrong disk gives the letter to a partition of your PC's own drive.
+
+3. **Give the boot partition a letter.** It is the small partition of a few hundred MB, often listed as **System**. Use its number in place of `<n>`:
+
+   ```text
+   select partition <n>
+   assign letter=P
+   exit
+   ```
+
+4. **Edit cmdline.txt with Explorer++.** Download [Explorer++](https://explorerplusplus.com/) (it runs without installing), right-click `Explorer++.exe` → **Run as administrator**, and open `P:\`. Right-click `cmdline.txt` → **Open With** → **Notepad**. Keep it on **one single line**, add or remove the option, and save.
+
+5. **Remove the letter again** before you unplug the drive. In an administrator Command Prompt:
+
+   ```text
+   diskpart
+   select volume P
+   remove letter=P
+   exit
+   ```
 
 **With WSL:** attach the drive to WSL, then edit the file from Linux.
 

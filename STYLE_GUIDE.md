@@ -83,6 +83,8 @@ Use these exact forms. If you see another form, change it.
 | PS5, PS5 Slim, PS5 Pro | PS5s, Ps5, "Playstation" |
 | PS5 OS (the console's own system software) | PS5 system, stock firmware |
 | PS5 Bazzite Deck | Bazzite Deck, Bazzite-Deck, the Bazzite image |
+| Legacy and bootc (PS5 Bazzite Deck's two forms; bootc in lower case) | classic, BootC, the ostree version |
+| bazzite-bootc-loader | bootc loader, Bazzite loader |
 | Linux loader (the payload that boots Linux) | the exploit, the payload |
 | Wi-Fi | WiFi, wifi, Wifi (except in commands, file names and quoted log lines) |
 | M.2 | M2, m.2 |

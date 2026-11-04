@@ -25,6 +25,14 @@ Two small files on the USB drive's FAT32 boot partition control how Linux starts
   ```
 
 - **From a PC:** plug the USB drive in and open the small FAT32 partition, see [Edit cmdline.txt from Windows](/installation/flash#optional-edit-cmdlinetxt-from-windows).
+- **PS5 Bazzite Deck, bootc form:** `cmdline.txt` is written from the system's own kernel arguments at every start and shutdown. Add an option the bootc way, so it survives updates and rollbacks:
+
+  ```bash
+  sudo rpm-ostree kargs --append=amdgpu.force_1080p=1      # add
+  sudo rpm-ostree kargs --delete=amdgpu.force_1080p=1      # remove
+  ```
+
+  An option added to `cmdline.txt` from a PC, for example when the screen stays black, is kept too.
 
 Changes take effect at the next start with the loader.
 
