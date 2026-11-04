@@ -43,12 +43,7 @@ const sidebars: SidebarsConfig = {
         'post-install/boot-options',
         'post-install/not-bazzite-deck',
         'post-install/distro-notes',
-        {
-          type: 'category',
-          label: 'PS5 Bazzite Deck',
-          link: {type: 'doc', id: 'post-install/bazzite'},
-          items: ['post-install/bazzite-warm-reboot'],
-        },
+        'post-install/bazzite',
         'using-linux/dualsense',
         'using-linux/audio',
         'using-linux/browser-video',

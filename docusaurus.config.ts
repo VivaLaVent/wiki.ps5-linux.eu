@@ -75,6 +75,7 @@ const config: Config = {
         // pages merged in the November 2026 restructure; old links keep working
         redirects: [
           {from: '/installation/bazzite-deck', to: '/choose/bazzite-deck'},
+          {from: '/post-install/bazzite-warm-reboot', to: '/advanced/warm-reboot'},
           {from: '/installation/linux-image', to: '/choose/official-images'},
           {from: '/using-linux/display', to: '/hardware/hdmi'},
           {from: '/troubleshooting/display-recovery', to: '/hardware/hdmi'},
