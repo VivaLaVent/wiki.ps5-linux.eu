@@ -36,21 +36,22 @@ Linux only runs on exploitable system software versions. Read [Supported firmwar
 
 **Before you install**
 
-1. [What you need](/getting-started/prerequisites): firmware, loader, drive, and the PS5 settings
-2. [Choose your image](/getting-started/which-image): [PS5 Bazzite Deck](/choose/bazzite-deck) (recommended), an [official image](/choose/official-images), or [your own build](/choose/build-your-own); download and verify it
+1. [What you need](/getting-started/prerequisites): firmware, drive and a PC
+2. [Get a PS5 Linux loader](/getting-started/loader)
+3. [Choose your image](/getting-started/which-image): [PS5 Bazzite Deck](/choose/bazzite-deck) (recommended), an [official image](/choose/official-images), or [your own build](/choose/build-your-own); download and verify it
 
 **Install**
 
-3. [Flash the image to USB](/installation/flash)
-4. Jailbreak your PS5 (not covered by this wiki), then [start Linux with the loader](/installation/booting)
-5. [First boot](/installation/first-boot)
+4. [Flash the image to USB](/installation/flash)
+5. Jailbreak your PS5 (not covered by this wiki), check two PS5 settings, then [start Linux with the loader](/installation/booting)
+6. [First boot](/installation/first-boot)
 
 **After installing**
 
-6. [All distros](/post-install/all-distros), then [PS5 Bazzite Deck](/post-install/bazzite) or [other images](/post-install/not-bazzite-deck)
+7. [All distros](/post-install/all-distros), then [PS5 Bazzite Deck](/post-install/bazzite) or [other images](/post-install/not-bazzite-deck)
 
 Optional, once Linux runs: [move it to an M.2 SSD](/installation/m2-install).
 
 ## Next steps
 
-**[What you need](/getting-started/prerequisites)**: firmware, loader, drive and the PS5 settings.
+**[What you need](/getting-started/prerequisites)**: firmware, drive and a PC.

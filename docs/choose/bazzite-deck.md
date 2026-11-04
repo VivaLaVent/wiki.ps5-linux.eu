@@ -65,12 +65,12 @@ Both chips support 1080p60, 1080p120, 1440p60 and 4K60, when the display can do 
 ## What you need for this image
 
 
-- A PS5 on a [supported firmware](/getting-started/prerequisites#firmware), and [bazzite-bootc-loader](/getting-started/prerequisites#which-loader).
+- A PS5 on a [supported firmware](/getting-started/prerequisites#firmware), and [bazzite-bootc-loader](/getting-started/loader#which-loader).
 - An original PS5, a PS5 Slim or a PS5 Pro.
 - **etaHEN and kstuff off:** they don't work together with the Linux loader (freezes, especially when going to sleep).
 - A USB drive of **64 GB or more**, ideally an external SSD (much faster than a stick).
 - A PC to download and flash the image. A USB keyboard is handy for the first setup.
-- The [required PS5 settings](/getting-started/prerequisites#required-ps5-settings): USB power in rest mode set to **Always**, and HDMI Device Link **off** (otherwise you'll usually get a black screen).
+- The [required PS5 settings](/installation/booting#required-ps5-settings): USB power in rest mode set to **Always**, and HDMI Device Link **off** (otherwise you'll usually get a black screen).
 
 ## Download and extract
 

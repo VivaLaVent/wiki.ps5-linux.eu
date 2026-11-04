@@ -8,7 +8,7 @@ applies_to: all
 
 # Booting Linux
 
-With the image on the drive, booting is three things: the drive in the right port, a jailbreak, and the Linux loader sent to the console. The LED tells you what the console is doing.
+With the image on the drive, booting is four things: the drive in the right port, a jailbreak, two PS5 settings, and the Linux loader sent to the console. The LED tells you what the console is doing.
 
 ## Plug the USB drive into the PS5
 
@@ -31,9 +31,23 @@ With an autoloader, put only the Linux loader `.elf` in `autoloader.txt`. Some s
 
 There is no permanent jailbreak: the console starts clean every time, so every Linux session begins with the exploit. Once the exploit has run, the PS5 listens on port `9021` for the Linux loader.
 
+## Required PS5 settings
+
+Check these in the PS5 OS before you send the Linux loader. A settings reset or a firmware reinstall clears them, so check them again after either. A missing setting here is behind most "Linux won't boot" reports.
+
+1. **Supply power to USB in rest mode** (required to boot):
+   **Settings → System → Power Saving → Features Available in Rest Mode → Supply Power to USB Ports → Always**
+2. **Disable HDMI Device Link** (required):
+   **Settings → HDMI → Enable HDMI Device Link → Off**
+
+**Recommended:**
+
+- Disable automatic updates: **Settings → System → System Software → System Software Update and Settings**
+- Disable automatic error reporting: **Settings → System → System Software → Report System Software Errors Automatically**
+
 ## Send the Linux loader
 
-Send the loader you downloaded in [Which loader](/getting-started/prerequisites#which-loader) to the PS5; it comes from the same release as the image you picked in [Choose your image](/getting-started/which-image). Replace `$PS5IP` with the IP address shown on the PS5's screen:
+Send the loader you downloaded in [Get a PS5 Linux loader](/getting-started/loader) to the PS5; it comes from the same release as the image you picked in [Choose your image](/getting-started/which-image). Replace `$PS5IP` with the IP address shown on the PS5's screen:
 
 ```bash
 socat -t 99999999 - TCP:$PS5IP:9021 < bazzite-bootc-loader-vX.Y.elf

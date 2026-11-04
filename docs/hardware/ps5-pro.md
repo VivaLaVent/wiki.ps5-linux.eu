@@ -16,7 +16,7 @@ The Pro GPU driver and its clock governor are upstream, in [ps5-linux/ps5-linux-
 
 ## GPU firmware
 
-The Pro's GPU needs its own firmware, eight files named `viola_*.bin` (`ce`, `me`, `mec`, `mec2`, `pfp`, `rlc`, `sdma`, `sdma1`). The [Linux loader](/getting-started/prerequisites#which-loader) dumps them from the PS5 OS to the boot partition, under `lib/firmware/amdgpu/`, every time it starts Linux.
+The Pro's GPU needs its own firmware, eight files named `viola_*.bin` (`ce`, `me`, `mec`, `mec2`, `pfp`, `rlc`, `sdma`, `sdma1`). The [Linux loader](/getting-started/loader#which-loader) dumps them from the PS5 OS to the boot partition, under `lib/firmware/amdgpu/`, every time it starts Linux.
 
 Only a loader that knows the Pro's firmware offsets does this: one built from the official [ps5-linux-loader](https://github.com/ps5-linux/ps5-linux-loader)'s `main` branch. bazzite-bootc-loader is built from `main` for every PS5 Bazzite Deck release, and each release lists its SHA-256. The official tagged releases predate the firmware dump, and so do the community forks. The official README lists the system software versions the dump supports.
 

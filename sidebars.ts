@@ -14,6 +14,7 @@ const sidebars: SidebarsConfig = {
       items: [
         'getting-started/overview',
         'getting-started/prerequisites',
+        'getting-started/loader',
         {
           type: 'category',
           label: 'Choose your image',

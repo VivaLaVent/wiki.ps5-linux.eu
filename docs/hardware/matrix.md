@@ -54,7 +54,7 @@ On [PS5 Bazzite Deck](/choose/bazzite-deck), `ps5-report` shows all three on its
 
 - **HDMI chip:** VERDE consoles don't get 1440p at 120 Hz, 4K at 120 Hz, HDR or VRR. How the chip works and why is on [HDMI chip](/hardware/hdmi); the feature table is on [PS5 Bazzite Deck](/choose/bazzite-deck#what-works-on-your-console).
 - **Wi-Fi/Bluetooth chip:** the IW620 uses the out-of-tree `mwifiex` port, built into rmuxnet's kernel, the `linux-ps5` package and PS5 Bazzite Deck, see [Wi-Fi](/hardware/wifi-bluetooth#wifi). The MediaTek chips use the in-kernel `mt7921e` (Slim) and `mt7925e` (Pro) drivers, which every current kernel builds; their Bluetooth needs fixes that PS5 Bazzite Deck has, see [Bluetooth](/hardware/wifi-bluetooth#bluetooth).
-- **PS5 Pro:** supported by the loader (see [Which loader](/getting-started/prerequisites#which-loader)). Its GPU ("Viola") needs its own firmware, which the loader dumps when it is built from the official repository's `main` branch, as bazzite-bootc-loader is; the kernel package and PS5 Bazzite Deck stage it into the initrd at boot. The GPU has 60 active compute units, so the [40 CU unlock](/hardware/gpu#40-cu-unlock) doesn't apply. Details on [PS5 Pro](/hardware/ps5-pro).
+- **PS5 Pro:** supported by the loader (see [Which loader](/getting-started/loader#which-loader)). Its GPU ("Viola") needs its own firmware, which the loader dumps when it is built from the official repository's `main` branch, as bazzite-bootc-loader is; the kernel package and PS5 Bazzite Deck stage it into the initrd at boot. The GPU has 60 active compute units, so the [40 CU unlock](/hardware/gpu#40-cu-unlock) doesn't apply. Details on [PS5 Pro](/hardware/ps5-pro).
 
 ## SoC (original PS5 and Slim)
 
