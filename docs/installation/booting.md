@@ -31,40 +31,12 @@ With an autoloader, put only the Linux loader `.elf` in `autoloader.txt`. Some s
 
 There is no permanent jailbreak: the console starts clean every time, so every Linux session begins with the exploit. Once the exploit has run, the PS5 listens on port `9021` for the Linux loader.
 
-## Which loader
-
-The Linux loader is the payload that boots Linux. The [official loader](https://github.com/ps5-linux/ps5-linux-loader/releases/) covers every supported console and firmware: the original PS5, the Slim and the Pro. Its README lists the versions; the Pro support and the newer firmware versions began as community forks and have been merged.
-
-| Loader | For |
-| --- | --- |
-| [ps5-linux/ps5-linux-loader](https://github.com/ps5-linux/ps5-linux-loader/releases/) | Everything: original PS5, Slim and Pro. Use this one. For a PS5 Pro, build it from `main`: only `main` dumps the Pro's GPU firmware, see [PS5 Pro](/hardware/ps5-pro#gpu-firmware). |
-| **bazzite-bootc-loader**, on every [PS5 Bazzite Deck release](https://github.com/VivaLaVent/ps5-bazzite-deck/releases) since v2.5 | The official loader built from `main` for each release, plus support for the boot entries of PS5 Bazzite Deck's bootc form. Needed for bootc; starts every other image like the official loader. |
-| [rmuxwashere/ps5-linux-loader](https://github.com/rmuxwashere/ps5-linux-loader/releases) | Fork that PS5 Bazzite Deck was tested with up to v1.8.9. Its newer-firmware and Pro fixes have been sent upstream; it doesn't dump the Pro's GPU firmware. |
-| [gzimbric/ps5-linux-loader](https://github.com/gzimbric/ps5-linux-loader), [Wigglez-sudo/12.xx-linux-loader](https://github.com/Wigglez-sudo/12.xx-linux-loader) | Older forks for the Pro and for newer firmware. Merged upstream; kept here for reference. |
-
-The pinned messages in the `#loader` channel on [Discord](https://discord.gg/ps5linux) point to the current payload.
-
 ## Send the Linux loader
 
-:::tip[PS5 Bazzite Deck]
-Send `bazzite-bootc-loader-vX.Y.elf` from the same [release](https://github.com/VivaLaVent/ps5-bazzite-deck/releases) as your image. It is needed to start PS5 Bazzite Deck's bootc image, and starts other images too.
-:::
-
-Download `ps5-linux-loader.elf` from one of the loaders above, or build the official one yourself (the same commit always gives the same file, so the SHA-256 of your build can be compared with one someone else tested):
+Send the loader you downloaded in [Which loader](/getting-started/prerequisites#which-loader) to the PS5; it comes from the same release as the image you picked in [Choose your image](/getting-started/which-image). Replace `$PS5IP` with the IP address shown on the PS5's screen:
 
 ```bash
-# ARM64 hosts only: install the cross-compilation tools first
-sudo apt install gcc-x86-64-linux-gnu binutils-x86-64-linux-gnu
-
-git clone https://github.com/ps5-linux/ps5-linux-loader
-cd ps5-linux-loader
-make
-```
-
-Send it to the PS5. Replace `$PS5IP` with the IP address shown on the PS5's screen:
-
-```bash
-socat -t 99999999 - TCP:$PS5IP:9021 < ps5-linux-loader.elf
+socat -t 99999999 - TCP:$PS5IP:9021 < bazzite-bootc-loader-vX.Y.elf
 ```
 
 The PS5 then goes into rest mode. Wait for the LED to turn **solid orange**, then press the power button.

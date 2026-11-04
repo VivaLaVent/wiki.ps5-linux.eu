@@ -1,7 +1,7 @@
 ---
 title: What you need
 sidebar_label: What you need
-description: Console firmware, loader, drive, display and network you need before installing Linux on a PS5.
+description: The PS5 settings, firmware, drive and Linux loader you need before installing Linux on a PS5.
 hardware: [original, slim, pro]
 applies_to: all
 ---
@@ -37,7 +37,7 @@ A PC that can write the image to the drive and send the loader: Linux, or Window
 
 You will spend time in a terminal: editing a file on the boot partition, running an install script, reading a log. Nothing here needs more than the command line basics, but if those are new to you, an introductory shell tutorial such as [learnshell.org](https://www.learnshell.org/) pays for itself before you start.
 
-## Firmware and loader {#firmware}
+## Firmware {#firmware}
 
 Whether your PS5 can run Linux depends on its system software version, because the jailbreak and the Linux loader need an exploitable version. Check yours before you change anything on the console.
 
@@ -47,11 +47,11 @@ Sony's current retail firmware is beyond the newest exploitable version, and the
 
 ### PS5 Slim and PS5 Pro
 
-The Slim runs the same firmware versions as the original PS5 and is supported on all of them. The Pro shipped with newer firmware, so its list starts later; the official loader covers it, see [Which loader](/installation/booting#which-loader). The Pro's GPU firmware is dumped by the loader on the versions it has offsets for, see [PS5 Pro](/hardware/ps5-pro#gpu-firmware).
+The Slim runs the same firmware versions as the original PS5 and is supported on all of them. The Pro shipped with newer firmware, so its list starts later; the loader covers it, see [Which loader](#which-loader). The Pro's GPU firmware is dumped by the loader on the versions it has offsets for, see [PS5 Pro](/hardware/ps5-pro#gpu-firmware).
 
 ### Exploitable versions
 
-The authoritative list is the README of the [Linux loader](https://github.com/ps5-linux/ps5-linux-loader). At the time of writing it reads as follows; jailbreaking itself is not covered by this wiki, and the exploit column is for orientation only.
+bazzite-bootc-loader is built from the official Linux loader, so the authoritative list is the [official loader's README](https://github.com/ps5-linux/ps5-linux-loader). At the time of writing it reads as follows; jailbreaking itself is not covered by this wiki, and the exploit column is for orientation only.
 
 | Firmware | M.2 support | Exploit |
 | --- | --- | --- |
@@ -93,6 +93,17 @@ Download the matching PUP file from [darthsternie.net/ps5-firmwares](https://dar
 :::warning
 A PS5 can't be downgraded. Only ever update to the exact version you want.
 :::
+
+## Which loader {#which-loader}
+
+The Linux loader is the payload that boots Linux. Download it now, together with your image.
+
+| Loader | For |
+| --- | --- |
+| **bazzite-bootc-loader**, on every [PS5 Bazzite Deck release](https://github.com/VivaLaVent/ps5-bazzite-deck/releases) since v2.5 | The official loader built from `main` for each release, plus support for the boot entries of PS5 Bazzite Deck's bootc form. Needed for bootc; starts every other image like the official loader. |
+| [rmuxwashere/ps5-linux-loader](https://github.com/rmuxwashere/ps5-linux-loader/releases) | Fork that PS5 Bazzite Deck was tested with up to v1.8.9. Its newer-firmware and Pro fixes have been sent upstream; it doesn't dump the Pro's GPU firmware. |
+
+Download `bazzite-bootc-loader-vX.Y.elf` and its `.sha256` file from the same release as your image. On a PS5 Pro, it also dumps the Pro's GPU firmware, see [PS5 Pro](/hardware/ps5-pro#gpu-firmware).
 
 ## Next steps
 

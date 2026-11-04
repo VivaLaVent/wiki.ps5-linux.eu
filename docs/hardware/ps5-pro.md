@@ -16,9 +16,9 @@ The Pro GPU driver and its clock governor are upstream, in [ps5-linux/ps5-linux-
 
 ## GPU firmware
 
-The Pro's GPU needs its own firmware, eight files named `viola_*.bin` (`ce`, `me`, `mec`, `mec2`, `pfp`, `rlc`, `sdma`, `sdma1`). The [Linux loader](/installation/booting#which-loader) dumps them from the PS5 OS to the boot partition, under `lib/firmware/amdgpu/`, every time it starts Linux.
+The Pro's GPU needs its own firmware, eight files named `viola_*.bin` (`ce`, `me`, `mec`, `mec2`, `pfp`, `rlc`, `sdma`, `sdma1`). The [Linux loader](/getting-started/prerequisites#which-loader) dumps them from the PS5 OS to the boot partition, under `lib/firmware/amdgpu/`, every time it starts Linux.
 
-Only a loader that knows the Pro's firmware offsets does this. At the time of writing that is the official [ps5-linux-loader](https://github.com/ps5-linux/ps5-linux-loader) built from its `main` branch: its tagged releases predate the firmware dump, and so do the community forks. A build from `main` is reproducible, so the SHA-256 of your `.elf` matches that of anyone else who built the same commit; compare it before you flash. Build it with the commands under [Send the Linux loader](/installation/booting#send-the-linux-loader) and check the repository's README for the system software versions the dump supports.
+Only a loader that knows the Pro's firmware offsets does this: one built from the official [ps5-linux-loader](https://github.com/ps5-linux/ps5-linux-loader)'s `main` branch. bazzite-bootc-loader is built from `main` for every PS5 Bazzite Deck release, and each release lists its SHA-256. The official tagged releases predate the firmware dump, and so do the community forks. The official README lists the system software versions the dump supports.
 
 With a loader that doesn't dump the files, `ls /boot/efi/lib/firmware/amdgpu/` (or `/efi/...` on Bazzite) stays empty, `amdgpu` loads the base PS5's firmware and the Pro runs as a base PS5 with 36 CUs. On PS5 Bazzite Deck, `journalctl -u ps5-stage-viola-fw` says that the staging was skipped.
 

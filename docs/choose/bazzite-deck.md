@@ -65,7 +65,7 @@ Both chips support 1080p60, 1080p120, 1440p60 and 4K60, when the display can do 
 ## What you need for this image
 
 
-- A PS5 on a firmware the [Linux loader](/installation/booting#which-loader) supports.
+- A PS5 on a [supported firmware](/getting-started/prerequisites#firmware), and [bazzite-bootc-loader](/getting-started/prerequisites#which-loader).
 - An original PS5, a PS5 Slim or a PS5 Pro.
 - **etaHEN and kstuff off:** they don't work together with the Linux loader (freezes, especially when going to sleep).
 - A USB drive of **64 GB or more**, ideally an external SSD (much faster than a stick).
