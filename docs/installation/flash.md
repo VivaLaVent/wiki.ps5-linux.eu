@@ -11,7 +11,7 @@ applies_to: all
 
 You have an image file from [Choose your image](/getting-started/which-image): a PS5 Bazzite Deck `.img`, or an official `.img.xz`.
 
-The drive must be **32 GB or larger for PS5 Bazzite Deck (Legacy), 64 GB or larger for its bootc form and for the official images**; an external SSD makes everything faster. Flashing erases the drive.
+The drive must be **64 GB or larger**; an external SSD makes everything faster. Flashing erases the drive.
 
 **Linux or macOS:**
 

@@ -15,7 +15,7 @@ Two small files on the USB drive's FAT32 boot partition control how Linux starts
 
 `cmdline.txt` must stay **one single line**. Add an option at the end with a space in front of it; delete it the same way.
 
-- **On the PS5, in Linux:** the boot partition is mounted at `/efi` on PS5 Bazzite Deck and at `/boot/efi` on most other images. These commands find it by themselves:
+- **On the PS5, in Linux:** the boot partition is mounted at `/boot/efi` on most images (`/efi` on Legacy PS5 Bazzite Deck installs). These commands find it by themselves:
 
   ```bash
   E=$(for d in /efi /boot/efi; do sudo test -f $d/cmdline.txt && echo $d && break; done)
@@ -25,7 +25,7 @@ Two small files on the USB drive's FAT32 boot partition control how Linux starts
   ```
 
 - **From a PC:** plug the USB drive in and open the small FAT32 partition, see [Edit cmdline.txt from Windows](/installation/flash#optional-edit-cmdlinetxt-from-windows).
-- **PS5 Bazzite Deck, bootc form:** `cmdline.txt` is written from the system's own kernel arguments at every start and shutdown. Add an option the bootc way, so it survives updates and rollbacks:
+- **PS5 Bazzite Deck:** `cmdline.txt` is written from the system's own kernel arguments at every start and shutdown. Add an option the bootc way, so it survives updates and rollbacks:
 
   ```bash
   sudo rpm-ostree kargs --append=amdgpu.force_1080p=1      # add

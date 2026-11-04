@@ -13,12 +13,9 @@ The PS5-specific steps (first boot, built-in commands, updates, troubleshooting)
 
 ## Updating
 
-Use the release marked **Latest**; releases marked **Pre-release** are test builds. How you update depends on the [form you run](/choose/bazzite-deck#legacy-or-bootc); `ps5-report` shows it on its **Install** line.
+Use Steam's update button (**Settings → System**) or `sudo bootc upgrade` in a terminal. The new version downloads in the background and takes over at the next start: restart, then start with **bazzite-bootc-loader**. If it gives you trouble, `sudo bootc rollback` and a restart take you back. Releases marked **Pre-release** are test builds, and Steam's update doesn't install them.
 
-- **Legacy:** run the update command from the release's notes, on the PS5 in a terminal or over SSH. It makes a backup, installs the new kernel, drivers and settings, and prints an undo command. Then power off and start with the loader.
-- **bootc:** Steam's update button (**Settings → System**), or `sudo bootc upgrade` in a terminal. The new version downloads in the background and takes over at the next start. Restart, then start with **bazzite-bootc-loader**. `sudo bootc rollback` goes back to the previous version.
-
-If the Latest release gives you trouble, the previous stable version is [v1.8.9](https://github.com/VivaLaVent/ps5-bazzite-deck/releases/tag/v1.8.9): on Legacy, run the update command with `v1.8.9` instead of the newer version, or flash its image.
+**Legacy installs** (`ps5-report` shows `legacy` on its **Install** line) update in place with the command in the release's notes, then power off and start with the loader. Switching to bootc is recommended, see [Built with bootc](/choose/bazzite-deck#built-with-bootc).
 
 ## Built-in commands
 
@@ -92,8 +89,8 @@ The output folder is printed at the end of the build.
 | [Steam Gaming Mode quirks](https://docs.bazzite.gg/Handheld_and_HTPC_edition/quirks/) | Yes |
 | [Installing software](https://docs.bazzite.gg/Installing_and_Managing_Software/): Bazaar (Flatpak), Homebrew, Distrobox, AppImage | Yes |
 | [ujust commands](https://docs.bazzite.gg/Installing_and_Managing_Software/ujust/) | Mostly; skip the ones about updates and the bootloader |
-| [Updates, rollbacks and rebasing](https://docs.bazzite.gg/Installing_and_Managing_Software/Updates_Rollbacks_and_Rebasing/), `rpm-ostree`, Bazzite Updater | **Legacy: no.** It isn't an ostree install ("This system was not booted via libostree"); update with its own command. **bootc: partly.** `sudo bootc upgrade`, `sudo bootc rollback`, `sudo bootc status` and `rpm-ostree kargs` work; don't rebase to Bazzite's own images, they can't start on the PS5. See [Updating](#updating) |
-| [Installation guides](https://docs.bazzite.gg/General/Installation_Guide/) | **No.** Install from a PS5 Bazzite Deck image, see [Legacy or bootc](/choose/bazzite-deck#legacy-or-bootc) |
+| [Updates, rollbacks and rebasing](https://docs.bazzite.gg/Installing_and_Managing_Software/Updates_Rollbacks_and_Rebasing/), `rpm-ostree`, Bazzite Updater | **Partly.** `sudo bootc upgrade`, `sudo bootc rollback`, `sudo bootc status` and `rpm-ostree kargs` work; don't rebase to Bazzite's own images, they can't start on the PS5. Legacy installs: no ("This system was not booted via libostree"). See [Updating](#updating) |
+| [Installation guides](https://docs.bazzite.gg/General/Installation_Guide/) | **No.** Install from a PS5 Bazzite Deck image, see [PS5 Bazzite Deck](/choose/bazzite-deck#download-and-extract) |
 
 PS5 Bazzite Deck is a community project, not made or supported by the Bazzite project. Ask PS5 questions on [Discord](https://discord.gg/ps5linux), not in Bazzite's channels.
 

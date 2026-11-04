@@ -24,7 +24,7 @@ Linux only runs on exploitable system software versions. Read [Supported firmwar
 **Required:**
 
 - A PS5 on a [supported firmware](/getting-started/prerequisites#firmware)
-- A USB drive of **64 GB or more** (32 GB for [PS5 Bazzite Deck](/choose/bazzite-deck)); an external SSD is much faster than a flash drive
+- A USB drive of **64 GB or more**; an external SSD is much faster than a flash drive
 - A USB keyboard and mouse
 
 **Optional:**

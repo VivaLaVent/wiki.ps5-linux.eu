@@ -46,6 +46,10 @@ The pinned messages in the `#loader` channel on [Discord](https://discord.gg/ps5
 
 ## Send the Linux loader
 
+:::tip[PS5 Bazzite Deck]
+Send `bazzite-bootc-loader-vX.Y.elf` from the same [release](https://github.com/VivaLaVent/ps5-bazzite-deck/releases) as your image. It is needed to start PS5 Bazzite Deck's bootc image, and starts other images too.
+:::
+
 Download `ps5-linux-loader.elf` from one of the loaders above, or build the official one yourself (the same commit always gives the same file, so the SHA-256 of your build can be compared with one someone else tested):
 
 ```bash

@@ -18,32 +18,23 @@ It runs from a USB drive (or the M.2 slot) and is started by the Linux loader, l
 - **Support the project:** [Ko-fi](https://ko-fi.com/vivalavent)
 
 :::tip[Which version?]
-Use the release marked **Latest**. Releases marked **Pre-release** are test builds, even when their version number is higher. If the Latest release gives you trouble, the previous stable version stays available: [v1.8.9](https://github.com/VivaLaVent/ps5-bazzite-deck/releases/tag/v1.8.9).
+Use the release marked **Latest**. Releases marked **Pre-release** are test builds, even when their version number is higher. If an update gives you trouble, `sudo bootc rollback` goes back to the version before.
 :::
 
-## Legacy or bootc
+## Built with bootc
 
-PS5 Bazzite Deck comes in two forms. Each release's notes have a section for each, with a new install and updating. `ps5-report` shows which one you run on its **Install** line.
+PS5 Bazzite Deck is a **bootc** image: the whole system is one image, built and checked as a unit with GitHub Actions from the [PS5 Bazzite Deck repository](https://github.com/VivaLaVent/ps5-bazzite-deck), the way Bazzite itself is made. VivaLaVent develops it this way because it makes updates safe:
 
-| | Legacy | bootc (experimental) |
-| --- | --- | --- |
-| What it is | The install most people have: flashed from a full image, then updated in place. | The whole system as one image, the way Bazzite itself is built. |
-| New install | Flash the full image of [v1.8.9](https://github.com/VivaLaVent/ps5-bazzite-deck/releases/tag/v1.8.9), then update to the Latest release. | Flash the bootc disk image of the Latest release. |
-| Updating | The update command in the release notes. | Steam's update button, or `sudo bootc upgrade`. |
-| Going back | The undo command the update prints, or v1.8.9. | `sudo bootc rollback`. |
-| Linux loader | Any [Linux loader](/installation/booting#which-loader). | **bazzite-bootc-loader** from the same release. |
-| Drive | 32 GB or more. | 64 GB or more. |
-
-**Why bootc is the better way to update.** A Legacy update replaces the kernel, drivers and settings file by file on the running system, so consoles drift apart over time, and going back means undoing those files. The bootc form, developed by VivaLaVent, builds the complete system as one image with GitHub Actions from the [PS5 Bazzite Deck repository](https://github.com/VivaLaVent/ps5-bazzite-deck), and checks it before release:
-
-- **Every console runs the same system.** The PS5 kernel, drivers and fixes are part of the image.
+- **Every console runs the same system.** The PS5 kernel, drivers and fixes are part of the image, not files changed on your drive.
 - **Updates download in the background** and take over at the next start. A power cut during an update doesn't leave a half-installed system.
 - **The previous version stays on the drive.** `sudo bootc rollback` and a restart take you back.
 - **Games, settings and your files are kept** across updates and rollbacks.
 
-**bazzite-bootc-loader** is the official Linux loader built from its `main` branch for every release, with support for the boot entries bootc uses to choose and roll back versions. It starts Legacy installs and other images exactly like the official loader, so one loader works for both.
+It starts with **bazzite-bootc-loader**, attached to every release: the official Linux loader built from its `main` branch, plus support for the boot entries bootc uses to choose and roll back versions. It starts other images like the official loader, so one loader works for everything.
 
-bootc is experimental: it hasn't been tested on many consoles yet. For a console you use every day, Legacy is the safer choice for now.
+:::note[Installed before v2.5?]
+Older installs run the **Legacy** form; `ps5-report` shows `legacy` on its **Install** line. Legacy installs still update in place with the command in each release's notes, but switching to bootc is recommended. Switching means flashing the bootc image, which erases the drive: use a second drive, or copy off what you want to keep first.
+:::
 
 ## What works on your console
 
@@ -77,19 +68,17 @@ Both chips support 1080p60, 1080p120, 1440p60 and 4K60, when the display can do 
 - A PS5 on a firmware the [Linux loader](/installation/booting#which-loader) supports.
 - An original PS5, a PS5 Slim or a PS5 Pro.
 - **etaHEN and kstuff off:** they don't work together with the Linux loader (freezes, especially when going to sleep).
-- A USB drive of **32 GB or more** for Legacy, **64 GB or more** for bootc, ideally an external SSD (much faster than a stick).
+- A USB drive of **64 GB or more**, ideally an external SSD (much faster than a stick).
 - A PC to download and flash the image. A USB keyboard is handy for the first setup.
 - The [required PS5 settings](/getting-started/prerequisites#required-ps5-settings): USB power in rest mode set to **Always**, and HDMI Device Link **off** (otherwise you'll usually get a black screen).
 
 ## Download and extract
 
-1. **Download** into one folder:
-   - **Legacy:** all `ps5-bazzite-deck-v1.8.9.img.7z.00*` files and the `.sha256` file from [v1.8.9](https://github.com/VivaLaVent/ps5-bazzite-deck/releases/tag/v1.8.9). After the first start, you update to the Latest release.
-   - **bootc:** all `ps5-bazzite-deck-bootc-vX.Y.img.7z.00*` files, the `.sha256` file and `bazzite-bootc-loader-vX.Y.elf` from the [release marked Latest](https://github.com/VivaLaVent/ps5-bazzite-deck/releases).
+1. **Download** all `ps5-bazzite-deck-bootc-vX.Y.img.7z.00*` files, the `.sha256` file and `bazzite-bootc-loader-vX.Y.elf` from the [release marked Latest](https://github.com/VivaLaVent/ps5-bazzite-deck/releases) into one folder.
 2. **Verify** the download: the checksums of the `.7z.00*` files must match the `.sha256` file. On Linux, `sha256sum -c <file>.sha256`; on Windows, `Get-FileHash <file> -Algorithm SHA256` in PowerShell for each volume.
 3. **Extract** the `.001` file with [7-Zip](https://7-zip.org) (Windows), Keka (macOS) or `7z x` (Linux). You get an `.img` file: that is the file you flash.
 
-Already installed? Update in place instead of reflashing, see [After installing: PS5 Bazzite Deck](/post-install/bazzite#updating).
+Already installed? Updates come through Steam, see [After installing: PS5 Bazzite Deck](/post-install/bazzite#updating).
 
 ## Next steps
 

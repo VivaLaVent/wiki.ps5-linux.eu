@@ -26,7 +26,7 @@ Change these in the PS5 OS **before** you jailbreak and send the Linux loader. A
 
 ## Hardware
 
-- A USB drive of 64 GB or more for the official and community images (32 GB for [PS5 Bazzite Deck](/choose/bazzite-deck)). An external SSD boots and loads much faster than a flash drive. Flashing erases the drive, so its current contents and format don't matter.
+- A USB drive of 64 GB or more. An external SSD boots and loads much faster than a flash drive. Flashing erases the drive, so its current contents and format don't matter.
 - A USB keyboard and mouse for the first setup.
 
 ## Host machine

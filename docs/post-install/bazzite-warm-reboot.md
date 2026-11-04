@@ -45,8 +45,8 @@ The next restart after that is warm again.
 
 A new kernel needs a cold start: starting it with a warm restart skips the console's hardware reset, and in testing that left the console hung. So the restart right after an update goes through the PS5 OS once, by itself:
 
-- **Legacy:** the update command arranges it and says so in its output. Power off, then start with the loader.
-- **bootc:** after `sudo bootc upgrade` or Steam's update, the next restart goes through the PS5 OS once. Start with the loader as usual and you are on the new version.
+- After Steam's update or `sudo bootc upgrade`, the next restart goes through the PS5 OS once. Start with the loader as usual and you are on the new version.
+- On a Legacy install, the update command arranges the same and says so in its output.
 
 ## IW620 consoles
 
