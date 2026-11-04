@@ -18,7 +18,7 @@ A PS5 on a firmware that can run Linux, a drive, and a PC to prepare it: that is
 
 ## Host machine
 
-A PC that can write the image to the drive and send the loader: Linux, or Windows with WSL. You need `dd` (or Rufus on Windows) for the image and `socat` for the loader. Docker is only needed if you [build an image yourself](/choose/build-your-own).
+A PC that can write the image to the drive and send the loader: Linux, or Windows with WSL. You need `dd` (or balenaEtcher on Windows) for the image and `socat` for the loader. Docker is only needed if you [build an image yourself](/choose/build-your-own).
 
 ## Linux knowledge
 

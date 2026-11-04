@@ -31,7 +31,13 @@ sync
 Double-check the target device. `dd` overwrites whatever you point it at without asking.
 :::
 
-**Windows:** use [Rufus](https://rufus.ie/). If it asks how to write the image, choose **DD Image mode**. balenaEtcher, which some READMEs suggest, has produced drives that don't boot with these images.
+**Windows:** use [balenaEtcher](https://etcher.balena.io/):
+
+1. **Flash from file** → pick the `.img` (an `.img.xz` works too, without unpacking it first).
+2. **Select target** → pick the USB drive. Check its size: everything on it is erased.
+3. **Flash!**, then wait until it has also checked the written drive.
+
+When Windows then offers to format the drive, choose **Cancel**: the Linux partitions are fine, Windows just can't read them.
 
 ## Plug the drive into the PS5
 
