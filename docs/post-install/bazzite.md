@@ -17,6 +17,33 @@ Use Steam's update button (**Settings → System**) or `sudo bootc upgrade` in a
 
 **Legacy installs** (`ps5-report` shows `legacy` on its **Install** line) update in place with the command in the release's notes, then power off and start with the loader. Switching to bootc is recommended, see [Built with bootc](/choose/bazzite-deck#built-with-bootc).
 
+:::warning[Updating from v2.5]
+On v2.5, every update fails with `Failed to start ostree-finalize-staged.service` (`Unit greenboot-set-rollback-trigger.service is masked`). Run this once on the PS5 before updating; it prints `ready to update`, and the change stays through all later updates:
+
+```bash
+sudo rm -f /etc/systemd/system/greenboot-set-rollback-trigger.service
+printf '[Unit]\nDescription=No greenboot rollbacks on the PS5\n\n[Service]\nType=oneshot\nExecStart=/usr/bin/true\nRemainAfterExit=yes\n' | sudo tee /etc/systemd/system/greenboot-set-rollback-trigger.service >/dev/null
+sudo systemctl daemon-reload && sudo systemctl start ostree-finalize-staged.service && echo "ready to update"
+```
+:::
+
+## Rolling back
+
+The previous version stays on the drive after every update. To go back to it:
+
+1. Run `sudo bootc rollback`.
+2. **Power off** (not restart), then start with **bazzite-bootc-loader**. With [warm restarts](/advanced/warm-reboot#ps5-bazzite-deck) on, a restart would skip the loader.
+3. Check which version runs:
+
+   ```bash
+   sudo rpm-ostree status
+   sed -n 's/^deck=//p' /usr/share/ps5-bazzite-bootc/VERSION
+   ```
+
+Running `sudo bootc rollback` again, then powering off, takes you forward to the newer version.
+
+The loader doesn't need to know about rollbacks: at every shutdown, `ps5-bootc-sync` puts the version that starts next on the boot partition as `bzImage`, `initrd.img` and `cmdline.txt`, and keeps the previous version's kernel under `ostree/<id>/`. `ROLLBACK.txt` on the boot partition names both, and describes how to start the previous version from a PC if a new version doesn't start at all.
+
 ## Built-in commands
 
 
@@ -64,6 +91,7 @@ E=$(for d in /boot/efi /efi; do sudo test -f $d/cmdline.txt && echo $d && break;
 - **VRR:** no "Enable VRR" option means a VERDE console, a display without HDMI VRR (FreeSync-only monitors), VRR turned off for that input on the TV, or an old image release with a TV that announces no VRR maximum (update). If the screen goes dark for 2 seconds in menus, use VRR per game instead (quick access menu → Performance). OLED flicker on the desktop: set Adaptive Sync to **Automatic**, not Always.
 - **Bluetooth settings find no new devices** (IW620 consoles): a bug in some earlier releases; a DualSense that was already paired kept working. Update to the current release. If a controller is refused in a loop instead, see [Bluetooth](/hardware/wifi-bluetooth#controller-refused-in-a-loop).
 - **HEVC video with broken colours or a red screen** (recording, streaming with Sunshine or Moonlight): the PS5's video engine gets HEVC P-frames wrong. Use **H.264**, or encode HEVC with I-frames only (see [VCN](/hardware/gpu#using-it-with-ffmpeg)). As a Moonlight client: use H.264, or "Force software decoding" for HEVC.
+- **An update or `bootc switch` fails with `Failed to start ostree-finalize-staged.service`:** v2.5's image; run the fix under [Updating](#updating) once.
 - **Won't boot from an SSD in a USB enclosure:** some enclosures don't work with the loader. Try another one.
 - **PS5 Pro reports 36 compute units:** the Pro's GPU firmware isn't in use yet. After every update, start Linux twice: the first start adds the firmware to the initrd, the second runs on it. If it stays at 36, the loader didn't dump the firmware, see [PS5 Pro](/hardware/ps5-pro#gpu-firmware).
 

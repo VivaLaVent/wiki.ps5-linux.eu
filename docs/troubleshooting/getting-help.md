@@ -48,7 +48,9 @@ Without a picture, look in your router's list of connected devices for a host na
 ssh <your-username>@<ps5-ip>
 ```
 
-Accept the host key prompt the first time you connect. From here you can troubleshoot even if the display is black, see [Black screen, but SSH works](/hardware/hdmi#black-screen-but-ssh-works).
+Accept the host key prompt the first time you connect.
+
+`WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!` after you switched the console to another install (bootc instead of Legacy, a reflash, another drive) is expected: every install has its own host key. Remove the old one with `ssh-keygen -R <ps5-ip>` and connect again. If you changed nothing on the console, don't connect, and ask on Discord. From here you can troubleshoot even if the display is black, see [Black screen, but SSH works](/hardware/hdmi#black-screen-but-ssh-works).
 
 ## Collect logs for a bug report
 

@@ -23,6 +23,8 @@ What is known to be broken or limited, with the workaround where there is one, a
 | CachyOS image doesn't boot (kernel panic) | No tracked issue; use Ubuntu, Arch or PS5 Bazzite Deck, see below |
 | MediaTek Wi-Fi (most Slims, PS5 Pro) | Works with the in-kernel drivers in every current kernel, the official one included |
 | MediaTek Bluetooth (most Slims, PS5 Pro) | Needs [btusb fixes](/hardware/wifi-bluetooth#bluetooth): PS5 Bazzite Deck has them; rmuxnet's kernel carries a different patch that its author reports as broken; not upstream |
+| PS5 Bazzite Deck v2.5 (bootc): every update fails, `Failed to start ostree-finalize-staged.service` | Fixed in later images; on v2.5, [run the fix once](/post-install/bazzite#updating) |
+| PS5 Bazzite Deck v2.5 (bootc): Steam's OS Update Channel switches to Bazzite's own images, which can't start on a PS5 | Don't use it on v2.5; from v2.5.1 it lists Stable and Beta of PS5 Bazzite Deck |
 | No picture after choosing a display mode | See [Display recovery](/hardware/hdmi#display-recovery) |
 | Kernel update on an M.2 install leaves a black screen or no network | See [below](#kernel-update-breaks-m2-boot) |
 | Starting Linux ends on the PS5 login screen (rest mode error) | See [below](#rest-mode-error-back-to-the-ps5-login-screen) |
