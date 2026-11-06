@@ -40,7 +40,7 @@ ps5-linux is a community project. Core contributors:
 | mfoster978 | Found the initrd 4-byte alignment bug for the Pro firmware; Pro firmware dump for more system software versions in the loader; Pro Bluetooth from a cold boot, GPU load in overlays and the Linux-only Bluetooth address on the Pro |
 | bizkut | IW620 btusb quirks |
 | Daniel Walker | IW620 legacy LE command family quirk |
-| Max | IW620 warm-restart testing |
+| Max | IW620 warm-reboot testing |
 | Verrek | VRR report and EDID that led to the open-ended VRR maximum fix |
 | Shahine, Phat | Fan reports on the PS5 Bazzite Deck pre-releases |
 | the_tales, Dvelaren, ciaccio | PS5 Pro testing: loader builds, GPU firmware staging, governor and fan reports |

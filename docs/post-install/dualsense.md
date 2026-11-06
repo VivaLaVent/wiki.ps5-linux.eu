@@ -47,7 +47,7 @@ Pairing profiles came to the DualSense with its software version **0630**, relea
 
 - `bluetoothctl` and the Bluetooth settings still show the original address. The chip and the DualSense use the new one.
 - In rest mode, both profiles can wake the PS5, but once it has started only the PS5 profile connects.
-- On consoles with the IW620 chip, restarts go through the PS5 OS instead of [warm restarts](/post-install/bazzite#built-in-commands) while this is on: the chip doesn't survive a warm restart with the changed address.
+- On consoles with the IW620 chip, restarts go through the PS5 OS instead of [warm reboots](/post-install/bazzite#built-in-commands) while this is on: the chip doesn't survive a warm reboot with the changed address.
 - With the feature **off**, a controller paired with the PS5 OS connects to Linux by itself and is refused in a loop, see [Controller refused in a loop](/troubleshooting/bluetooth#controller-refused-in-a-loop).
 
 How the address is set per chip, and the pitfalls found in testing, are on [Bluetooth](/troubleshooting/bluetooth#one-dualsense-for-the-ps5-and-linux).

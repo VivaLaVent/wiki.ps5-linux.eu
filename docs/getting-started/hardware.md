@@ -34,7 +34,7 @@ What works on each model, which kernel has it, and what is inside the console. E
 | One DualSense for the PS5 OS and Linux | ✅ BD | ✅ BD | ✅ BD | [DualSense](/post-install/dualsense) |
 | Fan control | ✅ | ✅ | ✅ | [Fan control](/troubleshooting/fan) |
 | Sleep (suspend-to-idle) | ✅ BD; 🚧 elsewhere | ✅ BD; 🚧 elsewhere | ✅ BD | [PS5 Bazzite Deck](/choose/bazzite-deck) |
-| Restart straight into Linux (warm reboot) | 🧪 | 🧪 | 🧪 | [Restart straight into Linux](/post-install/warm-reboot) |
+| Warm reboots (warm reboot) | 🧪 | 🧪 | 🧪 | [Warm reboots](/post-install/warm-reboot) |
 | USB drives, internal M.2 | ✅ | ✅ | ✅ | [Drives and USB ports](/getting-started/drives) |
 | Blu-ray drive | ✅ | ✅ (disc models) | ✅ (disc drive attached) | below |
 | Light bar, buzzer | see page | see page | see page | [LED, buzzer and capture cards](/troubleshooting/peripherals) |
@@ -101,10 +101,10 @@ Resolutions and refresh rates are detailed on [Display and HDMI](/troubleshootin
 
 | Feature | Status | Where |
 | --- | --- | --- |
-| Restart straight into Linux (kexec) | ✅ Working | Any image, see [Warm reboot](/post-install/warm-reboot) |
+| Warm reboots (kexec) | ✅ Working | Any image, see [Warm reboot](/post-install/warm-reboot) |
 | Sleep and wake (suspend-to-idle) | ⚠️ Not upstream | An open pull request on rmuxnet's repository; PS5 Bazzite Deck includes it |
 
-Linux can't resume from the console's own rest mode: shutting Linux down puts the PS5 into rest mode, and the next power-up starts the PS5 OS. Suspend-to-idle sleeps and wakes without leaving Linux, and the warm restart skips the PS5 OS and the loader; both are experimental.
+Linux can't resume from the console's own rest mode: shutting Linux down puts the PS5 into rest mode, and the next power-up starts the PS5 OS. Suspend-to-idle sleeps and wakes without leaving Linux, and the warm reboot skips the PS5 OS and the loader; both are experimental.
 
 Problems and their workarounds are under [Troubleshooting](/troubleshooting/getting-help), one page per component.
 

@@ -32,7 +32,7 @@ sudo systemctl daemon-reload && sudo systemctl start ostree-finalize-staged.serv
 The previous version stays on the drive after every update. To go back to it:
 
 1. Run `sudo bootc rollback`.
-2. **Power off** (not restart), then start with **bazzite-bootc-loader**. With [warm restarts](/post-install/warm-reboot#ps5-bazzite-deck) on, a restart would skip the loader.
+2. **Power off** (not restart), then start with the loader as usual. With [warm reboots](/post-install/warm-reboot#ps5-bazzite-deck) on, a restart would skip the loader. Any loader starts the version you rolled back to, because it is already in place on the boot partition; use bazzite-bootc-loader from your release anyway, so the manual rollback below works with the same loader.
 3. Check which version runs:
 
    ```bash
@@ -42,7 +42,7 @@ The previous version stays on the drive after every update. To go back to it:
 
 Running `sudo bootc rollback` again, then powering off, takes you forward to the newer version.
 
-The loader doesn't need to know about rollbacks: at every shutdown, `ps5-bootc-sync` puts the version that starts next on the boot partition as `bzImage`, `initrd.img` and `cmdline.txt`, and keeps the previous version's kernel under `ostree/<id>/`. `ROLLBACK.txt` on the boot partition names both, and describes how to start the previous version from a PC if a new version doesn't start at all.
+The loader doesn't need to know about rollbacks: at every shutdown, `ps5-bootc-sync` puts the version that starts next on the boot partition as `bzImage`, `initrd.img` and `cmdline.txt`, and keeps the previous version's kernel under `ostree/<id>/`. `ROLLBACK.txt` on the boot partition names both, and describes how to start the previous version from a PC if a new version doesn't start at all. That manual rollback **needs bazzite-bootc-loader**: it uses `path-override.txt`, and only this loader applies it to `cmdline.txt` and `vram.txt` as well as to the kernel and initrd. Another loader would start the previous kernel with the new version's `cmdline.txt`.
 
 ## Game Mode and Desktop Mode {#game-mode-and-desktop-mode}
 
@@ -64,7 +64,7 @@ On some TVs the picture doesn't come back after **Switch to Desktop**, see [Disp
 | --- | --- |
 | `ps5-report` | Collects your hardware details and the relevant logs into one file for a bug report. It only reads. |
 | `ps5-perf` | CPU boost and the fan target (the console's firmware control, 80 °C by default). `ps5-perf status` shows the fan mode and speed, see [Fan control](/troubleshooting/fan). |
-| `ps5-warm-reboot` | Restarts straight back into Linux, without the PS5 OS and the loader. Off by default, `on`/`off`/`status`, see [Warm restarts](/post-install/warm-reboot#ps5-bazzite-deck). |
+| `ps5-warm-reboot` | Restarts straight back into Linux, without the PS5 OS and the loader. Off by default, `on`/`off`/`status`, see [Warm reboots](/post-install/warm-reboot#ps5-bazzite-deck). |
 | `ps5-bt-address` | One DualSense for the PS5 and Linux, on by default. `status`, `on`, `off`. |
 
 Sleep (suspend-to-idle) is built in: a short press of the power button or Steam's **Sleep** puts the console to sleep and wakes it again. The GPU stays powered, so the saving is modest; it is not the PS5 OS's rest mode, and a DualSense can't wake the console.

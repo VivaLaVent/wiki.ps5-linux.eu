@@ -62,9 +62,9 @@ The screen saver is broken on the PS5 and can't be dismissed once it starts. SSH
 
 PS5 Bazzite Deck with [Decky Loader](/post-install/decky): Remove the plugin from Desktop Mode: delete its folder under `~/homebrew/plugins/`, then switch to Game Mode again. If that isn't enough, `ujust setup-decky uninstall` removes Decky completely.
 
-### A warm restart hangs
+### A warm reboot hangs
 
-PS5 Bazzite Deck with `ps5-warm-reboot on`: Hold the power button until the console turns off, then start Linux with the loader. If it keeps happening, turn warm restarts off with `ps5-warm-reboot off` and report it in `#bazzite-problems` on [Discord](https://discord.gg/ps5linux) with the file `ps5-report` saves.
+PS5 Bazzite Deck with `ps5-warm-reboot on`: Hold the power button until the console turns off, then start Linux with the loader. If it keeps happening, turn warm reboots off with `ps5-warm-reboot off` and report it in `#bazzite-problems` on [Discord](https://discord.gg/ps5linux) with the file `ps5-report` saves.
 
 ### Modules or sysctl settings not loading {#modules-or-sysctl-settings-not-loading}
 

@@ -115,7 +115,7 @@ nmcli device status
 ## First checks
 
 1. `nmcli device` lists the Wi-Fi device; on PS5 Bazzite Deck, `ps5-report` names the chip on its **Wi-Fi** line.
-2. No Wi-Fi device on an IW620 console: the chip needs its out-of-tree driver, which PS5 Bazzite Deck includes. After a warm restart, `ps5-wifi-repair` reloads it there, and a power off fixes it for sure.
+2. No Wi-Fi device on an IW620 console: the chip needs its out-of-tree driver, which PS5 Bazzite Deck includes. After a warm reboot, `ps5-wifi-repair` reloads it there, and a power off fixes it for sure.
 3. Slow or dropping Wi-Fi: PS5 Bazzite Deck turns power saving off by default (`ps5-perf wifi` switches it off again); on other images, see [Driver stuck under sustained load](#driver-stuck-under-sustained-load).
 
 ## Arch: install fails (missing headers or wrong headers path)
