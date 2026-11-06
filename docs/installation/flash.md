@@ -2,7 +2,7 @@
 title: Flash the image to USB
 sidebar_label: Flash to USB
 sidebar_position: 1
-description: Write the downloaded image to a USB drive, from Windows, macOS or Linux.
+description: Write the downloaded PS5 Linux image to a USB drive with balenaEtcher or dd, from Windows, macOS or Linux.
 hardware: [original, slim, pro]
 applies_to: all
 ---

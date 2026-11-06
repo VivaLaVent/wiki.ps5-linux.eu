@@ -2,7 +2,7 @@
 title: Browser video and monitoring
 sidebar_label: Browser video
 sidebar_position: 2
-description: Turn on hardware video decode in Chrome and Firefox, avoid AV1, and read GPU load without a sensor.
+description: Turn on hardware video decode in Chrome and Firefox on the PS5, avoid AV1, and read GPU load without a sensor.
 hardware: [original, slim, pro]
 applies_to: all
 ---

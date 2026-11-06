@@ -1,7 +1,7 @@
 ---
 title: Booting Linux
 sidebar_position: 2
-description: Plug in the USB drive, send the Linux loader and read the boot LED.
+description: Plug in the USB drive, set two PS5 settings, send the Linux loader and read what the PS5's LED tells you.
 hardware: [original, slim, pro]
 applies_to: all
 ---

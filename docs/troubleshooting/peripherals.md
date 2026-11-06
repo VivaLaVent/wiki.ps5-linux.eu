@@ -2,7 +2,7 @@
 title: LED, buzzer and capture cards
 sidebar_label: Peripherals
 sidebar_position: 11
-description: The light bar, the buzzer and HDMI capture cards under Linux.
+description: "The PS5's light bar, buzzer and HDMI capture cards under Linux: control from sysfs, and capture cards that show nothing."
 hardware: [original, slim, pro]
 applies_to: all
 ---

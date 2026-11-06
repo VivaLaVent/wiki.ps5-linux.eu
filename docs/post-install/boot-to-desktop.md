@@ -1,7 +1,7 @@
 ---
 title: Boot to the desktop or Gaming Mode
 sidebar_position: 3
-description: Choose whether the next boot starts the KDE desktop or Steam Gaming Mode, and avoid the switch that breaks HDMI.
+description: Choose whether the next PS5 boot starts the KDE desktop or Steam Gaming Mode, and avoid the switch that breaks HDMI.
 hardware: [original, slim, pro]
 applies_to: not-bazzite-deck
 ---

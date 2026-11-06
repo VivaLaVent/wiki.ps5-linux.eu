@@ -1,7 +1,7 @@
 ---
 title: Storage and USB
 sidebar_position: 9
-description: Fixes for USB drives that disconnect, aren't found at boot, don't boot from an enclosure, or show too little free space.
+description: Fixes for PS5 Linux USB drives that disconnect, aren't found at boot, don't boot from an enclosure, or show too little space.
 hardware: [original, slim, pro]
 applies_to: all
 ---

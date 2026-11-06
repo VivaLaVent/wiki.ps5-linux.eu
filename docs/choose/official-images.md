@@ -2,7 +2,7 @@
 title: Official images
 sidebar_label: Official images
 sidebar_position: 2
-description: "The ps5-linux project's own images: Ubuntu, Arch, CachyOS, Fedora, Debian and two Bazzite builds. Download and verify."
+description: "The ps5-linux project's own PS5 images: Ubuntu, Arch, CachyOS, Fedora, Debian and two Bazzite builds. Download and verify."
 hardware: [original, slim, pro]
 applies_to: not-bazzite-deck
 ---

@@ -18,6 +18,12 @@ const config: Config = {
   headTags: [
     {tagName: 'link', attributes: {rel: 'icon', type: 'image/png', sizes: '32x32', href: '/img/favicon-32.png'}},
     {tagName: 'link', attributes: {rel: 'apple-touch-icon', href: '/img/apple-touch-icon.png'}},
+    // site name and search box for search engines
+    {
+      tagName: 'script',
+      attributes: {type: 'application/ld+json'},
+      innerHTML: JSON.stringify({"@context": "https://schema.org", "@type": "WebSite", "name": "PS5 Linux Wiki", "alternateName": ["PlayStation 5 Linux Wiki", "wiki.ps5-linux.eu"], "url": "https://wiki.ps5-linux.eu/", "inLanguage": "en", "potentialAction": {"@type": "SearchAction", "target": "https://wiki.ps5-linux.eu/search?q={search_term_string}", "query-input": "required name=search_term_string"}}),
+    },
   ],
 
   future: {
@@ -59,6 +65,9 @@ const config: Config = {
           editUrl: 'https://github.com/VivaLaVent/wiki.ps5-linux.eu/edit/main/',
         },
         blog: false,
+        sitemap: {
+          ignorePatterns: ['/search', '/search/**'],
+        },
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -137,6 +146,11 @@ const config: Config = {
   ],
 
   themeConfig: {
+    image: 'img/social-card.png',
+    metadata: [
+      {name: 'keywords', content: 'PS5 Linux, PlayStation 5 Linux, PS5 Bazzite, PS5 Bazzite Deck, PS5 Pro Linux, PS5 Slim Linux, PS5 Steam, PS5 jailbreak Linux'},
+      {property: 'og:site_name', content: 'PS5 Linux Wiki'},
+    ],
     colorMode: {
       defaultMode: 'dark',
       disableSwitch: true,
