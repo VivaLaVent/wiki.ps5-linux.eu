@@ -20,7 +20,7 @@ The Pro's GPU needs its own firmware, eight files named `viola_*.bin` (`ce`, `me
 
 Only a loader that knows the offsets for the Pro's firmware version does this:
 
-| Pro firmware | Official loader (`main`), bazzite-bootc-loader up to v2.5.1 | soniciso1's loader, bazzite-bootc-loader from v2.6 |
+| Pro firmware | Official loader (`main`), bazzite-bootc-loader up to v2.5.1 | soniciso1's loader, bazzite-bootc-loader from v2.6.1 |
 | --- | --- | --- |
 | 11.00, 11.20, 11.40 | No | Yes |
 | 11.60 | Yes | Yes |
@@ -50,7 +50,20 @@ sudo dmesg | grep -i -e viola -e active_cu_number
 
 Five of the eight files (`ce`, `me`, `pfp`, `mec`, `mec2`) are the GPU's command-processor microcode. PS5 Bazzite Deck v2.1.6 to v2.5.1 replaced Sony's with linux-firmware's `cyan_skillfish2` microcode, because a DXVK (D3D9) game hung at its first frame on Sony's. That substitute hangs D3D12 games under vkd3d instead, such as Dragon's Dogma 2: the log shows `ring gfx_0.0.0 timeout` with the game's process, then `GPU Recovery Failed: -110`, and the screen stays black while SSH still works. With Sony's microcode, Dragon's Dogma 2 runs at 55 to 60 FPS on a Pro.
 
-From v2.6, PS5 Bazzite Deck uses Sony's microcode again. For a D3D9 game that hangs at its first frame, add `ps5.viola_cp=cs2` to `cmdline.txt` and start twice: the first start rebuilds the initrd with the substitute, the second runs on it. Remove the option to go back.
+From v2.6.1, PS5 Bazzite Deck uses Sony's microcode again. For a D3D9 game that hangs at its first frame, add `ps5.viola_cp=cs2` to `cmdline.txt` and start twice: the first start rebuilds the initrd with the substitute, the second runs on it. Remove the option to go back.
+
+## Vulkan driver (RADV) {#radv}
+
+The Pro's GPU has int8 matrix instructions that the base PS5 lacks, and a compute queue that works (on the base PS5's GPU it is broken, so Mesa hides it). Borchev's [Mesa patch](https://github.com/Borchev/mesa_viola_support) teaches RADV, Mesa's Vulkan driver, to use both. Int8 dot products in compute shaders, such as FSR4's INT8 model, run about 3.6 times faster; Borchev measured Dragon's Dogma 2 staying at its 60 FPS cap with FSR4 and frame generation, where the stock driver dropped to 55 to 58 FPS in its heaviest section.
+
+PS5 Bazzite Deck ships this RADV from v2.6.1 (bootc installs). It changes nothing on the base PS5 and the Slim. Launch options to turn the parts off for one game:
+
+| Option | Effect |
+| --- | --- |
+| `RADV_VIOLA_ML=0 %command%` | The stock int8 code instead of the matrix instructions |
+| `AMD_VIOLA_COMPUTE_QUEUE=0 %command%` | Hides the compute queue again |
+
+FSR4's INT8 model under Proton needs OptiScaler; the launch options are in the patch's README.
 
 ## GPU driver
 

@@ -45,7 +45,7 @@ https://github.com/NotHavocc/ps5-hwcon-plugin/releases/latest/download/ps5-hwcon
 
 Each tab has **Restore on Startup**, which applies your settings again at every start; without it, the console's defaults come back after a restart.
 
-Changes to VRAM, the GTT limit and the CU unlock edit `vram.txt` and `cmdline.txt` on the USB drive's boot partition, so they need a restart with the loader. PS5 Bazzite Deck sets 6 GB of VRAM by default from v2.6; the plugin's VRAM setting replaces it.
+Changes to VRAM, the GTT limit and the CU unlock edit `vram.txt` and `cmdline.txt` on the USB drive's boot partition, so they need a restart with the loader. PS5 Bazzite Deck sets 6 GB of VRAM by default from v2.6.1; the plugin's VRAM setting replaces it.
 
 The same controls exist for Desktop Mode as an app, [ps5-hwcon-gui](https://github.com/NotHavocc/ps5-hwcon-gui), which doesn't need Decky. `ps5-perf` sets the CPU boost and fan target too: whichever was set last applies.
 

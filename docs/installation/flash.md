@@ -20,7 +20,7 @@ PS5 Bazzite Deck's image comes as several `.img.7z.001`, `.002`, … parts. Extr
 - **Windows:** `certutil -hashfile ps5-bazzite-deck-bootc-vX.Y.img SHA256`
 - **Linux or macOS:** `sha256sum ps5-bazzite-deck-bootc-vX.Y.img` (macOS: `shasum -a 256 …`)
 
-Releases before v2.6 list only the checksums of the `.7z` parts.
+Releases before v2.6.1 list only the checksums of the `.7z` parts.
 
 ## Flash it
 

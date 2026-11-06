@@ -77,7 +77,7 @@ echo 128 | sudo tee $H/pwm1
 Back to the curve: `echo 2 | sudo tee $H/pwm1_enable`.
 
 :::note[PS5 Bazzite Deck]
-The image starts in firmware mode (`pwm1_enable` `3`) with an 80 °C target that the driver sets at boot and again after sleep; `ps5_fan.curve=1` in `cmdline.txt` starts with the curve instead. Writing `target_temp` (40 to 90) returns to firmware control, and so does the driver after an emergency. v2.5 and v2.5.1 started on the curve, and kept the firmware's lower target during sleep and shutdown, which made the fan ramp up then; v2.6 fixes both.
+The image starts in firmware mode (`pwm1_enable` `3`) with an 80 °C target that the driver sets at boot and again after sleep; `ps5_fan.curve=1` in `cmdline.txt` starts with the curve instead. Writing `target_temp` (40 to 90) returns to firmware control, and so does the driver after an emergency. v2.5 and v2.5.1 started on the curve, and kept the firmware's lower target during sleep and shutdown, which made the fan ramp up then; v2.6.1 fixes both.
 :::
 
 ## Target temperature (older kernels and PS5 Bazzite Deck)
@@ -100,7 +100,7 @@ Set a lower target for more cooling at the cost of noise, for example 65 °C:
 echo 65 | sudo tee /sys/bus/platform/devices/ps5-fan/target_temp
 ```
 
-The driver accepts 0 to 100 °C (PS5 Bazzite Deck from v2.6: 40 to 90 °C). A very low target doesn't make the fan a "max" switch: the firmware ramps as far as it needs to for any target, and below roughly 40 °C the fan is constantly audible while the SoC temperature barely moves any more. Pick a target you are happy to listen to.
+The driver accepts 0 to 100 °C (PS5 Bazzite Deck from v2.6.1: 40 to 90 °C). A very low target doesn't make the fan a "max" switch: the firmware ramps as far as it needs to for any target, and below roughly 40 °C the fan is constantly audible while the SoC temperature barely moves any more. Pick a target you are happy to listen to.
 
 On the oldest kernels, without a fan driver, the fan stays off until `ps5_control --fan on` from [ps5-linux-tools](https://github.com/ps5-linux/ps5-linux-tools) turns it on; its `install.sh` installs `ps5fan.service` so that happens at every boot, see [Clocks and boost](/hardware/gpu#clocks-and-boost).
 

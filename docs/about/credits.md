@@ -37,7 +37,7 @@ ps5-linux is a community project. Core contributors:
 | Slip | HDR, SCDC, CEC and hotplug patches; native FRL with 4K120 detection and fallback, ALLM |
 | Tertium | USB-C display output |
 | Dasloh | Suspend-to-idle, Linux-only Bluetooth address, USB power fixes |
-| [Borchev](https://github.com/Borchev) | PS5 Pro GPU driver, SMU backend and the GPU clock governor, hwmon fan driver Pro fix |
+| [Borchev](https://github.com/Borchev) | PS5 Pro GPU driver, SMU backend and the GPU clock governor, hwmon fan driver Pro fix, [RADV for the Pro's int8 matrix instructions and compute queue](https://github.com/Borchev/mesa_viola_support) |
 | mfoster978 | Found the initrd 4-byte alignment bug for the Pro firmware; Pro firmware dump for more system software versions in the loader; Pro Bluetooth from a cold boot, GPU load in overlays and the Linux-only Bluetooth address on the Pro |
 | bizkut | IW620 btusb quirks |
 | Daniel Walker | IW620 legacy LE command family quirk |

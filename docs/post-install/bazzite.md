@@ -88,7 +88,7 @@ E=$(for d in /boot/efi /efi; do sudo test -f $d/cmdline.txt && echo $d && break;
 - **HEVC video with broken colours or a red screen** (recording, streaming with Sunshine or Moonlight): the PS5's video engine gets HEVC P-frames wrong. Use **H.264**, or encode HEVC with I-frames only (see [VCN](/hardware/gpu#using-it-with-ffmpeg)). As a Moonlight client: use H.264, or "Force software decoding" for HEVC.
 - **An update or `bootc switch` fails with `Failed to start ostree-finalize-staged.service`:** v2.5's image; run the fix under [Updating](#updating) once.
 - **Won't boot from an SSD in a USB enclosure:** some enclosures don't work with the loader. Try another one.
-- **PS5 Pro: black screen in D3D12 games** (Dragon's Dogma 2, and others under vkd3d), SSH still works, `GPU Recovery Failed: -110` in the log: v2.1.6 to v2.5.1 replaced part of the Pro's GPU firmware, fixed in v2.6, see [Command-processor microcode](/hardware/ps5-pro#cp-microcode).
+- **PS5 Pro: black screen in D3D12 games** (Dragon's Dogma 2, and others under vkd3d), SSH still works, `GPU Recovery Failed: -110` in the log: v2.1.6 to v2.5.1 replaced part of the Pro's GPU firmware, fixed in v2.6.1, see [Command-processor microcode](/hardware/ps5-pro#cp-microcode).
 - **PS5 Pro reports 36 compute units:** the Pro's GPU firmware isn't in use yet. After every update, start Linux twice: the first start adds the firmware to the initrd, the second runs on it. If it stays at 36, the loader doesn't dump the firmware on your firmware version, see [PS5 Pro](/hardware/ps5-pro#gpu-firmware).
 
 ## How it works

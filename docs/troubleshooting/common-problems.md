@@ -32,7 +32,7 @@ ps5-report
 | SSH | Desktop Mode | `steamos-session-select plasma` |
 | SSH | Game Mode | `steamos-session-select gamescope` |
 
-From v2.6, PS5 Bazzite Deck starts in Desktop Mode. To start in Game Mode instead, change the default session in Steam's settings in Game Mode, or run `ujust set-default-game-mode` (and `ujust set-default-desktop` to go back).
+From v2.6.1, PS5 Bazzite Deck starts in Desktop Mode. To start in Game Mode instead, change the default session in Steam's settings in Game Mode, or run `ujust set-default-game-mode` (and `ujust set-default-desktop` to go back).
 
 :::warning[Switching to the desktop breaks the picture]
 On some TVs, the picture doesn't come back after **Switch to Desktop**. Power off and start with the loader: with Desktop Mode as the default, the console starts there without a switch.
@@ -44,7 +44,7 @@ On some TVs, the picture doesn't come back after **Switch to Desktop**. Power of
 - **The desktop, Steam or a browser stay at 1080p:** the HDMI driver marks 1080p at 60 Hz as the preferred mode, so the first start always has a picture, and the desktop keeps it until you choose another. Set the resolution and refresh rate in **System Settings → Display & Monitor**; Game Mode has its own in Steam's **Settings → Display**.
 - **Colours look washed out or too dark:** set the TV's HDMI black level to match the console, see [RGB range](/hardware/hdmi#rgb-range).
 - **No 120 Hz, 4K120 or VRR:** these need the FLAVA3 HDMI chip and a display that supports them, see [HDMI and display](/hardware/hdmi). HDMI 2.1 (FRL) is only used for 4K at 120 Hz (and 100 Hz); every other mode fits HDMI 2.0. `sudo dmesg | grep -e 4K120 -e 'over FRL'` shows whether your TV allows it (`4K120 possible`) and whether it is in use (`3840x2160@120 over FRL`).
-- **100 Hz:** PS5 Bazzite Deck v2.6 offers 1080p, 1440p and 4K at 100 Hz on FLAVA3 consoles with `hdmi.modes_100hz=1` in `cmdline.txt`.
+- **100 Hz:** PS5 Bazzite Deck v2.6.1 offers 1080p, 1440p and 4K at 100 Hz on FLAVA3 consoles with `hdmi.modes_100hz=1` in `cmdline.txt`.
 - **The screen goes black in a game on a PS5 Pro, and SSH still works:** a GPU hang that the Pro can't recover from. Restart over SSH as shown on [PS5 Pro](/hardware/ps5-pro#starting-linux-fails-on-the-pro); on v2.5.1 and older, see [Command-processor microcode](/hardware/ps5-pro#cp-microcode).
 
 ## Bluetooth
