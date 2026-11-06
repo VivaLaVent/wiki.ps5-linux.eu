@@ -41,6 +41,8 @@ title: Short page title
 sidebar_label: Optional shorter label
 sidebar_position: 3
 description: One sentence, ending with a full stop.
+hardware: [original, slim, pro]
+applies_to: all
 ---
 ```
 
@@ -51,6 +53,8 @@ description: One sentence, ending with a full stop.
 | `sidebar_position` | Required on every page inside a category. Numbers start at 1 and follow the order in `sidebars.ts`. |
 | `sidebar_label` | Only when the title is too long for the sidebar. Don't set it just to repeat the title. |
 | `slug` | Only for the front page (`intro.md`). Paths come from the file name. |
+| `hardware` | Required. `[original, slim, pro]` or a subset. |
+| `applies_to` | Required. `all`, `bazzite-deck` or `not-bazzite-deck`. |
 
 Other keys are not used. Don't add `tags`, `keywords`, `authors` or `last_update`.
 
