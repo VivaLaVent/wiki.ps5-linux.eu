@@ -88,9 +88,9 @@ All steps run on the PS5, started from the USB drive, in a terminal (password `p
    sudo ps5-m2-install
    ```
 
-   It shows what it copies and asks you to type `yes`; everything on the M.2's Linux partition is erased. The copy takes 10 to 30 minutes without progress output.
+   It shows what it copies and asks you to type `yes`; everything on the M.2's Linux partition is erased. The copy takes 10 to 30 minutes and shows its progress. At the end it checks that `cmdline.txt` (and on bootc every boot entry) starts the M.2.
 
-   On v2.5.1 and older, which don't have the command yet, run it straight from the repository instead:
+   On v2.5.1 and older, which don't have the command yet, or ship a version that stops with `would change RO state`, run the current one straight from the repository instead:
 
    ```bash
    curl -fsSLo /tmp/ps5-m2-install https://raw.githubusercontent.com/VivaLaVent/ps5-bazzite-deck/main/tools/ps5-m2-install.sh && sudo bash /tmp/ps5-m2-install

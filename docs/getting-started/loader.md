@@ -13,18 +13,23 @@ The Linux loader is the payload that boots Linux after the jailbreak. It support
 
 ## Which loader {#which-loader}
 
-Download it now, together with your image.
+All three start Linux from the USB drive the same way: they read `bzImage`, `initrd.img`, `cmdline.txt` and `vram.txt` from its FAT32 partition. They differ in the firmware versions they support and in whether they dump the PS5 Pro's GPU firmware.
 
-| Loader | For |
-| --- | --- |
-| **bazzite-bootc-loader**, on every [PS5 Bazzite Deck release](https://github.com/VivaLaVent/ps5-bazzite-deck/releases) since v2.5 | The official loader built from `main` for each release, plus support for the boot entries of PS5 Bazzite Deck's bootc form. Needed for bootc; starts every other image like the official loader. |
-| [rmuxwashere/ps5-linux-loader](https://github.com/rmuxwashere/ps5-linux-loader/releases) | Fork that PS5 Bazzite Deck was tested with up to v1.8.9. Its newer-firmware and Pro fixes have been sent upstream; it doesn't dump the Pro's GPU firmware. |
+| Loader | What it is | Pick it when |
+| --- | --- | --- |
+| **bazzite-bootc-loader**, on every [PS5 Bazzite Deck release](https://github.com/VivaLaVent/ps5-bazzite-deck/releases) | From v2.6: soniciso1's loader below, built for each release, plus `path-override.txt` for `cmdline.txt` and `vram.txt` (used for a [manual rollback](/post-install/bazzite#rolling-back)). Up to v2.5.1 it was built from the official loader. | You run PS5 Bazzite Deck. It starts every other image too. |
+| [soniciso1/ps5-linux-loader](https://github.com/soniciso1/ps5-linux-loader/releases) | The official loader plus offsets for more firmware versions, including the Pro's GPU firmware dump on 11.00 to 11.60, 12.00, 12.02, 12.40, 12.70 and 13.20 to 13.60. | Any other image, especially on a PS5 Pro. |
+| [rmuxwashere/ps5-linux-loader](https://github.com/rmuxwashere/ps5-linux-loader/releases) | An earlier fork of the official loader; its fixes have gone upstream. It doesn't dump the Pro's GPU firmware. | Only if a newer loader doesn't start on your console. |
 
-Download `bazzite-bootc-loader-vX.Y.elf` and its `.sha256` file from the same release as your image. On a PS5 Pro, it also dumps the Pro's GPU firmware, see [PS5 Pro](/hardware/ps5-pro#gpu-firmware).
+Download the `.elf` and its `.sha256` file. For PS5 Bazzite Deck, take `bazzite-bootc-loader-vX.Y.elf` from the same release as your image.
+
+:::tip[PS5 Pro]
+Without the GPU firmware dump, the Pro runs as a base PS5 with 36 compute units instead of 60. The dump depends on the Pro's firmware version, see [PS5 Pro](/hardware/ps5-pro#gpu-firmware).
+:::
 
 ## PS5 Slim and PS5 Pro
 
-The Slim runs the same firmware versions as the original PS5 and is supported on all of them. The Pro shipped with newer firmware, so its list starts later; bazzite-bootc-loader supports it. The Pro's GPU firmware is dumped by the loader on the versions it has offsets for, see [PS5 Pro](/hardware/ps5-pro#gpu-firmware).
+The Slim runs the same firmware versions as the original PS5 and is supported on all of them. The Pro shipped with newer firmware, so its list starts at 11.00.
 
 ## Next steps
 

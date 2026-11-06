@@ -13,7 +13,7 @@ The PS5-specific steps (first boot, built-in commands, updates, troubleshooting)
 
 ## Updating
 
-Use Steam's update button (**Settings → System**) or `sudo bootc upgrade` in a terminal. The new version downloads in the background and takes over at the next start: restart, then start with **bazzite-bootc-loader**. If it gives you trouble, `sudo bootc rollback` and a restart take you back. Releases marked **Pre-release** are test builds, and Steam's update doesn't install them.
+Use Steam's update button (**Settings → System**) or `sudo bootc upgrade` in a terminal. The new version downloads in the background and takes over at the next start: restart, then start with **bazzite-bootc-loader**. If it gives you trouble, [roll back](#rolling-back). Releases marked **Pre-release** are test builds: Steam's **Stable** channel doesn't install them, its **Beta** channel does (**Settings → System → OS Update Channel**).
 
 **Legacy installs** (`ps5-report` shows `legacy` on its **Install** line) update in place with the command in the release's notes, then power off and start with the loader. Switching to bootc is recommended, see [Built with bootc](/choose/bazzite-deck#built-with-bootc).
 
@@ -65,19 +65,14 @@ All options, PS5 Bazzite Deck's default line and how to edit it are on **[Boot o
 
 The image supports the [40 CU unlock](/hardware/gpu#40-cu-unlock) on the original PS5 and the Slim. The setting is kept across updates. Don't use it on a PS5 Pro.
 
-## Optional Decky plugins
+## Decky Loader and PS5 Hardware Control
 
-
-These are community-made and not part of the image. They need [Decky Loader](https://decky.xyz): install it from Desktop Mode with the installer on its website. Decky plugins appear in Game Mode's quick access menu (the `...` button).
-
-| Plugin | What it does |
-| --- | --- |
-| [PS5 hardware control](https://github.com/NotHavocc/ps5-hwcon-plugin) | Fan target or curve, live temperatures, CPU and GPU governors and clocks, LED presets. It sets the same things as `ps5-perf`: whichever was set last applies. Use a current image release: one pre-release had the fan modes swapped, and in some releases the fan target fell back to 50 °C after sleep (both fixed). There is also a desktop version, [ps5-hwcon-gui](https://github.com/NotHavocc/ps5-hwcon-gui). |
+[Decky Loader](/using-linux/decky) adds plugins to Game Mode's quick access menu: `ujust setup-decky install` in Desktop Mode installs it. Its [PS5 Hardware Control](/using-linux/decky#ps5-hardware-control) plugin sets the fan, CPU and GPU clocks, the light bar and VRAM from Game Mode; [ps5-hwcon-gui](https://github.com/NotHavocc/ps5-hwcon-gui) does the same on the desktop. Both are community-made and not part of the image.
 
 ## Troubleshooting
 
 
-Ask in `#bazzite-problems` on [Discord](https://discord.gg/ps5linux) and attach the report from `ps5-report`. Without a network connection, copy the report to the USB drive's FAT32 partition and take it from there on your PC:
+The first steps for the screen, Game Mode, Bluetooth and Wi-Fi are on [Common problems](/troubleshooting/common-problems). Ask in `#bazzite-problems` on [Discord](https://discord.gg/ps5linux) and attach the report from `ps5-report`. Without a network connection, copy the report to the USB drive's FAT32 partition and take it from there on your PC:
 
 ```bash
 E=$(for d in /boot/efi /efi; do sudo test -f $d/cmdline.txt && echo $d && break; done); sudo cp ~/ps5-report-*.txt $E/
@@ -93,7 +88,8 @@ E=$(for d in /boot/efi /efi; do sudo test -f $d/cmdline.txt && echo $d && break;
 - **HEVC video with broken colours or a red screen** (recording, streaming with Sunshine or Moonlight): the PS5's video engine gets HEVC P-frames wrong. Use **H.264**, or encode HEVC with I-frames only (see [VCN](/hardware/gpu#using-it-with-ffmpeg)). As a Moonlight client: use H.264, or "Force software decoding" for HEVC.
 - **An update or `bootc switch` fails with `Failed to start ostree-finalize-staged.service`:** v2.5's image; run the fix under [Updating](#updating) once.
 - **Won't boot from an SSD in a USB enclosure:** some enclosures don't work with the loader. Try another one.
-- **PS5 Pro reports 36 compute units:** the Pro's GPU firmware isn't in use yet. After every update, start Linux twice: the first start adds the firmware to the initrd, the second runs on it. If it stays at 36, the loader didn't dump the firmware, see [PS5 Pro](/hardware/ps5-pro#gpu-firmware).
+- **PS5 Pro: black screen in D3D12 games** (Dragon's Dogma 2, and others under vkd3d), SSH still works, `GPU Recovery Failed: -110` in the log: v2.1.6 to v2.5.1 replaced part of the Pro's GPU firmware, fixed in v2.6, see [Command-processor microcode](/hardware/ps5-pro#cp-microcode).
+- **PS5 Pro reports 36 compute units:** the Pro's GPU firmware isn't in use yet. After every update, start Linux twice: the first start adds the firmware to the initrd, the second runs on it. If it stays at 36, the loader doesn't dump the firmware on your firmware version, see [PS5 Pro](/hardware/ps5-pro#gpu-firmware).
 
 ## How it works
 

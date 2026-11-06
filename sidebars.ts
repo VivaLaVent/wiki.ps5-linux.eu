@@ -49,6 +49,7 @@ const sidebars: SidebarsConfig = {
         'using-linux/audio',
         'using-linux/browser-video',
         'using-linux/boot-to-desktop',
+        'using-linux/decky',
       ],
     },
     {
@@ -81,6 +82,7 @@ const sidebars: SidebarsConfig = {
       label: 'Troubleshooting & help',
       items: [
         'troubleshooting/getting-help',
+        'troubleshooting/common-problems',
         'troubleshooting/known-issues',
         'troubleshooting/recovery',
         'troubleshooting/modules-not-loading',

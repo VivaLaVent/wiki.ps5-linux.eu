@@ -13,8 +13,23 @@ The console's embedded controller (EMC) runs the fan through its own "autoservo"
 | Kernel | Default | Interface |
 | --- | --- | --- |
 | Upstream (current packages) and [rmuxnet's kernel](/advanced/kernel) | Kernel curve, on at boot. Nothing to install. | hwmon `ps5_fan`; `pwm1_enable` `2` is the curve. |
-| [PS5 Bazzite Deck](/choose/bazzite-deck) | Firmware control toward an 80 °C target, set by the driver at boot; `ps5-perf` can change it. | hwmon `ps5_fan` plus `target_temp`; `pwm1_enable` `2` is the curve, `3` the firmware. |
+| [PS5 Bazzite Deck](/choose/bazzite-deck) | Firmware control toward an 80 °C target, set by the driver at boot (v2.5 and v2.5.1 started on the kernel curve instead). | hwmon `ps5_fan` plus `target_temp`; `pwm1_enable` `2` is the curve, `3` the firmware. |
 | Older upstream kernels | Firmware control toward `target_temp`, 80 °C by default. The oldest kernels had no fan driver at all and left the fan off until `ps5_control --fan on`. | `target_temp` only. |
+
+## Change it from Game Mode or the desktop {#hwcon}
+
+The easiest way is NotHavocc's PS5 Hardware Control, in two forms that do the same:
+
+- **[ps5-hwcon-plugin](https://github.com/NotHavocc/ps5-hwcon-plugin)** for Game Mode: a [Decky Loader](/using-linux/decky) plugin in the quick access menu.
+- **[ps5-hwcon-gui](https://github.com/NotHavocc/ps5-hwcon-gui)** for the desktop: a window, no Decky needed.
+
+Its **Fan** tab shows the temperatures and switches between **Target** and **Curve**. On kernels with the hwmon driver, PS5 Bazzite Deck included, it runs every setting as a kernel curve (`pwm1_enable` `2`), a target too: a target there is a curve that reaches 45% at the target and full speed 6 °C above it. **Restore on Startup** re-applies your setting at every start, because the kernel starts from its default again.
+
+To go back to the console's own control on PS5 Bazzite Deck, turn **Restore on Startup** off and restart, or write a target directly:
+
+```bash
+echo 80 | sudo tee /sys/bus/platform/devices/ps5-fan/target_temp
+```
 
 ## hwmon driver
 
@@ -62,10 +77,8 @@ echo 128 | sudo tee $H/pwm1
 Back to the curve: `echo 2 | sudo tee $H/pwm1_enable`.
 
 :::note[PS5 Bazzite Deck]
-The image starts in firmware mode (`pwm1_enable` `3`) with an 80 °C target that the driver sets at boot (`ps5-perf` can change it); the curve is opt-in with `2`, and writing `target_temp` returns to firmware control. After an emergency the driver returns to firmware control, not to the curve. One pre-release had modes `2` and `3` the other way round, and some releases lost the target after sleep (it came back at 50 °C because the driver re-sent its parameter table on resume); both are fixed in the current release.
+The image starts in firmware mode (`pwm1_enable` `3`) with an 80 °C target that the driver sets at boot and again after sleep; `ps5_fan.curve=1` in `cmdline.txt` starts with the curve instead. Writing `target_temp` (40 to 90) returns to firmware control, and so does the driver after an emergency. v2.5 and v2.5.1 started on the curve, and kept the firmware's lower target during sleep and shutdown, which made the fan ramp up then; v2.6 fixes both.
 :::
-
-**User tools:** [ps5-hwcon-plugin](https://github.com/NotHavocc/ps5-hwcon-plugin) (a Decky plugin for Game Mode) and [ps5-hwcon-gui](https://github.com/NotHavocc/ps5-hwcon-gui) (desktop) set the fan and show the temperatures; they handle kernels with and without `target_temp`.
 
 ## Target temperature (older kernels and PS5 Bazzite Deck)
 
@@ -87,7 +100,7 @@ Set a lower target for more cooling at the cost of noise, for example 65 °C:
 echo 65 | sudo tee /sys/bus/platform/devices/ps5-fan/target_temp
 ```
 
-The driver accepts 0 to 100 °C. A very low target doesn't make the fan a "max" switch: the firmware ramps as far as it needs to for any target, and below roughly 40 °C the fan is constantly audible while the SoC temperature barely moves any more. Pick a target you are happy to listen to.
+The driver accepts 0 to 100 °C (PS5 Bazzite Deck from v2.6: 40 to 90 °C). A very low target doesn't make the fan a "max" switch: the firmware ramps as far as it needs to for any target, and below roughly 40 °C the fan is constantly audible while the SoC temperature barely moves any more. Pick a target you are happy to listen to.
 
 On the oldest kernels, without a fan driver, the fan stays off until `ps5_control --fan on` from [ps5-linux-tools](https://github.com/ps5-linux/ps5-linux-tools) turns it on; its `install.sh` installs `ps5fan.service` so that happens at every boot, see [Clocks and boost](/hardware/gpu#clocks-and-boost).
 

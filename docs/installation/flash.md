@@ -13,6 +13,17 @@ You have an image file from [Choose your image](/getting-started/which-image): a
 
 The drive must be **64 GB or larger**; an external SSD makes everything faster. Flashing erases the drive.
 
+## Check the download {#check-the-download}
+
+PS5 Bazzite Deck's image comes as several `.img.7z.001`, `.002`, … parts. Extract them with [7-Zip](https://www.7-zip.org) by opening the `.001` file; Windows' built-in extraction and some other tools produce a broken `.img`. The release's `.sha256` file lists the `.img`'s checksum on its first line. Compare it with yours:
+
+- **Windows:** `certutil -hashfile ps5-bazzite-deck-bootc-vX.Y.img SHA256`
+- **Linux or macOS:** `sha256sum ps5-bazzite-deck-bootc-vX.Y.img` (macOS: `shasum -a 256 …`)
+
+Releases before v2.6 list only the checksums of the `.7z` parts.
+
+## Flash it
+
 **Linux or macOS:**
 
 ```bash
@@ -37,7 +48,11 @@ Double-check the target device. `dd` overwrites whatever you point it at without
 2. **Select target** → pick the USB drive. Check its size: everything on it is erased.
 3. **Flash!**, then wait until it has also checked the written drive.
 
-When Windows then offers to format the drive, choose **Cancel**: the Linux partitions are fine, Windows just can't read them.
+When Windows then offers to format the drive, choose **Cancel**: the Linux partitions are fine, Windows just can't read them. Formatting erases the install.
+
+:::warning[Not Rufus]
+Drives flashed with Rufus stopped in an emergency shell (`/dev/disk/by-label/bazzite-deck does not exist`) for several users; balenaEtcher fixed it for all of them.
+:::
 
 ## Plug the drive into the PS5
 

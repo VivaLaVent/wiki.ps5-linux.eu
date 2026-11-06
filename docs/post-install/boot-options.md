@@ -71,6 +71,7 @@ root=LABEL=bazzite-deck rw rootwait console=ttyTitania0 console=tty0 mitigations
 | `ps5_cec.one_touch_play=0` | Doesn't turn the TV on and switch it to the console at boot | all | [HDMI](/hardware/hdmi) |
 | `usbc_dp.enable=1` | DisplayPort output on the front USB-C port (USB-C displays, PS VR2). Not with the boot drive in that port | all | [HDMI](/hardware/hdmi) |
 | `hdmi.vrr=0` | Never offers VRR. Steam's VRR setting also turns it off | BD | [VRR](/hardware/hdmi#vrr-on-flava3) |
+| `hdmi.modes_100hz=1` | Offers 1080p, 1440p and 4K at 100 Hz (FLAVA3, displays that go to 100 Hz) | BD from v2.6 | [HDMI](/hardware/hdmi) |
 | `hdmi.rgb_range=<0,1,2>` | RGB range flag sent to the TV: 1 full (default), 2 limited, 0 none | BD | [RGB range](/hardware/hdmi#rgb-range) |
 | `hdmi.icc_trace=1` | Logs every message to the HDMI chip and its reply. Debugging only, very noisy | BD | |
 | `hdmi.vrr_measure=1` | Logs the measured frame intervals every 2 seconds while VRR is on. Debugging only | BD | |
@@ -90,6 +91,9 @@ On upstream kernels, `/sys/module/hdmi/parameters/` also shows read-only state: 
 | `ttm.pages_limit=…` | Raises how much system memory the GPU may borrow (GTT) | all | [VRAM](/hardware/gpu#vram) |
 | `ps5_gpufreq.temp_limit=<50-95>` | Thermal limit of the GPU clock governor, 85 °C by default | upstream, BD | [GPU](/hardware/gpu) |
 | `amdgpu.ps5_viola_fw=0` | PS5 Pro: use the base PS5's GPU firmware (36 CUs). For comparisons and troubleshooting | upstream, BD | [PS5 Pro](/hardware/ps5-pro#gpu-driver) |
+| `ps5.viola_cp=cs2` | PS5 Pro: linux-firmware's command-processor microcode instead of Sony's, for D3D9 games that hang at their first frame. Takes two starts | BD from v2.6 | [PS5 Pro](/hardware/ps5-pro#cp-microcode) |
+| `ps5_fan.curve=1` | Starts with the kernel fan curve instead of the console's firmware control | BD from v2.6 | [Fan control](/hardware/fan) |
+| `lsm=landlock,lockdown,yama,integrity,apparmor,bpf` | Turns on the BPF LSM, which Bazzite's Game Mode needs (`cardwired`), on a kernel built without `bpf` in `CONFIG_LSM`. PS5 Bazzite Deck's kernel has it built in | all | [Image build](/advanced/image-build) |
 
 ### USB and storage {#usb-and-storage}
 
@@ -108,7 +112,7 @@ On upstream kernels, `/sys/module/hdmi/parameters/` also shows read-only state: 
 
 ## vram.txt {#vram}
 
-`vram.txt` sets the GPU's dedicated memory. The default is 512 MB, and the GPU borrows more from system memory as needed. The value is a **hexadecimal byte count**, not megabytes: see [VRAM](/hardware/gpu#vram) for the format and a table of sizes. A large fixed value takes that memory away from the system; memory-hungry games (on the Pro, for example Hogwarts Legacy and Dragon's Dogma 2) run better with a smaller one plus `ttm.pages_limit`.
+`vram.txt` sets the GPU's dedicated memory. The loader's default is 512 MB, and the GPU borrows more from system memory as needed; PS5 Bazzite Deck sets 6 GB from v2.6. The value is a **hexadecimal byte count**, not megabytes: see [VRAM](/hardware/gpu#vram) for the format and a table of sizes. A large fixed value takes that memory away from the system; memory-hungry games (on the Pro, for example Hogwarts Legacy and Dragon's Dogma 2) run better with a smaller one plus `ttm.pages_limit`.
 
 ## Next steps
 

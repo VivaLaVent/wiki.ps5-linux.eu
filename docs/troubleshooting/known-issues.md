@@ -25,6 +25,10 @@ What is known to be broken or limited, with the workaround where there is one, a
 | MediaTek Bluetooth (most Slims, PS5 Pro) | Needs [btusb fixes](/hardware/wifi-bluetooth#bluetooth): PS5 Bazzite Deck has them; rmuxnet's kernel carries a different patch that its author reports as broken; not upstream |
 | PS5 Bazzite Deck v2.5 (bootc): every update fails, `Failed to start ostree-finalize-staged.service` | Fixed in later images; on v2.5, [run the fix once](/post-install/bazzite#updating) |
 | PS5 Bazzite Deck v2.5 (bootc): Steam's OS Update Channel switches to Bazzite's own images, which can't start on a PS5 | Don't use it on v2.5; from v2.5.1 it lists Stable and Beta of PS5 Bazzite Deck |
+| PS5 Bazzite Deck v2.5 and v2.5.1: fan louder and hunting at idle (`ps5-perf status` shows `kernel curve`) | The 7.3.1 kernel started on its own fan curve; v2.6 returns to the console's firmware control with an 80 °C target. Until then, a quieter curve from [PS5 Hardware Control](/hardware/fan#hwcon) helps |
+| PS5 Pro, PS5 Bazzite Deck v2.1.6 to v2.5.1: D3D12 games go black (`ring gfx_0.0.0 timeout`, `GPU Recovery Failed: -110`) | Fixed in v2.6, see [Command-processor microcode](/hardware/ps5-pro#cp-microcode) |
+| Emergency shell at start, `/dev/disk/by-label/bazzite-deck does not exist` or `Not all disks have been found` | The system partition wasn't found: flash again with balenaEtcher, see [Flash the image](/installation/flash#check-the-download) |
+| Legacy update stops with `this is not a PS5 Bazzite Deck install` | Installs whose root isn't `LABEL=bazzite-deck` (copied to an M.2, for example); fixed in the v2.6 update: run the update command with `v2.6` |
 | No picture after choosing a display mode | See [Display recovery](/hardware/hdmi#display-recovery) |
 | Kernel update on an M.2 install leaves a black screen or no network | See [below](#kernel-update-breaks-m2-boot) |
 | Starting Linux ends on the PS5 login screen (rest mode error) | See [below](#rest-mode-error-back-to-the-ps5-login-screen) |

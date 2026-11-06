@@ -18,7 +18,18 @@ The Pro GPU driver and its clock governor are upstream, in [ps5-linux/ps5-linux-
 
 The Pro's GPU needs its own firmware, eight files named `viola_*.bin` (`ce`, `me`, `mec`, `mec2`, `pfp`, `rlc`, `sdma`, `sdma1`). The [Linux loader](/getting-started/loader#which-loader) dumps them from the PS5 OS to the boot partition, under `lib/firmware/amdgpu/`, every time it starts Linux.
 
-Only a loader that knows the Pro's firmware offsets does this: one built from the official [ps5-linux-loader](https://github.com/ps5-linux/ps5-linux-loader)'s `main` branch. bazzite-bootc-loader is built from `main` for every PS5 Bazzite Deck release, and each release lists its SHA-256. The official tagged releases predate the firmware dump, and so do the community forks. The official README lists the system software versions the dump supports.
+Only a loader that knows the offsets for the Pro's firmware version does this:
+
+| Pro firmware | Official loader (`main`), bazzite-bootc-loader up to v2.5.1 | soniciso1's loader, bazzite-bootc-loader from v2.6 |
+| --- | --- | --- |
+| 11.00, 11.20, 11.40 | No | Yes |
+| 11.60 | Yes | Yes |
+| 12.00, 12.02, 12.40, 12.70 | No | Yes |
+| 12.20, 12.60 | No | No |
+| 13.20, 13.60 | Yes | Yes |
+| 13.40, 13.42 | No | Yes |
+
+soniciso1's offsets for the versions the official loader lacks were read from retail firmware images; report on [Discord](https://discord.gg/ps5linux) whether yours dumps.
 
 With a loader that doesn't dump the files, `ls /boot/efi/lib/firmware/amdgpu/` (or `/efi/...` on Bazzite) stays empty, `amdgpu` loads the base PS5's firmware and the Pro runs as a base PS5 with 36 CUs. On PS5 Bazzite Deck, `journalctl -u ps5-stage-viola-fw` says that the staging was skipped.
 
@@ -34,6 +45,12 @@ sudo dmesg | grep -i -e viola -e active_cu_number
 ```
 
 `using Viola firmware` and `active_cu_number 60` mean the Pro firmware is in use. A Pro without it reports 36.
+
+### Command-processor microcode {#cp-microcode}
+
+Five of the eight files (`ce`, `me`, `pfp`, `mec`, `mec2`) are the GPU's command-processor microcode. PS5 Bazzite Deck v2.1.6 to v2.5.1 replaced Sony's with linux-firmware's `cyan_skillfish2` microcode, because a DXVK (D3D9) game hung at its first frame on Sony's. That substitute hangs D3D12 games under vkd3d instead, such as Dragon's Dogma 2: the log shows `ring gfx_0.0.0 timeout` with the game's process, then `GPU Recovery Failed: -110`, and the screen stays black while SSH still works. With Sony's microcode, Dragon's Dogma 2 runs at 55 to 60 FPS on a Pro.
+
+From v2.6, PS5 Bazzite Deck uses Sony's microcode again. For a D3D9 game that hangs at its first frame, add `ps5.viola_cp=cs2` to `cmdline.txt` and start twice: the first start rebuilds the initrd with the substitute, the second runs on it. Remove the option to go back.
 
 ## GPU driver
 
@@ -65,7 +82,7 @@ The clock drivers on a Pro have not been confirmed on hardware by the wiki edito
 
 ## What not to enable on a Pro
 
-- **`amdgpu.ps5_cu_unlock`:** all 60 CUs are already active; the [40 CU unlock](/hardware/gpu#40-cu-unlock) is for the base PS5 and the Slim.
+- **`amdgpu.ps5_cu_unlock`:** with the Viola firmware, 60 CUs are active. The driver's unlock code also covers the Pro's last two WGPs (64 CUs), but that is untested and they may be disabled for a reason. The [40 CU unlock](/hardware/gpu#40-cu-unlock) is for the base PS5 and the Slim.
 - **The earlier versions of rmuxnet's CPU frequency driver.** On a Pro their requests to the power controller never got through, most likely because the Pro's SMU backend uses the same controller, and the log flooded with `mp1fw_sendmsg: Error : busy` and `cpufreq: Failed to change cpu frequency: -16`. PS5 Bazzite Deck keeps `ps5-cpufreq` off on a Pro (its `ps5-gpufreq` is no longer built at all, the upstream governor replaces it); the firmware then sets the CPU clocks. rmuxnet's kernel ships reworked versions that know the Pro, see above.
 
 ## Starting Linux fails on the Pro

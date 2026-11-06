@@ -30,7 +30,7 @@ PS5 Bazzite Deck is a **bootc** image: the whole system is one image, built and 
 - **The previous version stays on the drive.** `sudo bootc rollback`, then power off and start with the loader, takes you back ([Rolling back](/post-install/bazzite#rolling-back)).
 - **Games, settings and your files are kept** across updates and rollbacks.
 
-It starts with **bazzite-bootc-loader**, attached to every release: the official Linux loader built from its `main` branch, plus support for the boot entries bootc uses to choose and roll back versions. It starts other images like the official loader, so one loader works for everything.
+It starts with **bazzite-bootc-loader**, attached to every release, see [Which loader](/getting-started/loader#which-loader). It starts other images like the official loader, so one loader works for everything.
 
 :::note[Installed before v2.5?]
 Older installs run the **Legacy** form; `ps5-report` shows `legacy` on its **Install** line. Legacy installs still update in place with the command in each release's notes, but switching to bootc is recommended. Switching means flashing the bootc image, which erases the drive: use a second drive, or copy off what you want to keep first.
