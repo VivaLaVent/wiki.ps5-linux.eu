@@ -15,7 +15,7 @@ Two small files on the USB drive's FAT32 boot partition control how Linux starts
 
 `cmdline.txt` must stay **one single line**. Add an option at the end with a space in front of it; delete it the same way.
 
-- **On the PS5, in Linux:** the boot partition is mounted at `/boot/efi` on most images (`/efi` on Legacy PS5 Bazzite Deck installs). These commands find it by themselves:
+- **On the PS5, in Linux:** the boot partition is mounted at `/boot/efi` on most images (`/efi` on Legacy PS5 Bazzite Deck installs) and belongs to root, so a file manager can show it but not save to it. Open a terminal (on PS5 Bazzite Deck: Desktop Mode → **Konsole**); these commands find the partition by themselves:
 
   ```bash
   E=$(for d in /efi /boot/efi; do sudo test -f $d/cmdline.txt && echo $d && break; done)
@@ -178,3 +178,17 @@ On upstream kernels, `/sys/module/hdmi/parameters/` also shows read-only state: 
 ## vram.txt {#vram}
 
 `vram.txt` sets the GPU's dedicated memory. The loader's default is 512 MB, and the GPU borrows more from system memory as needed; PS5 Bazzite Deck sets 6 GB from v2.6.1. The value is a **hexadecimal byte count**, not megabytes: see [VRAM](/troubleshooting/gpu#vram) for the format and a table of sizes. A large fixed value takes that memory away from the system; memory-hungry games (on the Pro, for example Hogwarts Legacy and Dragon's Dogma 2) run better with a smaller one plus `ttm.pages_limit`.
+
+### Edit vram.txt {#edit-vramtxt}
+
+`vram.txt` sits next to `cmdline.txt` on the boot partition and holds one hexadecimal value. On the PS5, in a terminal (on PS5 Bazzite Deck: Desktop Mode → **Konsole**):
+
+```bash
+E=$(for d in /efi /boot/efi; do sudo test -f $d/cmdline.txt && echo $d && break; done)
+sudo cat $E/vram.txt                         # show
+echo 180000000 | sudo tee $E/vram.txt        # 6 GB
+```
+
+The new value is used from the next start with the loader: power off, then start Linux with the loader as usual. From a PC, edit it like `cmdline.txt`, see [From a PC](#edit-from-a-pc).
+
+On PS5 Bazzite Deck, `vram.txt` isn't managed by the image: updates and rollbacks leave your value alone (from v2.6.1 an install gets 6 GB once, later changes are kept). [PS5 Hardware Control](/post-install/decky#ps5-hardware-control) and ps5-hwcon-gui change the same file from Game Mode or the desktop.
