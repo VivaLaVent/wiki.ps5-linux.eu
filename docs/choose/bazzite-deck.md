@@ -39,7 +39,7 @@ Older installs run the **Legacy** form; `ps5-report` shows `legacy` on its **Ins
 ## What works on your console
 
 
-One image runs on every supported PS5. What you get depends on three parts of the console; `ps5-report` shows all three. See [Hardware overview](/hardware/matrix#console-models-and-chips) for how to check them by hand.
+One image runs on every supported PS5. What you get depends on three parts of the console; `ps5-report` shows all three. See [Hardware status](/getting-started/hardware#console-models-and-chips) for how to check them by hand.
 
 **By HDMI chip:**
 
@@ -56,11 +56,11 @@ Both chips support 1080p60, 1080p120, 1440p60 and 4K60, when the display can do 
 
 | Feature | IW620 | MediaTek (Slim) | MediaTek (Pro) | Notes |
 | --- | :---: | :---: | :---: | --- |
-| One DualSense for the PS5 and Linux | ✅ | ✅ | ✅ | On by default, see [DualSense](/using-linux/dualsense#one-dualsense-for-the-ps5-and-linux). |
+| One DualSense for the PS5 and Linux | ✅ | ✅ | ✅ | On by default, see [DualSense](/post-install/dualsense#one-dualsense-for-the-ps5-and-linux). |
 | Wi-Fi after restarting straight into Linux (`ps5-warm-reboot on`) | ⚠️ | ✅ | ✅ | IW620: repaired automatically. If Wi-Fi is still missing, power off and run the loader. |
 | Bluetooth finds new devices | ✅ | ✅ | ✅ | IW620: broken in some earlier releases (a paired DualSense kept working). Update if the settings find nothing. |
 
-**PS5 Pro:** the GPU runs with its 60 compute units and the Pro's own firmware, Wi-Fi and Bluetooth work from a cold boot, and overlays show the GPU load. The GPU firmware has to be dumped by the Linux loader, which only a loader built from the official repository's `main` branch does; see [PS5 Pro](/hardware/ps5-pro#gpu-firmware) for which loaders do and what to expect after an update. Not supported on the Pro: the 40 CU unlock. Reports are welcome in `#bazzite-ps5-pro-tests`.
+**PS5 Pro:** the GPU runs with its 60 compute units and the Pro's own firmware, Wi-Fi and Bluetooth work from a cold boot, and overlays show the GPU load. The GPU firmware has to be dumped by the Linux loader, which bazzite-bootc-loader does on the firmware versions it has offsets for; see [PS5 Pro](/troubleshooting/ps5-pro#gpu-firmware) for which loaders do and what to expect after an update. Not supported on the Pro: the 40 CU unlock. Reports are welcome in `#bazzite-ps5-pro-tests`.
 
 ## What you need for this image
 
@@ -78,7 +78,7 @@ Both chips support 1080p60, 1080p120, 1440p60 and 4K60, when the display can do 
 2. **Verify** the download: the checksums of the `.7z.00*` files must match the `.sha256` file. On Linux, `sha256sum -c <file>.sha256`; on Windows, `Get-FileHash <file> -Algorithm SHA256` in PowerShell for each volume.
 3. **Extract** the `.001` file with [7-Zip](https://7-zip.org) (Windows), Keka (macOS) or `7z x` (Linux). You get an `.img` file: that is the file you flash.
 
-Already installed? Updates come through Steam, see [After installing: PS5 Bazzite Deck](/post-install/bazzite#updating).
+Already installed? Updates come through Steam, see [Updating](/post-install/bazzite#updating).
 
 ## Next steps
 

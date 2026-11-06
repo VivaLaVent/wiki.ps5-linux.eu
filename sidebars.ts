@@ -1,8 +1,8 @@
 import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
 
-// The sidebar follows the order a new user goes through:
-// before you install → install → after installing → hardware reference → advanced → fix problems.
-// "After installing" has three layers: all distros, the other images, distro notes; plus PS5 Bazzite Deck.
+// The order a new user goes through: welcome → before you install → install → after installing → troubleshooting.
+// After installing: all images, boot options, then PS5 Bazzite Deck and the other distros.
+// Troubleshooting: the start page (SSH and logs), error messages, then one page per component.
 
 const sidebars: SidebarsConfig = {
   wikiSidebar: [
@@ -14,13 +14,24 @@ const sidebars: SidebarsConfig = {
       items: [
         'getting-started/overview',
         'getting-started/prerequisites',
+        'getting-started/hardware',
+        'getting-started/drives',
         'getting-started/loader',
         {
           type: 'category',
           label: 'Choose your image',
           link: {type: 'doc', id: 'getting-started/which-image'},
           collapsed: false,
-          items: ['choose/bazzite-deck', 'choose/official-images', 'choose/build-your-own'],
+          items: [
+            'choose/bazzite-deck',
+            'choose/official-images',
+            {
+              type: 'category',
+              label: 'Build your own',
+              link: {type: 'doc', id: 'choose/build-your-own'},
+              items: ['choose/kernel-sources', 'choose/image-build'],
+            },
+          ],
         },
       ],
     },
@@ -40,59 +51,46 @@ const sidebars: SidebarsConfig = {
       label: 'After installing',
       collapsed: false,
       items: [
-        'post-install/all-distros',
+        {
+          type: 'category',
+          label: 'All images',
+          link: {type: 'doc', id: 'post-install/all-distros'},
+          items: ['post-install/dualsense', 'post-install/browser-video', 'post-install/warm-reboot'],
+        },
         'post-install/boot-options',
-        'post-install/not-bazzite-deck',
-        'post-install/distro-notes',
-        'post-install/bazzite',
-        'using-linux/dualsense',
-        'using-linux/audio',
-        'using-linux/browser-video',
-        'using-linux/boot-to-desktop',
-        'using-linux/decky',
+        {
+          type: 'category',
+          label: 'PS5 Bazzite Deck',
+          link: {type: 'doc', id: 'post-install/bazzite'},
+          items: ['post-install/decky'],
+        },
+        {
+          type: 'category',
+          label: 'Other distros',
+          link: {type: 'doc', id: 'post-install/not-bazzite-deck'},
+          items: ['post-install/package-repository', 'post-install/kernel', 'post-install/boot-to-desktop'],
+        },
       ],
     },
     {
       type: 'category',
-      label: 'Hardware reference',
+      label: 'Troubleshooting',
+      link: {type: 'doc', id: 'troubleshooting/getting-help'},
       items: [
-        'hardware/matrix',
-        'hardware/hdmi',
-        'hardware/gpu',
-        'hardware/ps5-pro',
-        'hardware/wifi-bluetooth',
-        'hardware/fan',
-        'hardware/storage',
-        'hardware/peripherals',
+        'troubleshooting/error-messages',
+        'troubleshooting/display',
+        'troubleshooting/gpu',
+        'troubleshooting/ps5-pro',
+        'troubleshooting/wifi',
+        'troubleshooting/ethernet',
+        'troubleshooting/bluetooth',
+        'troubleshooting/fan',
+        'troubleshooting/storage',
+        'troubleshooting/audio',
+        'troubleshooting/peripherals',
       ],
     },
-    {
-      type: 'category',
-      label: 'Advanced',
-      items: [
-        'advanced/kernel',
-        'advanced/kernel-sources',
-        'advanced/package-repository',
-        'advanced/image-build',
-        'advanced/warm-reboot',
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Troubleshooting & help',
-      items: [
-        'troubleshooting/getting-help',
-        'troubleshooting/common-problems',
-        'troubleshooting/known-issues',
-        'troubleshooting/recovery',
-        'troubleshooting/modules-not-loading',
-      ],
-    },
-    {
-      type: 'category',
-      label: 'About',
-      items: ['about/credits'],
-    },
+    'credits',
   ],
 };
 

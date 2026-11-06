@@ -17,7 +17,7 @@ Use one of the fast ports:
 - **Original PS5:** the **front USB-C** port or the two **rear USB-A** ports.
 - **PS5 Slim:** the two **rear USB-A** ports. One of the two front USB-C ports is the slow one, so the rear ports are the safe choice.
 
-Every PS5 has one slow USB 2.0 port (on the original PS5, the front USB-A port). It boots too, but everything that reads from the drive takes much longer; use it for a controller or keyboard instead. Keep hubs, keyboards and mice off the fast ports until Linux is running: they can stop the console from entering rest mode, see [Known issues](/troubleshooting/known-issues#rest-mode-error-back-to-the-ps5-login-screen).
+Every PS5 has one slow USB 2.0 port (on the original PS5, the front USB-A port). It boots too, but everything that reads from the drive takes much longer; use it for a controller or keyboard instead. Keep hubs, keyboards and mice off the fast ports until Linux is running: they can stop the console from entering rest mode, see [Error messages](/troubleshooting/error-messages#rest-mode-error-back-to-the-ps5-login-screen).
 
 ## Jailbreak the PS5
 
@@ -66,24 +66,10 @@ If you are testing repeatedly, you can wake the PS5 from rest mode with a DualSe
 | Orange, blinking | Going into rest mode, wait |
 | Orange, solid | Ready: press the power button now |
 | White | Linux has booted |
-| White straight to solid orange, no blinking | Rest mode was refused; the power button starts the PS5 OS, see [Known issues](/troubleshooting/known-issues#rest-mode-error-back-to-the-ps5-login-screen) |
+| White straight to solid orange, no blinking | Rest mode was refused; the power button starts the PS5 OS, see [Error messages](/troubleshooting/error-messages#rest-mode-error-back-to-the-ps5-login-screen) |
 | Back to the PS5 OS | You pressed the power button too early, or USB power in rest mode is not enabled |
 
-The front light bar can also be controlled from Linux, see [LED control](/hardware/peripherals#led).
-
-## Black screen?
-
-Try these first:
-
-- Remove `video=DP-1:1920x1080@60` from `cmdline.txt` on the FAT32 partition.
-- Add `amdgpu.force_1080p=1` to `cmdline.txt`.
-- Turn HDCP off in the PS5 settings, or on if it was off.
-- Try a different monitor or capture card.
-- Ask on [Discord](https://discord.gg/ps5linux) and include your EDID, see [Display recovery](/hardware/hdmi#decode-the-edid).
-
-See [Display output](/hardware/hdmi#troubleshooting-a-black-screen) for the full troubleshooting list.
-
-Next: [First boot](/installation/first-boot).
+A white LED with no picture usually means Linux is running and only the display is stuck, see [Black screen](/troubleshooting/display#black-screen).
 
 ## Next steps
 

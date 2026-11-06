@@ -1,7 +1,7 @@
 ---
 title: Browser video and monitoring
 sidebar_label: Browser video
-sidebar_position: 8
+sidebar_position: 2
 description: Turn on hardware video decode in Chrome and Firefox, avoid AV1, and read GPU load without a sensor.
 hardware: [original, slim, pro]
 applies_to: all
@@ -9,7 +9,7 @@ applies_to: all
 
 # Browser video and monitoring
 
-Hardware video decode needs a kernel with VCN support, see [Hardware video (VCN)](/hardware/gpu#video-engine). With it, browsers can decode H.264 video on the GPU instead of the CPU.
+Hardware video decode needs a kernel with VCN support, see [Hardware video (VCN)](/troubleshooting/gpu#video-engine). With it, browsers can decode H.264 video on the GPU instead of the CPU.
 
 ## Chrome
 
@@ -35,11 +35,5 @@ The GPU has no AV1 decoder, so AV1 video falls back to the CPU and can stutter. 
 On the original PS5 and the Slim the GPU has no load sensor in the kernel, so KDE's system monitor shows no GPU usage; `nvtop` in a terminal shows what the driver does know. On the PS5 Pro the SMU backend provides `gpu_busy_percent`, and overlays such as MangoHud show the load.
 
 :::note[Not tested]
-The Chrome flags were reported on the official CachyOS image. The encoder flag turns on hardware encode, which only works well with H.264, see [Using it with FFmpeg](/hardware/gpu#using-it-with-ffmpeg).
+The Chrome flags were reported on the official CachyOS image. The encoder flag turns on hardware encode, which only works well with H.264, see [Using it with FFmpeg](/troubleshooting/gpu#using-it-with-ffmpeg).
 :::
-
-## Next steps
-
-- [Hardware status](/hardware/matrix): what works on each model
-- [After installing](/post-install/all-distros)
-- [Troubleshooting & help](/troubleshooting/getting-help)

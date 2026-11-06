@@ -1,7 +1,7 @@
 ---
 title: Get a PS5 Linux loader
 sidebar_label: Get a Linux loader
-sidebar_position: 3
+sidebar_position: 5
 description: Which Linux loader to use on the PS5, where to download it, and what it does on the Slim and the Pro.
 hardware: [original, slim, pro]
 applies_to: all
@@ -24,12 +24,8 @@ All three start Linux from the USB drive the same way: they read `bzImage`, `ini
 Download the `.elf` and its `.sha256` file. For PS5 Bazzite Deck, take `bazzite-bootc-loader-vX.Y.elf` from the same release as your image.
 
 :::tip[PS5 Pro]
-Without the GPU firmware dump, the Pro runs as a base PS5 with 36 compute units instead of 60. The dump depends on the Pro's firmware version, see [PS5 Pro](/hardware/ps5-pro#gpu-firmware).
+Without the GPU firmware dump, the Pro runs as a base PS5 with 36 compute units instead of 60. The dump depends on the Pro's firmware version, see [PS5 Pro](/troubleshooting/ps5-pro#gpu-firmware).
 :::
-
-## PS5 Slim and PS5 Pro
-
-The Slim runs the same firmware versions as the original PS5 and is supported on all of them. The Pro shipped with newer firmware, so its list starts at 11.00.
 
 ## Next steps
 

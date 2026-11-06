@@ -11,14 +11,18 @@ applies_to: all
 The first start takes longer than later ones: the root partition grows to fill the drive, and some images run a setup screen for the time zone, host name and password.
 
 :::warning[Ubuntu: black screen before you create a user]
-The Ubuntu image creates its user during the first-boot setup. Until that is done there is no account, so if the screen goes black before you finish, you can't SSH in either. The way out is to create the user from another Linux system with chroot, see [Recovery via chroot](/troubleshooting/recovery).
+The Ubuntu image creates its user during the first-boot setup. Until that is done there is no account, so if the screen goes black before you finish, you can't SSH in either. The way out is to create the user from another Linux system with chroot, see [Recovery via chroot](/troubleshooting/error-messages#recovery-via-chroot).
 :::
 
 1. Create your user account and password where the image asks for it, and remember them.
-2. If the screen stays black for more than a few minutes, switch TTY (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F2</kbd>, wait, <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F1</kbd>) before assuming the boot failed, see [Display recovery](/hardware/hdmi#display-recovery).
-3. Check that the root partition has grown: `df -h /` should show the drive's size, not a few GB. If not, see [USB and storage](/hardware/storage#usb-drive-required).
+2. If the screen stays black for more than a few minutes, switch TTY (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F2</kbd>, wait, <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F1</kbd>) before assuming the boot failed, see [Display recovery](/troubleshooting/display#display-recovery).
+3. Check that the root partition has grown: `df -h /` should show the drive's size, not a few GB. If not, see [USB and storage](/troubleshooting/storage).
 
-Then work through the [Post-install checklist](/post-install/all-distros): it holds the PS5-specific steps (kernel hold, fan and boost, GPU memory, Wi-Fi driver) that every image needs.
+Then work through [After installing](/post-install/all-distros): the PS5-specific steps every image needs, then the ones for your image.
+
+## Default user and password
+
+It depends on the image. The official CachyOS image logs in as `steam` with the password `steam` and the hostname `ps5`. PS5 Bazzite Deck uses `ps5` for both. Ubuntu asks you to create a user on the first boot. Change the password with `passwd` right after the first login: SSH with password login is on by default on most images, see [Get in over SSH](/troubleshooting/getting-help#ssh).
 
 ## PS5 Bazzite Deck
 
@@ -37,7 +41,7 @@ Then work through the [Post-install checklist](/post-install/all-distros): it ho
 
 ## Next steps
 
-Continue with **[After installing: all distros](/post-install/all-distros)**, then:
+Continue with **[After installing: all images](/post-install/all-distros)**, then:
 
 - **PS5 Bazzite Deck:** [After installing: PS5 Bazzite Deck](/post-install/bazzite)
-- **Official or self-built images:** [Other images](/post-install/not-bazzite-deck) and [Distro notes](/post-install/distro-notes)
+- **Official or self-built images:** [After installing: other distros](/post-install/not-bazzite-deck)

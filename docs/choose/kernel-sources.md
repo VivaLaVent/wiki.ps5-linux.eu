@@ -1,6 +1,6 @@
 ---
 title: Kernel sources and patches
-sidebar_position: 2
+sidebar_position: 1
 description: Where the PS5 kernel comes from, what the version strings and branches mean, and how to apply a patch set or single patches by hand on any image.
 hardware: [original, slim, pro]
 applies_to: not-bazzite-deck
@@ -8,7 +8,7 @@ applies_to: not-bazzite-deck
 
 # Kernel sources and patches
 
-Every PS5 kernel is stock Linux plus one patch file and a config, and every image boots whatever kernel sits on its boot partition. This page is the map: how a kernel is put together, what the version strings and branches mean, and how to apply patches yourself. The build and install commands are on [Kernel setup](/advanced/kernel).
+Every PS5 kernel is stock Linux plus one patch file and a config, and every image boots whatever kernel sits on its boot partition. This page is the map: how a kernel is put together, what the version strings and branches mean, and how to apply patches yourself. The build and install commands are on [Kernel setup](/post-install/kernel).
 
 ## How a PS5 kernel is put together
 
@@ -54,11 +54,11 @@ cat /proc/version
 | [VivaLaVent/ps5-bazzite-deck](https://github.com/VivaLaVent/ps5-bazzite-deck) | tags `vX.Y.Z` | The image. `patches/` holds its kernel patches, each with a description at the top; `build.sh` section 3 is the order; `CHANGELOG.md` says what changed when and what is untested. |
 | [ps5-linux/ps5-linux-image](https://github.com/ps5-linux/ps5-linux-image) | | The image builders. They take the patch set as a `--patches-ref` (branch, tag or commit) and build the kernel packages the images ship. |
 
-Which feature is in which of them is on [Kernel setup](/advanced/kernel#what-is-where). rmuxnet's README sets the rules for his repository: changes go in as pull requests only, work taken from it is credited, and renamed forks of the kernel are not allowed.
+Which feature is in which of them is on [Kernel setup](/post-install/kernel#what-is-where). rmuxnet's README sets the rules for his repository: changes go in as pull requests only, work taken from it is credited, and renamed forks of the kernel are not allowed.
 
 ## Apply a patch set by hand
 
-The full commands are under [Build by hand](/advanced/kernel#build-by-hand). The shape is always the same, for either repository:
+The full commands are under [Build by hand](/post-install/kernel#build-by-hand). The shape is always the same, for either repository:
 
 1. Clone the patch set and the stock kernel side by side, the patch set in a folder named `ps5-linux-patches`.
 2. Check out the tag named in the first lines of `.config`.
@@ -93,7 +93,7 @@ make LLVM=1 olddefconfig
 Then build as usual. Give the kernel a local version (`scripts/config --set-str CONFIG_LOCALVERSION "-mine"`) so its modules don't overwrite the ones of the kernel you are running.
 
 :::note[Patches move between the layers]
-When PS5 Bazzite Deck's or Slip's kernel-tree patches are merged upstream, they become part of `linux.patch` and applying them again fails with "patch does not apply". [What is where](/advanced/kernel#what-is-where) is a snapshot; `CHANGELOG.md` in the image repository and the pull requests upstream are the running record.
+When PS5 Bazzite Deck's or Slip's kernel-tree patches are merged upstream, they become part of `linux.patch` and applying them again fails with "patch does not apply". [What is where](/post-install/kernel#what-is-where) is a snapshot; `CHANGELOG.md` in the image repository and the pull requests upstream are the running record.
 :::
 
 ## Put a kernel on an existing image
@@ -101,14 +101,8 @@ When PS5 Bazzite Deck's or Slip's kernel-tree patches are merged upstream, they 
 Nothing in the distro has to change for a new kernel except its modules and initrd:
 
 1. Install the modules to `/lib/modules/<version>` (a package, rmuxnet's `install.sh`, or `make modules_install`).
-2. Build an initrd for that version on the image (`update-initramfs`, `mkinitcpio` or `dracut`). On a PS5 Pro the GPU firmware has to be inside it, see [PS5 Pro](/hardware/ps5-pro#gpu-firmware).
+2. Build an initrd for that version on the image (`update-initramfs`, `mkinitcpio` or `dracut`). On a PS5 Pro the GPU firmware has to be inside it, see [PS5 Pro](/troubleshooting/ps5-pro#gpu-firmware).
 3. Back up `bzImage` and `initrd.img` on the boot partition and copy the new ones over them. `cmdline.txt` and `vram.txt` stay.
-4. Cold boot and start with the loader. To test a kernel without a cold boot, use [kexec](/advanced/warm-reboot).
+4. Cold boot and start with the loader. To test a kernel without a cold boot, use [kexec](/post-install/warm-reboot).
 
-If the new kernel doesn't boot, put the backed-up files back from any PC (the partition is FAT32). What a kernel needs beyond that is the same for every image: the IW620 Wi-Fi driver built for it (bundled in the `linux-ps5` package and in rmuxnet's release, otherwise [reinstall it](/hardware/wifi-bluetooth#after-a-kernel-update)), and on an image with Steam Gaming Mode the [BPF LSM and BTF](/advanced/kernel#build-a-kernel-for-bazzite-game-mode) options.
-
-## Next steps
-
-- [Hardware status](/hardware/matrix): what works on each model
-- [After installing](/post-install/all-distros)
-- [Troubleshooting & help](/troubleshooting/getting-help)
+If the new kernel doesn't boot, put the backed-up files back from any PC (the partition is FAT32). What a kernel needs beyond that is the same for every image: the IW620 Wi-Fi driver built for it (bundled in the `linux-ps5` package and in rmuxnet's release, otherwise [reinstall it](/troubleshooting/wifi#after-a-kernel-update)), and on an image with Steam Gaming Mode the [BPF LSM and BTF](/post-install/kernel#build-a-kernel-for-bazzite-game-mode) options.

@@ -11,7 +11,7 @@ applies_to: all
 
 An NVMe drive in the console's M.2 slot gives Linux a fast, large home. It needs a firmware with M.2 support (every version except the oldest, see [Supported firmware](/getting-started/prerequisites#firmware)), and while Linux lives on the drive the PS5 OS can't use it for games.
 
-Before you buy a drive, read [M.2 drives](/hardware/storage#m2-drives): only NVMe drives work, and Gen3 drives need an [unlock](/hardware/storage#gen3-nvme-unlock).
+Before you buy a drive, read [M.2 drives](/getting-started/drives#m2-drives): only NVMe drives work, and Gen3 drives need an [unlock](/getting-started/drives#gen3-nvme-unlock).
 
 :::note[PS5 Bazzite Deck]
 PS5 Bazzite Deck moves the running system with its own command, bootc and Legacy alike. Follow [its own M.2 steps](/installation/m2-install#ps5-bazzite-deck) instead.
@@ -56,7 +56,7 @@ The USB drive stays in the console: the loader reads the kernel from its FAT32 p
 :::
 
 :::warning[Kernel updates on M.2]
-A kernel update on an M.2 install has left some users with a black screen or a kernel that doesn't match its modules. Read [Known issues](/troubleshooting/known-issues#kernel-update-breaks-m2-boot) before you update.
+A kernel update on an M.2 install has left some users with a black screen or a kernel that doesn't match its modules. Read [Error messages](/troubleshooting/error-messages#kernel-update-breaks-m2-boot) before you update.
 :::
 
 ## Switching distros
@@ -107,4 +107,4 @@ To go back to the USB system: `sudo ps5-m2-install --back` (or the download line
 ## Next steps
 
 - [After installing](/post-install/all-distros)
-- [Storage](/hardware/storage#m2-ssds): which M.2 drives work
+- [Drives and USB ports](/getting-started/drives#m2-ssds): which M.2 drives work

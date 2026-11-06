@@ -1,6 +1,6 @@
 ---
 title: Package repository
-sidebar_position: 3
+sidebar_position: 1
 description: Install and update the PS5 kernel, Wi-Fi driver and tools with your package manager (repo.etawen.dev).
 hardware: [original, slim, pro]
 applies_to: not-bazzite-deck
@@ -74,9 +74,9 @@ REPO
 
 | Package | What it does |
 | --- | --- |
-| `linux-ps5` | The PS5 Linux kernel, mirrored from the [ps5-linux-patches releases](https://github.com/ps5-linux/ps5-linux-patches/releases) (a package for every commit on `main`; rmuxnet's release isn't packaged, see [Kernel setup](/advanced/kernel)). Its install hook builds the initramfs (it detects update-initramfs, dracut, mkinitcpio or mkinitfs), mounts `/boot/efi` if needed (from fstab, or `LABEL=boot` as a fallback), and copies the kernel and initrd to `/boot/efi/` for the loader. **It already includes the Wi-Fi driver**, so Wi-Fi works with this package alone. |
+| `linux-ps5` | The PS5 Linux kernel, mirrored from the [ps5-linux-patches releases](https://github.com/ps5-linux/ps5-linux-patches/releases) (a package for every commit on `main`; rmuxnet's release isn't packaged, see [Kernel setup](/post-install/kernel)). Its install hook builds the initramfs (it detects update-initramfs, dracut, mkinitcpio or mkinitfs), mounts `/boot/efi` if needed (from fstab, or `LABEL=boot` as a fallback), and copies the kernel and initrd to `/boot/efi/` for the loader. **It already includes the Wi-Fi driver**, so Wi-Fi works with this package alone. |
 | `ps5-linux-mwifiex` | **Optional override** of the NXP IW620 Wi-Fi driver (`moal` + `mlan`). Only install it if you want a newer driver build than the one included in your kernel. It requires one exact `linux-ps5` version. The firmware (`nxp/pcieuartiw620_combo_v1.bin`) is Sony-proprietary: `linux-ps5`'s firmware service copies it into place on the first boot, from where the loader left it. |
-| `ps5-linux-tools` | Fan and CPU/GPU boost control: the `ps5_control` program plus `ps5fan.service` and `ps5boost.service`, both enabled by default so the fan and boost turn on at every boot. On the current packages only the CPU boost still needs it. Not for rmuxnet's kernel, see [Clocks and boost](/hardware/gpu#clocks-and-boost). Upstream: [ps5-linux-tools](https://github.com/ps5-linux/ps5-linux-tools). |
+| `ps5-linux-tools` | Fan and CPU/GPU boost control: the `ps5_control` program plus `ps5fan.service` and `ps5boost.service`, both enabled by default so the fan and boost turn on at every boot. On the current packages only the CPU boost still needs it. Not for rmuxnet's kernel, see [Clocks and boost](/troubleshooting/gpu#clocks-and-boost). Upstream: [ps5-linux-tools](https://github.com/ps5-linux/ps5-linux-tools). |
 | `ps5-payload-sdk` | The PS5 payload development SDK, mirrored from [ps5-payload-dev/sdk](https://github.com/ps5-payload-dev/sdk/releases). Installs to `/opt/ps5-payload-sdk/` and sets up `PS5_PAYLOAD_SDK` and your `PATH`. Pulls in clang, llvm, lld and make. |
 
 ## Install the packages
@@ -128,7 +128,7 @@ It detects your package manager (pacman, apt, dnf, dnf5 or rpm-ostree), adds the
 
 ## Install a specific kernel version
 
-Every tagged upstream release is mirrored, so you can go back to an earlier kernel, for example after a [kernel update that broke an M.2 install](/troubleshooting/known-issues#kernel-update-breaks-m2-boot).
+Every tagged upstream release is mirrored, so you can go back to an earlier kernel, for example after a [kernel update that broke an M.2 install](/troubleshooting/error-messages#kernel-update-breaks-m2-boot).
 
 **Arch:** the pacman database only lists the newest version, so install older ones by URL. Browse [repo.etawen.dev/arch](https://repo.etawen.dev/arch/) for the file name:
 
@@ -161,24 +161,4 @@ One-line fixes for older images, or when something wasn't set up properly on the
 | `curl -fsSL https://repo.etawen.dev/fix-grow-rootfs.sh \| sudo bash` | For images where the `grow-rootfs` service failed: repairs the partition table, extends the root partition to fill the drive, and resizes the filesystem without unmounting it. |
 | `curl -fsSL https://repo.etawen.dev/fix-cachyos.sh \| sudo bash` | CachyOS-specific fixes for the image. |
 
-## Troubleshooting
-
-**"certificate is not yet valid" when refreshing the repository:** the PS5's clock is wrong. Force a time sync with `sudo chronyc makestep`, or set the time manually with `sudo timedatectl set-time "YYYY-MM-DD HH:MM:SS"`.
-
-**"Could not resolve host: repo.etawen.dev" inside rpm-ostree on Bazzite:** systemd-resolved is stuck. Run `sudo systemctl restart systemd-resolved`.
-
-**`rpm-ostree` refuses with "This system was not booted via libostree" on Bazzite:** the loader's boot chain doesn't create `/run/ostree-booted`. Run `sudo touch /run/ostree-booted`, then `sudo rpm-ostree install ...` works. To reboot, use `sudo sync && sudo sh -c 'echo b > /proc/sysrq-trigger'`, because the `rpm-ostree-systemctl` wrapper swallows `systemctl reboot`.
-
-**"ld-linux-aarch64.so.1 not found" during `dnf upgrade`:** you have an old, badly converted RPM. Upgrade to a current package: `sudo dnf upgrade --setopt=gpgcheck=0 linux-ps5`.
-
-**`fatal error: linux/errno.h: No such file or directory` when compiling on Debian/Ubuntu:** newer `linux-ps5` packages no longer ship `/usr/include/linux/*`, to stop clashing with the distro's own headers. If you upgraded from a flashed image, the old headers were removed and the distro ones were never installed. Fix it with `sudo apt install linux-libc-dev`. On Arch: `sudo pacman -S linux-api-headers`. On Fedora: `sudo dnf install kernel-headers`.
-
-**`/boot/efi exists but is not mounted, attempting to mount...` during install:** this is normal. If you also see `ERROR: could not mount EFI partition; aborting`, mount `/dev/disk/by-label/boot` at `/boot/efi` yourself and run the install again.
-
-**No Wi-Fi networks on Bazzite (NetworkManager stuck):** Bazzite uses `iwd` as the Wi-Fi backend by default, which doesn't work with the IW620 driver. Switch back to `wpa_supplicant` with `ujust toggle-iwd` (choose "disable iwd"), then run `sudo systemctl restart NetworkManager`. Current images already include the fix.
-
-## Next steps
-
-- [Hardware status](/hardware/matrix): what works on each model
-- [After installing](/post-install/all-distros)
-- [Troubleshooting & help](/troubleshooting/getting-help)
+Errors from the repository and its install script are on [Error messages](/troubleshooting/error-messages#package-repository).

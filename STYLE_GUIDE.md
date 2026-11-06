@@ -9,7 +9,7 @@ Read it before adding or changing a page. When a page breaks a rule, fix the pag
 - The wiki assumes the PS5 is **already jailbroken**. Cover booting Linux and getting the hardware to work properly.
 - Mention the jailbreak only as "run your jailbreak, then send the Linux loader". Never explain how to jailbreak.
 - No emulators, launchers or general Linux software guides. PS5-specific things (fan curve, boost, VCN, display modes) are in scope.
-- Don't link to other wikis or guides as a source of instructions. Credit people on the [Credits](docs/about/credits.md) page instead.
+- Don't link to other wikis or guides as a source of instructions. Credit people on the [Credits](docs/credits.md) page instead.
 - Only write what is confirmed. If something is untested, say so in a `:::note[Not tested]` callout. Don't present a guess, a Discord remark or LLM-written text as fact.
 
 ## 2. Page structure
@@ -114,10 +114,10 @@ Pick one type per page and use its shape.
 
 | Type | Lives in | Shape |
 | --- | --- | --- |
-| **Walkthrough** | `getting-started/`, `installation/` | Numbered steps or `## 1.`, `## 2.` sections, then `## Where to go next` |
-| **How-to** | `using-linux/`, parts of `advanced/` | One task or problem per `##` section. Steps first, background in a `<details>` block if needed |
-| **Reference** | `hardware/` | Facts in tables and short sections. No steps unless a procedure is the point |
-| **Troubleshooting** | `troubleshooting/` | One symptom per `##`/`###` heading, named after what the reader sees. Cause, then fix |
+| **Walkthrough** | `getting-started/`, `choose/`, `installation/` | Numbered steps or `## 1.`, `## 2.` sections, then `## Where to go next` |
+| **How-to** | `post-install/` | One task per `##` section. Steps first, background in a `<details>` block if needed. Problems go to `troubleshooting/` |
+| **Reference** | `getting-started/hardware.md`, `getting-started/drives.md` | Facts in tables and short sections. No steps unless a procedure is the point |
+| **Troubleshooting** | `troubleshooting/` | One page per component (how it works, then one symptom per `##`/`###` heading, named after what the reader sees: cause, then fix), plus `error-messages.md` for starting, updating and repairing |
 
 ## 7. Callouts
 
@@ -186,9 +186,9 @@ Only in status tables, and always together with a word, never alone:
 
 ## 10. Links
 
-- **Internal links** to other pages: use the site path, `/section/page`, with an anchor when you mean a section: `[VRAM](/hardware/gpu#vram)`.
+- **Internal links** to other pages: use the site path, `/section/page`, with an anchor when you mean a section: `[VRAM](/troubleshooting/gpu#vram)`.
 - **Between pages in the same folder** the relative `./page.md` form is also fine. Don't mix both styles in one paragraph.
-- Link text says what the reader gets: `[Display recovery](/hardware/hdmi#display-recovery)`. Never "click here" or a bare URL.
+- Link text says what the reader gets: `[Display recovery](/troubleshooting/display#display-recovery)`. Never "click here" or a bare URL.
 - Link to a topic the **first time it matters on a page**, not every time it is mentioned.
 - External links: official docs and project repositories (`github.com/ps5-linux/...`). They open in the same tab. Don't link to anything that explains how to jailbreak.
 - Scripts users can download live in `static/scripts/` and are linked with `pathname:///scripts/...` so Docusaurus doesn't treat them as pages.
@@ -202,7 +202,7 @@ The wiki has **no images**. Describe things in text, tables and code blocks. If 
 
 - Page file names are lower-case, words joined with hyphens: `m2-compatibility.md`. They match the page's topic, not its title wording.
 - Use `.md`. Use `.mdx` only when a page needs components such as `<Tabs>`.
-- Folders are the sidebar categories: `getting-started`, `choose`, `installation`, `post-install`, `using-linux`, `hardware`, `advanced`, `troubleshooting`, `about`.
+- Folders are the sidebar categories: `getting-started` (Before you install), `choose` (Choose your image), `installation` (Install), `post-install` (After installing), `troubleshooting`. `intro.md` (Welcome) and `credits.md` sit at the top level.
 - Every new page is added to `sidebars.ts` in the same commit.
 - Don't rename or move a page without checking inbound links (`grep -r "old-name" docs/`).
 
@@ -219,8 +219,9 @@ The wiki has **no images**. Describe things in text, tables and code blocks. If 
 
 ## Structure (November 2026)
 
-- **One source of truth per topic.** Each hardware component has one page under Hardware reference; its setup and troubleshooting live there. Other pages link to it instead of repeating it. Status changes go into the table on [Hardware status](docs/hardware/matrix.md) first.
-- **After installing has three layers:** All distros (applies everywhere), Other images (what PS5 Bazzite Deck already does), Distro notes (package-manager differences only), plus a PS5 Bazzite Deck page that points to docs.bazzite.gg for plain-Bazzite topics.
+- **Six sections:** Welcome, Before you install, Install, After installing, Troubleshooting, Credits. There is no hardware reference, advanced, known issues, common problems or FAQ section: a fact goes where the reader needs it, before installing, while installing, after installing, or under the component it breaks.
+- **One source of truth per topic.** Each hardware component has one page under Troubleshooting; how it works and its problems live there. Other pages link to it instead of repeating it. Status changes go into the tables on [Hardware status](docs/getting-started/hardware.md) first.
+- **After installing has three parts plus one reference:** All images (applies to every image, PS5 Bazzite Deck included), PS5 Bazzite Deck (only what that image has; docs.bazzite.gg for plain Bazzite), Other distros (what PS5 Bazzite Deck already does, and the package manager per distro), and Boot options, one article with a table for each. None of them holds troubleshooting.
 - **Moving or merging a page:** add a redirect in `docusaurus.config.ts` (`@docusaurus/plugin-client-redirects`) so old links keep working.
 - **Front matter:** quote `title` and `description` if they contain `: `. No firmware or kernel version fields: they go stale within weeks.
 - **Tone, after docs.bazzite.gg:** task-named pages, hub pages with bold link lists, one idea per paragraph, numbered steps, and "order reflects the recommendation" where options are ranked.

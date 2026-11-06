@@ -1,7 +1,7 @@
 ---
 title: Restart straight into Linux
 sidebar_label: Warm reboot
-sidebar_position: 4
+sidebar_position: 3
 description: Restart into Linux without the PS5 OS and the loader, with kexec on any image or PS5 Bazzite Deck's built-in command.
 hardware: [original, slim, pro]
 applies_to: all
@@ -39,13 +39,13 @@ A kernel that doesn't boot costs you a full cycle through the PS5 OS, the jailbr
 
 A warm restart starts the new kernel without the console's firmware resetting anything:
 
-- **The Wi-Fi/Bluetooth chip** keeps whatever state the last boot left. The IW620's Wi-Fi often needs the driver reloaded after a warm boot; its Bluetooth side can hang, in which case reload `btusb` or power off, see [Bluetooth](/hardware/wifi-bluetooth#iw620-marvell).
+- **The Wi-Fi/Bluetooth chip** keeps whatever state the last boot left. The IW620's Wi-Fi often needs the driver reloaded after a warm boot; its Bluetooth side can hang, in which case reload `btusb` or power off, see [Bluetooth](/troubleshooting/bluetooth#iw620-marvell).
 - **The HDMI chip** keeps the mode the last kernel set. The new kernel sets it up again; a display that needs the full link-training sequence may stay black until a cold start.
 - **Firmware the loader dumps** (Wi-Fi, PS5 Pro GPU) stays on the boot partition and is picked up again; nothing is re-dumped.
 
 ## IW620 hazard
 
-Giving Linux its own Bluetooth address (the [one DualSense for both systems](/hardware/wifi-bluetooth#one-dualsense-for-the-ps5-and-linux) feature) sends a vendor command to the IW620 at every boot. With that on, a warm restart can leave the chip hung: Bluetooth gone, sometimes Wi-Fi too, until a power-off and a start with the loader. There is no fix yet, see [the research notes](/hardware/wifi-bluetooth#iw620-the-linux-only-address-and-warm-restarts). Don't use both at once on an IW620 console.
+Giving Linux its own Bluetooth address (the [one DualSense for both systems](/troubleshooting/bluetooth#one-dualsense-for-the-ps5-and-linux) feature) sends a vendor command to the IW620 at every boot. With that on, a warm restart can leave the chip hung: Bluetooth gone, sometimes Wi-Fi too, until a power-off and a start with the loader. There is no fix yet, see [the research notes](/troubleshooting/bluetooth#iw620-the-linux-only-address-and-warm-restarts). Don't use both at once on an IW620 console.
 
 ## PS5 Bazzite Deck
 
@@ -86,14 +86,3 @@ Because of the [IW620 hazard](#iw620-hazard), restarts on an IW620 console go th
 To use warm restarts on an IW620 console, turn the address off with `ps5-bt-address off`. The trade-off: Linux and the PS5 OS then share the console's Bluetooth address, and pairing a DualSense on one side breaks its pairing on the other.
 
 After a warm restart, two services check the chip and repair it by themselves: `ps5-wifi-repair` reloads the Wi-Fi driver when the firmware was still running, and `ps5-bt-revive` restarts a Bluetooth adapter that hangs. If Wi-Fi or Bluetooth is still missing, power off and start with the loader. The MediaTek chips of the Slim and the Pro keep working through warm restarts with the address on.
-
-### If a warm restart hangs
-
-Hold the power button until the console turns off, then start Linux with the loader. If it keeps happening, turn warm restarts off with `ps5-warm-reboot off` and report it in `#bazzite-problems` on [Discord](https://discord.gg/ps5linux) with the file `ps5-report` saves.
-
-
-## Next steps
-
-- [Hardware status](/hardware/matrix): what works on each model
-- [After installing](/post-install/all-distros)
-- [Troubleshooting & help](/troubleshooting/getting-help)

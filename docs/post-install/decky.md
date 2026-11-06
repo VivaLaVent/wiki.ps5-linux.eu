@@ -1,6 +1,6 @@
 ---
 title: Decky Loader
-sidebar_position: 9
+sidebar_position: 1
 description: Install Decky Loader on PS5 Bazzite Deck and use the PS5 Hardware Control plugin for the fan, clocks, LED and VRAM.
 hardware: [original, slim, pro]
 applies_to: bazzite-deck
@@ -38,9 +38,9 @@ https://github.com/NotHavocc/ps5-hwcon-plugin/releases/latest/download/ps5-hwcon
 
 | Tab | What it does |
 | --- | --- |
-| **Fan** | Live temperatures, a fan curve or a target temperature, presets, and a thermal guard that switches to full speed when the CPU gets too hot. See [Fan control](/hardware/fan#hwcon). |
+| **Fan** | Live temperatures, a fan curve or a target temperature, presets, and a thermal guard that switches to full speed when the CPU gets too hot. See [Fan control](/troubleshooting/fan#hwcon). |
 | **CPU** | Governor and a fixed clock. |
-| **GPU** | Governor and a fixed clock, the [CU unlock](/hardware/gpu#40-cu-unlock), and **GPU Memory**: `vram.txt` and the GTT limit (`ttm.pages_limit`). |
+| **GPU** | Governor and a fixed clock, the [CU unlock](/troubleshooting/gpu#40-cu-unlock), and **GPU Memory**: `vram.txt` and the GTT limit (`ttm.pages_limit`). |
 | **LED** | Light bar presets. |
 
 Each tab has **Restore on Startup**, which applies your settings again at every start; without it, the console's defaults come back after a restart.
@@ -48,13 +48,3 @@ Each tab has **Restore on Startup**, which applies your settings again at every 
 Changes to VRAM, the GTT limit and the CU unlock edit `vram.txt` and `cmdline.txt` on the USB drive's boot partition, so they need a restart with the loader. PS5 Bazzite Deck sets 6 GB of VRAM by default from v2.6.1; the plugin's VRAM setting replaces it.
 
 The same controls exist for Desktop Mode as an app, [ps5-hwcon-gui](https://github.com/NotHavocc/ps5-hwcon-gui), which doesn't need Decky. `ps5-perf` sets the CPU boost and fan target too: whichever was set last applies.
-
-## When Game Mode doesn't start after installing a plugin
-
-Remove the plugin from Desktop Mode: delete its folder under `~/homebrew/plugins/`, then switch to Game Mode again. If that isn't enough, `ujust setup-decky uninstall` removes Decky completely.
-
-## Next steps
-
-- [Fan control](/hardware/fan): what the fan modes do
-- [VRAM](/hardware/gpu#vram): how much dedicated memory to give the GPU
-- [Troubleshooting & help](/troubleshooting/getting-help)

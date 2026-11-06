@@ -1,8 +1,8 @@
 ---
 title: Getting started
 sidebar_label: Overview
-description: What you need to run Linux on a PS5 and the steps to get there.
 sidebar_position: 1
+description: What you need to run Linux on a PS5 and the steps to get there.
 hardware: [original, slim, pro]
 applies_to: all
 ---
@@ -36,7 +36,7 @@ Linux only runs on exploitable system software versions. Read [Supported firmwar
 
 **Before you install**
 
-1. [What you need](/getting-started/prerequisites): firmware, drive and a PC
+1. [What you need](/getting-started/prerequisites): firmware, drive and a PC; check [what works on your model](/getting-started/hardware) and [which drives work](/getting-started/drives)
 2. [Get a PS5 Linux loader](/getting-started/loader)
 3. [Choose your image](/getting-started/which-image): [PS5 Bazzite Deck](/choose/bazzite-deck) (recommended), an [official image](/choose/official-images), or [your own build](/choose/build-your-own); download and verify it
 
@@ -48,9 +48,9 @@ Linux only runs on exploitable system software versions. Read [Supported firmwar
 
 **After installing**
 
-7. [All distros](/post-install/all-distros), then [PS5 Bazzite Deck](/post-install/bazzite) or [other images](/post-install/not-bazzite-deck)
+7. [All images](/post-install/all-distros), then [PS5 Bazzite Deck](/post-install/bazzite) or [other distros](/post-install/not-bazzite-deck)
 
-Optional, once Linux runs: [move it to an M.2 SSD](/installation/m2-install).
+Optional, once Linux runs: [move it to an M.2 SSD](/installation/m2-install). When something doesn't work, start at [Troubleshooting](/troubleshooting/getting-help).
 
 ## Next steps
 

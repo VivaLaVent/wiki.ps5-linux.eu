@@ -2,14 +2,14 @@
 title: What you need
 sidebar_label: What you need
 sidebar_position: 2
-description: The firmware, drive, PC and Linux skills you need before installing Linux on a PS5.
+description: The firmware, drive and PC you need before installing Linux on a PS5, and which firmware versions each model supports.
 hardware: [original, slim, pro]
 applies_to: all
 ---
 
 # What you need
 
-A PS5 on a firmware that can run Linux, a drive, and a PC to prepare it: that is all Linux on the PS5 needs.
+A PS5 on a firmware that can run Linux, a drive, and a PC to prepare it: that is all Linux on the PS5 needs. Which drives work is on [Drives and USB ports](/getting-started/drives).
 
 ## Hardware
 
@@ -19,10 +19,6 @@ A PS5 on a firmware that can run Linux, a drive, and a PC to prepare it: that is
 ## Host machine
 
 A PC that can write the image to the drive and send the loader: Linux, or Windows with WSL. You need `dd` (or balenaEtcher on Windows) for the image and `socat` for the loader. Docker is only needed if you [build an image yourself](/choose/build-your-own).
-
-## Linux knowledge
-
-You will spend time in a terminal: editing a file on the boot partition, running an install script, reading a log. Nothing here needs more than the command line basics, but if those are new to you, an introductory shell tutorial such as [learnshell.org](https://www.learnshell.org/) pays for itself before you start.
 
 ## Firmware {#firmware}
 
@@ -36,22 +32,23 @@ Sony's current retail firmware is beyond the newest exploitable version, and the
 
 bazzite-bootc-loader is built from the official Linux loader, so the authoritative list is the [official loader's README](https://github.com/ps5-linux/ps5-linux-loader). At the time of writing it reads as follows; jailbreaking itself is not covered by this wiki, and the exploit column is for orientation only.
 
-| Firmware | M.2 support | Exploit |
-| --- | --- | --- |
-| 3.00, 3.10, 3.20, 3.21 | ❌ | WebKit + umtx2 |
-| 4.00, 4.02, 4.03, 4.50, 4.51 | ✅ | WebKit + umtx2 |
-| 5.00, 5.02, 5.10, 5.50 | ✅ | WebKit + umtx2 |
-| 6.00, 6.02, 6.50 | ✅ | Y2JB + Lapse |
-| 7.00, 7.01, 7.20, 7.40, 7.60, 7.61 | ✅ | Y2JB + Lapse |
-| 11.00, 11.20, 11.40, 11.60 | ✅ | Y2JB Relapse / WebKit Relapse |
-| 12.00, 12.02, 12.20, 12.40, 12.60, 12.70 | ✅ | Y2JB Relapse / WebKit Relapse |
-| 13.00, 13.20, 13.40, 13.42, 13.60 | ✅ | Y2JB Relapse / WebKit Relapse |
+| Firmware | PS5 and Slim | PS5 Pro | M.2 support | Exploit |
+| --- | :---: | :---: | --- | --- |
+| 3.00, 3.10, 3.20, 3.21 | ✅ | | ❌ | WebKit + umtx2 |
+| 4.00, 4.02, 4.03, 4.50, 4.51 | ✅ | | ✅ | WebKit + umtx2 |
+| 5.00, 5.02, 5.10, 5.50 | ✅ | | ✅ | WebKit + umtx2 |
+| 6.00, 6.02, 6.50 | ✅ | | ✅ | Y2JB + Lapse |
+| 7.00, 7.01, 7.20, 7.40, 7.60, 7.61 | ✅ | | ✅ | Y2JB + Lapse |
+| 11.00, 11.20, 11.40, 11.60 | ✅ | ✅ | ✅ | Y2JB Relapse / WebKit Relapse |
+| 12.00, 12.02, 12.20, 12.40, 12.60, 12.70 | ✅ | ✅ | ✅ | Y2JB Relapse / WebKit Relapse |
+| 13.00 | ✅ | | ✅ | Y2JB Relapse / WebKit Relapse |
+| 13.20, 13.40, 13.42, 13.60 | ✅ | ✅ | ✅ | Y2JB Relapse / WebKit Relapse |
+
+Whether the loader also dumps the Pro's GPU firmware depends on the version and the loader, see [Which loader](/getting-started/loader#which-loader).
 
 :::info[Why no M.2 on 3.xx?]
 A console on 3.xx firmware doesn't start with a drive in the M.2 slot, so Linux on 3.xx is USB only.
 :::
-
-**PS5 Pro:** 11.00, 11.20, 11.40, 11.60; 12.00, 12.02, 12.20, 12.40, 12.60, 12.70; 13.20, 13.40, 13.42, 13.60. All with M.2 support.
 
 ### Which firmware should I be on?
 
@@ -79,4 +76,4 @@ A PS5 can't be downgraded. Only ever update to the exact version you want.
 
 ## Next steps
 
-**[Get a PS5 Linux loader](/getting-started/loader)**.
+**[Hardware status](/getting-started/hardware)**: what works on your model.

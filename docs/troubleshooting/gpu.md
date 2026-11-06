@@ -1,14 +1,14 @@
 ---
 title: GPU
-sidebar_label: GPU
-description: Clocks, compute units, VRAM and the video engine of the PS5 GPU, once there is a picture.
+sidebar_position: 3
+description: Clocks, compute units, VRAM and the video engine of the PS5 GPU, and the limits and errors games run into.
 hardware: [original, slim, pro]
 applies_to: all
 ---
 
 # GPU
 
-The PS5's GPU is an RDNA2 part inside the Oberon APU, PCI ID `1002:13fb` on the original PS5 and the Slim. The PS5 Pro has a different GPU, see [PS5 Pro](/hardware/ps5-pro). This page covers what the kernel does with it and the settings you can change.
+The PS5's GPU is an RDNA2 part inside the Oberon APU, PCI ID `1002:13fb` on the original PS5 and the Slim. The PS5 Pro has a different GPU, see [PS5 Pro](/troubleshooting/ps5-pro). This page covers what the kernel does with it and the settings you can change.
 
 ## Status
 
@@ -27,13 +27,13 @@ Without this file the GPU comes up without a picture. When you bring up a distro
 
 ## Clocks and boost
 
-The console's firmware starts the CPU at 3.2 GHz and the GPU below the 2.23 GHz the PS5 OS runs it at. How the full clocks are reached depends on the kernel, see [Kernel setup](/advanced/kernel):
+The console's firmware starts the CPU at 3.2 GHz and the GPU below the 2.23 GHz the PS5 OS runs it at. How the full clocks are reached depends on the kernel, see [Kernel setup](/post-install/kernel):
 
 | Kernel | CPU and GPU clocks | What to do |
 | --- | --- | --- |
-| [rmuxnet's kernel](/advanced/kernel#install-rmuxnets-release) | `ps5-cpufreq` and `ps5-gpufreq` scale them with the load. | Nothing for the GPU. CPU boost (3.3 to 3.5 GHz) is off until you turn it on, below. |
+| [rmuxnet's kernel](/post-install/kernel#install-rmuxnets-release) | `ps5-cpufreq` and `ps5-gpufreq` scale them with the load. | Nothing for the GPU. CPU boost (3.3 to 3.5 GHz) is off until you turn it on, below. |
 | PS5 Bazzite Deck | The upstream GPU governor; CPU boost through `ps5-perf`. | On by default. |
-| Upstream (current packages) | The upstream GPU governor (`ps5_gpufreq.temp_limit`, see [PS5 Pro](/hardware/ps5-pro#gpu-driver)); the CPU stays at 3.2 GHz until `ps5_control --boost on`. | Install [ps5-linux-tools](https://github.com/ps5-linux/ps5-linux-tools), below. |
+| Upstream (current packages) | The upstream GPU governor (`ps5_gpufreq.temp_limit`, see [PS5 Pro](/troubleshooting/ps5-pro#gpu-driver)); the CPU stays at 3.2 GHz until `ps5_control --boost on`. | Install [ps5-linux-tools](https://github.com/ps5-linux/ps5-linux-tools), below. |
 | Older upstream kernels | Fixed at the firmware's clocks until `ps5_control --boost on`. | Install [ps5-linux-tools](https://github.com/ps5-linux/ps5-linux-tools), below. |
 
 The upstream GPU governor is a devfreq driver: 500 to 2,230 MHz on the original PS5 and the Slim, 500 to 2,350 MHz on the Pro, with a thermal limit of 85 °C by default (`ps5_gpufreq.temp_limit=<50-95>` in `cmdline.txt`). Read the current clock from `cur_freq` under its directory in `/sys/class/devfreq/`.
@@ -74,7 +74,7 @@ To apply both at every boot:
 sudo ./install.sh
 ```
 
-This installs `ps5fan.service` and `ps5boost.service`. On a kernel with the fan curve (see [Fan control](/hardware/fan)) `--fan` isn't needed.
+This installs `ps5fan.service` and `ps5boost.service`. On a kernel with the fan curve (see [Fan control](/troubleshooting/fan)) `--fan` isn't needed.
 
 ## 40 CU unlock
 
@@ -229,7 +229,7 @@ On `1002:13fb`, the driver also:
 ### Getting it
 
 :::note[Which kernels have it]
-Every current kernel: the upstream packages, rmuxnet's release and PS5 Bazzite Deck. On an old kernel, update or build from the current patch set, see [Kernel setup](/advanced/kernel).
+Every current kernel: the upstream packages, rmuxnet's release and PS5 Bazzite Deck. On an old kernel, update or build from the current patch set, see [Kernel setup](/post-install/kernel).
 :::
 
 The repository's `.config` sets:
@@ -275,7 +275,7 @@ An all-I-frame stream needs a much higher bitrate for the same quality, so when 
 
 ### Browsers and streaming
 
-Firefox decodes through VAAPI by itself: H.264 at 720p, 1080p and 4K, HEVC and HEVC Main 10 at 1080p, and VP9 at 1080p all play without dropped frames. `about:support`, under **Media**, shows which codecs are decoded in hardware. Chrome needs flags, see [Browser video](/using-linux/browser-video).
+Firefox decodes through VAAPI by itself: H.264 at 720p, 1080p and 4K, HEVC and HEVC Main 10 at 1080p, and VP9 at 1080p all play without dropped frames. `about:support`, under **Media**, shows which codecs are decoded in hardware. Chrome needs flags, see [Browser video](/post-install/browser-video).
 
 Moonlight streaming from the PS5 works through Sunshine with H.264 VCN encoding, see [Game streaming](/post-install/all-distros#game-streaming).
 
@@ -436,8 +436,16 @@ Higher is better. HEVC VCN results use a normal GOP with P-frames, which is why 
 | Repeats | Decoding and 12 Mbps tests: two runs. Other bitrates: one run. |
 | Exact frames | Decoded pixels match software decoding exactly. |
 
-## Next steps
+## Limits and open problems {#limits}
 
-- [Hardware status](/hardware/matrix): what works on each model
-- [After installing](/post-install/all-distros)
-- [Troubleshooting & help](/troubleshooting/getting-help)
+What every PS5 Linux user runs into sooner or later, whatever the distro.
+
+| Limit | What happens | Status |
+| --- | --- | --- |
+| GPU memory ceiling | A game that needs more than the GTT ceiling crashes with `Not enough memory for command submission`. Raise `ttm.pages_limit` rather than a fixed `vram.txt` carve-out, see [VRAM](/troubleshooting/gpu#vram). | Documented fix |
+| 40 CU unlock | More GPU power on units whose disabled pairs are good; artefacts, a purple tint or crashes on units where one isn't, see [40 CU unlock](/troubleshooting/gpu#40-cu-unlock). Don't use it on a Pro. | Silicon lottery |
+| HEVC encoding | The video engine corrupts colours with P-frames (red screen when streaming or recording). Use H.264, or HEVC with I-frames only, see [VCN](/troubleshooting/gpu#using-it-with-ffmpeg). | Known not to work |
+| GPU fault at session switches | Switching between a Gamescope session and a desktop can trigger a GPU page fault and `ring gfx_0.0.0 timeout`, most often at 4K120 on some TVs. It is on the compositor side; keep the desktop at 4K60 and switch sessions at the boot instead, see [Boot to the desktop](/post-install/boot-to-desktop). On a PS5 Pro the fault isn't recovered (`GPU Recovery Failed`) and the screen stays black until a restart. If you hit it, save the coredump before restarting: `sudo cp /sys/class/drm/card0/device/devcoredump/data ~/gpu-coredump.txt`. | Open |
+| `Failed to pin framebuffer: -ENOMEM` | Reported under memory pressure with a desktop and Steam running. No confirmed fix; more zram helped in one report, see [Memory and swap](/post-install/all-distros#memory-and-swap). | Open |
+| Graphical glitches in one game | Glitches in a single game. Add `RADV_DEBUG=nohiz %command%` to that game's launch options, see [Performance tips](#performance-tips). | Workaround |
+| No AV1 decode, no GPU load sensor on the base PS5 | AV1 video falls back to the CPU; KDE's system monitor shows no GPU usage, see [Browser video](/post-install/browser-video). | Hardware limits |

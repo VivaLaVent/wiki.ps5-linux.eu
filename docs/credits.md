@@ -1,6 +1,5 @@
 ---
 title: Credits
-sidebar_position: 1
 description: The people whose work makes Linux on the PS5 possible, and where to find the community.
 hardware: [original, slim, pro]
 applies_to: all
@@ -27,7 +26,7 @@ ps5-linux is a community project. Core contributors:
 | [kirathenotebook](https://github.com/kirathenotebook) | Beta testing, README |
 | 15432 | Testing on the BC-250 |
 | [soniciso1](https://github.com/soniciso1) | Loader fork with support for newer firmware |
-| [mia / etawen](https://etawen.dev) | Community images, [package repository](/advanced/package-repository) and documentation |
+| [mia / etawen](https://etawen.dev) | Community images, [package repository](/post-install/package-repository) and documentation |
 | [WizGery](https://github.com/WizGery/ps5-mediatek-fixes) | MediaTek Bluetooth fixes |
 | [QuartConz](https://github.com/QuartConz/ps5-pro-viola-bluetooth) | PS5 Pro Bluetooth |
 | [gzimbric](https://github.com/gzimbric/ps5-linux-loader) | First PS5 Pro loader |
@@ -58,9 +57,3 @@ ps5-linux is a community project. Core contributors:
 ## Community
 
 - [Discord](https://discord.gg/ps5linux): help, tips, development and bug reports; PS5 Bazzite Deck help and testing in `#bazzite-problems` and `#bazzite-general`
-
-## Next steps
-
-- [Hardware status](/hardware/matrix): what works on each model
-- [After installing](/post-install/all-distros)
-- [Troubleshooting & help](/troubleshooting/getting-help)

@@ -1,6 +1,6 @@
 ---
 title: Kernel setup
-sidebar_position: 1
+sidebar_position: 2
 description: Install or build the patched PS5 kernel, which patch set to use, and the kernel parameters in cmdline.txt.
 hardware: [original, slim, pro]
 applies_to: not-bazzite-deck
@@ -16,14 +16,14 @@ The PS5 kernel is stock Linux plus one patch file and a config. Two repositories
 | Repository | What it is | Get it as |
 | --- | --- | --- |
 | [rmuxnet/ps5-linux-patches-1](https://github.com/rmuxnet/ps5-linux-patches-1) | A fork on a newer stable kernel. Nearly everything in upstream `main` plus CPU and GPU clock drivers for the base PS5 and the Pro, its own Bluetooth patches, the IW620 Wi-Fi driver built in, and `build.sh`. | A zip with `install.sh` from its releases, or `build.sh` on the PS5. |
-| [ps5-linux/ps5-linux-patches](https://github.com/ps5-linux/ps5-linux-patches) | The official patch set. Every push to `main` becomes a packaged release with the fan curve, the HDMI work, the Pro GPU and VCN. | `.deb`, `.pkg.tar.zst` and `.rpm` packages, or the [package repository](/advanced/package-repository). |
+| [ps5-linux/ps5-linux-patches](https://github.com/ps5-linux/ps5-linux-patches) | The official patch set. Every push to `main` becomes a packaged release with the fan curve, the HDMI work, the Pro GPU and VCN. | `.deb`, `.pkg.tar.zst` and `.rpm` packages, or the [package repository](/post-install/package-repository). |
 
-rmuxnet's repository is a fork of the official one and its work is merged upstream over time. Use it unless you need the package manager route; the two differ in the details listed under [What is where](#what-is-where). What the version strings and branches mean, and how to apply single patches on top, is on [Kernel sources and patches](/advanced/kernel-sources). [PS5 Bazzite Deck](/choose/bazzite-deck) has its own kernel and update process, see its release notes.
+rmuxnet's repository is a fork of the official one and its work is merged upstream over time. Use it unless you need the package manager route; the two differ in the details listed under [What is where](#what-is-where). What the version strings and branches mean, and how to apply single patches on top, is on [Kernel sources and patches](/choose/kernel-sources). [PS5 Bazzite Deck](/choose/bazzite-deck) has its own kernel and update process, see its release notes.
 
 The loader always starts the kernel (`bzImage`) and initrd (`initrd.img`) from the FAT32 partition of the USB drive, labelled `boot` and usually mounted at `/boot/efi` (or `/efi` on Bazzite). Whatever way you install a kernel, it has to end up there.
 
 :::warning[M.2 installs]
-A kernel update on an M.2 install has left some users with a black screen or a kernel that doesn't match its modules. Read [Known issues](/troubleshooting/known-issues#kernel-update-breaks-m2-boot) before you update one.
+A kernel update on an M.2 install has left some users with a black screen or a kernel that doesn't match its modules. Read [Error messages](/troubleshooting/error-messages#kernel-update-breaks-m2-boot) before you update one.
 :::
 
 ## Install rmuxnet's release
@@ -40,7 +40,7 @@ Then **cold boot** the PS5 (power off, start it, run the loader). The script:
 
 - copies the modules to `/lib/modules/<version>` and the kernel to `/boot`,
 - builds the initrd with `mkinitcpio`, `update-initramfs` or `dracut`, whichever the distro has,
-- writes `/etc/modprobe.d/ps5-iw620.conf` for the Marvell IW620 Wi-Fi driver that comes with the kernel, and copies its firmware from the boot partition (`lib/nxp/pcieuartiw620_combo_v1.bin`) to `/lib/firmware/nxp/` when it is there, so the internal Wi-Fi works without [ps5-linux-mwifiex](/hardware/wifi-bluetooth#wifi),
+- writes `/etc/modprobe.d/ps5-iw620.conf` for the Marvell IW620 Wi-Fi driver that comes with the kernel, and copies its firmware from the boot partition (`lib/nxp/pcieuartiw620_combo_v1.bin`) to `/lib/firmware/nxp/` when it is there, so the internal Wi-Fi works without [ps5-linux-mwifiex](/troubleshooting/wifi),
 - finds the mounted partition that holds `bzImage` and asks you to confirm it (or pass the path: `sudo ./install.sh /boot/efi`),
 - backs the old `bzImage` and `initrd.img` up to `/boot/efi-backup/<date>` (the last three are kept) and copies the new ones in.
 
@@ -55,7 +55,7 @@ sync
 The release is built with Clang, full LTO and `-march=znver2` (the PS5's Zen 2 cores); it is a kernel for the PS5, not for an ordinary PC.
 
 :::note[PS5 Pro]
-`install.sh` doesn't copy the Pro's GPU firmware into the initrd. Put the eight `viola_*.bin` files in `/lib/firmware/amdgpu/` before you run it, see [PS5 Pro](/hardware/ps5-pro#gpu-firmware). Not tested by the wiki editors with this installer.
+`install.sh` doesn't copy the Pro's GPU firmware into the initrd. Put the eight `viola_*.bin` files in `/lib/firmware/amdgpu/` before you run it, see [PS5 Pro](/troubleshooting/ps5-pro#gpu-firmware). Not tested by the wiki editors with this installer.
 :::
 
 ## Build with build.sh
@@ -107,7 +107,7 @@ The Wi-Fi driver for the Marvell IW620 (NXP `mwifiex`, already patched for the k
 
 ### Build by hand
 
-Without the script, the steps are the usual ones. The `.config` is made with Clang, so always pass `LLVM=1`, and keep the folder name `ps5-linux-patches`: the config loads the [VCN firmware](/hardware/gpu#video-engine) from `../ps5-linux-patches/firmware`. Use the kernel tag named in the first lines of `.config`.
+Without the script, the steps are the usual ones. The `.config` is made with Clang, so always pass `LLVM=1`, and keep the folder name `ps5-linux-patches`: the config loads the [VCN firmware](/troubleshooting/gpu#video-engine) from `../ps5-linux-patches/firmware`. Use the kernel tag named in the first lines of `.config`.
 
 ```bash
 git clone https://github.com/rmuxnet/ps5-linux-patches-1 ps5-linux-patches
@@ -170,7 +170,7 @@ If the new kernel doesn't boot, rename the `.old` files back from another comput
 
 ## Install upstream's packaged kernel
 
-The official repository publishes `.deb`, `.pkg.tar.zst` and `.rpm` packages on its [releases page](https://github.com/ps5-linux/ps5-linux-patches/releases) for every commit on `main`. The easiest way to get them is the [package repository](/advanced/package-repository): it installs the kernel with your package manager, copies it to the boot partition for you and keeps it up to date. Or install a downloaded package by hand:
+The official repository publishes `.deb`, `.pkg.tar.zst` and `.rpm` packages on its [releases page](https://github.com/ps5-linux/ps5-linux-patches/releases) for every commit on `main`. The easiest way to get them is the [package repository](/post-install/package-repository): it installs the kernel with your package manager, copies it to the boot partition for you and keeps it up to date. Or install a downloaded package by hand:
 
 <Tabs groupId="distro">
 <TabItem value="debian" label="Debian / Ubuntu" default>
@@ -189,7 +189,7 @@ sudo pacman -U linux-ps5-*.pkg.tar.zst
 </TabItem>
 </Tabs>
 
-A current package brings the fan curve and the GPU governor; the CPU boost still needs `ps5_control` from [ps5-linux-tools](/hardware/gpu#clocks-and-boost), the IW620 Wi-Fi needs [ps5-linux-mwifiex](/hardware/wifi-bluetooth#wifi) (the package repository bundles it), and the Slim's and Pro's Bluetooth fixes aren't upstream.
+A current package brings the fan curve and the GPU governor; the CPU boost still needs `ps5_control` from [ps5-linux-tools](/troubleshooting/gpu#clocks-and-boost), the IW620 Wi-Fi needs [ps5-linux-mwifiex](/troubleshooting/wifi) (the package repository bundles it), and the Slim's and Pro's Bluetooth fixes aren't upstream.
 
 ## Build a kernel for Bazzite Game Mode
 
@@ -209,10 +209,10 @@ Without them, `cardwired` crash-loops with `CardwireEbpfError(LSMNotEnabled)` or
 | HDR on FLAVA3, HDMI CEC, display hotplug | ✅ | ✅ | ✅ |
 | USB-C DisplayPort output, off by default | ✅ | ✅ | ✅ |
 | PS5 Pro GPU with the Viola firmware | ✅ | ✅ | ✅ |
-| Native FRL for 4K120 with 4:2:0 fallback and ALLM, on by default | ✅ | ✅ | ❌ Own 4K120 path, see [HDMI chip](/hardware/hdmi#4k120-over-hdmi-21-frl) |
-| GPU clock governor with `ps5_gpufreq.temp_limit` | ✅ | ❌ Replaced by `ps5-gpufreq`, see [GPU](/hardware/gpu#clocks-and-boost) | ✅ |
+| Native FRL for 4K120 with 4:2:0 fallback and ALLM, on by default | ✅ | ✅ | ❌ Own 4K120 path, see [Display and HDMI](/troubleshooting/display#4k120-over-hdmi-21-frl) |
+| GPU clock governor with `ps5_gpufreq.temp_limit` | ✅ | ❌ Replaced by `ps5-gpufreq`, see [GPU](/troubleshooting/gpu#clocks-and-boost) | ✅ |
 | GFX1013 MMIO TLB flush and GFXOFF guard | ✅ | ❌ Dropped | ✅ |
-| hwmon fan driver | ✅ Curve on by default | ✅ Curve on by default | ✅ Firmware mode by default, see [Fan control](/hardware/fan) |
+| hwmon fan driver | ✅ Curve on by default | ✅ Curve on by default | ✅ Firmware mode by default, see [Fan control](/troubleshooting/fan) |
 | CPU and GPU clock drivers `ps5-cpufreq`, `ps5-gpufreq`, with the Pro's clock range | ❌ | ✅ | ⚠️ `ps5-cpufreq` only, kept off on the Pro |
 | Slim MediaTek Wi-Fi driver in the config | ✅ | ✅ | ✅ |
 | Slim and Pro MediaTek Bluetooth, IW620 L2CAP fix | ❌ Only the IW620 quirks entry | ⚠️ A different Bluetooth patch, reported broken by its author | ✅ |
@@ -226,9 +226,3 @@ Still listed as to do in both repositories: an amdgpu SMU driver so the base PS5
 ## Kernel parameters (cmdline.txt)
 
 All kernel parameters, the default lines and how to edit `cmdline.txt` and `vram.txt` are on **[Boot options](/post-install/boot-options)**.
-
-## Next steps
-
-- [Hardware status](/hardware/matrix): what works on each model
-- [After installing](/post-install/all-distros)
-- [Troubleshooting & help](/troubleshooting/getting-help)
