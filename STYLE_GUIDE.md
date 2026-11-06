@@ -184,7 +184,7 @@ Only in status tables, and always together with a word, never alone:
 
 - **Internal links** to other pages: use the site path, `/section/page`, with an anchor when you mean a section: `[VRAM](/hardware/gpu#vram)`.
 - **Between pages in the same folder** the relative `./page.md` form is also fine. Don't mix both styles in one paragraph.
-- Link text says what the reader gets: `[Display recovery](/troubleshooting/display-recovery)`. Never "click here" or a bare URL.
+- Link text says what the reader gets: `[Display recovery](/hardware/hdmi#display-recovery)`. Never "click here" or a bare URL.
 - Link to a topic the **first time it matters on a page**, not every time it is mentioned.
 - External links: official docs and project repositories (`github.com/ps5-linux/...`). They open in the same tab. Don't link to anything that explains how to jailbreak.
 - Scripts users can download live in `static/scripts/` and are linked with `pathname:///scripts/...` so Docusaurus doesn't treat them as pages.
@@ -198,7 +198,7 @@ The wiki has **no images**. Describe things in text, tables and code blocks. If 
 
 - Page file names are lower-case, words joined with hyphens: `m2-compatibility.md`. They match the page's topic, not its title wording.
 - Use `.md`. Use `.mdx` only when a page needs components such as `<Tabs>`.
-- Folders are the sidebar categories: `getting-started`, `installation`, `using-linux`, `hardware`, `advanced`, `troubleshooting`, `about`.
+- Folders are the sidebar categories: `getting-started`, `choose`, `installation`, `post-install`, `using-linux`, `hardware`, `advanced`, `troubleshooting`, `about`.
 - Every new page is added to `sidebars.ts` in the same commit.
 - Don't rename or move a page without checking inbound links (`grep -r "old-name" docs/`).
 
@@ -218,5 +218,5 @@ The wiki has **no images**. Describe things in text, tables and code blocks. If 
 - **One source of truth per topic.** Each hardware component has one page under Hardware reference; its setup and troubleshooting live there. Other pages link to it instead of repeating it. Status changes go into the table on [Hardware status](docs/hardware/matrix.md) first.
 - **After installing has three layers:** All distros (applies everywhere), Other images (what PS5 Bazzite Deck already does), Distro notes (package-manager differences only), plus a PS5 Bazzite Deck page that points to docs.bazzite.gg for plain-Bazzite topics.
 - **Moving or merging a page:** add a redirect in `docusaurus.config.ts` (`@docusaurus/plugin-client-redirects`) so old links keep working.
-- **Front matter on every page:** `title`, `description` (quote both if they contain `: `), `hardware` (`[original, slim, pro]` or a subset) and `applies_to` (`all`, `bazzite-deck` or `not-bazzite-deck`). No firmware or kernel version fields: they go stale within weeks.
+- **Front matter:** quote `title` and `description` if they contain `: `. No firmware or kernel version fields: they go stale within weeks.
 - **Tone, after docs.bazzite.gg:** task-named pages, hub pages with bold link lists, one idea per paragraph, numbered steps, and "order reflects the recommendation" where options are ranked.
