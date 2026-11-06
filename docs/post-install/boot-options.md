@@ -120,7 +120,7 @@ root=LABEL=bazzite-deck rw rootwait console=ttyTitania0 console=tty0 mitigations
 
 ## PS5 Bazzite Deck options {#bazzite-deck}
 
-Add these with `rpm-ostree kargs` on bootc installs, see [Edit cmdline.txt](#edit-cmdlinetxt). VRR and HDMI-CEC have settings of their own: Steam's **Settings → Display** turns VRR off, and the TV's own settings stop it from turning on with the console.
+Add these with `rpm-ostree kargs` on bootc installs, see [Edit cmdline.txt](#edit-cmdlinetxt). The BPF LSM that Game Mode needs is built into its kernel, so it needs no `lsm=` option. VRR and HDMI-CEC have settings of their own: Steam's **Settings → Display** turns VRR off, and the TV's own settings stop it from turning on with the console.
 
 | Area | Parameter | What it does | Details |
 | --- | --- | --- | --- |
@@ -167,6 +167,7 @@ Add these with `rpm-ostree kargs` on bootc installs, see [Edit cmdline.txt](#edi
 | GPU and memory | `ttm.pages_limit=…` | Raises how much system memory the GPU may borrow (GTT) | all | [VRAM](/troubleshooting/gpu#vram) |
 | GPU and memory | `ps5_gpufreq.temp_limit=<50-95>` | Thermal limit of the GPU clock governor, 85 °C by default | upstream | [GPU](/troubleshooting/gpu) |
 | GPU and memory | `amdgpu.ps5_viola_fw=0` | PS5 Pro: use the base PS5's GPU firmware (36 CUs). For comparisons and troubleshooting | upstream | [PS5 Pro](/troubleshooting/ps5-pro#gpu-driver) |
+| Game Mode | `lsm=landlock,lockdown,yama,integrity,apparmor,bpf` | Turns on the BPF LSM, which Bazzite's and SteamOS's Game Mode need (`cardwired`), on a kernel built without `bpf` in `CONFIG_LSM`. Without it Gamescope is killed a second after it starts | all | [Kernel setup](/post-install/kernel#build-a-kernel-for-bazzite-game-mode) |
 | USB and storage | `usb-storage.quirks=xxxx:yyyy:u` | Turns off UAS for one USB drive (`xxxx:yyyy` from `lsusb`): for SSDs or enclosures that disconnect or freeze | all | [Storage and USB](/troubleshooting/storage) |
 | USB and storage | `rootwait rootdelay=60` | Waits up to 60 seconds for a slow USB drive | all | [Storage and USB](/troubleshooting/storage) |
 | USB and storage | `usbcore.autosuspend=-1` | Stops USB devices from sleeping | all | [Storage and USB](/troubleshooting/storage) |
