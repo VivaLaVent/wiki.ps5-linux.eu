@@ -11,7 +11,7 @@ applies_to: all
 
 There are three ways to run Linux on a PS5. Order reflects the recommendation.
 
-1. **[PS5 Bazzite Deck](/choose/bazzite-deck)**: a Steam console. Boots into Steam Gaming Mode with a KDE desktop one click away; Wi-Fi, Bluetooth, the fan, the PS5 Pro and the display fixes on this wiki are set up, and updates are one command.
+1. **[PS5 Bazzite Deck](/choose/bazzite-deck)**: a Steam console. Starts in the KDE desktop with Steam Gaming Mode one click away; Wi-Fi, Bluetooth, the fan, the PS5 Pro and the display fixes on this wiki are set up, and updates are one command.
 2. **[An official image](/choose/official-images)**: Ubuntu 26.04, Arch, CachyOS, Fedora 44, Debian 12 or upstream's Bazzite builds, from the ps5-linux project. A normal distro you set up yourself; update its kernel right after installing.
 3. **[Build it yourself](/choose/build-your-own)**: an official image, PS5 Bazzite Deck, or only the kernel, from current sources.
 

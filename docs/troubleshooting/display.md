@@ -21,7 +21,7 @@ HDR, CEC, hotplug, 4K120 over FRL with its fallback and ALLM are in upstream `ps
 | Chip | Consoles | Extras |
 | --- | --- | --- |
 | FLAVA3 | Most consoles | 1440p at 120 Hz, 4K at 120 Hz over FRL, HDR, VRR |
-| VERDE | Some later models | 1080p60, 1080p120, 1440p60 and 4K60 only |
+| VERDE | Some later models | 1080p60, 1080p120, 1440p60 and 4K60; on PS5 Bazzite Deck from v2.7 also 1080p100 and 1440p at 100 and 120 Hz |
 
 Check which one you have:
 
@@ -40,13 +40,13 @@ The GPU feeds the chip over an internal DisplayPort link of four lanes at HBR3. 
 | 1080p60 | CEA VIC 16 | ✅ | ✅ | Confirmed |
 | 1080p120 | CEA VIC 63 | ✅ | ✅ | Confirmed |
 | 1440p60 | VESA DMT reduced blanking | ✅ | ✅ | Confirmed |
-| 1440p120 | CVT-RB, same high-bandwidth setup as 4K60 | ✅ | ❌ | Confirmed |
+| 1440p120 | CVT-RB, same high-bandwidth setup as 4K60 | ✅ | ⚠️ | FLAVA3 confirmed; VERDE from v2.7, confirmed on one Slim with an earlier kernel (ghaem51) |
 | 4K60 | CEA VIC 97 | ✅ | ✅ | Confirmed |
 | 4K120 | CEA VIC 118 over FRL, Sony's index `0x0b` | ✅ | ❌ | Confirmed on some TVs, fails on others (see below) |
-| 1080p100, 1440p100, 4K100 | VIC 64, CVT-RB, VIC 117 (index `0x0a`) | ⚠️ | ❌ | Not tested: offered as an experiment only |
-| 165 Hz, ultrawide, anything else | | ❌ | ❌ | Known not to work: no setup in the chip |
+| 1080p100, 1440p100, 4K100 | VIC 64, CVT-RB, VIC 117 (index `0x0a`, FLAVA3) | ⚠️ | ⚠️ (not 4K100) | Offered from v2.7 when the display takes them; few reports yet |
+| 144 or 165 Hz, ultrawide, any other EDID mode up to 600 MHz | The chip's manual timing setup (index `0x05`, from rmuxnet's tree) | ⚠️ | ❌ | PS5 Bazzite Deck from v2.7; few reports yet. Standard TV formats outside the table (720p, 1080p50, 4K30) stay excluded |
 
-`ps5-hdmi-modes.patch` offers these modes whenever the display's limits allow them, even if its EDID doesn't list them, drops the display's own 1440p variants (the chip only accepts the timing above), marks 1080p60 as preferred so a new display starts there, and skips modes a display accepts only as YCbCr 4:2:0. It also gives both 1440p syncs the standard polarity and shape on FLAVA3, because the chip shifts the picture by the pulse width when a polarity differs. `ps5-hdmi-100hz-test.patch` adds the 100 Hz modes.
+`ps5-display.patch` offers the chip's own modes whenever the display's limits allow them, even if its EDID doesn't list them, marks 1080p60 as preferred so a new display starts there, and skips modes a display accepts only as YCbCr 4:2:0. It also gives both 1440p syncs the standard polarity and shape on FLAVA3, because the chip shifts the picture by the pulse width when a polarity differs. `ps5-hdmi-modes.patch` (v2.7) adds the 100 Hz modes and VERDE 1440p120 without an option, and on FLAVA3 sends every other progressive timing up to 600 MHz through the chip's manual timing setup; on VERDE, the display's own 1440p variants are still dropped.
 
 ## VRR on FLAVA3
 
@@ -123,11 +123,13 @@ The HDMI port is driven by `amdgpu` through the console's HDMI chip, and a pictu
 | --- | --- | --- |
 | 1080p | 60 Hz, 120 Hz | Every console |
 | 1440p | 60 Hz | Every console |
-| 1440p | 120 Hz | FLAVA3 HDMI chip |
+| 1440p | 120 Hz | FLAVA3 HDMI chip; VERDE on PS5 Bazzite Deck from v2.7 |
+| 1080p, 1440p | 100 Hz | PS5 Bazzite Deck from v2.7, every console |
 | 2160p (4K) | 60 Hz | Every console |
-| 2160p (4K) | 120 Hz | FLAVA3 HDMI chip, HDMI 2.1 TVs that accept the console's FRL link |
+| 2160p (4K) | 100 Hz, 120 Hz | FLAVA3 HDMI chip, HDMI 2.1 TVs that accept the console's FRL link (100 Hz: PS5 Bazzite Deck from v2.7) |
+| Other modes the display lists (144 or 165 Hz, ultrawide) | | FLAVA3 HDMI chip, PS5 Bazzite Deck from v2.7, up to 600 MHz |
 
-HDR and VRR also need the FLAVA3 chip; VRR is PS5 Bazzite Deck only. Nothing else is possible: 30 Hz, 165 Hz, ultrawide and other resolutions have no setup in the HDMI chip, see [Why only certain modes exist](#why-only-certain-modes-exist). Whether a mode is offered also depends on the display: the kernel reads its EDID and drops what the display doesn't accept.
+HDR and VRR also need the FLAVA3 chip; VRR is PS5 Bazzite Deck only. Other images and older releases stop at the chip's own setups: 165 Hz, ultrawide and other resolutions are not offered there, see [Why only certain modes exist](#why-only-certain-modes-exist). Whether a mode is offered also depends on the display: the kernel reads its EDID and drops what the display doesn't accept.
 
 :::tip[`amdgpu.force_1080p=1` caps the refresh rate]
 Some images ship this parameter in `cmdline.txt` as a safety net. It isn't needed for most displays, and it **limits the output to 1080p60**, including on panels that could do 120 Hz. If you get a picture without it, leave it out; keep it only for a display that shows nothing otherwise, see [Troubleshooting a black screen](#black-screen).
@@ -245,7 +247,8 @@ A capture card is just another display to the kernel, see [Capture cards](/troub
 - **The desktop, Steam or a browser stay at 1080p:** the HDMI driver marks 1080p at 60 Hz as the preferred mode, so the first start always has a picture, and the desktop keeps it until you choose another. Set the resolution and refresh rate in the desktop's display settings (on KDE, **System Settings → Display & Monitor**); Game Mode has its own in Steam's **Settings → Display**.
 - **Colours look washed out or too dark:** set the TV's HDMI black level to match the console, see [RGB range](#rgb-range).
 - **No 120 Hz, 4K120 or VRR:** these need the FLAVA3 HDMI chip and a display that supports them. HDMI 2.1 (FRL) is only used for 4K at 120 Hz (and 100 Hz); every other mode fits HDMI 2.0. On PS5 Bazzite Deck, `sudo dmesg | grep -e 4K120 -e 'over FRL'` shows whether your TV allows it (`4K120 possible`) and whether it is in use (`3840x2160@120 over FRL`).
-- **100 Hz:** PS5 Bazzite Deck v2.6.1 offers 1080p, 1440p and 4K at 100 Hz on FLAVA3 consoles with `hdmi.modes_100hz=1` in `cmdline.txt`.
+- **100 Hz and other refresh rates:** PS5 Bazzite Deck from v2.7 offers 100 Hz on every console and, on FLAVA3, the other modes the display lists, without an option (v2.6.1 to v2.6.3: `hdmi.modes_100hz=1`, FLAVA3 only). A mode that gives no picture: on the desktop, wait 15 seconds and the old mode comes back; otherwise see [Display recovery](#display-recovery).
+- **No picture until you unplug and replug the HDMI cable:** the console and the TV missed each other's handshake. Replugging is the quick fix; if it happens at every start, turn off the TV's HDMI Device Link/CEC and any auto input switching, and report it with `ps5-report` (it records the HDMI chip's events).
 - **VRR on PS5 Bazzite Deck:** no "Enable VRR" option means a VERDE console, a display without HDMI VRR (FreeSync-only monitors), VRR turned off for that input on the TV, or an old release with a TV that announces no VRR maximum (update). If the screen goes dark for 2 seconds in menus, use VRR per game instead (quick access menu → Performance). OLED flicker on the desktop: set Adaptive Sync to **Automatic**, not Always.
 - **No picture after choosing a display mode:** see [Black screen and display recovery](#display-recovery).
 - **The screen goes black in a game on a PS5 Pro, and SSH still works:** see [PS5 Pro](/troubleshooting/ps5-pro#other-problems-on-the-pro).

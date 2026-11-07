@@ -10,6 +10,12 @@ applies_to: all
 
 Problems with the drive Linux runs from. Which drives and ports to use in the first place is on [Drives and USB ports](/getting-started/drives).
 
+## Slow starts, long Steam updates, black screens on a hard drive {#slow-drive}
+
+Hard drives, and SATA SSDs in cheap USB adapters, are much slower than a USB NVMe SSD. Starts take minutes, Steam's updates can keep the screen black for a long time, and some adapters drop the drive under a long write (I/O errors, a frozen picture). If the drive's light shows activity, wait. If it happens often, move the system to a USB NVMe SSD or the [M.2 slot](/installation/m2-install). A drive that disconnects needs the UAS setting below.
+
+After holding the power button during a write, the next start can take longer while the filesystem is checked, or stop in an emergency shell. Let it finish; if it doesn't start, check the root partition from a Linux PC with `sudo e2fsck -f /dev/sdX4` (`sdX` is the drive; the root is partition 4 on a bootc install).
+
 ## USB SSD disconnects, freezes or shows I/O errors {#uas}
 
 Many USB-C SSDs and enclosures have buggy UAS support. Turn UAS off for that drive only: find its ID (`xxxx:yyyy`) with `lsusb`, then add this to `cmdline.txt`:

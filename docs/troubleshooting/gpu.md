@@ -152,7 +152,9 @@ Setting `adev->gfx.cu_info.lds_size = 128;` in `amdgpu_device.c` has been sugges
 
 ## VRAM
 
-Tools show a default allocation of 512 MB, but VRAM is **dynamic**: the driver takes more as needed. With the default split and about 14 GB usable, the ceiling works out at roughly 7 GB; the formula and how to raise it are below.
+PS5 Bazzite Deck sets **6 GB** from v2.6.1, once per install. The loader applies `vram.txt` when it starts the console, so a change takes effect at the next start with the loader, not at a [warm reboot](/post-install/warm-reboot); the first start after installing or updating can still show 512 MB. Check `cat /boot/efi/vram.txt` (it should be `0x180000000`) and `ps5-report`'s VRAM line. Tools such as PS5 Hardware Control's Memory tab write the same file: the last value written wins.
+
+Other images and the loader's default give 512 MB, but VRAM is **dynamic**: the driver takes more as needed. With the default split and about 14 GB usable, the ceiling works out at roughly 7 GB; the formula and how to raise it are below.
 
 To set a fixed minimum, edit `vram.txt` on the FAT32 USB partition. The loader reads the value as **hexadecimal bytes**, not decimal megabytes (`strtoull(buf, NULL, 16)` in `ps5-linux-loader/source/loader.c`). A decimal megabyte value gives the GPU almost nothing, and the boot ends in a black screen.
 
@@ -187,6 +189,8 @@ ttm.pages_limit = (desired GTT size in GB) × 1024 × 1024 / 4
 ```
 
 For a console used for gaming, **6 GB in `vram.txt`** (`180000000`) is the usual choice: the GPU then has 6 GB it never has to compete for, and the ceiling becomes 6 + (14 - 6) / 2 = about 10 GB. On a server or a desktop that doesn't game, leave the default: the 6 GB are then locked away from everything else. Raising `ttm.pages_limit` gives the same ceiling without locking anything, and is the tool for games that need more than that.
+
+More VRAM leaves less RAM for the game and the system (about 14 GB in all): a game that crashes after a long session with RAM nearly full can do better with **4 GB** (`100000000`). Raising `ttm.pages_limit` doesn't make games faster; leave it out unless a game runs out of GPU memory.
 
 Example for a 10 GB GTT ceiling:
 

@@ -74,7 +74,7 @@ To go back to the PS5 OS once while warm reboots are on, run `ps5-reboot-to-ps5`
 
 A new kernel needs a cold start: starting it with a warm reboot skips the console's hardware reset, and in testing that left the console hung. So the restart right after an update goes through the PS5 OS once, by itself:
 
-- After Steam's update or `sudo bootc upgrade`, the next restart goes through the PS5 OS. Start with the loader as usual and you are on the new version.
+- After `sudo bootc upgrade`, the next restart goes through the PS5 OS. Start with the loader as usual and you are on the new version.
 - On a Legacy install, the update command arranges the same and says so in its output.
 - After `sudo bootc rollback`, power off and start with the loader rather than restarting, so the loader starts the version you rolled back to.
 

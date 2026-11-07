@@ -13,7 +13,35 @@ What only PS5 Bazzite Deck has: updates and rollbacks, its own commands, and the
 
 ## Updating
 
-Use Steam's update button (**Settings → System**) or `sudo bootc upgrade` in a terminal. The new version downloads in the background and takes over at the next start: restart, then start with **bazzite-bootc-loader**. If it gives you trouble, [roll back](#rolling-back). Releases marked **Pre-release** are test builds: Steam's **Stable** channel doesn't install them, its **Beta** channel does (**Settings → System → OS Update Channel**).
+In a terminal (Desktop Mode's Konsole, or over SSH):
+
+```bash
+sudo bootc upgrade
+```
+
+The new version downloads in the background and takes over at the next start: restart, then start with **bazzite-bootc-loader**. If it gives you trouble, [roll back](#rolling-back).
+
+- **`No update available`** means your channel has nothing newer, not that something is broken. On **Stable** that is the release marked **Latest**; pre-releases are only on **Beta**.
+- **Steam's update button doesn't update the PS5.** Bazzite's updater behind it needs a security module the PS5 kernel doesn't run. Up to v2.6.3 Steam shows **Update Error**; from v2.7 it finds nothing. Steam may also show SteamOS patch notes: those are Valve's notes for its channel, not this image's.
+- **`mount: (hint) your fstab has been modified`** before the update starts is harmless.
+- **The first start after an update** can still use the old VRAM size; power off and start with the loader once more, see [VRAM](/troubleshooting/gpu#vram).
+
+### Stable or Beta {#update-channels}
+
+| Channel | Follows | Switch to it |
+| --- | --- | --- |
+| **Stable** | The release marked **Latest**, plus Bazzite's weekly updates | `sudo bootc switch ghcr.io/vivalavent/ps5-bazzite-bootc:stable` |
+| **Beta** | The newest pre-release, plus Bazzite's weekly updates | `sudo bootc switch ghcr.io/vivalavent/ps5-bazzite-bootc:beta` |
+
+Steam's **Settings → System → OS Update Channel** does the same switch. The switch downloads the channel's image and takes over at the next start. Between releases, both channels are rebuilt with Bazzite's base updates: an update then installs the same release with a newer build number.
+
+### Which version runs {#which-version-runs}
+
+```bash
+grep -E '^(deck|version)=' /usr/share/ps5-bazzite-bootc/VERSION
+```
+
+`deck=` is the release (for example `v2.6.3`), `version=` the image build (`20261106.25`: the build date and a number). `ps5-report`'s **Install** line shows the channel and the build, `fastfetch` the release. `uname -r` shows only the kernel (`7.3.1-viva`), which is the same in several releases.
 
 **Legacy installs** (`ps5-report` shows `legacy` on its **Install** line) update in place with the command in the release's notes, then power off and start with the loader. Switching to bootc is recommended, see [Built with bootc](/choose/bazzite-deck#built-with-bootc).
 
@@ -33,12 +61,7 @@ The previous version stays on the drive after every update. To go back to it:
 
 1. Run `sudo bootc rollback`.
 2. **Power off** (not restart), then start with the loader as usual. With [warm reboots](/post-install/warm-reboot#ps5-bazzite-deck) on, a restart would skip the loader. Any loader starts the version you rolled back to, because it is already in place on the boot partition; use bazzite-bootc-loader from your release anyway, so the manual rollback below works with the same loader.
-3. Check which version runs:
-
-   ```bash
-   sudo rpm-ostree status
-   sed -n 's/^deck=//p' /usr/share/ps5-bazzite-bootc/VERSION
-   ```
+3. Check which version runs, see [Which version runs](#which-version-runs).
 
 Running `sudo bootc rollback` again, then powering off, takes you forward to the newer version.
 
@@ -53,7 +76,7 @@ The loader doesn't need to know about rollbacks: at every shutdown, `ps5-bootc-s
 | SSH | Desktop Mode | `steamos-session-select plasma` |
 | SSH | Game Mode | `steamos-session-select gamescope` |
 
-From v2.6.1, PS5 Bazzite Deck starts in Desktop Mode. To start in Game Mode instead, change the default session in Steam's settings in Game Mode, or run `ujust set-default-game-mode` (and `ujust set-default-desktop` to go back).
+From v2.6.1, PS5 Bazzite Deck starts in Desktop Mode. To start in Game Mode instead, change the default session in Steam's settings in Game Mode, or run `ujust set-default-game-mode` (and `ujust set-default-desktop` to go back). The setting applies from the next start. If it still starts in Desktop Mode after that, report it in `#bazzite-problems` with the output of `ls -l /etc/sddm.conf.d; cat /etc/sddm.conf.d/*`.
 
 On some TVs the picture doesn't come back after **Switch to Desktop**, see [Display and HDMI](/troubleshooting/display#switch-to-desktop).
 
@@ -90,7 +113,7 @@ The image supports the [40 CU unlock](/troubleshooting/gpu#40-cu-unlock) on the 
 | [Steam Gaming Mode quirks](https://docs.bazzite.gg/Handheld_and_HTPC_edition/quirks/) | Yes |
 | [Installing software](https://docs.bazzite.gg/Installing_and_Managing_Software/): Bazaar (Flatpak), Homebrew, Distrobox, AppImage | Yes |
 | [ujust commands](https://docs.bazzite.gg/Installing_and_Managing_Software/ujust/) | Mostly; skip the ones about updates and the bootloader |
-| [Updates, rollbacks and rebasing](https://docs.bazzite.gg/Installing_and_Managing_Software/Updates_Rollbacks_and_Rebasing/), `rpm-ostree`, Bazzite Updater | **Partly.** `sudo bootc upgrade`, `sudo bootc rollback`, `sudo bootc status` and `rpm-ostree kargs` work; don't rebase to Bazzite's own images, they can't start on the PS5. Legacy installs: no ("This system was not booted via libostree"). See [Updating](#updating) |
+| [Updates, rollbacks and rebasing](https://docs.bazzite.gg/Installing_and_Managing_Software/Updates_Rollbacks_and_Rebasing/), `rpm-ostree`, Bazzite Updater | **Partly.** `sudo bootc upgrade`, `sudo bootc rollback`, `sudo bootc status` and `rpm-ostree kargs` work. The Bazzite Updater, Steam's update button and `bazzite-rollback-helper` (`bruh`) don't; don't rebase to Bazzite's own images, they can't start on the PS5. Legacy installs: no ("This system was not booted via libostree"). See [Updating](#updating) |
 | [Installation guides](https://docs.bazzite.gg/General/Installation_Guide/) | **No.** Install from a PS5 Bazzite Deck image, see [PS5 Bazzite Deck](/choose/bazzite-deck#download-and-extract) |
 
 PS5 Bazzite Deck is a community project, not made or supported by the Bazzite project. Ask PS5 questions on [Discord](https://discord.gg/ps5linux), not in Bazzite's channels.

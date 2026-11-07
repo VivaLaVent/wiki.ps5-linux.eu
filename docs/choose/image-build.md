@@ -48,7 +48,7 @@ The order matters: later patches are written against the tree state the earlier 
 
 1. **Suspend-to-idle:** Dasloh's pull request.
 2. **Display:** the FLAVA3 and VERDE display stack: 4K120 over FRL, 1440p, VRR. Explained on [Display and HDMI](/troubleshooting/display).
-3. **100 Hz modes** behind `hdmi.modes_100hz=1`.
+3. **HDMI modes:** 100 Hz and VERDE 1440p120 without an option, FLAVA3's manual timing setup for other EDID modes.
 4. **GPU:** the thermal GPU clock governor.
 5. **Fan:** no fan spike at shutdown, then firmware fan control with an 80 °C target by default and the kernel curve as an option. See [Fan control](/troubleshooting/fan#hwmon-driver).
 6. **PS5 Pro:** Bluetooth and the CPU clock. See [PS5 Pro](/troubleshooting/ps5-pro).

@@ -35,11 +35,13 @@ Pairing profiles came to the DualSense with its software version **0630**, relea
 **Pair the DualSense with Linux** (make sure it is already paired with the PS5 OS on one profile):
 
 1. Start Linux.
-2. On the DualSense, select a different profile, for example **PS + Square**.
-3. Put the DualSense in pairing mode.
+2. On the DualSense, hold **PS + Square** (or another face button than the PS5's): it switches to that profile, and keeps blinking in pairing mode if the profile has no pairing yet. Use a face button, not **PS + Create**.
+3. If it doesn't blink fast, keep holding until it does.
 4. Pair it in the Linux Bluetooth settings.
 5. Start the PS5 OS, select the PS5 profile on the DualSense, and check that it connects.
 6. Start Linux again, select the Linux profile, and check that it connects.
+
+From then on, hold **PS + the profile's button** for 2 to 3 seconds to switch: the PS5's profile in the PS5 OS, the Linux profile in Linux. No cable is needed.
 
 **Check or change the setting:** `ps5-bt-address status` shows the address in use; `ps5-bt-address off` turns the feature off (pair the DualSense with Linux again afterwards).
 

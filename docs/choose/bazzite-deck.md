@@ -9,7 +9,7 @@ applies_to: bazzite-deck
 
 # PS5 Bazzite Deck
 
-[PS5 Bazzite Deck](https://github.com/VivaLaVent/ps5-bazzite-deck) turns the PS5 into a Steam console. It is [Bazzite](https://bazzite.gg) in Steam Deck mode, adapted for the PS5: it boots straight into **Steam Gaming Mode** (the Steam Deck interface), and a full KDE desktop is one click away.
+[PS5 Bazzite Deck](https://github.com/VivaLaVent/ps5-bazzite-deck) turns the PS5 into a Steam console. It is [Bazzite](https://bazzite.gg) in Steam Deck mode, adapted for the PS5: it starts in the KDE desktop, with **Steam Gaming Mode** (the Steam Deck interface) one click away, and Steam can make Game Mode the default.
 
 It runs from a USB drive (or the M.2 slot) and is started by the Linux loader, like any other image. The PS5 itself is not modified: when you restart or power off, the PS5 starts its own system again, even with the drive still plugged in.
 
@@ -18,7 +18,7 @@ It runs from a USB drive (or the M.2 slot) and is started by the Linux loader, l
 - **Support the project:** [Ko-fi](https://ko-fi.com/vivalavent)
 
 :::tip[Which version?]
-Use the release marked **Latest**. Releases marked **Pre-release** are test builds, even when their version number is higher. If an update gives you trouble, `sudo bootc rollback` goes back to the version before.
+Use the release marked **Latest**. Releases marked **Pre-release** are test builds, even when their version number is higher. If an update gives you trouble, `sudo bootc rollback` goes back to the version before. To see which version a console runs, see [Which version runs](/post-install/bazzite#which-version-runs).
 :::
 
 ## Built with bootc
@@ -45,12 +45,14 @@ One image runs on every supported PS5. What you get depends on three parts of th
 
 | Feature | FLAVA3 (most consoles) | VERDE (some later models) | Notes |
 | --- | :---: | :---: | --- |
-| 1440p at 120 Hz | ✅ | ❌ | |
+| 1440p at 120 Hz | ✅ | ✅ from v2.7 | VERDE: new in v2.7, report how it works on your display. |
+| 100 Hz (1080p, 1440p; 4K on FLAVA3) | ✅ from v2.7 | ✅ from v2.7 | Offered when the display takes it. v2.6.x: FLAVA3 only, with `hdmi.modes_100hz=1`. |
+| Other modes the display lists (144 or 165 Hz, ultrawide) | ✅ from v2.7 | ❌ | Up to the HDMI chip's 600 MHz without FRL. New in v2.7, report how it works. |
 | 4K at 120 Hz | ✅ | ❌ | Needs an HDMI 2.1 TV and cable. Only offered when the TV can take it, and falls back to 4K60 by itself if the link fails. |
 | HDR (1080p60, 4K60) | ✅ | ❌ | Game Mode → Settings → Display |
 | VRR (displays with HDMI VRR) | ✅ | ❌ | At every resolution: Game Mode → Settings → Display → Enable VRR. Like on the PS5 OS, not on monitors that only have FreeSync. |
 
-Both chips support 1080p60, 1080p120, 1440p60 and 4K60, when the display can do them. Other resolutions and refresh rates (ultrawide, 165 Hz and so on) are not offered: the HDMI chip only has setups for these.
+Both chips support 1080p60, 1080p120, 1440p60 and 4K60, when the display can do them. The console always starts at 1080p60; choose another mode in the settings. Details: [Display and HDMI](/troubleshooting/display#supported-resolutions).
 
 **By Wi-Fi/Bluetooth chip:**
 
@@ -78,7 +80,7 @@ Both chips support 1080p60, 1080p120, 1440p60 and 4K60, when the display can do 
 2. **Verify** the download: the checksums of the `.7z.00*` files must match the `.sha256` file. On Linux, `sha256sum -c <file>.sha256`; on Windows, `Get-FileHash <file> -Algorithm SHA256` in PowerShell for each volume.
 3. **Extract** the `.001` file with [7-Zip](https://7-zip.org) (Windows), Keka (macOS) or `7z x` (Linux). You get an `.img` file: that is the file you flash.
 
-Already installed? Updates come through Steam, see [Updating](/post-install/bazzite#updating).
+Already installed? Update with `sudo bootc upgrade`, see [Updating](/post-install/bazzite#updating).
 
 ## Next steps
 

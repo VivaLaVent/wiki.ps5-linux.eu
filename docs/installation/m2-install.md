@@ -102,7 +102,7 @@ All steps run on the PS5, started from the USB drive, in a terminal (password `p
 
 To go back to the USB system: `sudo ps5-m2-install --back` (or the download line above with `--back`), then power off and start with the loader. The copy on the M.2 stays; running `sudo ps5-m2-install` again from the USB system replaces it.
 
-**Updates work as before:** on bootc through Steam or `sudo bootc upgrade`, on Legacy with the update command from the release notes. Keep the USB drive plugged in for both.
+**Updates work as before:** on bootc with `sudo bootc upgrade`, on Legacy with the update command from the release notes. Keep the USB drive plugged in for both.
 
 ## Next steps
 

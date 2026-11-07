@@ -64,7 +64,7 @@ PS5 Bazzite Deck with [Decky Loader](/post-install/decky): Remove the plugin fro
 
 ### A warm reboot hangs
 
-PS5 Bazzite Deck with `ps5-warm-reboot on`: Hold the power button until the console turns off, then start Linux with the loader. If it keeps happening, turn warm reboots off with `ps5-warm-reboot off` and report it in `#bazzite-problems` on [Discord](https://discord.gg/ps5linux) with the file `ps5-report` saves.
+PS5 Bazzite Deck with `ps5-warm-reboot on`: on consoles with the IW620 chip, Wi-Fi and Bluetooth may not come back after one. Hold the power button until the console turns off, then start Linux with the loader. If it keeps happening, turn warm reboots off with `ps5-warm-reboot off` and report it in `#bazzite-problems` on [Discord](https://discord.gg/ps5linux) with the file `ps5-report` saves.
 
 ### Modules or sysctl settings not loading {#modules-or-sysctl-settings-not-loading}
 
@@ -112,6 +112,14 @@ Reboot, then run the check again. It should print nothing.
 On v2.5, every update and `bootc switch` fails with `Failed to start ostree-finalize-staged.service` (`Unit greenboot-set-rollback-trigger.service is masked`). Later images are fixed; on v2.5, run the fix under [Updating from v2.5](/post-install/bazzite#updating) once.
 
 v2.5's **OS Update Channel** in Steam also switches to Bazzite's own images, which can't start on a PS5: don't use it on v2.5. From v2.5.1 it lists Stable and Beta of PS5 Bazzite Deck.
+
+### Steam: "Update Error" {#steam-update-error}
+
+PS5 Bazzite Deck up to v2.6.3: Steam's update button can't update the PS5 (Bazzite's updater behind it doesn't run with the PS5 kernel). Update with `sudo bootc upgrade` instead, see [Updating](/post-install/bazzite#updating). From v2.7 Steam finds no update.
+
+### "No update available" {#no-update-available}
+
+Your channel has nothing newer. On **Stable**, that is the release marked **Latest**: to get a pre-release, switch to Beta, see [Stable or Beta](/post-install/bazzite#update-channels). [Which version runs](/post-install/bazzite#which-version-runs) shows what you have.
 
 ### Legacy update: "this is not a PS5 Bazzite Deck install"
 
