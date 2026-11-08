@@ -18,7 +18,7 @@ It runs from a USB drive (or the M.2 slot) and is started by the Linux loader, l
 - **Support the project:** [Ko-fi](https://ko-fi.com/vivalavent)
 
 :::tip[Which version?]
-Use the release marked **Latest**. Releases marked **Pre-release** are test builds, even when their version number is higher. If an update gives you trouble, `sudo bootc rollback` goes back to the version before. To see which version a console runs, see [Which version runs](/post-install/bazzite#which-version-runs).
+Use the release marked **Latest**. Releases marked **Pre-release** are test builds, even when their version number is higher. If an update gives you trouble, `sudo bootc rollback` goes back to the version before. To see which version a console runs, see [Which version runs](/updating/bazzite-deck#which-version-runs).
 :::
 
 ## Built with bootc
@@ -27,7 +27,7 @@ PS5 Bazzite Deck is a **bootc** image: the whole system is one image, built and 
 
 - **Every console runs the same system.** The PS5 kernel, drivers and fixes are part of the image, not files changed on your drive.
 - **Updates download in the background** and take over at the next start. A power cut during an update doesn't leave a half-installed system.
-- **The previous version stays on the drive.** `sudo bootc rollback`, then power off and start with the loader, takes you back ([Rolling back](/post-install/bazzite#rolling-back)).
+- **The previous version stays on the drive.** `sudo bootc rollback`, then power off and start with the loader, takes you back ([Rolling back](/updating/bazzite-deck#rolling-back)).
 - **Games, settings and your files are kept** across updates and rollbacks.
 
 It starts with **bazzite-bootc-loader**, attached to every release, see [Which loader](/getting-started/loader#which-loader). It starts other images like the official loader, so one loader works for everything.
@@ -80,7 +80,7 @@ Both chips support 1080p60, 1080p120, 1440p60 and 4K60, when the display can do 
 2. **Verify** the download: the `.img.sha256` file lists the checksum of the `.img` first, then one for each `.7z.00*` volume. On Linux, `sha256sum -c --ignore-missing <file>.img.sha256` checks the volumes; on Windows, `Get-FileHash <file> -Algorithm SHA256` in PowerShell for each volume, compared with its line.
 3. **Extract** the `.001` file with [7-Zip](https://7-zip.org) (Windows), Keka (macOS) or `7z x` (Linux). You get an `.img` file: that is the file you flash.
 
-Already installed? Update with `sudo bootc upgrade`, see [Updating](/post-install/bazzite#updating).
+Already installed? Update with `sudo bootc upgrade`, see [Updating](/updating/bazzite-deck#updating).
 
 ## Next steps
 

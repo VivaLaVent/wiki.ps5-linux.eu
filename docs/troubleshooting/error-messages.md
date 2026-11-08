@@ -109,17 +109,17 @@ Reboot, then run the check again. It should print nothing.
 
 ### PS5 Bazzite Deck v2.5: updates fail {#bazzite-deck-v25-updates-fail}
 
-On v2.5, every update and `bootc switch` fails with `Failed to start ostree-finalize-staged.service` (`Unit greenboot-set-rollback-trigger.service is masked`). Later images are fixed; on v2.5, run the fix under [Updating from v2.5](/post-install/bazzite#updating) once.
+On v2.5, every update and `bootc switch` fails with `Failed to start ostree-finalize-staged.service` (`Unit greenboot-set-rollback-trigger.service is masked`). Later images are fixed; on v2.5, run the fix under [Updating from v2.5](/updating/bazzite-deck#updating) once.
 
 v2.5's **OS Update Channel** in Steam also switches to Bazzite's own images, which can't start on a PS5: don't use it on v2.5. From v2.5.1 it lists Stable and Beta of PS5 Bazzite Deck.
 
 ### Steam: "Update Error" {#steam-update-error}
 
-PS5 Bazzite Deck up to v2.6.3: Steam's update button can't update the PS5 (Bazzite's updater behind it doesn't run with the PS5 kernel). Update with `sudo bootc upgrade` instead, see [Updating](/post-install/bazzite#updating). From v2.7 Steam finds no update.
+PS5 Bazzite Deck up to v2.6.3: Steam's update button can't update the PS5 (Bazzite's updater behind it doesn't run with the PS5 kernel). Update with `sudo bootc upgrade` instead, see [Updating](/updating/bazzite-deck#updating). From v2.7 Steam finds no update.
 
 ### "No update available" {#no-update-available}
 
-Your channel has nothing newer. On **Stable**, that is the release marked **Latest**: to get a pre-release, switch to Beta, see [Stable or Beta](/post-install/bazzite#update-channels). [Which version runs](/post-install/bazzite#which-version-runs) shows what you have.
+Your channel has nothing newer. On **Stable**, that is the release marked **Latest**: to get a pre-release, switch to Beta, see [Stable or Beta](/updating/bazzite-deck#update-channels). [Which version runs](/updating/bazzite-deck#which-version-runs) shows what you have.
 
 ### Legacy update: "this is not a PS5 Bazzite Deck install"
 
@@ -154,7 +154,7 @@ Two different problems get reported under this name.
 If your install no longer boots but you have access to another Linux system (booted from another USB drive, or another machine), you can chroot into your install to fix it.
 
 :::note[Not for PS5 Bazzite Deck]
-This page is for installs you manage with a package manager. PS5 Bazzite Deck users: go back to the previous version with `sudo bootc rollback`, see [Rolling back](/post-install/bazzite#rolling-back); `ROLLBACK.txt` on the boot partition explains how to start it from a PC.
+This page is for installs you manage with a package manager. PS5 Bazzite Deck users: go back to the previous version with `sudo bootc rollback`, see [Rolling back](/updating/bazzite-deck#rolling-back); `ROLLBACK.txt` on the boot partition explains how to start it from a PC.
 :::
 
 ### Find your partition

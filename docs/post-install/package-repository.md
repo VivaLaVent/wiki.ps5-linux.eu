@@ -118,37 +118,7 @@ sudo dnf upgrade -y linux-ps5 ps5-linux-tools --setopt=gpgcheck=0
 
 ## Update the kernel later
 
-One command for any distro:
-
-```bash
-curl -fsSL https://repo.etawen.dev/update-kernel.sh | sudo sh
-```
-
-It detects your package manager (pacman, apt, dnf, dnf5 or rpm-ostree), adds the repository first if needed, skips `ps5-linux-mwifiex` when your kernel already includes the driver, and only reboots if the kernel actually changed. Add `-s -- --no-reboot` after `sh` to skip the reboot.
-
-## Install a specific kernel version
-
-Every tagged upstream release is mirrored, so you can go back to an earlier kernel, for example after a [kernel update that broke an M.2 install](/troubleshooting/error-messages#kernel-update-breaks-m2-boot).
-
-**Arch:** the pacman database only lists the newest version, so install older ones by URL. Browse [repo.etawen.dev/arch](https://repo.etawen.dev/arch/) for the file name:
-
-```bash
-sudo pacman -U https://repo.etawen.dev/arch/linux-ps5-<version>-x86_64.pkg.tar.zst
-```
-
-**Debian / Ubuntu:**
-
-```bash
-apt-cache madison linux-ps5
-sudo apt install linux-ps5=<version>
-```
-
-**Fedora / Bazzite:**
-
-```bash
-dnf --showduplicates list linux-ps5
-sudo dnf install --setopt=gpgcheck=0 linux-ps5-<version>
-```
+See [Updating: other images](/updating/other-images): one command for any distro, and how to go back to an earlier kernel.
 
 ## Fix scripts for older images
 

@@ -15,13 +15,9 @@ Linux lives on a USB drive or on an M.2 SSD. The internal SSD is never written t
 
 The ready-made images are a convenience, not a requirement: the PS5 kernel is stock Linux plus one patch set (see [Kernel setup](/post-install/kernel)), so any distro can be made to run, and people have brought up their own from scratch.
 
-:::tip[New here?]
-Start with [Getting started](/getting-started/overview). It lists what you need and walks you through every step in order. Not sure which image to pick? [Which image should I use?](/getting-started/which-image)
-:::
+## Start here
 
-## Video guide for beginners
-
-Modded Warfare's **[Running Linux on a Jailbroken PS5 (13.60 or lower)](https://www.youtube.com/watch?v=QEcGPgPfoMw)** walks through a whole install of PS5 Bazzite Deck: the PS5 settings, flashing the drive, starting the loader, the first setup in Desktop Mode and Game Mode, moving the system to the M.2 and updating. If this is your first time, watch it before you start, then come back here for the details.
+New to it? Watch Modded Warfare's **[Running Linux on a Jailbroken PS5 (13.60 or lower)](https://www.youtube.com/watch?v=QEcGPgPfoMw)** first: a whole install of PS5 Bazzite Deck, from the PS5 settings to the first games and updates. Then follow **[Getting started](/getting-started/overview)**, which takes you through every step in order; the sidebar follows the same order.
 
 <iframe
   src="https://www.youtube-nocookie.com/embed/QEcGPgPfoMw"
@@ -45,21 +41,15 @@ Modded Warfare's **[Running Linux on a Jailbroken PS5 (13.60 or lower)](https://
 | [12:58 PS5 Linux tools](https://www.youtube.com/watch?v=QEcGPgPfoMw&t=778s), [13:31 Installing Linux to the M.2](https://www.youtube.com/watch?v=QEcGPgPfoMw&t=811s) | [Install to the M.2](/installation/m2-install) |
 | [17:20 Fan and overclock](https://www.youtube.com/watch?v=QEcGPgPfoMw&t=1040s) | [Fan control](/troubleshooting/fan), [Clocks and boost](/troubleshooting/gpu#clocks-and-boost) |
 | [18:17 Running PC games](https://www.youtube.com/watch?v=QEcGPgPfoMw&t=1097s) | [Steam and Proton](/post-install/all-distros#steam-and-proton) |
-| [20:55 Updating PS5 Linux](https://www.youtube.com/watch?v=QEcGPgPfoMw&t=1255s) | [Updating PS5 Bazzite Deck](/post-install/bazzite#updating), [Kernel setup](/post-install/kernel) for other images |
+| [20:55 Updating PS5 Linux](https://www.youtube.com/watch?v=QEcGPgPfoMw&t=1255s) | [Updating](/updating): [PS5 Bazzite Deck](/updating/bazzite-deck) and [other images](/updating/other-images) |
 | [22:36 Switching OS](https://www.youtube.com/watch?v=QEcGPgPfoMw&t=1356s) | Power off or restart: the PS5 OS starts again; [Warm reboots](/post-install/warm-reboot) restart straight into Linux |
 
-The downloads the video links to: the [Linux loader](https://github.com/ps5-linux/ps5-linux-loader) and [soniciso1's loader](https://github.com/soniciso1/ps5-linux-loader/releases) (see [Which loader](/getting-started/loader#which-loader)), [PS5 Bazzite Deck](https://github.com/VivaLaVent/ps5-bazzite-deck/releases) (take the release marked **Latest**), the [official images](https://github.com/ps5-linux/ps5-linux-image) and [kernel packages](https://github.com/ps5-linux/ps5-linux-patches), [balenaEtcher](https://etcher.balena.io/) and [7-Zip](https://www.7-zip.org/download.html).
-
 Where the video and this wiki differ, follow the wiki: flash with [balenaEtcher](/installation/flash), not Rufus, and on PS5 Bazzite Deck leave `ps5_control` from ps5-linux-tools alone, because the image's own fan driver and clock governor already run the fan and clocks (see [Fan control](/troubleshooting/fan) and `ps5-perf`).
-
-## How this wiki is organised
-
-The wiki follows the order you need it in: **Before you install** (firmware, [hardware status](/getting-started/hardware), drives, loader and image), **Install**, **After installing** (for every image, for PS5 Bazzite Deck, and for the other distros), and **Troubleshooting**, with one page per component and one for [error messages](/troubleshooting/error-messages).
 
 ## Resources
 
 - [ps5-linux GitHub organisation](https://github.com/ps5-linux)
-- [ps5-linux-loader](https://github.com/ps5-linux/ps5-linux-loader): the payload that boots Linux
+- [ps5-linux-loader](https://github.com/ps5-linux/ps5-linux-loader): the payload that boots Linux, and [soniciso1's loader](https://github.com/soniciso1/ps5-linux-loader/releases) for more firmware versions, see [Which loader](/getting-started/loader#which-loader)
 - [ps5-linux-patches](https://github.com/ps5-linux/ps5-linux-patches): the patched kernel (official repository, packaged releases)
 - [rmuxnet/ps5-linux-patches-1](https://github.com/rmuxnet/ps5-linux-patches-1): rmuxnet's fork with its own releases, see [Kernel setup](/post-install/kernel)
 - [ps5-linux-tools](https://github.com/ps5-linux/ps5-linux-tools): fan, boost and M.2 tools
@@ -68,7 +58,6 @@ The wiki follows the order you need it in: **Before you install** (firmware, [ha
 - [PS5 Bazzite Deck](https://github.com/VivaLaVent/ps5-bazzite-deck): Bazzite with Steam Gaming Mode
 - [repo.etawen.dev](https://repo.etawen.dev): package repository for the kernel and tools
 - [Discord server](https://discord.gg/ps5linux): help, tips, development and bug reports
-- [Video guide by Modded Warfare](https://www.youtube.com/watch?v=QEcGPgPfoMw): PS5 Bazzite Deck from start to finish, firmware up to 13.60
 - [PS4 Linux guide](https://github.com/DionKill/ps4-linux-tutorial/)
 
 Spotted a mistake or have something to add? Every page has an **Edit this page** link at the bottom. Corrections are welcome.

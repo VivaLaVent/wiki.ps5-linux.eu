@@ -1,6 +1,6 @@
 ---
 title: How the PS5 Bazzite Deck image is built
-sidebar_label: PS5 Bazzite Deck build
+sidebar_label: PS5 Bazzite Deck
 sidebar_position: 2
 description: What a PS5 image builder has to change in the kernel config and which patches it applies, using PS5 Bazzite Deck as the worked example.
 hardware: [original, slim, pro]

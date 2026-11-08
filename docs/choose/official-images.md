@@ -24,7 +24,7 @@ The [ps5-linux-image release](https://github.com/ps5-linux/ps5-linux-image/relea
 | Bazzite Deck UI | Steam Gaming Mode | Upstream's own build, **not** [PS5 Bazzite Deck](/choose/bazzite-deck) |
 
 :::warning[Update the kernel after installing]
-The release images are not rebuilt often: the current set was built on 31 July 2026 with kernel 7.1.4, which predates the PS5 Pro's GPU support and the Slim's Wi-Fi. After the first boot, update the kernel with the [package repository](/post-install/package-repository#update-the-kernel-later).
+The release images are not rebuilt often: the current set was built on 31 July 2026 with kernel 7.1.4, which predates the PS5 Pro's GPU support and the Slim's Wi-Fi. After the first boot, update the kernel with the [package repository](/updating/other-images#update-the-kernel).
 :::
 
 The builder can also make a **multi-distro image** with Ubuntu, Arch and CachyOS side by side on one drive, switched with kexec.
