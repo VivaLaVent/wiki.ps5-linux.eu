@@ -13,7 +13,7 @@ Everything about the picture: which modes the console's HDMI chip can drive, how
 The GPU does not drive the HDMI port directly. It sends DisplayPort to a separate HDMI chip, and the kernel programs that chip over I2C through the console's ICC for every mode. This page explains what the chip can do and what the PS5 patches do with it. The user-facing side (resolutions, black screens) is on [Display output](#display-settings).
 
 :::info[Where the patches live]
-HDR, CEC, hotplug, 4K120 over FRL with its fallback and ALLM are in upstream `ps5-linux-patches` and in rmuxnet's kernel. The VRR, mode, RGB range and link lock patches are PS5 Bazzite Deck only, in its [`patches/`](https://github.com/VivaLaVent/ps5-bazzite-deck/tree/main/patches) folder; each file starts with a description of what it does. See [Kernel setup](/post-install/kernel#what-is-where).
+HDR, CEC, hotplug, 4K120 over FRL with its fallback and ALLM are in upstream `ps5-linux-patches` and in rmuxnet's kernel. PS5 Bazzite Deck carries its own display stack, VRR, the mode list, the RGB range and the link lock included, in two files of its [`patches/`](https://github.com/VivaLaVent/ps5-bazzite-deck/tree/main/patches) folder: `ps5-display.patch` and `ps5-hdmi-modes.patch`. Each starts with a description of what it does. See [Kernel setup](/post-install/kernel#what-is-where).
 :::
 
 ## The two HDMI chips
@@ -31,9 +31,9 @@ sudo dmesg | grep "HDMI IC Type"
 
 ## Why only certain modes exist
 
-The chip has no general-purpose mode set. For each resolution it has a fixed setup: a mode index written to registers `0x7227` and `0x7070`, a PHY configuration and a block of InfoFrame registers. The kernel replays Sony's setup for the mode the compositor asked for. A mode the chip has no setup for cannot be output, whatever the GPU or the display can do. That rules out 165 Hz, ultrawide resolutions and every other mode not in the table below.
+The chip has no general-purpose mode set. For each resolution it has a fixed setup: a mode index written to registers `0x7227` and `0x7070`, a PHY configuration and a block of InfoFrame registers. The kernel replays Sony's setup for the mode the compositor asked for. On VERDE, and on every image but PS5 Bazzite Deck, a mode the chip has no setup for cannot be output, whatever the GPU or the display can do. On FLAVA3, PS5 Bazzite Deck from v2.7 also uses the chip's manual timing setup for the display's other modes (last row of the table).
 
-The GPU feeds the chip over an internal DisplayPort link of four lanes at HBR3. That link is wide enough for every mode below, but the driver used to train it at the lowest rate a mode needs, and the chip sometimes failed to sync at those lower rates. `ps5-hdmi-link-lock.patch` trains it at the full rate for every mode; the same idea by hand is on [Lock the display link](#display-link-lock).
+The GPU feeds the chip over an internal DisplayPort link of four lanes at HBR3. That link is wide enough for every mode below, but the driver used to train it at the lowest rate a mode needs, and the chip sometimes failed to sync at those lower rates. PS5 Bazzite Deck trains it at the full rate for every mode (`PS5: DP link locked` in the log); the same idea by hand is on [Lock the display link](#display-link-lock).
 
 | Mode | Timing the chip expects | FLAVA3 | VERDE | Status |
 | --- | --- | --- | --- | --- |
@@ -44,9 +44,9 @@ The GPU feeds the chip over an internal DisplayPort link of four lanes at HBR3. 
 | 4K60 | CEA VIC 97 | ✅ | ✅ | Confirmed |
 | 4K120 | CEA VIC 118 over FRL, Sony's index `0x0b` | ✅ | ❌ | Confirmed on some TVs, fails on others (see below) |
 | 1080p100, 1440p100, 4K100 | VIC 64, CVT-RB, VIC 117 (index `0x0a`, FLAVA3) | ⚠️ | ⚠️ (not 4K100) | Offered from v2.7 when the display takes them; few reports yet |
-| 144 or 165 Hz, ultrawide, any other EDID mode up to 600 MHz | The chip's manual timing setup (index `0x05`, from rmuxnet's tree) | ⚠️ | ❌ | PS5 Bazzite Deck from v2.7; few reports yet. Standard TV formats outside the table (720p, 1080p50, 4K30) stay excluded |
+| 144 or 165 Hz, ultrawide, any other EDID mode up to 600 MHz | The chip's manual timing setup (index `0x05`, from rmuxnet's tree) | ⚠️ | ❌ | PS5 Bazzite Deck from v2.7; few reports yet. Standard TV formats outside the table (720p, 1080p50, 4K30) stay excluded, and so, from v2.7.1, do the display's own 1440p timings up to 340 MHz (1440p at about 60 Hz) |
 
-`ps5-display.patch` offers the chip's own modes whenever the display's limits allow them, even if its EDID doesn't list them, marks 1080p60 as preferred so a new display starts there, and skips modes a display accepts only as YCbCr 4:2:0. It also gives both 1440p syncs the standard polarity and shape on FLAVA3, because the chip shifts the picture by the pulse width when a polarity differs. `ps5-hdmi-modes.patch` (v2.7) adds the 100 Hz modes and VERDE 1440p120 without an option, and on FLAVA3 sends every other progressive timing up to 600 MHz through the chip's manual timing setup; on VERDE, the display's own 1440p variants are still dropped.
+`ps5-display.patch` offers the chip's own modes whenever the display's limits allow them, even if its EDID doesn't list them, marks 1080p60 as preferred so a new display starts there, and skips modes a display accepts only as YCbCr 4:2:0. It also gives both 1440p syncs the standard polarity and shape on FLAVA3, because the chip shifts the picture by the pulse width when a polarity differs. `ps5-hdmi-modes.patch` (v2.7) adds the 100 Hz modes and VERDE 1440p120 without an option, and on FLAVA3 sends every other progressive timing up to 600 MHz through the chip's manual timing setup. 1440p is the exception: up to 340 MHz only the chip's own 1440p timing is used (from v2.7.1, as in rmuxnet's tree, after a report of a 1440p picture shifted into a corner), and on VERDE the display's own 1440p variants are dropped.
 
 ## VRR on FLAVA3
 
@@ -60,11 +60,11 @@ VRR did not work because of the GPU side, not the chip. Captures of what the PS5
 
 Three more rules come from testing:
 
-- **HDMI VRR only.** The chip's follow mode is HDMI VRR. A monitor that announces only AMD FreeSync (no VRR range in its HDMI Forum block) resynced and blanked at every refresh change, so such displays are not offered VRR, the same as on the PS5 OS. The log says why.
+- **FreeSync-only monitors from v2.7.1.** A monitor that announces only AMD FreeSync (no VRR range in its HDMI Forum block) gets its FreeSync range, with the same follow mode and floor; up to v2.7 such displays weren't offered VRR. The chip sends a FreeSync SPD in every case, so TVs with both, an LG C4 for example, show FreeSync as active. Reports from FreeSync-only monitors are welcome.
 - **48 Hz floor.** TVs often announce 40 Hz as their minimum, where OLEDs flicker visibly. The range used never goes below 48 Hz, the PS5 OS's own floor: below it, frames are doubled at 120 Hz modes, and 60 Hz modes keep a fixed 60 Hz. A TV with a higher minimum keeps it.
-- **An open-ended maximum counts as HDMI VRR.** Some TVs announce HDMI VRR with a minimum and `VRRmax` 0, which the HDMI specification defines as "up to the highest refresh rate". Early versions of the patch read that as "no HDMI VRR" and refused it; the current one takes the maximum from the FreeSync range, or 120 Hz. The range is also read from the HF-SCDB block that newer TVs use instead of the VSDB. The log says why a display is or isn't offered VRR.
+- **An open-ended maximum counts as HDMI VRR.** Some TVs announce HDMI VRR with a minimum and `VRRmax` 0, which the HDMI specification defines as "up to the highest refresh rate". Early versions of the patch read that as "no HDMI VRR" and refused it; the current one takes the maximum from the FreeSync range, or 120 Hz. From v2.7.2 the range is also read from the HF-SCDB block that newer displays use instead of the VSDB. The log says why a display is or isn't offered VRR.
 
-Sources: `ps5-vrr.patch`, `ps5-vrr-stock-setup.patch` (the chip only follows when every setup includes Sony's full PHY tail and VSync block), `ps5-vrr-min-48.patch`, `ps5-vrr-hdmi-only.patch`, `ps5-vrr-follow-guard.patch` and `ps5-vrr-hdmi-range.patch` in the [`patches/`](https://github.com/VivaLaVent/ps5-bazzite-deck/tree/main/patches) folder.
+Source: `ps5-display.patch` in the [`patches/`](https://github.com/VivaLaVent/ps5-bazzite-deck/tree/main/patches) folder (`drivers/ps5/hdmi.c` and amdgpu's PS5 hooks). The chip only follows when every setup includes Sony's full PHY tail and VSync block.
 
 :::tip[PS5 Bazzite Deck]
 Steam's VRR setting switches it. From a shell: `gamescopectl adaptive_sync 0` (or `1`) after exporting `XDG_RUNTIME_DIR` and `GAMESCOPE_WAYLAND_DISPLAY=gamescope-0`, see [Display recovery](#display-recovery).
@@ -90,22 +90,22 @@ Because a TV that can't take the link was left black at every boot, there is a g
 
 **Session switches at 4K120:** on some TVs, switching between Gaming Mode and the desktop while the output is 4K120 triggers a GPU fault. It is a compositor-side problem; keep the desktop at 4K60 and use 4K120 in Gaming Mode only. On a PS5 Pro a GPU fault is not recovered, see [PS5 Pro](/troubleshooting/ps5-pro#starting-linux-fails-on-the-pro).
 
-Sources: `ps5-hdmi-frl-4k120.patch` and `ps5-hdmi-4k120-guard.patch`.
+Source: `ps5-display.patch` (4K120 by Lawson, the gate and fallback added later).
 
 ## SCDC and TVs that drop to HDMI 1.4 modes
 
-Some TVs announce their HDMI 2.1 EDID at boot and then, a few seconds after the console sets up 1080p60, re-announce an HDMI 1.4 EDID: 340 MHz, 4K only as 4:2:0, nothing above 60 Hz, no VRR. The cause is SCDC traffic the TV expects from an HDMI 2.x source. Two patches write it at every video setup for sinks that talk SCDC (an HDMI Forum VSDB with `SCDC_Present`, or 4K / 4:2:0 modes in the EDID); 1080p-only HDMI 1.4 TVs never get SCDC traffic.
+Some TVs announce their HDMI 2.1 EDID at boot and then, a few seconds after the console sets up 1080p60, re-announce an HDMI 1.4 EDID: 340 MHz, 4K only as 4:2:0, nothing above 60 Hz, no VRR. The cause is SCDC traffic the TV expects from an HDMI 2.x source. PS5 Bazzite Deck writes it at every video setup for sinks that talk SCDC (an HDMI Forum VSDB with `SCDC_Present`, or 4K / 4:2:0 modes in the EDID); 1080p-only HDMI 1.4 TVs never get SCDC traffic.
 
-| Patch | Writes | Status |
+| Write | What | Status |
 | --- | --- | --- |
-| `ps5-hdmi-scdc-source-version.patch` | SCDC Source Version = 1, through the chip's DDC write descriptor at `0x7a80` | Confirmed on a TV with the symptom |
-| `ps5-hdmi-scdc-tmds-config.patch` | SCDC `TMDS_Config` at every setup, `0x00` when not scrambling, as a PC driver does | Not tested |
+| SCDC Source Version | `1`, through the chip's DDC write descriptor at `0x7a80` | Confirmed on a TV with the symptom |
+| SCDC `TMDS_Config` | At every setup, `0x00` when not scrambling, as a PC driver does | Not tested |
 
 ## RGB range
 
 The GPU sends full-range RGB on the internal link, but the AVI InfoFrame's quantization field (PB3 bits Q1:Q0, chip register `0x7226` bits 3:2) stayed "default". TVs read "default" as limited for TV timings (1080p, 4K60) and as full for PC timings (1440p), so 1080p had crushed blacks while 1440p looked right. The driver now sends "full" explicitly for RGB output.
 
-CTA-861 codes the field as 0 default, 1 limited, 2 full. A first version wrote the parameter value itself, so "1 = full" went out as limited and every resolution was too dark on TVs set to Auto. `ps5-hdmi-rgb-range-encoding.patch` maps the parameter to the right codes.
+CTA-861 codes the field as 0 default, 1 limited, 2 full. A first version wrote the parameter value itself, so "1 = full" went out as limited and every resolution was too dark on TVs set to Auto. The current one maps the parameter to the right codes.
 
 `hdmi.rgb_range=1` is full (default), `2` limited, `0` sends no flag and lets the TV decide. VERDE consoles already declare full range and don't need this.
 
@@ -249,7 +249,7 @@ A capture card is just another display to the kernel, see [Capture cards](/troub
 - **No 120 Hz, 4K120 or VRR:** these need the FLAVA3 HDMI chip and a display that supports them. HDMI 2.1 (FRL) is only used for 4K at 120 Hz (and 100 Hz); every other mode fits HDMI 2.0. On PS5 Bazzite Deck, `sudo dmesg | grep -e 4K120 -e 'over FRL'` shows whether your TV allows it (`4K120 possible`) and whether it is in use (`3840x2160@120 over FRL`).
 - **100 Hz and other refresh rates:** PS5 Bazzite Deck from v2.7 offers 100 Hz on every console and, on FLAVA3, the other modes the display lists, without an option (v2.6.1 to v2.6.3: `hdmi.modes_100hz=1`, FLAVA3 only). A mode that gives no picture: on the desktop, wait 15 seconds and the old mode comes back; otherwise see [Display recovery](#display-recovery).
 - **No picture until you unplug and replug the HDMI cable:** the console and the TV missed each other's handshake. Replugging is the quick fix; if it happens at every start, turn off the TV's HDMI Device Link/CEC and any auto input switching, and report it with `ps5-report` (it records the HDMI chip's events).
-- **VRR on PS5 Bazzite Deck:** no "Enable VRR" option means a VERDE console, a display without HDMI VRR (FreeSync-only monitors), VRR turned off for that input on the TV, or an old release with a TV that announces no VRR maximum (update). If the screen goes dark for 2 seconds in menus, use VRR per game instead (quick access menu → Performance). OLED flicker on the desktop: set Adaptive Sync to **Automatic**, not Always.
+- **VRR on PS5 Bazzite Deck:** no "Enable VRR" option means a VERDE console, a display without a VRR range (FreeSync-only monitors up to v2.7), VRR turned off for that input on the TV, or an old release with a TV that announces no VRR maximum (update). `sudo dmesg | grep "PS5 VRR"` says which. In 100 and 120 Hz modes, a game below 48 fps has each frame shown twice, so the TV's refresh reads about double the game's frame rate; that is normal. If the screen goes dark for 2 seconds in menus, use VRR per game instead (quick access menu → Performance). OLED flicker on the desktop: set Adaptive Sync to **Automatic**, not Always.
 - **No picture after choosing a display mode:** see [Black screen and display recovery](#display-recovery).
 - **The screen goes black in a game on a PS5 Pro, and SSH still works:** see [PS5 Pro](/troubleshooting/ps5-pro#other-problems-on-the-pro).
 

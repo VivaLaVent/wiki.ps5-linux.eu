@@ -50,7 +50,7 @@ One image runs on every supported PS5. What you get depends on three parts of th
 | Other modes the display lists (144 or 165 Hz, ultrawide) | ✅ from v2.7 | ❌ | Up to the HDMI chip's 600 MHz without FRL. New in v2.7, report how it works. |
 | 4K at 120 Hz | ✅ | ❌ | Needs an HDMI 2.1 TV and cable. Only offered when the TV can take it, and falls back to 4K60 by itself if the link fails. |
 | HDR (1080p60, 4K60) | ✅ | ❌ | Game Mode → Settings → Display |
-| VRR (displays with HDMI VRR) | ✅ | ❌ | At every resolution: Game Mode → Settings → Display → Enable VRR. Like on the PS5 OS, not on monitors that only have FreeSync. |
+| VRR | ✅ | ❌ | At every resolution: Game Mode → Settings → Display → Enable VRR. Displays with HDMI VRR; monitors that only have FreeSync from v2.7.1 (pre-release, report how it works). |
 
 Both chips support 1080p60, 1080p120, 1440p60 and 4K60, when the display can do them. The console always starts at 1080p60; choose another mode in the settings. Details: [Display and HDMI](/troubleshooting/display#supported-resolutions).
 
@@ -77,7 +77,7 @@ Both chips support 1080p60, 1080p120, 1440p60 and 4K60, when the display can do 
 ## Download and extract
 
 1. **Download** all `ps5-bazzite-deck-bootc-vX.Y.img.7z.00*` files, the `.sha256` file and `bazzite-bootc-loader-vX.Y.elf` from the [release marked Latest](https://github.com/VivaLaVent/ps5-bazzite-deck/releases) into one folder.
-2. **Verify** the download: the checksums of the `.7z.00*` files must match the `.sha256` file. On Linux, `sha256sum -c <file>.sha256`; on Windows, `Get-FileHash <file> -Algorithm SHA256` in PowerShell for each volume.
+2. **Verify** the download: the `.img.sha256` file lists the checksum of the `.img` first, then one for each `.7z.00*` volume. On Linux, `sha256sum -c --ignore-missing <file>.img.sha256` checks the volumes; on Windows, `Get-FileHash <file> -Algorithm SHA256` in PowerShell for each volume, compared with its line.
 3. **Extract** the `.001` file with [7-Zip](https://7-zip.org) (Windows), Keka (macOS) or `7z x` (Linux). You get an `.img` file: that is the file you flash.
 
 Already installed? Update with `sudo bootc upgrade`, see [Updating](/post-install/bazzite#updating).

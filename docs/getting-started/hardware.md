@@ -24,7 +24,7 @@ What works on each model, which kernel has it, and what is inside the console. E
 | HDMI 1080p/1440p 60 Hz, 4K 60 Hz, audio | ✅ | ✅ | ✅ | [Display and HDMI](/troubleshooting/display) |
 | 1080p/1440p 120 Hz, HDR | ✅ FLAVA3 chip | ✅ FLAVA3 chip | ✅ | [Display and HDMI](/troubleshooting/display) |
 | 4K 120 Hz | 🧪 FLAVA3, depends on the TV | 🧪 FLAVA3, depends on the TV | 🧪 | [Display and HDMI](/troubleshooting/display) |
-| VRR (HDMI VRR displays) | ✅ FLAVA3, BD | ✅ FLAVA3, BD | ✅ BD | [Display and HDMI](/troubleshooting/display) |
+| VRR (HDMI VRR displays; FreeSync-only from v2.7.1) | ✅ FLAVA3, BD | ✅ FLAVA3, BD | ✅ BD | [Display and HDMI](/troubleshooting/display) |
 | VERDE HDMI chip | ✅ up to 1080p120, 1440p60, 4K60 (PS5 Bazzite Deck from v2.7: also 100 Hz and 1440p120); no HDR or VRR | same | n/a | [Display and HDMI](/troubleshooting/display) |
 | USB-C DisplayPort | 🧪 off by default | 🧪 | 🧪 | [Display and HDMI](/troubleshooting/display) |
 | Video decode and encode (VCN) | ✅ HEVC encode with I-frames only | ✅ | ✅ | [GPU](/troubleshooting/gpu#video-engine) |
@@ -71,7 +71,7 @@ What works on each model, which kernel has it, and what is inside the console. E
 | 100 Hz, and on FLAVA3 other modes the display lists (144 or 165 Hz, ultrawide) | ⚠️ New | PS5 Bazzite Deck from v2.7 |
 | 4K120 over HDMI 2.1 FRL | ⚠️ FLAVA3 consoles, some TVs | Works on some TVs and falls back on others. Every current kernel; PS5 Bazzite Deck has its own 4K120 path |
 | HDR | ✅ FLAVA3 consoles | Every current kernel |
-| VRR (HDMI VRR displays) | ✅ FLAVA3 consoles | PS5 Bazzite Deck only |
+| VRR (HDMI VRR displays; FreeSync-only from v2.7.1) | ✅ FLAVA3 consoles | PS5 Bazzite Deck only |
 | HDMI CEC | ✅ Working | Every current kernel |
 | USB-C DisplayPort output | ⚠️ Off by default | Every current kernel, `usbc_dp.enable=1` |
 | Hardware video decode (VCN) | ✅ Working | Every current kernel, see [Hardware video](/troubleshooting/gpu#video-engine) |

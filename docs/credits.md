@@ -49,6 +49,10 @@ ps5-linux is a community project. Core contributors:
 | [abrocoma](https://github.com/abrocoma) | CachyOS notes: display link lock, DualSense reconnect, boot-to-desktop and systemd ordering fixes |
 | [Gilles (VivaLaVent)](https://github.com/VivaLaVent) | [PS5 Bazzite Deck](/choose/bazzite-deck) and this wiki |
 
+## About this wiki {#about-this-wiki}
+
+This wiki started from the [PS5 Linux Guide](https://rmuxnet.github.io/ps5-linux-guide/guide/what-is-this) by [rmuxnet](https://github.com/rmuxnet) and the people who wrote it with him, among them [nothinglikeuuuuu](https://github.com/nothinglikeuuuuu) and slix. Its pages on the hardware, the kernel, booting and the first steps are the base that many pages here grew from, and it is released under the MIT License. Thank you for that groundwork.
+
 ## Upstreamed kernel and Mesa changes
 
 - [drm/amd: fix DCN 2.01 check](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/gpu/drm/amd/display/dc?id=39f44f54afa58661ecae9c27e15f5dbce2372892)

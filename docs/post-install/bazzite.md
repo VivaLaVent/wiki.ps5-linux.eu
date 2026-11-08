@@ -26,6 +26,10 @@ The new version downloads in the background and takes over at the next start: re
 - **`mount: (hint) your fstab has been modified`** before the update starts is harmless.
 - **The first start after an update** can still use the old VRAM size; power off and start with the loader once more, see [VRAM](/troubleshooting/gpu#vram).
 
+### Packages you installed yourself {#layered-packages}
+
+On bootc, `dnf install` changes don't survive an update. Prefer Flatpak (Bazaar), Homebrew or Distrobox, as on any Bazzite. For a system package that has to be part of the system, layer it with `sudo rpm-ostree install <package>` and from then on update with **`sudo rpm-ostree upgrade`** instead of `sudo bootc upgrade`, which refuses to update a system with layered packages. Layered packages are kept through updates and rollbacks; `rpm-ostree status` lists them.
+
 ### Stable or Beta {#update-channels}
 
 | Channel | Follows | Switch to it |
@@ -86,7 +90,7 @@ On some TVs the picture doesn't come back after **Switch to Desktop**, see [Disp
 | Command | What it does |
 | --- | --- |
 | `ps5-report` | Collects your hardware details and the relevant logs into one file for a bug report. It only reads. |
-| `ps5-perf` | CPU boost and the fan target (the console's firmware control, 80 °C by default). `ps5-perf status` shows the fan mode and speed, see [Fan control](/troubleshooting/fan). |
+| `ps5-perf` | CPU boost and the fan target. The fan runs on the console's firmware control: from v2.7.2 with Sony's own target (`sudo ps5-perf fan 70` sets one, `sudo ps5-perf fan default` goes back), up to v2.7.1 with 80 °C. `ps5-perf status` shows the fan mode and target, see [Fan control](/troubleshooting/fan). |
 | `ps5-warm-reboot` | Restarts straight back into Linux, without the PS5 OS and the loader. Off by default, `on`/`off`/`status`, see [Warm reboots](/post-install/warm-reboot#ps5-bazzite-deck). |
 | `ps5-bt-address` | One DualSense for the PS5 and Linux, on by default. `status`, `on`, `off`. |
 

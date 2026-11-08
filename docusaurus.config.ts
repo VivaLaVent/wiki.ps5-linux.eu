@@ -162,14 +162,6 @@ const config: Config = {
         autoCollapseCategories: true,
       },
     },
-    announcementBar: {
-      id: 'other-guide',
-      content:
-        '<a href="/img/other-guide.jpg" target="_blank" rel="noopener noreferrer">Why you shouldn\'t use the other guide</a>',
-      backgroundColor: '#8d5cff',
-      textColor: '#ffffff',
-      isCloseable: false,
-    },
     navbar: {
       title: 'PS5 Linux Wiki',
       items: [
@@ -186,6 +178,12 @@ const config: Config = {
             {label: 'Discord', href: 'https://discord.gg/ps5linux'},
             {label: 'PS5 Bazzite Deck on GitHub', href: 'https://github.com/VivaLaVent/ps5-bazzite-deck'},
             {label: 'Support the project on Ko-fi', href: 'https://ko-fi.com/vivalavent'},
+          ],
+        },
+        {
+          title: 'Origins',
+          items: [
+            {label: 'The PS5 Linux Guide by rmuxnet and its writers', to: '/credits#about-this-wiki'},
           ],
         },
       ],

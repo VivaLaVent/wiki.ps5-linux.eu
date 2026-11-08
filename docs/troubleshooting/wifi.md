@@ -195,7 +195,7 @@ If apt or dnf complains about cached package files with the same names, fall bac
 
 ## Bazzite: no Wi-Fi networks
 
-Bazzite uses `iwd` as NetworkManager's Wi-Fi backend by default, which doesn't work with the IW620 driver. Switch back to `wpa_supplicant` with `ujust toggle-iwd` (choose "disable iwd"), then run `sudo systemctl restart NetworkManager`. Current images already do this.
+Older Bazzite builds used `iwd` as NetworkManager's Wi-Fi backend, which doesn't work with the IW620 driver. Current Bazzite uses `wpa_supplicant` again and removes the old setting by itself (its `ujust toggle-iwd` is gone). If an install still has `/etc/NetworkManager/conf.d/iwd.conf`, remove it and run `sudo systemctl restart NetworkManager`.
 
 ## The interface shows as unavailable
 

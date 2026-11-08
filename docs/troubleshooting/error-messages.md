@@ -147,7 +147,7 @@ Two different problems get reported under this name.
 
 **`/boot/efi exists but is not mounted, attempting to mount...` during install:** this is normal. If you also see `ERROR: could not mount EFI partition; aborting`, mount `/dev/disk/by-label/boot` at `/boot/efi` yourself and run the install again.
 
-**No Wi-Fi networks on Bazzite (NetworkManager stuck):** Bazzite uses `iwd` as the Wi-Fi backend by default, which doesn't work with the IW620 driver. Switch back to `wpa_supplicant` with `ujust toggle-iwd` (choose "disable iwd"), then run `sudo systemctl restart NetworkManager`. Current images already include the fix.
+**No Wi-Fi networks on Bazzite (NetworkManager stuck):** older Bazzite builds used `iwd` as the Wi-Fi backend, which doesn't work with the IW620 driver; current ones use `wpa_supplicant` again, see [Wi-Fi](/troubleshooting/wifi#bazzite-no-wi-fi-networks).
 
 ## Recovery via chroot {#recovery-via-chroot}
 

@@ -106,7 +106,7 @@ Most images:
 root=LABEL=<image> rw rootwait console=ttyTitania0 console=tty0 mitigations=off idle=halt preempt=full video=DP-1:1920x1080@60
 ```
 
-PS5 Bazzite Deck:
+PS5 Bazzite Deck (Legacy; on bootc, `root=` names the partition by UUID and `ostree=` the version to start, and from v2.7.1 `firmware_class.path=/etc/firmware`, so the IW620 Wi-Fi driver finds its firmware at its first load):
 
 ```text title="cmdline.txt"
 root=LABEL=bazzite-deck rw rootwait console=ttyTitania0 console=tty0 mitigations=off idle=halt preempt=full

@@ -40,11 +40,20 @@ https://github.com/NotHavocc/ps5-hwcon-plugin/releases/latest/download/ps5-hwcon
 | --- | --- |
 | **Fan** | Live temperatures, a fan curve or a target temperature, presets, and a thermal guard that switches to full speed when the CPU gets too hot. See [Fan control](/troubleshooting/fan#hwcon). |
 | **CPU** | Governor and a fixed clock. |
-| **GPU** | Governor and a fixed clock, the [CU unlock](/troubleshooting/gpu#40-cu-unlock), and **GPU Memory**: `vram.txt` and the GTT limit (`ttm.pages_limit`). |
+| **GPU** | Governor and a fixed clock, and the [CU unlock](/troubleshooting/gpu#40-cu-unlock). |
+| **Memory** (from v1.6.0) | RAM and swap in use; **GPU Memory**: `vram.txt` and the GTT limit (`ttm.pages_limit`); **zram** on or off, its size and compression; **zswap** on or off. |
 | **LED** | Light bar presets. |
 
 Each tab has **Restore on Startup**, which applies your settings again at every start; without it, the console's defaults come back after a restart.
 
-Changes to VRAM, the GTT limit and the CU unlock edit `vram.txt` and `cmdline.txt` on the USB drive's boot partition, so they need a restart with the loader. PS5 Bazzite Deck sets 6 GB of VRAM by default from v2.6.1; the plugin's VRAM setting replaces it.
+Changes to VRAM, the GTT limit, zram, zswap and the CU unlock need a restart, and VRAM a start with the loader (not a [warm reboot](/post-install/warm-reboot)). VRAM, the GTT limit, zswap and the CU unlock edit `vram.txt` and `cmdline.txt` on the boot partition; on PS5 Bazzite Deck they stay through updates. PS5 Bazzite Deck sets 6 GB of VRAM once from v2.6.1; the plugin's VRAM setting replaces it, and the last value written wins. zram writes `/etc/systemd/zram-generator.conf`: Bazzite already runs zram, so leave zswap off with it. How VRAM, the GTT limit and swap work together: [Memory, VRAM and swap](/post-install/all-distros#memory-and-swap).
 
-The same controls exist for Desktop Mode as an app, [ps5-hwcon-gui](https://github.com/NotHavocc/ps5-hwcon-gui), which doesn't need Decky. `ps5-perf` sets the CPU boost and fan target too: whichever was set last applies.
+### On the desktop
+
+[ps5-hwcon-gui](https://github.com/NotHavocc/ps5-hwcon-gui) has the same tabs as an app for Desktop Mode, without Decky. From v1.4.0 it runs in the system tray instead of a background service: closing the window keeps the thermal guard and LED loops running, **Quit** in the window or the tray menu stops them, and **Start in Tray at Login** on its About page starts it with the desktop. Install or update it on the PS5, as your normal user:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/NotHavocc/ps5-hwcon-gui/main/install.sh | bash
+```
+
+It asks for your password each time it opens; `bash -s -- --passwordless` at the end of that command skips that (any program running as you can then open it as root). Use the plugin or the app for the same setting, not both at once. `ps5-perf` sets the CPU boost and fan target too: whichever was set last applies.
