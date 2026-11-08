@@ -111,7 +111,7 @@ CTA-861 codes the field as 0 default, 1 limited, 2 full. A first version wrote t
 
 ## Kernel parameters
 
-The display and HDMI parameters, with which kernel has which, are on **[Boot options](/post-install/boot-options#bazzite-deck)**.
+The display and HDMI parameters, with which kernel has which, are on **[Boot options: PS5 Bazzite Deck](/post-install/bazzite-boot-options) and [other images](/post-install/other-boot-options)**.
 
 ## Display settings {#display-settings}
 

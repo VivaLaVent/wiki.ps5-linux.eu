@@ -131,7 +131,7 @@ Two different problems get reported under this name.
 
 **Official and community images:** some users who updated the kernel on an M.2 install got a black screen afterwards and had to go back to the kernel the image shipped with. There is no tracked issue and no confirmed cause, and it hasn't been re-tested with the current upstream packages. If you hit it, report it on [ps5-linux-patches](https://github.com/ps5-linux/ps5-linux-patches/issues) with `dmesg`. To go back, reinstall the previous kernel package through a chroot, see [Recovery via chroot](/troubleshooting/error-messages#recovery-via-chroot).
 
-**PS5 Bazzite Deck:** the kernel and initrd always have to come from the USB drive's `boot` partition, which is where the update script puts them. A loader that takes `bzImage` and `initrd.img` from somewhere else (a second drive, a copy on the M.2) starts the **old kernel with the new modules**: the network is gone and the log is full of `disagrees about version of symbol`. Boot with only the USB drive's boot partition in reach of the loader, see [Install to the internal M.2](/installation/m2-install#ps5-bazzite-deck).
+**PS5 Bazzite Deck:** the kernel and initrd always have to come from the USB drive's `boot` partition, which is where the update script puts them. A loader that takes `bzImage` and `initrd.img` from somewhere else (a second drive, a copy on the M.2) starts the **old kernel with the new modules**: the network is gone and the log is full of `disagrees about version of symbol`. Boot with only the USB drive's boot partition in reach of the loader, see [Install to the internal M.2](/installation/m2-bazzite-deck).
 
 ### Package repository errors {#package-repository}
 

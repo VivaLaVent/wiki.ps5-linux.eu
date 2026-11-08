@@ -48,7 +48,7 @@ Linux only runs on exploitable system software versions. Read [Supported firmwar
 
 **After installing**
 
-7. [All images](/post-install/all-distros), then [PS5 Bazzite Deck](/post-install/bazzite) or [other distros](/post-install/not-bazzite-deck)
+7. [All images](/post-install/all-distros), then [PS5 Bazzite Deck](/post-install/bazzite) or [other images](/post-install/not-bazzite-deck)
 
 Optional, once Linux runs: [move it to an M.2 SSD](/installation/m2-install). When something doesn't work, start at [Troubleshooting](/troubleshooting/getting-help).
 

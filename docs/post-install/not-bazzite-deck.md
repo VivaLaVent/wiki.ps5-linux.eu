@@ -1,13 +1,13 @@
 ---
-title: "After installing: other distros"
-sidebar_label: Other distros
+title: "After installing: other images"
+sidebar_label: Other images
 sidebar_position: 4
 description: What the official images and self-built installs need set up by hand that PS5 Bazzite Deck does for you, and the commands per distro.
 hardware: [original, slim, pro]
 applies_to: not-bazzite-deck
 ---
 
-# After installing: other distros
+# After installing: other images
 
 :::note[Not for PS5 Bazzite Deck]
 PS5 Bazzite Deck sets all of this up. Its users can skip this page.
@@ -67,7 +67,7 @@ The Pro's GPU needs its own firmware in the initrd. The `linux-ps5` package stag
 
 ## 6. Tune cmdline.txt
 
-Two parameters on the boot partition are worth a look, see [Kernel parameters](/post-install/boot-options):
+Two parameters on the boot partition are worth a look, see [Boot options](/post-install/other-boot-options):
 
 - `video=DP-1:1920x1080@60`: the safe boot mode. Keep it, and set your real resolution from the desktop.
 - `amdgpu.force_1080p=1`: caps output at 1080p60. Remove it unless you need it to get a picture at all.

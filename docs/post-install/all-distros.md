@@ -9,7 +9,7 @@ applies_to: all
 
 # After installing: all images
 
-Linux is running. These steps apply to every image, PS5 Bazzite Deck included; none of them are generic Linux setup. What only one kind of image needs is on [PS5 Bazzite Deck](/post-install/bazzite) and [Other distros](/post-install/not-bazzite-deck), and the kernel parameters for both are on [Boot options](/post-install/boot-options).
+Linux is running. These steps apply to every image, PS5 Bazzite Deck included; none of them are generic Linux setup. What only one kind of image needs is on [PS5 Bazzite Deck](/post-install/bazzite) and [Other images](/post-install/not-bazzite-deck), each with its own boot options; editing `cmdline.txt` and `vram.txt` is on [Boot options](/post-install/boot-options).
 
 ## 1. Change the password and check SSH
 
@@ -211,4 +211,4 @@ To make it permanent, put `vm.swappiness=10` in a file under `/etc/sysctl.d/`. W
 ## Next steps
 
 - **PS5 Bazzite Deck:** [After installing: PS5 Bazzite Deck](/post-install/bazzite)
-- **Official or self-built images:** [After installing: other distros](/post-install/not-bazzite-deck)
+- **Official or self-built images:** [After installing: other images](/post-install/not-bazzite-deck)

@@ -100,7 +100,7 @@ Sleep (suspend-to-idle) is built in: a short press of the power button or Steam'
 
 ## Boot options (cmdline.txt)
 
-All options, PS5 Bazzite Deck's default line and how to edit it are on **[Boot options](/post-install/boot-options)**. The ones you're most likely to need: `amdgpu.force_1080p=1` for a picture you can't get past, `usb-storage.quirks=…` for a USB drive that disconnects, `usbc_dp.enable=1` for a USB-C display. To turn off VRR, use Steam's setting (Settings → Display). To stop the TV from turning on with the console, turn off HDMI-CEC in the TV's settings.
+All options, PS5 Bazzite Deck's default line and how to add an option are on **[Boot options: PS5 Bazzite Deck](/post-install/bazzite-boot-options)**. The ones you're most likely to need: `amdgpu.force_1080p=1` for a picture you can't get past, `usb-storage.quirks=…` for a USB drive that disconnects, `usbc_dp.enable=1` for a USB-C display. To turn off VRR, use Steam's setting (Settings → Display). To stop the TV from turning on with the console, turn off HDMI-CEC in the TV's settings.
 
 ## 40 GPU compute units
 

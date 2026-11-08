@@ -45,4 +45,4 @@ It depends on the image. The official CachyOS image logs in as `steam` with the 
 Continue with **[After installing: all images](/post-install/all-distros)**, then:
 
 - **PS5 Bazzite Deck:** [After installing: PS5 Bazzite Deck](/post-install/bazzite)
-- **Official or self-built images:** [After installing: other distros](/post-install/not-bazzite-deck)
+- **Official or self-built images:** [After installing: other images](/post-install/not-bazzite-deck)
