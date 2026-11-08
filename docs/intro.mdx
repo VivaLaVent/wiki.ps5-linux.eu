@@ -19,6 +19,24 @@ The ready-made images are a convenience, not a requirement: the PS5 kernel is st
 Start with [Getting started](/getting-started/overview). It lists what you need and walks you through every step in order. Not sure which image to pick? [Which image should I use?](/getting-started/which-image)
 :::
 
+## Video guide for beginners
+
+Modded Warfare's **[Running Linux on a Jailbroken PS5 (13.60 or lower)](https://www.youtube.com/watch?v=QEcGPgPfoMw)** walks through a whole install of PS5 Bazzite Deck: the PS5 settings, flashing the drive, starting the loader, the first setup in Desktop Mode and Game Mode, moving the system to the M.2 and updating. If this is your first time, watch it before you start, then come back here for the details.
+
+<iframe
+  src="https://www.youtube-nocookie.com/embed/QEcGPgPfoMw"
+  title="Running Linux on a Jailbroken PS5 (13.60 or lower), by Modded Warfare"
+  style={{width: '100%', aspectRatio: '16 / 9', border: 0, marginBottom: '1rem'}}
+  allow="encrypted-media; picture-in-picture; web-share"
+  referrerPolicy="strict-origin-when-cross-origin"
+  loading="lazy"
+  allowFullScreen
+/>
+
+Where the video and this wiki differ, follow the wiki: flash with [balenaEtcher](/installation/flash), not Rufus, and on PS5 Bazzite Deck leave `ps5_control` from ps5-linux-tools alone, because the image's own fan driver and clock governor already run the fan and clocks (see [Fan control](/troubleshooting/fan) and `ps5-perf`).
+
+## How this wiki is organised
+
 The wiki follows the order you need it in: **Before you install** (firmware, [hardware status](/getting-started/hardware), drives, loader and image), **Install**, **After installing** (for every image, for PS5 Bazzite Deck, and for the other distros), and **Troubleshooting**, with one page per component and one for [error messages](/troubleshooting/error-messages).
 
 ## Resources
@@ -33,7 +51,7 @@ The wiki follows the order you need it in: **Before you install** (firmware, [ha
 - [PS5 Bazzite Deck](https://github.com/VivaLaVent/ps5-bazzite-deck): Bazzite with Steam Gaming Mode
 - [repo.etawen.dev](https://repo.etawen.dev): package repository for the kernel and tools
 - [Discord server](https://discord.gg/ps5linux): help, tips, development and bug reports
-- [Video guide by Modded Warfare](https://www.youtube.com/watch?v=4Iix8SaJtaM)
+- [Video guide by Modded Warfare](https://www.youtube.com/watch?v=QEcGPgPfoMw): PS5 Bazzite Deck from start to finish, firmware up to 13.60
 - [PS4 Linux guide](https://github.com/DionKill/ps4-linux-tutorial/)
 
 Spotted a mistake or have something to add? Every page has an **Edit this page** link at the bottom. Corrections are welcome.

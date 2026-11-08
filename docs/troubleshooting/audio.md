@@ -12,7 +12,7 @@ Sound goes out over HDMI together with the picture, and on most TVs and monitors
 
 ## Audio plays through the controller instead of HDMI
 
-A DualSense on a USB cable is also a sound card, and some desktops make it the default output. Pick the HDMI output in the sound settings instead; on GNOME that is **Settings → Sound → Output**, on KDE **System Settings → Sound**. If the desktop keeps switching back, remove the DualSense from the list of outputs in the sound settings, or connect it over Bluetooth, where it carries no audio.
+A DualSense on a USB cable is also a sound card, and some desktops make it the default output. Pick the HDMI output in the sound settings instead; on GNOME that is **Settings → Sound → Output**, on KDE **System Settings → Sound**, in Steam's Game Mode **Settings → Audio → Output Device**. If the desktop keeps switching back, remove the DualSense from the list of outputs in the sound settings, or connect it over Bluetooth, where it carries no audio.
 
 If the HDMI output is listed but stays silent, switching the sound server from PipeWire to PulseAudio has helped on some images.
 

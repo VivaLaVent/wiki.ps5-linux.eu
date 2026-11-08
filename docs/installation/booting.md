@@ -53,6 +53,8 @@ Send the loader you downloaded in [Get a PS5 Linux loader](/getting-started/load
 socat -t 99999999 - TCP:$PS5IP:9021 < bazzite-bootc-loader-vX.Y.elf
 ```
 
+With a payload manager in your jailbreak, you can also copy the `.elf` to the root of a USB stick, import it in the payload manager (for example **Scan USB payloads**, then **Get payloads**) and start it from its list. Stop any payloads it would load automatically first, so the loader is the only one.
+
 The PS5 then goes into rest mode. Wait for the LED to turn **solid orange**, then press the power button.
 
 :::tip[Waking the PS5 without pressing the button]

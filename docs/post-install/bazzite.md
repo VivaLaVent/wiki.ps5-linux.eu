@@ -80,7 +80,7 @@ The loader doesn't need to know about rollbacks: at every shutdown, `ps5-bootc-s
 | SSH | Desktop Mode | `steamos-session-select plasma` |
 | SSH | Game Mode | `steamos-session-select gamescope` |
 
-From v2.6.1, PS5 Bazzite Deck starts in Desktop Mode. To start in Game Mode instead, change the default session in Steam's settings in Game Mode, or run `ujust set-default-game-mode` (and `ujust set-default-desktop` to go back). The setting applies from the next start. If it still starts in Desktop Mode after that, report it in `#bazzite-problems` with the output of `ls -l /etc/sddm.conf.d; cat /etc/sddm.conf.d/*`.
+From v2.6.1, PS5 Bazzite Deck starts in Desktop Mode. To start in Game Mode instead, turn off **Default to Desktop Mode on startup** in Steam's system settings in Game Mode, or run `ujust set-default-game-mode` (and `ujust set-default-desktop` to go back). The setting applies from the next start. If it still starts in Desktop Mode after that, report it in `#bazzite-problems` with the output of `ls -l /etc/sddm.conf.d; cat /etc/sddm.conf.d/*`.
 
 On some TVs the picture doesn't come back after **Switch to Desktop**, see [Display and HDMI](/troubleshooting/display#switch-to-desktop).
 
@@ -93,6 +93,8 @@ On some TVs the picture doesn't come back after **Switch to Desktop**, see [Disp
 | `ps5-perf` | CPU boost and the fan target. The fan runs on the console's firmware control: from v2.7.2 with Sony's own target (`sudo ps5-perf fan 70` sets one, `sudo ps5-perf fan default` goes back), up to v2.7.1 with 80 °C. `ps5-perf status` shows the fan mode and target, see [Fan control](/troubleshooting/fan). |
 | `ps5-warm-reboot` | Restarts straight back into Linux, without the PS5 OS and the loader. Off by default, `on`/`off`/`status`, see [Warm reboots](/post-install/warm-reboot#ps5-bazzite-deck). |
 | `ps5-bt-address` | One DualSense for the PS5 and Linux, on by default. `status`, `on`, `off`. |
+
+The image runs the fan and the clocks itself. Don't use `ps5_control --fan` or `--boost` from ps5-linux-tools on it: they go around the kernel's fan driver and GPU clock governor. Use `ps5-perf` or [PS5 Hardware Control](/post-install/decky#ps5-hardware-control) instead.
 
 Sleep (suspend-to-idle) is built in: a short press of the power button or Steam's **Sleep** puts the console to sleep and wakes it again. The GPU stays powered, so the saving is modest; it is not the PS5 OS's rest mode, and a DualSense can't wake the console.
 

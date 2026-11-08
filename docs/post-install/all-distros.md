@@ -46,7 +46,7 @@ Steam and Proton run on the PS5 as on any Linux PC with a mid-range RDNA2 GPU. T
 
 ### Steam and Proton {#steam-and-proton}
 
-Pick **Proton Experimental** in Steam's compatibility settings for the newest fixes, and for games with Easy Anti-Cheat or BattlEye try the dedicated **Proton EAC** or **Proton BE** builds. A game that fails on one Proton version often runs on another; a tool such as ProtonPlus makes switching easy.
+Pick **Proton Experimental** in Steam's compatibility settings for the newest fixes, and for games with Easy Anti-Cheat or BattlEye try the dedicated **Proton EAC** or **Proton BE** builds. A game that fails or runs slowly on one Proton version often does better on another: Halo: The Master Chief Collection, for example, was reported to run much faster on Proton 10 than on Experimental. Switch it in the game's **Properties → Compatibility**; a tool such as ProtonPlus adds more builds.
 
 ### Performance tips
 

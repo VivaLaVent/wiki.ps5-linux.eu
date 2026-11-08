@@ -98,7 +98,7 @@ All steps run on the PS5, started from the USB drive, in a terminal (password `p
 
    For `--back` later, run the same with `--back` at the end.
 
-3. **Power off and start with the loader.** The system now starts from the M.2. The first start can show a grey or black screen: power off once more and use the loader again.
+3. **Power off and start with the loader.** The system now starts from the M.2: `findmnt /` shows an `nvme` partition as its source. The first start can show a grey or black screen: power off once more and use the loader again.
 
 To go back to the USB system: `sudo ps5-m2-install --back` (or the download line above with `--back`), then power off and start with the loader. The copy on the M.2 stays; running `sudo ps5-m2-install` again from the USB system replaces it.
 
