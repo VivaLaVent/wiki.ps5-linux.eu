@@ -11,7 +11,7 @@ applies_to: all
 
 Linux is running. These steps apply to every image, PS5 Bazzite Deck included; none of them are generic Linux setup. What only one kind of image needs is on [PS5 Bazzite Deck](/post-install/bazzite) and [Other images](/post-install/not-bazzite-deck), each with its own boot options; editing `cmdline.txt` and `vram.txt` is on [Boot options](/post-install/boot-options).
 
-## 1. Change the password and check SSH
+## Change the password and check SSH
 
 Most images ship with SSH on and a known password. Change it:
 
@@ -21,24 +21,13 @@ passwd
 
 The default users per image are on [Get in over SSH](/troubleshooting/getting-help#ssh-availability-by-distro). Keep SSH working: it is how you get in when the display goes black.
 
-## 2. Disable the screen saver
+## Disable the screen saver
 
 It is broken on the PS5 and can't be dismissed once it starts. Turn it off in your desktop's power settings before any long install or download. Over SSH, `sudo reboot` is the way out if it already started.
 
-## 3. Set the GPU memory
+## Set the GPU memory
 
-The default `vram.txt` reserves 512 MB for the GPU and lets it borrow up to half of the rest, which caps games at about 7 GB. For gaming, reserve **6 GB** instead: the GPU then has 6 GB guaranteed and can borrow up to about 10 GB in total. Edit `vram.txt` on the boot partition (it is read as a hexadecimal byte count):
-
-```text title="vram.txt"
-180000000
-```
-
-PS5 Bazzite Deck sets 6 GB from v2.6.1. That memory is no longer available to the rest of the system, so stay at the default on a server or a desktop that doesn't game. For games that need more than 8 GB, raise the ceiling further with `ttm.pages_limit`, see [VRAM](/troubleshooting/gpu#vram).
-
-## 4. Optional
-
-- **40 CU unlock:** more GPU power on units whose disabled compute units are good; artefacts on units where they aren't. Original PS5 and Slim only, see [40 CU unlock](/troubleshooting/gpu#40-cu-unlock).
-- **Swap or zram:** a desktop with Steam open can fill the 14 GB that is left, see [Memory, VRAM and swap](#memory-and-swap).
+For gaming, set `vram.txt` on the boot partition to 6 GB, `180000000` (a hexadecimal byte count), see [Edit vram.txt](/post-install/boot-options#edit-vramtxt). PS5 Bazzite Deck does this from v2.6.1. Why 6 GB, and when to choose less or raise `ttm.pages_limit`, is on [VRAM](/troubleshooting/gpu#vram).
 
 ## Gaming performance {#gaming-performance}
 
@@ -70,7 +59,7 @@ With a VCN-enabled kernel (see [Hardware video (VCN)](/troubleshooting/gpu#video
 
 ## Memory, VRAM and swap {#memory-and-swap}
 
-"VRAM", "GTT" and "swap" get mixed up a lot. This page separates them. The PS5 has one pool of memory, and each term below describes a different part of how that pool is used.
+"VRAM", "GTT" and "swap" get mixed up a lot. The PS5 has one pool of memory, and each term below describes a different part of how that pool is used.
 
 ### One pool, not two
 
@@ -91,25 +80,13 @@ On Linux this means:
 
 The first two decide **how much memory the GPU can use**. Swap is a general Linux feature for **the whole system running out of RAM**. They are separate settings.
 
-#### What "dynamic VRAM" means
-
-The default `vram.txt` value is 512 MB, but the GPU is not limited to that. The driver takes more memory as a game needs it. The ceiling is:
-
-```text
-(vram.txt split) + (remaining RAM not in that split) / 2
-```
-
-Raising `vram.txt` also raises that ceiling, but it locks that memory away from the rest of the system. For gaming, 6 GB in `vram.txt` is the usual choice; for everything else leave the default and, if needed, raise `ttm.pages_limit`, which gives the same ceiling without locking anything. The full explanation, the size table and a worked example are in [VRAM](/troubleshooting/gpu#vram).
-
-:::info[Not enough memory for command submission]
-If a game crashes with `amdgpu_vm_validate() failed / Not enough memory for command submission` while plenty of RAM looks free, you have hit the GTT ceiling, not a lack of RAM. The fix is `ttm.pages_limit`, see [VRAM](/troubleshooting/gpu#vram).
-:::
+The ceiling for the GPU is the `vram.txt` split plus half of the remaining RAM; the formula, the sizes and the error you see at the ceiling are on [VRAM](/troubleshooting/gpu#vram).
 
 ### Does swap help games?
 
 Swap helps the **system** when normal RAM is full: browsers, launchers, shader compilation and similar background work. With only 14 GB usable and the GPU taking its share from the same pool, a Linux desktop with Steam running can fill up.
 
-What this wiki does **not** claim is that swap raises the GPU memory ceiling. The ceiling formula above only involves `vram.txt` and the remaining RAM. If a game crashes with the error above, change `ttm.pages_limit`; adding swap is not the documented fix. A different error under memory pressure, `Failed to pin framebuffer: -ENOMEM`, has gone away for one user after adding more zram; that is a lead, not a confirmed fix.
+What this wiki does **not** claim is that swap raises the GPU memory ceiling. The ceiling only involves `vram.txt` and the remaining RAM. If a game crashes with `Not enough memory for command submission`, change `ttm.pages_limit`; adding swap is not the documented fix. A different error under memory pressure, `Failed to pin framebuffer: -ENOMEM`, has gone away for one user after adding more zram; that is a lead, not a confirmed fix.
 
 :::note[Not tested]
 How the GPU driver behaves when the whole system is deep into swap has not been documented on the PS5 yet. If you test it, share your results on [Discord](https://discord.gg/ps5linux).

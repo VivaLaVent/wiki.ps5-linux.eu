@@ -143,4 +143,4 @@ Whether a card wants HDCP on, HDCP off, or an HDCP-stripping splitter in front o
 
 ### Switching between a TV and a capture card
 
-With both a display and a capture card connected through a switch, moving the output from one to the other at runtime works some of the time. On an X11 desktop, `arandr` (a graphical front end for `xrandr`) lets you re-enable the output after a switch; on Wayland, use the desktop's display settings or `kscreen-doctor` over SSH, see [Display recovery](/troubleshooting/display#3-change-the-mode-from-a-desktop). When the picture doesn't come back, a restart is the reliable way.
+With both a display and a capture card connected through a switch, moving the output from one to the other at runtime works some of the time. On an X11 desktop, `arandr` (a graphical front end for `xrandr`) lets you re-enable the output after a switch; on Wayland, use the desktop's display settings or `kscreen-doctor` over SSH, see [Display recovery](/troubleshooting/display#change-the-mode-from-a-desktop). When the picture doesn't come back, a restart is the reliable way.

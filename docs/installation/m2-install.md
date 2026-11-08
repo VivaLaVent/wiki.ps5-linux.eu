@@ -15,11 +15,11 @@ The USB drive stays plugged in: it keeps the boot files the loader starts Linux 
 
 Before you buy a drive, read [M.2 drives](/getting-started/drives#m2-drives): only NVMe drives work, and Gen3 drives need an [unlock](/getting-started/drives#gen3-nvme-unlock).
 
-## 1. Install and empty the drive
+## Install and empty the drive
 
 Install the M.2 drive following [Sony's official guide](https://www.playstation.com/en-us/support/hardware/ps5-install-m2-ssd). If it held games, move the ones you want to keep to the console storage, then format it in the PS5 OS: **Settings → Storage → M.2 SSD Storage**.
 
-## 2. Prepare it for Linux
+## Prepare it for Linux
 
 Start Linux from the USB drive as usual, then build [ps5-linux-tools](https://github.com/ps5-linux/ps5-linux-tools) once and run `m2_init`. It adds a Linux partition the PS5 OS leaves alone:
 
@@ -31,7 +31,7 @@ lsblk /dev/nvme0n1
 
 `lsblk` should list `nvme0n1p1`, the new partition; if it doesn't, restart and start Linux again. Otherwise you can carry on straight away. Restarting into the PS5 OS once is a check that it accepts the drive: should it ask to format the drive again, say so on [Discord](https://discord.gg/ps5linux) with the drive's model and size, because that combination hasn't been seen before.
 
-## 3. Put Linux on it
+## Put Linux on it
 
 This step depends on your image:
 

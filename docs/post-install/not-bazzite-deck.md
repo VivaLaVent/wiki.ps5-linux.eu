@@ -15,13 +15,9 @@ PS5 Bazzite Deck sets all of this up. Its users can skip this page.
 
 Do these after [All images](/post-install/all-distros), on the official images and on installs you built yourself.
 
-## 1. Update the kernel
+## Hold the stock kernel {#hold-the-stock-kernel}
 
-The official release images run an older kernel than the current packages. Add the [package repository](/post-install/package-repository) once, then update the kernel with your package manager. On self-built installs, see [Kernel setup](/post-install/kernel).
-
-## 2. Stop the distro from replacing the kernel
-
-The PS5 kernel comes from `ps5-linux-patches`, not from your distro. A distro upgrade that installs a stock kernel into the boot partition leaves you with a system that doesn't boot. On Ubuntu and Debian, hold the stock kernel packages:
+Do this before the first update. The PS5 kernel comes from `ps5-linux-patches`, not from your distro, and a distro upgrade that installs a stock kernel into the boot partition leaves you with a system that doesn't boot. On Ubuntu and Debian:
 
 ```bash
 sudo apt-mark hold linux-generic linux-generic-hwe-24.04 linux-generic-hwe-26.04 \
@@ -29,9 +25,13 @@ sudo apt-mark hold linux-generic linux-generic-hwe-24.04 linux-generic-hwe-26.04
   linux-headers-generic linux-headers-generic-hwe-24.04 linux-headers-generic-hwe-26.04
 ```
 
-On Arch and Fedora, the `linux-ps5` package from the [package repository](/post-install/package-repository) is the kernel; don't install the distro's `linux` or `kernel` package alongside it.
+On Arch and Fedora, `linux-ps5` from the [package repository](/post-install/package-repository) is the kernel; don't install the distro's `linux` or `kernel` package alongside it.
 
-## 3. Fan, boost and clocks
+## Update the kernel {#update-the-kernel}
+
+The official release images run an older kernel than the current packages. Update it now with the command on [Updating: other images](/updating/other-images#update-the-kernel); self-built installs follow [Kernel setup](/post-install/kernel).
+
+## Fan, boost and clocks {#fan-boost-and-clocks}
 
 What you do here depends on the kernel, see [Kernel setup](/post-install/kernel):
 
@@ -54,25 +54,25 @@ sudo ./install.sh
 
 Check them with `sudo systemctl status ps5fan ps5boost`, and turn either off with `sudo systemctl disable --now ps5fan.service` (or `ps5boost.service`). How the fan works is on [Fan control](/troubleshooting/fan), the clocks on [Clocks and boost](/troubleshooting/gpu#clocks-and-boost).
 
-## 4. Wi-Fi and Bluetooth
+## Wi-Fi and Bluetooth
 
 - **MediaTek (most Slims, the PS5 Pro):** Wi-Fi works with the in-kernel driver in every current kernel. Bluetooth needs fixes that only PS5 Bazzite Deck carries so far.
 - **Marvell IW620 (most original PS5s):** Wi-Fi needs the out-of-tree driver.
 
 On the IW620, a kernel from the package repository or rmuxnet's release bundles the driver; with any other kernel, install it after every kernel update, see [Wi-Fi](/troubleshooting/wifi). Ethernet works out of the box. Bluetooth details are on [Bluetooth](/troubleshooting/bluetooth).
 
-## 5. PS5 Pro: the GPU firmware
+## PS5 Pro: the GPU firmware
 
 The Pro's GPU needs its own firmware in the initrd. The `linux-ps5` package stages it; otherwise see [PS5 Pro](/troubleshooting/ps5-pro).
 
-## 6. Tune cmdline.txt
+## Tune cmdline.txt
 
-Two parameters on the boot partition are worth a look, see [Boot options](/post-install/other-boot-options):
+Two parameters on the boot partition are worth a look, see [Boot options](/post-install/boot-options#options):
 
 - `video=DP-1:1920x1080@60`: the safe boot mode. Keep it, and set your real resolution from the desktop.
 - `amdgpu.force_1080p=1`: caps output at 1080p60. Remove it unless you need it to get a picture at all.
 
-## 7. Steam and Mesa
+## Steam and Mesa
 
 :::warning[Don't use the Snap version of Steam (Ubuntu)]
 Ubuntu's Snap package of Steam runs in a sandbox that gets in the way on the PS5 images. Install Steam from apt instead (or the `.deb` from [store.steampowered.com/about](https://store.steampowered.com/about/)):
@@ -86,24 +86,10 @@ sudo apt install steam
 
 **Newer Mesa (Ubuntu only):** the PS5's GPU (GFX1013) picks up fixes in newer Mesa releases, and Ubuntu's own packages lag behind. The kisak PPA is the usual source there: `sudo add-apt-repository ppa:kisak/kisak-mesa` then `sudo apt upgrade`. Arch and Fedora ship recent Mesa already, and on Bazzite it comes with the image.
 
-## Package manager per distro {#distro-notes}
-
-Only the package manager differs between distros; the steps above are the same everywhere.
-
-| Distro | Package manager | Add the PS5 repository | Update the kernel |
-| --- | --- | --- | --- |
-| Ubuntu, Debian | `apt` | [Package repository](/post-install/package-repository#add-the-repository-once) | `sudo apt update && sudo apt upgrade` |
-| Arch, CachyOS | `pacman` | [Package repository](/post-install/package-repository#add-the-repository-once) | `sudo pacman -Syu` |
-| Fedora | `dnf` | [Package repository](/post-install/package-repository#add-the-repository-once) | `sudo dnf upgrade` |
-
-The repository's install script detects which one you use: `curl -fsSL https://repo.etawen.dev/install.sh | sudo sh`.
-
-### Distro specifics
+## Distro specifics {#distro-notes}
 
 **Arch:** the image with the least running in the background; Sway leaves the most memory for games.
 
 **CachyOS:** `sudo pacman -S cachyos-handheld` converts a plain install into a Gamescope-first setup with a "switch to desktop" option.
-
-**Ubuntu:** install Steam from Steam's own package, not the Snap version, see [Steam and Mesa](#7-steam-and-mesa).
 
 **Upstream's Bazzite images:** Bazzite is an image-based system; install software as [Bazzite's documentation](https://docs.bazzite.gg/Installing_and_Managing_Software/) describes, and add the PS5 kernel packages with `rpm-ostree` as the repository's install script prints.

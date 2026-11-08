@@ -9,7 +9,7 @@ applies_to: all
 
 # Getting started
 
-Linux on the PS5 is six steps: set two console settings, pick and flash an image, jailbreak, send the loader, and finish the first boot. This page is the map; each step has its own page.
+Linux on the PS5 is six steps: set two console settings, pick and flash an image, jailbreak, send the loader, and finish the first boot.
 
 :::note[Scope of this wiki]
 This wiki assumes your PS5 is **already jailbroken**. It covers everything after that: booting Linux and getting the hardware working properly.

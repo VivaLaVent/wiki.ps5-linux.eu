@@ -8,7 +8,7 @@ applies_to: all
 
 # PS5 Pro
 
-The Pro has a different GPU (`1002:13da` or `1002:13dc`, "Viola", 60 active compute units) and a MediaTek MT7925 Wi-Fi/Bluetooth chip. Everything else works as on the base PS5. This page covers the GPU side and the Pro-specific quirks; Bluetooth is on [Bluetooth](/troubleshooting/bluetooth#mediatek-on-the-pro).
+The Pro has a different GPU (`1002:13da` or `1002:13dc`, "Viola", 60 active compute units) and a MediaTek MT7925 Wi-Fi/Bluetooth chip. Everything else works as on the base PS5. Bluetooth is on [Bluetooth](/troubleshooting/bluetooth#mediatek-on-the-pro).
 
 :::info[Where the Pro support lives]
 The Pro GPU driver and its clock governor are upstream, in [ps5-linux/ps5-linux-patches](https://github.com/ps5-linux/ps5-linux-patches). rmuxnet's kernel and PS5 Bazzite Deck carry the same driver on their newer kernel base; the clocks are handled differently in each, see below.

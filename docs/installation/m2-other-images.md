@@ -9,9 +9,9 @@ applies_to: not-bazzite-deck
 
 # Install to the M.2: other images
 
-The image is written to the M.2 as a fresh install, so you set it up again there. First do [steps 1 and 2](/installation/m2-install) (install the drive and run `m2_init`), and put the image's `.img` file somewhere the running system can read it.
+The image is written to the M.2 as a fresh install, so you set it up again there. First [install the drive and run `m2_init`](/installation/m2-install), and put the image's `.img` file somewhere the running system can read it.
 
-## 1. Install the image onto the drive
+## Install the image onto the drive
 
 ```bash
 cd ~/ps5-linux-tools
@@ -19,7 +19,7 @@ chmod +x ./m2_install.sh
 sudo ./m2_install.sh --install /path/to/ps5-ubuntu2604.img
 ```
 
-## 2. Start from the drive
+## Start from the drive
 
 ```bash
 cd ~/ps5-linux-tools
@@ -28,10 +28,6 @@ sudo ./m2_exec.sh
 ```
 
 To start from the M.2 every time, edit `/boot/efi/cmdline.txt` and change `root=LABEL=ubuntu2604` to `root=LABEL=ubuntu2604-m2`, see [Boot options](/post-install/boot-options#edit-cmdlinetxt).
-
-:::warning[Kernel updates on M.2]
-A kernel update on an M.2 install has left some users with a black screen or a kernel that doesn't match its modules. Read [Error messages](/troubleshooting/error-messages#kernel-update-breaks-m2-boot) before you update.
-:::
 
 ## Switching distros
 

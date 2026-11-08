@@ -9,22 +9,11 @@ applies_to: not-bazzite-deck
 
 # How the PS5 Bazzite Deck image is built
 
-[PS5 Bazzite Deck](/choose/bazzite-deck) has two parts: a kernel package, built with the official [ps5-linux-image](https://github.com/ps5-linux/ps5-linux-image) builder from a recent stable kernel, rmuxnet's PS5 patch set and its own patches on top; and a bootc image, Bazzite's Steam Deck image with that kernel, the PS5 services and its own Vulkan driver (RADV) build. This page is for anyone making an image: the kernel config changes it needs, the patch order, and the upstream repositories it tracks. Users don't need any of it.
+[PS5 Bazzite Deck](/choose/bazzite-deck) has two parts: a kernel package, built with the official [ps5-linux-image](https://github.com/ps5-linux/ps5-linux-image) builder from a recent stable kernel, rmuxnet's PS5 patch set and its own patches on top; and a bootc image, Bazzite's Steam Deck image with that kernel, the PS5 services and its own Vulkan driver (RADV) build. Users don't need any of it.
 
 :::info[Patch base]
 The stable kernel named in the patch set's `.config`, plus [rmuxnet/ps5-linux-patches-1](https://github.com/rmuxnet/ps5-linux-patches-1) at a pinned commit, then the image's patches in the order of [`patches/series`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/patches/series). Each release ships a `VERSIONS.md` with the exact pins and a `local-changes.diff` with the changes to the builder.
 :::
-
-## Why Game Mode needs the BPF LSM and kernel BTF
-
-Bazzite's Game Mode starts Steam through the `cardwired` service, which loads an eBPF program. That needs two kernel features:
-
-1. **The BPF LSM.** `CONFIG_BPF_LSM=y` on its own does nothing; `bpf` has to be in `CONFIG_LSM`, or `lsm=landlock,lockdown,yama,integrity,apparmor,bpf` on the command line.
-2. **Kernel BTF.** `CONFIG_DEBUG_INFO_BTF=y`, so that `/sys/kernel/btf/vmlinux` exists.
-
-Without them `cardwired` crash-loops with `CardwireEbpfError(LSMNotEnabled)` or `error parsing /sys/kernel/btf/vmlinux`, Gamescope is killed a second after it starts, and after five attempts Bazzite drops to the desktop. The same applies to any image that runs Bazzite's or SteamOS's Game Mode session. Confirmed; this was the reason Bazzite Game Mode never worked on the PS5 before.
-
-`CONFIG_MODULE_ALLOW_BTF_MISMATCH=y` lets a kernel-only hotfix load the release's modules.
 
 ## Kernel config changes
 
@@ -33,8 +22,8 @@ Applied to the patch set's `.config` before the build:
 | Option | Value | Why |
 | --- | --- | --- |
 | `CONFIG_SUSPEND` | `y` | Suspend-to-idle |
-| `CONFIG_LSM` | `landlock,lockdown,yama,integrity,apparmor,bpf` | Game Mode, above |
-| `CONFIG_DEBUG_INFO_BTF` | `y` | Game Mode, above |
+| `CONFIG_LSM` | `landlock,lockdown,yama,integrity,apparmor,bpf` | [Game Mode](/post-install/kernel#build-a-kernel-for-bazzite-game-mode) |
+| `CONFIG_DEBUG_INFO_BTF` | `y` | [Game Mode](/post-install/kernel#build-a-kernel-for-bazzite-game-mode) |
 | `CONFIG_MODULE_ALLOW_BTF_MISMATCH` | `y` | Hotfix kernels keep loading release modules |
 | `CONFIG_MT7921E` | `m` | MediaTek Wi-Fi on the Slim (the official config has it now too) |
 | `CONFIG_USB_AUTOSUSPEND_DELAY` | `-1` | USB never sleeps: the Bluetooth chips and the Salina xHCI don't survive it |

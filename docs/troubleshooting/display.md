@@ -10,7 +10,7 @@ applies_to: all
 
 Everything about the picture: which modes the console's HDMI chip can drive, how to set them, and what to do when the screen stays black. Performance once there is a picture is on [GPU](/troubleshooting/gpu).
 
-The GPU does not drive the HDMI port directly. It sends DisplayPort to a separate HDMI chip, and the kernel programs that chip over I2C through the console's ICC for every mode. This page explains what the chip can do and what the PS5 patches do with it. The user-facing side (resolutions, black screens) is on [Display output](#display-settings).
+The GPU does not drive the HDMI port directly. It sends DisplayPort to a separate HDMI chip, and the kernel programs that chip over I2C through the console's ICC for every mode. The user-facing side (resolutions, black screens) is on [Display output](#display-settings).
 
 :::info[Where the patches live]
 HDR, CEC, hotplug, 4K120 over FRL with its fallback and ALLM are in upstream `ps5-linux-patches` and in rmuxnet's kernel. PS5 Bazzite Deck carries its own display stack, VRR, the mode list, the RGB range and the link lock included, in two files of its [`patches/`](https://github.com/VivaLaVent/ps5-bazzite-deck/tree/main/patches) folder: `ps5-display.patch` and `ps5-hdmi-modes.patch`. Each starts with a description of what it does. See [Kernel setup](/post-install/kernel#what-is-where).
@@ -18,12 +18,7 @@ HDR, CEC, hotplug, 4K120 over FRL with its fallback and ALLM are in upstream `ps
 
 ## The two HDMI chips
 
-| Chip | Consoles | Extras |
-| --- | --- | --- |
-| FLAVA3 | Most consoles | 1440p at 120 Hz, 4K at 120 Hz over FRL, HDR, VRR |
-| VERDE | Some later models | 1080p60, 1080p120, 1440p60 and 4K60; on PS5 Bazzite Deck from v2.7 also 1080p100 and 1440p at 100 and 120 Hz |
-
-Check which one you have:
+Most consoles have the FLAVA3 chip, some later models the VERDE. HDR, VRR and 4K at 120 Hz need FLAVA3; which modes each chip drives is in the table under [Why only certain modes exist](#why-only-certain-modes-exist). Check which one you have:
 
 ```bash
 sudo dmesg | grep "HDMI IC Type"
@@ -111,25 +106,15 @@ CTA-861 codes the field as 0 default, 1 limited, 2 full. A first version wrote t
 
 ## Kernel parameters
 
-The display and HDMI parameters, with which kernel has which, are on **[Boot options: PS5 Bazzite Deck](/post-install/bazzite-boot-options) and [other images](/post-install/other-boot-options)**.
+The display and HDMI parameters, with which kernel has which, are on [Boot options](/post-install/boot-options#options).
 
 ## Display settings {#display-settings}
 
-The HDMI port is driven by `amdgpu` through the console's HDMI chip, and a picture appears as soon as the driver loads. Wayland and X11 both work; the ready-made images use Wayland sessions. What the chip can and can't output, and why, is on [Display and HDMI](/troubleshooting/display).
+The HDMI port is driven by `amdgpu` through the console's HDMI chip, and a picture appears as soon as the driver loads. Wayland and X11 both work; the ready-made images use Wayland sessions.
 
 ### Supported resolutions
 
-| Resolution | Refresh rate | Consoles |
-| --- | --- | --- |
-| 1080p | 60 Hz, 120 Hz | Every console |
-| 1440p | 60 Hz | Every console |
-| 1440p | 120 Hz | FLAVA3 HDMI chip; VERDE on PS5 Bazzite Deck from v2.7 |
-| 1080p, 1440p | 100 Hz | PS5 Bazzite Deck from v2.7, every console |
-| 2160p (4K) | 60 Hz | Every console |
-| 2160p (4K) | 100 Hz, 120 Hz | FLAVA3 HDMI chip, HDMI 2.1 TVs that accept the console's FRL link (100 Hz: PS5 Bazzite Deck from v2.7) |
-| Other modes the display lists (144 or 165 Hz, ultrawide) | | FLAVA3 HDMI chip, PS5 Bazzite Deck from v2.7, up to 600 MHz |
-
-HDR and VRR also need the FLAVA3 chip; VRR is PS5 Bazzite Deck only. Other images and older releases stop at the chip's own setups: 165 Hz, ultrawide and other resolutions are not offered there, see [Why only certain modes exist](#why-only-certain-modes-exist). Whether a mode is offered also depends on the display: the kernel reads its EDID and drops what the display doesn't accept.
+Which modes each HDMI chip outputs is in the table under [Why only certain modes exist](#why-only-certain-modes-exist); on other images and older releases, the 100 Hz modes and the display's other modes (144 or 165 Hz, ultrawide) are not offered. Whether a mode is offered also depends on the display: the kernel reads its EDID and drops what the display doesn't accept.
 
 :::tip[`amdgpu.force_1080p=1` caps the refresh rate]
 Some images ship this parameter in `cmdline.txt` as a safety net. It isn't needed for most displays, and it **limits the output to 1080p60**, including on panels that could do 120 Hz. If you get a picture without it, leave it out; keep it only for a display that shows nothing otherwise, see [Troubleshooting a black screen](#black-screen).
@@ -150,7 +135,7 @@ Work down this list; stop as soon as you have a picture:
 3. Turn HDCP off in the PS5 settings (and if it was already off, turn it on): some displays only sync one way.
 4. Try another cable, another HDMI input, or another display.
 5. Put an HDMI-to-VGA adapter in between. It has worked on monitors that refuse the direct connection.
-6. Switch TTY: <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F2</kbd>, wait a few seconds, <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F1</kbd>. Over SSH: `sudo chvt 2; sleep 3; sudo chvt 1`.
+6. [Switch TTY](#tty-switch).
 7. Check that HDMI Device Link is off in the PS5 settings, see [Required PS5 settings](/installation/booting#required-ps5-settings).
 8. Ask on [Discord](https://discord.gg/ps5linux) and include your EDID, see [Decode the EDID](#decode-the-edid).
 
@@ -255,9 +240,19 @@ A capture card is just another display to the kernel, see [Capture cards](/troub
 
 ## Black screen and display recovery {#display-recovery}
 
-When the console is running but the TV shows nothing (a wrong mode, or a mode the TV doesn't accept), you can still reach it and change the mode. This page works on any image; the parts that only apply to [PS5 Bazzite Deck](/choose/bazzite-deck) are marked.
+When the console is running but the TV shows nothing (a wrong mode, or a mode the TV doesn't accept), you can still reach it and change the mode. Everything here works on any image; the parts that only apply to [PS5 Bazzite Deck](/choose/bazzite-deck) are marked.
 
-### 1. Get a shell
+### Switch TTY {#tty-switch}
+
+Switching TTYs back and forth can bring the picture back. With a keyboard: <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F2</kbd>, wait 2 to 3 seconds, then <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F1</kbd>; repeat if needed. Over SSH:
+
+```bash
+sudo chvt 2; sleep 3; sudo chvt 1
+```
+
+Switching TTYs can disconnect a USB keyboard or mouse; unplug it and plug it in again. If the picture keeps dropping out, see [Display link lock](#display-link-lock).
+
+### Get a shell
 
 **With a keyboard on the PS5 (TTY):** press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F3</kbd> for a text login. To get back to the picture, press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F1</kbd> or <kbd>F2</kbd>. If the TV shows nothing at all, the text console won't show either; use SSH instead.
 
@@ -269,15 +264,7 @@ ssh <user>@<console-ip>
 
 The console's IP address is in your router's list of devices. See [Get in over SSH](/troubleshooting/getting-help) for the default users per image.
 
-**Quick fix to try first:** switching TTYs back and forth can bring the picture back. With a keyboard: <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F2</kbd>, wait 2 to 3 seconds, then <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F1</kbd>. Over SSH:
-
-```bash
-sudo chvt 2; sleep 3; sudo chvt 1
-```
-
-If the picture keeps dropping out, see [Lock the display link](#display-link-lock).
-
-### 2. Force a safe mode for one boot
+### Force a safe mode for one boot
 
 `amdgpu.force_1080p=1` in `cmdline.txt` only allows 1080p60, which every display accepts. Add it, power off, start with the loader, set the mode you want from the desktop, then remove it again. The commands find `cmdline.txt` on the boot partition (`/boot/efi` on most images, `/efi` on Bazzite):
 
@@ -295,7 +282,7 @@ sudo sed -i 's/ *amdgpu\.force_1080p=1//' $E/cmdline.txt && sudo systemctl power
 
 For a failed **4K120** attempt only, add ` hdmi.frl_4k120=0` instead: that takes away only that mode, see [HDMI chip](#4k120-over-hdmi-21-frl).
 
-### 3. Change the mode from a desktop
+### Change the mode from a desktop
 
 **KDE:** `kscreen-doctor` changes the mode directly. Over SSH, run this first:
 
@@ -327,7 +314,7 @@ gamescopectl adaptive_sync 0      # off (1 = on)
 To switch to the desktop instead: `steamos-session-select plasma` (and back with `steamos-session-select gamescope`).
 :::
 
-### 4. The TV itself
+### The TV itself
 
 After a failed 4K120 attempt, some TVs stay dark at every mode. Unplug the TV's power for a minute (standby isn't enough), then start the console again.
 
@@ -391,7 +378,7 @@ For a black screen, a picture that blinks or reconnects, VRR that doesn't work, 
 
 ## Display link lock {#display-link-lock}
 
-If the screen goes black after boot, or when the resolution changes, but Linux is still running (white LED, SSH works), the cause is often the link between the GPU and the HDMI converter. This page explains the cause and shows how to lock the link so it stays stable.
+If the screen goes black after boot, or when the resolution changes, but Linux is still running (white LED, SSH works), the cause is often the link between the GPU and the HDMI converter.
 
 :::note[Not tested]
 This fix was reported on the official CachyOS image with an upstream kernel. It writes to `debugfs`, which is not a stable interface, so the path may change between kernels. Share your results on [Discord](https://discord.gg/ps5linux).
@@ -412,7 +399,7 @@ A kernel that includes the fix described there needs none of this. Use this page
 Try these in order. All of them need Linux to be running.
 
 1. Switch the TV or monitor input away and back.
-2. Switch TTY. Press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F2</kbd>, wait 2 to 3 seconds, then press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F1</kbd>. Repeat if needed.
+2. [Switch TTY](#tty-switch).
 3. Lock the link and force a hotplug. Run both lines on the PS5 (from tty2 or over SSH):
 
    ```bash
@@ -423,10 +410,6 @@ Try these in order. All of them need Linux to be running.
 4. If the screen is still black, wait for `hdmi: got real edid` in `dmesg`, then run the hotplug line a second time.
 
 `4 0x1e` means four lanes at HBR3, the highest link rate. On a KDE desktop a hotplug can make KWin lose the screen, so try the TTY switch first. Gamescope is not affected.
-
-:::tip[A USB keyboard may drop out]
-Switching TTYs can disconnect a USB keyboard or mouse. Unplug it and plug it in again.
-:::
 
 ### Lock the link at every boot
 

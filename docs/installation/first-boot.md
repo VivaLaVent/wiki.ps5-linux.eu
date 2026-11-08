@@ -10,9 +10,9 @@ applies_to: all
 
 The first start takes longer than later ones: the root partition grows to fill the drive, and some images run a setup screen for the time zone, host name and password.
 
-1. If the screen stays black for more than a few minutes, switch TTY (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F2</kbd>, wait, <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F1</kbd>) before assuming the boot failed, see [Display recovery](/troubleshooting/display#display-recovery).
+1. If the screen stays black for more than a few minutes, [switch TTY](/troubleshooting/display#tty-switch) before assuming the boot failed.
 2. Check that the root partition has grown: `df -h /` should show the drive's size, not a few GB. If not, see [USB and storage](/troubleshooting/storage).
-3. Change the default password with `passwd` right after the first login: SSH with password login is on by default on most images, see [Get in over SSH](/troubleshooting/getting-help#ssh).
+3. Change the default password right after the first login, see [Change the password](/post-install/all-distros#change-the-password-and-check-ssh).
 
 The user, the password and what else to expect depend on your image:
 

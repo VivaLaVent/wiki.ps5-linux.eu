@@ -8,7 +8,7 @@ applies_to: all
 
 # DualSense controller
 
-The DualSense works over USB and over Bluetooth on every PS5 model. This page covers both, and how to keep one controller paired with the PS5 OS and Linux at the same time.
+The DualSense works over USB and over Bluetooth on every PS5 model.
 
 ## USB
 

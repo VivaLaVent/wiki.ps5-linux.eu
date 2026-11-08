@@ -106,7 +106,15 @@ const sidebars: SidebarsConfig = {
       label: 'Updating',
       link: {type: 'doc', id: 'updating/overview'},
       collapsed: false,
-      items: ['updating/bazzite-deck', 'updating/other-images'],
+      items: [
+        {
+          type: 'category',
+          label: 'PS5 Bazzite Deck',
+          link: {type: 'doc', id: 'updating/bazzite-deck'},
+          items: ['updating/bootc', 'updating/legacy'],
+        },
+        'updating/other-images',
+      ],
     },
     {
       type: 'category',

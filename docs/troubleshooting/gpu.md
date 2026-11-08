@@ -8,7 +8,7 @@ applies_to: all
 
 # GPU
 
-The PS5's GPU is an RDNA2 part inside the Oberon APU, PCI ID `1002:13fb` on the original PS5 and the Slim. The PS5 Pro has a different GPU, see [PS5 Pro](/troubleshooting/ps5-pro). This page covers what the kernel does with it and the settings you can change.
+The PS5's GPU is an RDNA2 part inside the Oberon APU, PCI ID `1002:13fb` on the original PS5 and the Slim. The PS5 Pro has a different GPU, see [PS5 Pro](/troubleshooting/ps5-pro).
 
 ## Status
 
@@ -203,7 +203,7 @@ ttm.pages_limit = (desired GTT size in GB) × 1024 × 1024 / 4
 
 For a console used for gaming, **6 GB in `vram.txt`** (`180000000`) is the usual choice: the GPU then has 6 GB it never has to compete for, and the ceiling becomes 6 + (14 - 6) / 2 = about 10 GB. On a server or a desktop that doesn't game, leave the default: the 6 GB are then locked away from everything else. Raising `ttm.pages_limit` gives the same ceiling without locking anything, and is the tool for games that need more than that.
 
-More VRAM leaves less RAM for the game and the system (about 14 GB in all): a game that crashes after a long session with RAM nearly full can do better with **4 GB** (`100000000`). Raising `ttm.pages_limit` doesn't make games faster; leave it out unless a game runs out of GPU memory.
+More VRAM leaves less RAM for the game and the system (about 14 GB in all): a game that crashes after a long session with RAM nearly full can do better with **4 GB** (`100000000`); on the Pro, Hogwarts Legacy and Dragon's Dogma 2 are examples. Raising `ttm.pages_limit` doesn't make games faster; leave it out unless a game runs out of GPU memory.
 
 Example for a 10 GB GTT ceiling:
 
@@ -220,7 +220,7 @@ ttm.pages_limit=2621440
 
 ## Video engine (VCN) {#video-engine}
 
-The GPU's video engine (VCN 2.0, IP 2.0.3, driver `vcn_v2_0`) decodes and encodes video in hardware in every current PS5 kernel. This page lists what it handles, how it was made to work, and measured results.
+The GPU's video engine (VCN 2.0, IP 2.0.3, driver `vcn_v2_0`) decodes and encodes video in hardware in every current PS5 kernel.
 
 | What | Status |
 | --- | --- |

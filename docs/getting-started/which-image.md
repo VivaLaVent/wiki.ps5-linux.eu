@@ -18,7 +18,7 @@ There are three ways to run Linux on a PS5. Order reflects the recommendation.
 Every image is a normal distro plus the same PS5 parts: a patched kernel on the boot partition, the Wi-Fi driver and a few services. They differ in how much of that is set up for you: PS5 Bazzite Deck skips most of [After installing](/post-install/all-distros), the others work through it.
 
 :::info[Who writes this wiki]
-This wiki is maintained by Gilles (VivaLaVent), who also makes PS5 Bazzite Deck. It is recommended first because its kernel had the fixes first; the other images catch up with each kernel release, see [Status by kernel](/getting-started/hardware#by-kernel).
+This wiki is maintained by Gilles (VivaLaVent), who also makes PS5 Bazzite Deck. It is recommended first because its kernel had the fixes first; the other images catch up with each kernel release, see [What is where](/post-install/kernel#what-is-where).
 :::
 
 ## Next steps

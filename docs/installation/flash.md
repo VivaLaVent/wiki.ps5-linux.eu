@@ -54,10 +54,6 @@ When Windows then offers to format the drive, choose **Cancel**: the Linux parti
 The image has to be written to the drive byte for byte, which Rufus calls **DD mode**. Rufus used to ask whether to write in ISO or DD mode; current versions no longer ask, and drives flashed with them stopped in an emergency shell (`/dev/disk/by-label/bazzite-deck does not exist`) for several users. balenaEtcher always writes byte for byte, and it fixed the problem for all of them.
 :::
 
-## Plug the drive into the PS5
-
-Use a fast port, see [USB ports](/getting-started/drives#usb-ports); the slow USB 2.0 port is for a controller or keyboard. To change boot options in `cmdline.txt` from your PC first, see [Edit cmdline.txt from a PC](/post-install/boot-options#edit-from-a-pc).
-
 ## Next steps
 
-**[Start Linux with the loader](/installation/booting)**.
+To change boot options before the first start, edit `cmdline.txt` from your PC, see [Edit cmdline.txt from a PC](/post-install/boot-options#edit-from-a-pc). Then **[start Linux with the loader](/installation/booting)**.

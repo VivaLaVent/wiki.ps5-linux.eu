@@ -8,7 +8,7 @@ applies_to: all
 
 # Wi-Fi
 
-Most original PS5s have a Marvell IW620 Wi-Fi/Bluetooth chip (`40:00.7`, PCI ID `1b4b:2b56`). Its Linux driver is an NXP `mwifiex` fork patched for the PS5, which is not part of the stock kernel; this page covers getting it in and keeping it working, and the fixes when Wi-Fi misbehaves.
+Most original PS5s have a Marvell IW620 Wi-Fi/Bluetooth chip (`40:00.7`, PCI ID `1b4b:2b56`). Its Linux driver is an NXP `mwifiex` fork patched for the PS5, which is not part of the stock kernel.
 
 :::warning[MediaTek chips (most PS5 Slims and the PS5 Pro)]
 Some consoles use a MediaTek chip instead of the Marvell IW620: the MT7961 (`14c3:7961`) on most Slims and the MT7925 (`14c3:7925`) on the PS5 Pro. See [Console models and chips](/getting-started/hardware#console-models-and-chips) for how to check which one you have.

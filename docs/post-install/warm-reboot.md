@@ -14,7 +14,7 @@ A normal restart returns the PS5 to the PS5 OS, and you run the jailbreak and th
 
 A warm reboot starts the new kernel without the console's firmware resetting anything:
 
-- **The Wi-Fi/Bluetooth chip** keeps whatever state the last boot left. The IW620's Wi-Fi often needs the driver reloaded after a warm reboot; its Bluetooth side can hang, in which case reload `btusb` or power off, see [Bluetooth](/troubleshooting/bluetooth#iw620-marvell).
+- **The Wi-Fi/Bluetooth chip** keeps whatever state the last boot left. The IW620's Wi-Fi often needs the driver reloaded after a warm reboot; its Bluetooth side can hang, see [Bluetooth problems](/troubleshooting/bluetooth#bluetooth-problems).
 - **The HDMI chip** keeps the mode the last kernel set. The new kernel sets it up again; a display that needs the full link-training sequence may stay black until a cold start.
 - **Firmware the loader dumps** (Wi-Fi, PS5 Pro GPU) stays on the boot partition and is picked up again; nothing is re-dumped.
 

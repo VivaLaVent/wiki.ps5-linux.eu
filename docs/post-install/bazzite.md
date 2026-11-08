@@ -13,7 +13,7 @@ What only PS5 Bazzite Deck has: updates and rollbacks, its own commands, and the
 
 ## Updating and rolling back {#updating}
 
-`sudo bootc upgrade && sudo systemctl reboot`, then start with the loader. Everything else, Stable or Beta, which version runs and rolling back, is on **[Updating: PS5 Bazzite Deck](/updating/bazzite-deck)**.
+Updating, Stable or Beta, which version runs and rolling back are on [Updating: PS5 Bazzite Deck](/updating/bazzite-deck).
 
 ## Game Mode and Desktop Mode {#game-mode-and-desktop-mode}
 
@@ -44,7 +44,7 @@ Sleep (suspend-to-idle) is built in: a short press of the power button or Steam'
 
 ## Boot options (cmdline.txt)
 
-All options, PS5 Bazzite Deck's default line and how to add an option are on **[Boot options: PS5 Bazzite Deck](/post-install/bazzite-boot-options)**. The ones you're most likely to need: `amdgpu.force_1080p=1` for a picture you can't get past, `usb-storage.quirks=…` for a USB drive that disconnects, `usbc_dp.enable=1` for a USB-C display. To turn off VRR, use Steam's setting (Settings → Display). To stop the TV from turning on with the console, turn off HDMI-CEC in the TV's settings.
+PS5 Bazzite Deck's default line and how to add an option are on [Boot options: PS5 Bazzite Deck](/post-install/bazzite-boot-options), every option on [Boot options](/post-install/boot-options#options).
 
 ## 40 GPU compute units
 

@@ -8,7 +8,7 @@ applies_to: not-bazzite-deck
 
 # Kernel sources and patches
 
-Every PS5 kernel is stock Linux plus one patch file and a config, and every image boots whatever kernel sits on its boot partition. This page is the map: how a kernel is put together, what the version strings and branches mean, and how to apply patches yourself. The build and install commands are on [Kernel setup](/post-install/kernel).
+Every PS5 kernel is stock Linux plus one patch file and a config, and every image boots whatever kernel sits on its boot partition. The build and install commands are on [Kernel setup](/post-install/kernel).
 
 ## How a PS5 kernel is put together
 

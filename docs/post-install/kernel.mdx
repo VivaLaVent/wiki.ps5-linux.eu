@@ -18,13 +18,9 @@ The PS5 kernel is stock Linux plus one patch file and a config. Two repositories
 | [rmuxnet/ps5-linux-patches-1](https://github.com/rmuxnet/ps5-linux-patches-1) | A fork on a newer stable kernel. Nearly everything in upstream `main` plus CPU and GPU clock drivers for the base PS5 and the Pro, its own Bluetooth patches, the IW620 Wi-Fi driver built in, and `build.sh`. | A zip with `install.sh` from its releases, or `build.sh` on the PS5. |
 | [ps5-linux/ps5-linux-patches](https://github.com/ps5-linux/ps5-linux-patches) | The official patch set. Every push to `main` becomes a packaged release with the fan curve, the HDMI work, the Pro GPU and VCN. | `.deb`, `.pkg.tar.zst` and `.rpm` packages, or the [package repository](/post-install/package-repository). |
 
-rmuxnet's repository is a fork of the official one and its work is merged upstream over time. Use it unless you need the package manager route; the two differ in the details listed under [What is where](#what-is-where). What the version strings and branches mean, and how to apply single patches on top, is on [Kernel sources and patches](/choose/kernel-sources). [PS5 Bazzite Deck](/choose/bazzite-deck) has its own kernel and update process, see its release notes.
+rmuxnet's repository is a fork of the official one and its work is merged upstream over time. Use it unless you need the package manager route; the two differ in the details listed under [What is where](#what-is-where). What the version strings and branches mean, and how to apply single patches on top, is on [Kernel sources and patches](/choose/kernel-sources). [PS5 Bazzite Deck](/choose/bazzite-deck) has its own kernel, updated with the image, see [Updating](/updating/bazzite-deck).
 
 The loader always starts the kernel (`bzImage`) and initrd (`initrd.img`) from the FAT32 partition of the USB drive, labelled `boot` and usually mounted at `/boot/efi` (or `/efi` on Bazzite). Whatever way you install a kernel, it has to end up there.
-
-:::warning[M.2 installs]
-A kernel update on an M.2 install has left some users with a black screen or a kernel that doesn't match its modules. Read [Error messages](/troubleshooting/error-messages#kernel-update-breaks-m2-boot) before you update one.
-:::
 
 ## Install rmuxnet's release
 
@@ -198,7 +194,7 @@ Bazzite's Game Mode starts Steam through the `cardwired` service, which loads an
 1. **The BPF LSM.** `CONFIG_BPF_LSM=y` is set in both configs, but `bpf` is missing from `CONFIG_LSM`, so it never activates. Add `bpf` to `CONFIG_LSM`, or add `lsm=landlock,lockdown,yama,integrity,apparmor,bpf` to `cmdline.txt`.
 2. **Kernel BTF.** `CONFIG_DEBUG_INFO_BTF=y` is in both current configs. Check that `/sys/kernel/btf/vmlinux` exists; older configs need it turned on.
 
-Without them, `cardwired` crash-loops with `CardwireEbpfError(LSMNotEnabled)` or `error parsing /sys/kernel/btf/vmlinux`, Gamescope is killed a second after it starts, and after five attempts Bazzite drops you to the desktop. [PS5 Bazzite Deck](/choose/bazzite-deck) applies both changes.
+Without them, `cardwired` crash-loops with `CardwireEbpfError(LSMNotEnabled)` or `error parsing /sys/kernel/btf/vmlinux`, Gamescope is killed a second after it starts, and after five attempts Bazzite drops you to the desktop. This holds for any image that runs Bazzite's or SteamOS's Game Mode session, and was why Bazzite Game Mode never worked on the PS5 before. [PS5 Bazzite Deck](/choose/bazzite-deck) applies both changes.
 
 ## What is where
 
@@ -225,4 +221,4 @@ Still listed as to do in both repositories: an amdgpu SMU driver so the base PS5
 
 ## Kernel parameters (cmdline.txt)
 
-All kernel parameters and the default line are on **[Boot options: other images](/post-install/other-boot-options)**, and how to edit `cmdline.txt` and `vram.txt` on **[Boot options](/post-install/boot-options)**.
+Every kernel parameter, with which kernel has it, and how to edit `cmdline.txt` are on [Boot options](/post-install/boot-options#options).

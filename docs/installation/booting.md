@@ -12,12 +12,7 @@ With the image on the drive, booting is four things: the drive in the right port
 
 ## Plug the USB drive into the PS5
 
-Use one of the fast ports:
-
-- **Original PS5:** the **front USB-C** port or the two **rear USB-A** ports.
-- **PS5 Slim:** the two **rear USB-A** ports. One of the two front USB-C ports is the slow one, so the rear ports are the safe choice.
-
-Every PS5 has one slow USB 2.0 port (on the original PS5, the front USB-A port). It boots too, but everything that reads from the drive takes much longer; use it for a controller or keyboard instead. Keep hubs, keyboards and mice off the fast ports until Linux is running: they can stop the console from entering rest mode, see [Error messages](/troubleshooting/error-messages#rest-mode-error-back-to-the-ps5-login-screen).
+Use a fast port, see [USB ports](/getting-started/drives#usb-ports), and keep hubs, keyboards and mice off the fast ports until Linux is running.
 
 ## Jailbreak the PS5
 
