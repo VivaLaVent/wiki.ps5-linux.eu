@@ -20,10 +20,10 @@ A kernel update on an M.2 install has left some users with a black screen or a k
 One command for any distro:
 
 ```bash
-curl -fsSL https://repo.etawen.dev/update-kernel.sh | sudo sh
+curl -fsSL https://repo.etawen.dev/update-kernel.sh | sudo sh -s -- --no-reboot
 ```
 
-It detects your package manager (pacman, apt, dnf, dnf5 or rpm-ostree), adds the repository first if needed, skips `ps5-linux-mwifiex` when your kernel already includes the driver, and only reboots if the kernel actually changed. Add `-s -- --no-reboot` after `sh` to skip the reboot.
+It detects your package manager (pacman, apt, dnf, dnf5 or rpm-ostree), adds the repository first if needed, skips `ps5-linux-mwifiex` when your kernel already includes the driver, and with `--no-reboot` leaves the restart to you: the new kernel runs from the next start with the loader. Without it, the script reboots by itself when the kernel changed.
 
 On rmuxnet's kernel, install the new release the same way as the first time, see [Install rmuxnet's release](/post-install/kernel#install-rmuxnets-release).
 

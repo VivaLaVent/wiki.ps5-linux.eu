@@ -28,14 +28,14 @@ sudo systemctl daemon-reload && sudo systemctl start ostree-finalize-staged.serv
 | **Stable** | The release marked **Latest**, plus Bazzite's weekly updates |
 | **Beta** | The newest pre-release, plus Bazzite's weekly updates |
 
-To change channel, switch and restart. The switch downloads the channel's newest build and takes over at the next start; no update is needed afterwards.
+To change channel, switch. The switch downloads the channel's newest build, which takes over at the next start with the loader; no update is needed afterwards.
 
 ```bash
-sudo bootc switch ghcr.io/vivalavent/ps5-bazzite-bootc:beta && sudo systemctl reboot
+sudo bootc switch ghcr.io/vivalavent/ps5-bazzite-bootc:beta
 ```
 
 ```bash
-sudo bootc switch ghcr.io/vivalavent/ps5-bazzite-bootc:stable && sudo systemctl reboot
+sudo bootc switch ghcr.io/vivalavent/ps5-bazzite-bootc:stable
 ```
 
 Steam's **Settings → System → OS Update Channel** does the same switch. Between releases, both channels are rebuilt with Bazzite's base updates: an update then installs the same release with a newer build number. Stable is built from the release marked **Latest** itself, so a change reaches it only with the next stable release.
@@ -47,10 +47,10 @@ Steam's **Settings → System → OS Update Channel** does the same switch. Betw
 Already on the channel you want:
 
 ```bash
-sudo bootc upgrade && sudo systemctl reboot
+sudo bootc upgrade
 ```
 
-The console restarts through the PS5 OS: start Linux with the loader as usual, and once more on a PS5 Pro for its GPU firmware.
+The update takes over at the next start with the loader; on a PS5 Pro, start with the loader once more for its GPU firmware.
 
 - **`No update available`** means your channel has nothing newer, not that something is broken. On **Stable** that is the release marked **Latest**; pre-releases are only on **Beta**.
 - **Steam's update button doesn't update the PS5.** Bazzite's updater behind it needs a security module the PS5 kernel doesn't run. Up to v2.6.3 Steam shows **Update Error**; from v2.7 it finds nothing. Steam may also show SteamOS patch notes: those are Valve's notes for its channel, not this image's.
@@ -64,7 +64,7 @@ The console restarts through the PS5 OS: start Linux with the loader as usual, a
 On bootc, `dnf install` changes don't survive an update. Prefer Flatpak (Bazaar), Homebrew or Distrobox, as on any Bazzite. A system package layered with `sudo rpm-ostree install <package>` stays through updates, but `bootc upgrade` and `bootc switch` refuse a system with layered packages. Update with `sudo rpm-ostree upgrade` instead, and change channel with `rpm-ostree rebase`, which keeps them:
 
 ```bash
-sudo rpm-ostree rebase ostree-image-signed:docker://ghcr.io/vivalavent/ps5-bazzite-bootc:beta && sudo systemctl reboot
+sudo rpm-ostree rebase ostree-image-signed:docker://ghcr.io/vivalavent/ps5-bazzite-bootc:beta
 ```
 
 `rpm-ostree status` lists the layered packages.

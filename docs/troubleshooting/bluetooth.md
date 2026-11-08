@@ -228,7 +228,7 @@ hidp
 hid_playstation
 ```
 
-Enable the service, then reboot:
+Enable the service; it applies from the next start:
 
 ```bash
 sudo systemctl enable bt-connectable

@@ -188,7 +188,6 @@ The module has to be built with the same toolchain as the kernel. A distro upgra
 ```bash
 sudo dnf upgrade -y linux-ps5 --setopt=gpgcheck=0
 sudo rpm-ostree install ps5-linux-mwifiex ps5-linux-tools
-sudo systemctl reboot
 ```
 
 If apt or dnf complains about cached package files with the same names, fall back to the manual `install.sh` method.

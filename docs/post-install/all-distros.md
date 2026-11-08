@@ -167,7 +167,7 @@ zram-size = ram / 2
 compression-algorithm = zstd
 ```
 
-Apply it with a reboot, then check with `swapon --show`. Some distros enable zram by default, so check first.
+It applies from the next start; check with `swapon --show`. Some distros enable zram by default, so check first.
 
 ### Tuning how eagerly Linux swaps
 

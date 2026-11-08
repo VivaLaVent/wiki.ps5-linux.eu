@@ -103,10 +103,9 @@ sudo dnf install --setopt=gpgcheck=0 linux-ps5 ps5-linux-tools ps5-payload-sdk
 
 ```bash
 sudo dnf install linux-ps5 ps5-linux-tools
-sudo sync && sudo sh -c 'echo b > /proc/sysrq-trigger'
 ```
 
-The sysrq reboot is needed because Bazzite's `rpm-ostree-systemctl` wrapper swallows `systemctl reboot`. On older images where `dnf install` only prints a link to the Bazzite docs and exits, use `dnf5 install` instead. Later updates:
+Bazzite's `rpm-ostree-systemctl` wrapper swallows `systemctl reboot` on these images; to restart, use `sudo sync && sudo sh -c 'echo b > /proc/sysrq-trigger'`. On older images where `dnf install` only prints a link to the Bazzite docs and exits, use `dnf5 install` instead. Later updates:
 
 ```bash
 sudo dnf upgrade -y linux-ps5 ps5-linux-tools --setopt=gpgcheck=0
