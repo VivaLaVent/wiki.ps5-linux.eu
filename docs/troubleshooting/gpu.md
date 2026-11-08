@@ -150,6 +150,19 @@ The AMD BC-250, a mining board built on the same APU, is the usual reference. At
 Setting `adev->gfx.cu_info.lds_size = 128;` in `amdgpu_device.c` has been suggested as a fix. A rebuild with it produced a black screen and no `amdgpu` output. It is listed here so nobody tries it again, not as a fix.
 :::
 
+## Async compute (compute queue) {#async-compute}
+
+The GPU has a compute queue next to the graphics queue, which games use to run lighting, post-processing or upscaling alongside rendering (async compute). Mesa hides it on this GPU family, because compute dispatches with partial threadgroups corrupted pictures there. DryhoppedIPA found the cause on the BC-250 ([bc250-gfx1013-fix](https://github.com/DryhoppedIPA/bc250-gfx1013-fix)): with the threadgroup workaround RADV already has for two older GPUs, the queue works, and Cyberpunk 2077 ran 20 to 25% faster there.
+
+| Console | Compute queue |
+| --- | --- |
+| PS5 Pro | On, from PS5 Bazzite Deck v2.6.1, see [PS5 Pro](/troubleshooting/ps5-pro#radv). `AMD_VIOLA_COMPUTE_QUEUE=0 %command%` hides it |
+| Original PS5 and Slim | On, from PS5 Bazzite Deck v2.7.3 (pre-release, bootc). `AMD_PS5_COMPUTE_QUEUE=0 %command%` hides it. Hidden on other images |
+
+The BC-250 project also has two kernel patches. They change only ROCm's compute contexts (KFD), which games don't use, so PS5 Bazzite Deck doesn't need them. Its mesh shader patches can hang the GPU and stay off there too.
+
+Report what you see on v2.7.3: FPS with and without `AMD_PS5_COMPUTE_QUEUE=0`, and any corrupted picture, missing geometry or hang.
+
 ## VRAM
 
 PS5 Bazzite Deck sets **6 GB** from v2.6.1, once per install. The loader applies `vram.txt` when it starts the console, so a change takes effect at the next start with the loader, not at a [warm reboot](/post-install/warm-reboot); the first start after installing or updating can still show 512 MB. Check `cat /boot/efi/vram.txt` (it should be `0x180000000`) and `ps5-report`'s VRAM line. Tools such as PS5 Hardware Control's Memory tab write the same file: the last value written wins.

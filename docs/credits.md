@@ -46,6 +46,7 @@ ps5-linux is a community project. Core contributors:
 | the_tales, Dvelaren, ciaccio | PS5 Pro testing: loader builds, GPU firmware staging, governor and fan reports |
 | AdiX, wfelix | Diagnosis and fix for a controller refused in a loop |
 | [NotHavocc](https://github.com/NotHavocc/ps5-hwcon-plugin) | PS5 hardware control plugin |
+| [DryhoppedIPA](https://github.com/DryhoppedIPA/bc250-gfx1013-fix) | Found why the compute queue corrupts on this GPU family (BC-250), the basis for async compute on the base PS5 |
 | [abrocoma](https://github.com/abrocoma) | CachyOS notes: display link lock, DualSense reconnect, boot-to-desktop and systemd ordering fixes |
 | [Gilles (VivaLaVent)](https://github.com/VivaLaVent) | [PS5 Bazzite Deck](/choose/bazzite-deck) and this wiki |
 

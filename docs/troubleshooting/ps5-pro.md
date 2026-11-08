@@ -54,9 +54,9 @@ From v2.6.1, PS5 Bazzite Deck uses Sony's microcode again. For a D3D9 game that 
 
 ## Vulkan driver (RADV) {#radv}
 
-The Pro's GPU has int8 matrix instructions that the base PS5 lacks, and a compute queue that works (on the base PS5's GPU it is broken, so Mesa hides it). Borchev's [Mesa patch](https://github.com/Borchev/mesa_viola_support) teaches RADV, Mesa's Vulkan driver, to use both. Int8 dot products in compute shaders, such as FSR4's INT8 model, run about 3.6 times faster; Borchev measured Dragon's Dogma 2 staying at its 60 FPS cap with FSR4 and frame generation, where the stock driver dropped to 55 to 58 FPS in its heaviest section.
+The Pro's GPU has int8 matrix instructions that the base PS5 lacks, and a compute queue that works (upstream Mesa hides it on the whole GPU family; PS5 Bazzite Deck turns it on for the base PS5 and the Slim too from v2.7.3, see [Async compute](/troubleshooting/gpu#async-compute)). Borchev's [Mesa patch](https://github.com/Borchev/mesa_viola_support) teaches RADV, Mesa's Vulkan driver, to use both. Int8 dot products in compute shaders, such as FSR4's INT8 model, run about 3.6 times faster; Borchev measured Dragon's Dogma 2 staying at its 60 FPS cap with FSR4 and frame generation, where the stock driver dropped to 55 to 58 FPS in its heaviest section.
 
-PS5 Bazzite Deck ships this RADV from v2.6.1 (bootc installs). It changes nothing on the base PS5 and the Slim. Launch options to turn the parts off for one game:
+PS5 Bazzite Deck ships this RADV from v2.6.1 (bootc installs). Up to v2.7.2 it changes nothing on the base PS5 and the Slim; from v2.7.3 they get the compute queue too. Launch options to turn the parts off for one game:
 
 | Option | Effect |
 | --- | --- |

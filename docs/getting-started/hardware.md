@@ -117,7 +117,7 @@ Linux runs on the original PS5, the PS5 Slim and the PS5 Pro. Within those model
 | --- | --- | --- |
 | **HDMI chip** | FLAVA3 (most consoles), VERDE (some later models) | `sudo dmesg \| grep "HDMI IC Type"` |
 | **Wi-Fi/Bluetooth chip** | Marvell IW620 (most original PS5s, `1b4b:2b56`), MediaTek MT7961 (most Slims, `14c3:7961`), MediaTek MT7925 (PS5 Pro, `14c3:7925`) | `lspci -nn \| grep -i -e 1b4b -e 14c3` |
-| **Model** | PS5 or Slim, PS5 Pro (GPU `1002:13da` or `1002:13dc`) | `lspci -nn \| grep -e 1002:13da -e 1002:13dc` |
+| **Model** | PS5 or Slim (GPU `1002:13db`, `1002:13fb` and other ids), PS5 Pro (GPU `1002:13da` or `1002:13dc`) | `lspci -nn \| grep -i vga` |
 
 On [PS5 Bazzite Deck](/choose/bazzite-deck), `ps5-report` shows all three on its first lines.
 
