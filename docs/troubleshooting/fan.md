@@ -13,7 +13,7 @@ The console's embedded controller (EMC) runs the fan through its own "autoservo"
 | Kernel | Default | Interface |
 | --- | --- | --- |
 | Upstream (current packages) and [rmuxnet's kernel](/post-install/kernel) | Kernel curve, on at boot. Nothing to install. | hwmon `ps5_fan`; `pwm1_enable` `2` is the curve. |
-| [PS5 Bazzite Deck](/choose/bazzite-deck) | The console's own firmware control on Sony's fan table, as on the PS5 OS (from v2.7.2; v2.6.1 to v2.7.1 with the driver's quiet table and an 80 °C target; v2.5 and v2.5.1 started on the kernel curve). | hwmon `ps5_fan`; `pwm1_enable` `2` is the curve, `3` the firmware. `target_temp` from v2.6.1 to v2.7.3. |
+| [PS5 Bazzite Deck](/choose/bazzite-deck) | The console's own firmware control on Sony's fan table with an 80 °C target (from v2.8.1; Sony's own 91 °C on v2.7.2 to v2.8; v2.6.1 to v2.7.1 with the driver's quiet table and an 80 °C target; v2.5 and v2.5.1 started on the kernel curve). | hwmon `ps5_fan`; `pwm1_enable` `2` is the curve, `3` the firmware. `ps5_fan.target=` from v2.8.1, `target_temp` from v2.6.1 to v2.7.3. |
 | Older upstream kernels | Firmware control toward `target_temp`, 80 °C by default. The oldest kernels had no fan driver at all and left the fan off until `ps5_control --fan on`. | `target_temp` only. |
 
 ## Change it from Game Mode or the desktop {#hwcon}
@@ -23,7 +23,7 @@ The easiest way is NotHavocc's PS5 Hardware Control, in two forms that do the sa
 - **[ps5-hwcon-plugin](https://github.com/NotHavocc/ps5-hwcon-plugin)** for Game Mode: a [Decky Loader](/post-install/decky) plugin in the quick access menu.
 - **[ps5-hwcon-gui](https://github.com/NotHavocc/ps5-hwcon-gui)** for the desktop: a window, no Decky needed.
 
-Its **Fan** tab shows the temperatures and switches between **Target** and **Curve**. On kernels with the hwmon driver, PS5 Bazzite Deck included, it runs every setting as a kernel curve (`pwm1_enable` `2`), a target too: a target there is a curve that reaches 45% at the target and full speed 6 °C above it. **Restore on Startup** re-applies your setting at every start, because the kernel starts from its default again. On PS5 Bazzite Deck that default is the console's own control: up to version 1.4.0, Restore on Startup writes your curve without switching to it, so it takes over only once you apply a curve or preset (a fix is with its developer).
+Its **Fan** tab shows the temperatures and switches between **Target** and **Curve**. On kernels with the hwmon driver, PS5 Bazzite Deck included, it runs every setting as a kernel curve (`pwm1_enable` `2`), a target too: a target there is a curve that reaches 45% at the target and full speed 6 °C above it. **Restore on Startup** re-applies your setting at every start, because the kernel starts from its default again. On PS5 Bazzite Deck that default is the console's own control: up to version 1.5.0, Restore on Startup writes your curve without switching to it, so it takes over only once you apply a curve or preset (a fix is with its developer). Until then, `ps5_fan.curve=1` in `cmdline.txt` starts on the curve, and Restore on Startup works.
 
 To go back to the console's own control on PS5 Bazzite Deck:
 
@@ -58,7 +58,7 @@ The default curve:
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Duty | 10% | 30% | 40% | 50% | 65% | 80% | 95% | 100% |
 
-Below 45 °C the fan stops. The duty follows a filtered temperature with slew limiting, so the fan doesn't hunt; above 80 °C it follows the raw reading. At **90 °C** the driver goes to full speed and stays there until the SoC is below 85 °C, then continues on the curve; on PS5 Bazzite Deck from v2.8 not in firmware mode, where the console handles its own temperature. If the hardware stops answering, the driver falls back to the firmware's own control. The boot log names the mode it started in: on upstream and rmuxnet's kernels `quiet fan curve enabled; configure through hwmonN`, on PS5 Bazzite Deck from v2.8 `firmware fan control, Sony's target N C; pwm1_enable 3 firmware, 2 curve: hwmonN`. The driver doesn't read the fan speed: there is no `fan1_input`.
+Below 45 °C the fan stops. The duty follows a filtered temperature with slew limiting, so the fan doesn't hunt; above 80 °C it follows the raw reading. At **90 °C** the driver goes to full speed and stays there until the SoC is below 85 °C, then continues on the curve; on PS5 Bazzite Deck from v2.8 not in firmware mode, where the console handles its own temperature. If the hardware stops answering, the driver falls back to the firmware's own control. The boot log names the mode it started in: on upstream and rmuxnet's kernels `quiet fan curve enabled; configure through hwmonN`, on PS5 Bazzite Deck from v2.8.1 `firmware fan control, target 80 C (Sony's 91 C); pwm1_enable 3 firmware, 2 curve: hwmonN`. The driver doesn't read the fan speed: there is no `fan1_input`.
 
 A cooler, louder curve, for example 60% from 70 °C:
 
@@ -79,9 +79,10 @@ echo 128 | sudo tee $H/pwm1
 Back to the curve: `echo 2 | sudo tee $H/pwm1_enable`.
 
 :::note[PS5 Bazzite Deck]
-The image starts in firmware mode (`pwm1_enable` `3`): the console's own fan control on Sony's fan table and target, as on the PS5 OS. Sony's tables aim for 91 °C on the SoC; for a cooler chip at the cost of noise, use a curve. `ps5_fan.curve=1` in `cmdline.txt` starts with the curve instead.
+The image starts in firmware mode (`pwm1_enable` `3`): the console's own fan control on Sony's fan table, with an 80 °C target on the SoC. Sony's tables aim for 91 °C; above 85 °C (80 °C on a Pro) the [GPU governor](/troubleshooting/gpu) lowers the GPU clock, so the lower target keeps games faster. `ps5_fan.target=75` in `cmdline.txt` sets your own target (40 up to Sony's), `ps5_fan.target=0` Sony's own; `ps5-perf status` shows the value. `ps5_fan.curve=1` starts with the curve instead.
 
-- **From v2.8** Linux doesn't change the target, and the driver doesn't step in at 90 °C in firmware mode. Sony's table is uploaded at every start, the driver's quiet table only for full speed, manual and the curve (`pwm1_enable` `0` to `2`), and Sony's goes back when you return to `3`, for sleep and at shutdown. A quiet table that v2.7.1 or older left in the console is found at the start and gets the control values all of Sony's retail tables share (`quiet servo table from an older kernel, retail values restored` in the boot log).
+- **From v2.8.1** the target is set after every table upload and at resume, and Sony's goes back for sleep and at shutdown, so the PS5 OS starts with its own.
+- **From v2.8** the driver doesn't step in at 90 °C in firmware mode (v2.8 itself kept Sony's 91 °C). Sony's table is uploaded at every start, the driver's quiet table only for full speed, manual and the curve (`pwm1_enable` `0` to `2`), and Sony's goes back when you return to `3`, for sleep and at shutdown. A quiet table that v2.7.1 or older left in the console is found at the start and gets the control values all of Sony's retail tables share (`quiet servo table from an older kernel, retail values restored` in the boot log).
 - **v2.7.2 and v2.7.3** ran on Sony's table and target too, with `target_temp` and `ps5-perf fan` for your own target. The driver also went to full speed at 90 °C in firmware mode, which made the fan cycle under load.
 - **v2.6.1 to v2.7.1** uploaded the quiet table at every start and set an 80 °C target. That kept the fan quiet, but the chip ran warm, the fan spun up at power off and restart, and the PS5 OS could start with Linux's table still in place.
 - **v2.5 and v2.5.1** started on the curve and kept the firmware's lower target during sleep and shutdown.
@@ -161,6 +162,7 @@ The GPU clock is reported by the devfreq driver of your kernel: look under `/sys
 ## Fan problems
 
 - **The fan cycles between loud and quiet under load** (PS5 Bazzite Deck v2.7.2 and v2.7.3, the SoC between about 85 and 92 °C): the driver went to full speed at 90 °C, just under Sony's 91 °C target, and handed back below 85 °C. v2.8 leaves firmware mode to the console. On v2.7.3, `sudo ps5-perf fan 80` keeps the SoC below 90 °C.
+- **About 90 °C in games, or at idle in Game Mode, with a quiet fan** (PS5 Bazzite Deck v2.8): the console held Sony's 91 °C target. v2.8.1 aims for 80 °C.
 - **The fan spins up at power off and restart** (PS5 Bazzite Deck v2.6.1 to v2.7.1, with the driver's quiet table and 80 °C target): from v2.7.2 the console runs on Sony's table throughout; report it if it still happens. On those releases, a lower target (`echo 70 | sudo tee /sys/bus/platform/devices/ps5-fan/target_temp`) shortens the spin-up.
 - **The PS5 OS fan runs fast after using Linux:** up to v2.7.1 the console's fan control could keep Linux's quiet table, with its 50 °C target, after a shutdown. On consoles whose boot log shows `FanServo: Not update` (the PS5 Pro among them) the kernel has no Sony table to load, so v2.7.2 and v2.7.3 then took that table for the console's own (`ps5-perf status` shows a 50 °C target). v2.8 finds it and puts the retail values back: start v2.8 once, power off, then check the fan on the PS5 OS. If it still happens, report it with `ps5-report`.
 - **Louder and hunting at idle on PS5 Bazzite Deck v2.5 and v2.5.1** (`ps5-perf status` shows `kernel curve`): the 7.3.1 kernel started on its own curve. v2.6.1 returns to the console's firmware control. Until you update, a quieter curve from [PS5 Hardware Control](#hwcon) helps.

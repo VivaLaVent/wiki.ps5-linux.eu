@@ -127,6 +127,7 @@ The exact line is on the page for your image ([PS5 Bazzite Deck](/post-install/b
 | GPU and memory | `amdgpu.ps5_viola_fw=0` | PS5 Pro: use the base PS5's GPU firmware (36 CUs). For comparisons and troubleshooting | Deck, upstream | [PS5 Pro](/troubleshooting/ps5-pro#gpu-driver) |
 | GPU and memory | `ps5.viola_cp=cs2` | PS5 Pro: linux-firmware's command-processor microcode instead of Sony's, for D3D9 games that hang at their first frame. Takes two starts (from v2.6.1) | Deck | [PS5 Pro](/troubleshooting/ps5-pro#cp-microcode) |
 | GPU and memory | `ps5_fan.curve=1` | Starts with the kernel fan curve instead of the console's firmware control (from v2.6.1) | Deck | [Fan control](/troubleshooting/fan) |
+| GPU and memory | `ps5_fan.target=75` | SoC target of the console's firmware fan control, 40 °C up to Sony's 91 °C (default 80; `0` = Sony's; from v2.8.1) | Deck | [Fan control](/troubleshooting/fan) |
 | Game Mode | `lsm=landlock,lockdown,yama,integrity,apparmor,bpf` | Turns on the BPF LSM that Game Mode needs, on a kernel built without `bpf` in `CONFIG_LSM`. PS5 Bazzite Deck has it built in | all | [Kernel setup](/post-install/kernel#build-a-kernel-for-bazzite-game-mode) |
 | USB and storage | `usb-storage.quirks=xxxx:yyyy:u` | Turns off UAS for one USB drive (`xxxx:yyyy` from `lsusb`): for SSDs or enclosures that disconnect or freeze | all | [Storage and USB](/troubleshooting/storage) |
 | USB and storage | `rootwait rootdelay=60` | Waits up to 60 seconds for a slow USB drive | all | [Storage and USB](/troubleshooting/storage) |

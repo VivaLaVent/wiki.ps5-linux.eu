@@ -28,15 +28,15 @@ On Bazzite, pair a controller over Bluetooth from **Game Mode**, not from the de
 
 The PS5 OS and Linux share the same Bluetooth chip, and therefore the same Bluetooth address. A DualSense with pairing profiles keeps one pairing per host address, so pairing it with Linux replaces the PS5 pairing, and the other way around. Normally you'd have to pair again every time you switch systems.
 
-Giving Linux its own Bluetooth address solves this. It is a boot-time service ([`ps5-bt-addr`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/files/ps5-bt-addr), and [`ps5-bt-pro-addr`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/files/ps5-bt-pro-addr) for the PS5 Pro) that any image can run; PS5 Bazzite Deck includes both and turns them on by default. The DualSense then keeps one pairing for the PS5 on one profile, and one for Linux on another. No re-pairing and no USB cable are needed when you switch.
+Giving Linux its own Bluetooth address solves this. It is a boot-time service ([`ps5-bt-addr`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/files/ps5-bt-addr), and [`ps5-bt-pro-addr`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/files/ps5-bt-pro-addr) for the PS5 Pro) that any image can run; PS5 Bazzite Deck includes both and turns them on by default, except on the Slim's MediaTek chip, where the address broke connections on several units (off from v2.8.1; `ps5-bt-address on` switches it on). The DualSense then keeps one pairing for the PS5 on one profile, and one for Linux on another. No re-pairing and no USB cable are needed when you switch.
 
 Pairing profiles came to the DualSense with its software version **0630**, released with PS5 system software 12.00. A controller on older software has no profiles: PS + Square or Triangle does nothing. A jailbroken console on older system software can't update the controller, but a PC can: Sony's [DualSense firmware updater](https://controller.dl.playstation.net/controller/lang/en/fwupdater.html) for Windows, over USB. Check the version in the PS5 OS under Settings → Accessories → Controller (General) → Wireless Controller Device Software.
 
 **Pair the DualSense with Linux** (make sure it is already paired with the PS5 OS on one profile):
 
 1. Start Linux.
-2. On the DualSense, hold **PS + Square** (or another face button than the PS5's): it switches to that profile, and keeps blinking in pairing mode if the profile has no pairing yet. Use a face button, not **PS + Create**.
-3. If it doesn't blink fast, keep holding until it does.
+2. On the DualSense, hold **PS + Square** (or another face button than the PS5's): it switches to that profile, and keeps blinking in pairing mode if the profile has no pairing yet. Select the profile with a face button: **PS + Create** on the PS5's profile replaces the PS5's pairing.
+3. If it doesn't blink fast (the profile already holds a pairing, for example an earlier Linux one: remove that in Linux first), hold **PS + Create** on this profile until it does.
 4. Pair it in the Linux Bluetooth settings.
 5. Start the PS5 OS, select the PS5 profile on the DualSense, and check that it connects.
 6. Start Linux again, select the Linux profile, and check that it connects.
@@ -50,7 +50,7 @@ From then on, hold **PS + the profile's button** for 2 to 3 seconds to switch: t
 - `bluetoothctl` and the Bluetooth settings still show the original address. The chip and the DualSense use the new one.
 - In rest mode, both profiles can wake the PS5, but once it has started only the PS5 profile connects.
 - On consoles with the IW620 chip, restarts go through the PS5 OS instead of [warm reboots](/post-install/bazzite#built-in-commands) while this is on: the chip doesn't survive a warm reboot with the changed address.
-- With the feature **off**, a controller paired with the PS5 OS connects to Linux by itself and is refused in a loop, see [Controller refused in a loop](/troubleshooting/bluetooth#controller-refused-in-a-loop).
+- With the feature **off** (the Slim's default), a controller paired with the PS5 OS connects to Linux by itself and is refused in a loop, see [Controller refused in a loop](/troubleshooting/bluetooth#controller-refused-in-a-loop).
 
 How the address is set per chip, and the pitfalls found in testing, are on [Bluetooth](/troubleshooting/bluetooth#one-dualsense-for-the-ps5-and-linux).
 

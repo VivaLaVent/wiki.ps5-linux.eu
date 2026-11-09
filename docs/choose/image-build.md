@@ -40,7 +40,7 @@ The order matters: later patches are written against the tree state the earlier 
 2. **Display:** the FLAVA3 and VERDE display stack: 4K120 over FRL, 1440p, VRR. Explained on [Display and HDMI](/troubleshooting/display).
 3. **HDMI modes:** 100 Hz and VERDE 1440p120 without an option, FLAVA3's manual timing setup for other EDID modes.
 4. **GPU:** the thermal GPU clock governor.
-5. **Fan:** the console's firmware control on Sony's own table by default, as on the PS5 OS, with the driver's quiet table only for the kernel curve, manual and full speed, and no full speed forced at 90 °C in firmware mode. A quiet table older releases left in the console is repaired. See [Fan control](/troubleshooting/fan#hwmon-driver).
+5. **Fan:** the console's firmware control on Sony's own table by default, with an 80 °C target (`ps5_fan.target=`), with the driver's quiet table only for the kernel curve, manual and full speed, and no full speed forced at 90 °C in firmware mode. A quiet table older releases left in the console is repaired. See [Fan control](/troubleshooting/fan#hwmon-driver).
 6. **PS5 Pro:** Bluetooth and the CPU clock. See [PS5 Pro](/troubleshooting/ps5-pro).
 7. **MediaTek Bluetooth:** no ISO interface setup.
 8. **IW620 Bluetooth:** the repeated link key request and host address resolution, from the official patches. See [Bluetooth](/troubleshooting/bluetooth#iw620-marvell).

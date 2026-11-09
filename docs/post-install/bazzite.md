@@ -36,7 +36,7 @@ On some TVs the picture doesn't come back after **Switch to Desktop**, see [Disp
 | `ps5-report` | Collects your hardware details and the relevant logs into one file for a bug report. It only reads. |
 | `ps5-perf` | CPU boost and Wi-Fi power saving; `ps5-perf status` shows the boost and the fan mode. The fan runs on the console's own control with Sony's target, see [Fan control](/troubleshooting/fan); v2.7.2 and v2.7.3 also set a target with `ps5-perf fan`, v2.6.1 to v2.7.1 used 80 °C. |
 | `ps5-warm-reboot` | Restarts straight back into Linux, without the PS5 OS and the loader. Off by default, `on`/`off`/`status`, see [Warm reboots](/post-install/warm-reboot-bazzite-deck). |
-| `ps5-bt-address` | One DualSense for the PS5 and Linux, on by default. `status`, `on`, `off`. |
+| `ps5-bt-address` | One DualSense for the PS5 and Linux, on by default (off on the Slim's MediaTek chip from v2.8.1). `status`, `on`, `off`. |
 
 The image runs the fan and the clocks itself. Don't use `ps5_control --fan` or `--boost` from ps5-linux-tools on it: they go around the kernel's fan driver and GPU clock governor. Use `ps5-perf` or [PS5 Hardware Control](/post-install/decky#ps5-hardware-control) instead.
 
