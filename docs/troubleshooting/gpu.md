@@ -157,11 +157,11 @@ The GPU has a compute queue next to the graphics queue, which games use to run l
 | Console | Compute queue |
 | --- | --- |
 | PS5 Pro | On, from PS5 Bazzite Deck v2.6.1, see [PS5 Pro](/troubleshooting/ps5-pro#radv). `AMD_VIOLA_COMPUTE_QUEUE=0 %command%` hides it |
-| Original PS5 and Slim | On, from PS5 Bazzite Deck v2.7.3 (pre-release, bootc). `AMD_PS5_COMPUTE_QUEUE=0 %command%` hides it. Hidden on other images |
+| Original PS5 and Slim | On, from PS5 Bazzite Deck v2.7.3 (bootc). `AMD_PS5_COMPUTE_QUEUE=0 %command%` hides it. Hidden on other images |
 
 The BC-250 project also has two kernel patches. They change only ROCm's compute contexts (KFD), which games don't use, so PS5 Bazzite Deck doesn't need them. Its mesh shader patches can hang the GPU and stay off there too.
 
-Report what you see on v2.7.3: FPS with and without `AMD_PS5_COMPUTE_QUEUE=0`, and any corrupted picture, missing geometry or hang.
+Report what you see: FPS with and without `AMD_PS5_COMPUTE_QUEUE=0`, and any corrupted picture, missing geometry or hang.
 
 ## VRAM
 

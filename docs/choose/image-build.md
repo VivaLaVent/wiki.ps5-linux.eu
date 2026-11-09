@@ -12,7 +12,7 @@ applies_to: not-bazzite-deck
 [PS5 Bazzite Deck](/choose/bazzite-deck) has two parts: a kernel package, built with the official [ps5-linux-image](https://github.com/ps5-linux/ps5-linux-image) builder from a recent stable kernel, rmuxnet's PS5 patch set and its own patches on top; and a bootc image, Bazzite's Steam Deck image with that kernel, the PS5 services and its own Vulkan driver (RADV) build. Users don't need any of it.
 
 :::info[Patch base]
-The stable kernel named in the patch set's `.config`, plus [rmuxnet/ps5-linux-patches-1](https://github.com/rmuxnet/ps5-linux-patches-1) at a pinned commit, then the image's patches in the order of [`patches/series`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/patches/series). Each release ships a `VERSIONS.md` with the exact pins and a `local-changes.diff` with the changes to the builder.
+The stable kernel named in `build.sh` (`KERNEL_TAG`), plus [rmuxnet/ps5-linux-patches-1](https://github.com/rmuxnet/ps5-linux-patches-1) at a pinned commit, then the image's patches in the order of [`patches/series`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/patches/series). Each release ships a `VERSIONS.md` with the exact pins and a `local-changes.diff` with the changes to the builder.
 :::
 
 ## Kernel config changes
@@ -30,24 +30,24 @@ Applied to the patch set's `.config` before the build:
 | `CONFIG_LOG_BUF_SHIFT` | `20` | 1 MiB boot log, so the early HDMI chip and Pro firmware lines don't scroll out of reports |
 | `CONFIG_PS5_GPUFREQ` | not set | rmuxnet's GPU clock driver, replaced by the upstream governor |
 | `CONFIG_LOGITECH_FF` and the other Logitech `_FF` options | `y` | Wheel force feedback |
+| `CONFIG_NF_CONNTRACK_NETBIOS_NS` | `m` | The helper of firewalld's samba-client service, which Fedora's default zone has; without it the firewall doesn't start |
 
 ## Patch order
 
-The order matters: later patches are written against the tree state the earlier ones leave. [`build.sh`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/build.sh) first gives the out-of-tree IW620 Wi-Fi driver its compatibility patches for the kernel version, then applies rmuxnet's `linux.patch` and the files in [`patches/series`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/patches/series) in this order:
+The order matters: later patches are written against the tree state the earlier ones leave. [`build.sh`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/build.sh) first takes the out-of-tree IW620 Wi-Fi driver from ps5-linux-mwifiex at a pinned commit, with that repository's own patches in its order and `ext_scan=2` for hidden networks, then applies rmuxnet's `linux.patch` and the files in [`patches/series`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/patches/series) in this order:
 
 1. **Suspend-to-idle:** Dasloh's pull request.
 2. **Display:** the FLAVA3 and VERDE display stack: 4K120 over FRL, 1440p, VRR. Explained on [Display and HDMI](/troubleshooting/display).
 3. **HDMI modes:** 100 Hz and VERDE 1440p120 without an option, FLAVA3's manual timing setup for other EDID modes.
 4. **GPU:** the thermal GPU clock governor.
-5. **Fan:** no fan spike at shutdown, then firmware fan control on Sony's own table and target by default, as on the PS5 OS, with the driver's quiet table only for the kernel curve, manual and full speed. See [Fan control](/troubleshooting/fan#hwmon-driver).
+5. **Fan:** the console's firmware control on Sony's own table by default, as on the PS5 OS, with the driver's quiet table only for the kernel curve, manual and full speed, and no full speed forced at 90 °C in firmware mode. A quiet table older releases left in the console is repaired. See [Fan control](/troubleshooting/fan#hwmon-driver).
 6. **PS5 Pro:** Bluetooth and the CPU clock. See [PS5 Pro](/troubleshooting/ps5-pro).
 7. **MediaTek Bluetooth:** no ISO interface setup.
+8. **IW620 Bluetooth:** the repeated link key request and host address resolution, from the official patches. See [Bluetooth](/troubleshooting/bluetooth#iw620-marvell).
+9. **Display updates:** triple-buffer flags cleared before full updates, from the official patches.
 
 Every patch file starts with a description of what it does and why.
 
-:::warning[Not in the image any more: the IW620 legacy LE workaround]
-rmuxnet's repository has a change that marks the IW620's extended LE commands as broken so keyboards and mice reconnect. On that chip it stops Bluetooth from finding new devices, because the scan then uses the legacy commands while advertising still uses the extended ones, see [Bluetooth](/troubleshooting/bluetooth#iw620-marvell). The image dropped it; an image that takes rmuxnet's patch set as is inherits it.
-:::
 
 ## Files baked into the image
 

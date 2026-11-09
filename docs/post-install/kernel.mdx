@@ -203,7 +203,7 @@ Without them, `cardwired` crash-loops with `CardwireEbpfError(LSMNotEnabled)` or
 | Change | Upstream `main` | rmuxnet's kernel | PS5 Bazzite Deck |
 | --- | --- | --- | --- |
 | HDR on FLAVA3, HDMI CEC, display hotplug | ✅ | ✅ | ✅ |
-| USB-C DisplayPort output, off by default | ✅ | ✅ | ✅ |
+| USB-C DisplayPort output | ✅ Automatic when a display appears | ✅ Off by default | ✅ Off by default |
 | PS5 Pro GPU with the Viola firmware | ✅ | ✅ | ✅ |
 | Native FRL for 4K120 with 4:2:0 fallback and ALLM, on by default | ✅ | ✅ | ❌ Own 4K120 path, see [Display and HDMI](/troubleshooting/display#4k120-over-hdmi-21-frl) |
 | GPU clock governor with `ps5_gpufreq.temp_limit` | ✅ | ❌ Replaced by `ps5-gpufreq`, see [GPU](/troubleshooting/gpu#clocks-and-boost) | ✅ |
@@ -211,7 +211,8 @@ Without them, `cardwired` crash-loops with `CardwireEbpfError(LSMNotEnabled)` or
 | hwmon fan driver | ✅ Curve on by default | ✅ Curve on by default | ✅ Firmware mode by default, see [Fan control](/troubleshooting/fan) |
 | CPU and GPU clock drivers `ps5-cpufreq`, `ps5-gpufreq`, with the Pro's clock range | ❌ | ✅ | ⚠️ `ps5-cpufreq` only, kept off on the Pro |
 | Slim MediaTek Wi-Fi driver in the config | ✅ | ✅ | ✅ |
-| Slim and Pro MediaTek Bluetooth, IW620 L2CAP fix | ❌ Only the IW620 quirks entry | ⚠️ A different Bluetooth patch, reported broken by its author | ✅ |
+| Slim and Pro MediaTek Bluetooth, IW620 L2CAP fix | ⚠️ The IW620 quirks entry and the Slim's pairing fix | ⚠️ A different Bluetooth patch, reported broken by its author | ✅ |
+| IW620 Bluetooth: repeated link key request, host address resolution | ✅ | ❌ | ✅ from v2.8 |
 | IW620 Wi-Fi driver built with the kernel | ❌ | ✅ | ✅ |
 | UVC webcams, Logitech wheel force feedback | ❌ | ✅ | ✅ (wheels) |
 | VRR, RGB range flag, display link lock, 100 Hz and manual-timing modes | ❌ | ❌ | ✅ |

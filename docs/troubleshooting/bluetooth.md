@@ -40,15 +40,18 @@ All three drop off USB when they enter USB power saving (U3) and stay gone until
 
 ## IW620 (Marvell)
 
-Two changes to `btusb` make the IW620 usable:
+These changes to `btusb` and the Bluetooth stack make the IW620 usable:
 
 - **Quirks table entry.** The chip needs its own entry with the right quirks; without it `btusb` treats it as a generic adapter.
 - **L2CAP connect while encryption is pending.** Controllers that connect before encryption has finished were dropped. The fix defers the connection until security is settled.
+- **Legacy LE commands.** The chip's extended LE scan and create-connection commands are marked broken, and the stack then advertises with the legacy commands too, so keyboards and mice reconnect.
+- **The repeated link key request.** Right after pairing, the chip asks for the new key again; the driver answers with the key the chip just reported. `btusb.ps5_iw620_linkkey=0` turns it off.
+- **Host address resolution.** LL privacy is hidden from the stack, which resolves private addresses itself, so paired devices that use them are recognized. `btusb.ps5_iw620_le=0` turns it off.
 
-Both are in rmuxnet's kernel and PS5 Bazzite Deck; upstream has the quirks entry.
+The first three are in rmuxnet's kernel and PS5 Bazzite Deck, the last two in the official patches and PS5 Bazzite Deck from v2.8; upstream has the quirks entry.
 
 :::warning[Don't mix the LE command families on this chip]
-A third change, a "legacy LE" workaround that marks the chip's extended LE scan and create-connection commands as broken so keyboards and mice reconnect, exists in rmuxnet's repository and was in some PS5 Bazzite Deck releases. On the IW620 it stops the settings from finding any new device: the scan uses the legacy commands while advertising still uses the extended ones (`0x2039`), and the chip refuses to mix them (`Busy`, `0x200b … Command Disallowed`). A DualSense that was already paired keeps working, which hides the problem. The current PS5 Bazzite Deck release drops the workaround; anyone porting it to another kernel should know what it does to the IW620.
+The legacy LE change has to cover advertising as well (`ext_adv_capable` in `hci_core.h`). With only the scan and create-connection commands marked broken, as in some earlier PS5 Bazzite Deck releases, the chip still advertises with the extended commands (`0x2039`) and refuses the mix (`Busy`, `0x200b … Command Disallowed`): the settings find no new device, while a DualSense that was already paired keeps working, which hides the problem. Anyone porting the change to another kernel needs both parts.
 :::
 
 ## MediaTek on the Slim

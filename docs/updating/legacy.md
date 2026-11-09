@@ -18,7 +18,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/VivaLaVent/ps5-bazzite-deck/
 For a specific release, pre-releases included, put its version from the [releases page](https://github.com/VivaLaVent/ps5-bazzite-deck/releases) at the end:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/VivaLaVent/ps5-bazzite-deck/main/tools/update-latest.sh) v2.7.3
+bash <(curl -fsSL https://raw.githubusercontent.com/VivaLaVent/ps5-bazzite-deck/main/tools/update-latest.sh) v2.8
 ```
 
 Then power off and start with the loader. The command prints how to undo the update. Switching to bootc is recommended, see [Built with bootc](/choose/bazzite-deck#built-with-bootc); it means flashing the bootc image, which erases the drive.

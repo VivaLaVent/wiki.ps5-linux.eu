@@ -42,7 +42,7 @@ sudo insmod ./mlan.ko
 sudo insmod ./moal.ko \
   fw_name=nxp/pcieuartiw620_combo_v1.bin \
   pcie_int_mode=1 drv_mode=1 cfg80211_wext=4 sta_name=mlan \
-  ext_scan=1 auto_fw_reload=0 wifi_reset_config=0 \
+  ext_scan=2 auto_fw_reload=0 wifi_reset_config=0 \
   sched_scan=0 ps_mode=2 auto_ds=2 amsdu_disable=1
 ```
 
@@ -115,8 +115,9 @@ nmcli device status
 ## First checks
 
 1. `nmcli device` lists the Wi-Fi device; on PS5 Bazzite Deck, `ps5-report` names the chip on its **Wi-Fi** line.
-2. No Wi-Fi device on an IW620 console: the chip needs its out-of-tree driver, which PS5 Bazzite Deck includes. After a warm reboot, `ps5-wifi-repair` reloads it there, and a power off fixes it for sure.
-3. Slow or dropping Wi-Fi: PS5 Bazzite Deck turns power saving off by default (`ps5-perf wifi` switches it off again); on other images, see [Driver stuck under sustained load](#driver-stuck-under-sustained-load).
+2. No Wi-Fi device on an IW620 console: the chip needs its out-of-tree driver, which PS5 Bazzite Deck includes. After a warm reboot, the driver from ps5-linux-mwifiex's 9 November 2026 version (PS5 Bazzite Deck from v2.8) resets the chip when it finds the old firmware still running; on PS5 Bazzite Deck `ps5-wifi-repair` reloads it if that wasn't enough. A power off fixes it for sure.
+3. A hidden network doesn't show up: the driver needs `ext_scan=2` on its `options moal` line, the default from ps5-linux-mwifiex's 9 November 2026 version (PS5 Bazzite Deck from v2.8).
+4. Slow or dropping Wi-Fi: PS5 Bazzite Deck turns power saving off by default (`ps5-perf wifi` switches it off again); on other images, see [Driver stuck under sustained load](#driver-stuck-under-sustained-load).
 
 ## Arch: install fails (missing headers or wrong headers path)
 
@@ -217,7 +218,7 @@ Right after the first boot the connection sometimes only comes up after Wi-Fi is
 sudo modprobe -r moal mlan
 sudo modprobe cfg80211
 sudo insmod ./mlan.ko
-sudo insmod ./moal.ko fw_name=nxp/pcieuartiw620_combo_v1.bin pcie_int_mode=1 drv_mode=1 cfg80211_wext=4 sta_name=mlan ext_scan=1 auto_fw_reload=0 wifi_reset_config=0 sched_scan=0 ps_mode=2 auto_ds=2 amsdu_disable=1
+sudo insmod ./moal.ko fw_name=nxp/pcieuartiw620_combo_v1.bin pcie_int_mode=1 drv_mode=1 cfg80211_wext=4 sta_name=mlan ext_scan=2 auto_fw_reload=0 wifi_reset_config=0 sched_scan=0 ps_mode=2 auto_ds=2 amsdu_disable=1
 ```
 
 ## Driver stuck under sustained load

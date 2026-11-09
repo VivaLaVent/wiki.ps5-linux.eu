@@ -50,7 +50,7 @@ One image runs on every supported PS5. What you get depends on three parts of th
 | Other modes the display lists (144 or 165 Hz, ultrawide) | ✅ from v2.7 | ❌ | Up to the HDMI chip's 600 MHz without FRL. New in v2.7, report how it works. |
 | 4K at 120 Hz | ✅ | ❌ | Needs an HDMI 2.1 TV and cable. Only offered when the TV can take it, and falls back to 4K60 by itself if the link fails. |
 | HDR (1080p60, 4K60) | ✅ | ❌ | Game Mode → Settings → Display |
-| VRR | ✅ | ❌ | At every resolution: Game Mode → Settings → Display → Enable VRR. Displays with HDMI VRR; monitors that only have FreeSync from v2.7.1 (pre-release, report how it works). |
+| VRR | ✅ | ❌ | At every resolution: Game Mode → Settings → Display → Enable VRR. Displays with HDMI VRR; monitors that only have FreeSync from v2.7.1. |
 
 Both chips support 1080p60, 1080p120, 1440p60 and 4K60, when the display can do them. The console always starts at 1080p60; choose another mode in the settings. Details: [Display and HDMI](/troubleshooting/display#supported-resolutions).
 
@@ -59,7 +59,7 @@ Both chips support 1080p60, 1080p120, 1440p60 and 4K60, when the display can do 
 | Feature | IW620 | MediaTek (Slim) | MediaTek (Pro) | Notes |
 | --- | :---: | :---: | :---: | --- |
 | One DualSense for the PS5 and Linux | ✅ | ✅ | ✅ | On by default, see [DualSense](/post-install/dualsense#one-dualsense-for-the-ps5-and-linux). |
-| Wi-Fi after restarting straight into Linux (`ps5-warm-reboot on`) | ⚠️ | ✅ | ✅ | IW620: repaired automatically. If Wi-Fi is still missing, power off and run the loader. |
+| Wi-Fi after restarting straight into Linux (`ps5-warm-reboot on`) | ⚠️ | ✅ | ✅ | IW620: from v2.8 the driver resets the chip when it finds the old firmware running; before, it was repaired after the start. If Wi-Fi is still missing, power off and run the loader. |
 | Bluetooth finds new devices | ✅ | ✅ | ✅ | IW620: broken in some earlier releases (a paired DualSense kept working). Update if the settings find nothing. |
 
 **PS5 Pro:** the GPU runs with its 60 compute units and the Pro's own firmware, Wi-Fi and Bluetooth work from a cold boot, and overlays show the GPU load. The GPU firmware has to be dumped by the Linux loader, which bazzite-bootc-loader does on the firmware versions it has offsets for; see [PS5 Pro](/troubleshooting/ps5-pro#gpu-firmware) for which loaders do and what to expect after an update. Not supported on the Pro: the 40 CU unlock. Reports are welcome in `#bazzite-ps5-pro-tests`.

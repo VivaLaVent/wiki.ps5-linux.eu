@@ -110,7 +110,7 @@ dmesg | grep spcie
 
 - **USB-A (2 ports, USB 3.1 Gen 2):** AMD Ariel `1022:13ee`
 - **USB-C (1 port, USB 3.1 Gen 2 with DisplayPort Alt Mode):** AMD Ariel `1022:13ed`
-- **Front USB-C DisplayPort output:** off by default in every current kernel. Turn it on with `usbc_dp.enable=1` for USB-C displays and the PS VR2; don't use this when your boot drive is in the front USB-C port.
+- **Front USB-C DisplayPort output:** off by default on PS5 Bazzite Deck and rmuxnet's kernel; turn it on with `usbc_dp.enable=1` for USB-C displays and the PS VR2. Upstream packages from 6 November 2026 turn it on by themselves when a display appears (`usbc_dp.enable=-1`, `0` turns it off). Don't use it when your boot drive is in the front USB-C port.
 
 Which port to boot from, hubs and adapters: [Drives and USB ports](/getting-started/drives#usb-ports).
 

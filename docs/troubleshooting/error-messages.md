@@ -66,6 +66,17 @@ PS5 Bazzite Deck with [Decky Loader](/post-install/decky): Remove the plugin fro
 
 PS5 Bazzite Deck with `ps5-warm-reboot on`: on consoles with the IW620 chip, Wi-Fi and Bluetooth may not come back after one. Hold the power button until the console turns off, then start Linux with the loader. If it keeps happening, turn warm reboots off with `ps5-warm-reboot off` and report it in `#bazzite-problems` on [Discord](https://discord.gg/ps5linux) with the file `ps5-report` saves.
 
+### The firewall doesn't start {#firewall}
+
+PS5 Bazzite Deck up to v2.7.3: `firewall-cmd --state` says `failed`. The kernel lacks the NetBIOS helper that the samba-client service in Fedora's default zone needs; v2.8 has it. On older releases, this starts the firewall without that service:
+
+```bash
+sudo firewall-offline-cmd --zone=FedoraWorkstation --remove-service=samba-client
+sudo systemctl restart firewalld
+```
+
+On v2.8 or newer, `--add-service=samba-client` in the same command puts the service back.
+
 ### Modules or sysctl settings not loading {#modules-or-sysctl-settings-not-loading}
 
 Things fail at random after boot: a driver is missing, `/etc/sysctl.d` values are not applied, or a service behaves differently from one boot to the next.

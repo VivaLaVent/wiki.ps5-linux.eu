@@ -33,7 +33,7 @@ ps5-linux is a community project. Core contributors:
 | [Wigglez-sudo](https://github.com/Wigglez-sudo/12.xx-linux-loader) | Loader for newer firmware, including the PS5 Pro |
 | Lawson | VRR fix and the port of Sony's 4K120 setup over HDMI 2.1 FRL |
 | hsgodd | Captures and research on the PS5's HDMI setup |
-| Slip | HDR, SCDC, CEC and hotplug patches; native FRL with 4K120 detection and fallback, ALLM |
+| Slip | HDR, SCDC, CEC and hotplug patches; native FRL with 4K120 detection and fallback, ALLM; IW620 Bluetooth link key and address resolution fixes, IW620 Wi-Fi reset after a warm reboot, the triple-buffer fix |
 | Tertium | USB-C display output |
 | Dasloh | Suspend-to-idle, Linux-only Bluetooth address, USB power fixes |
 | [Borchev](https://github.com/Borchev) | PS5 Pro GPU driver, SMU backend and the GPU clock governor, hwmon fan driver Pro fix, [RADV for the Pro's int8 matrix instructions and compute queue](https://github.com/Borchev/mesa_viola_support) |

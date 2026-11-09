@@ -34,7 +34,7 @@ On some TVs the picture doesn't come back after **Switch to Desktop**, see [Disp
 | Command | What it does |
 | --- | --- |
 | `ps5-report` | Collects your hardware details and the relevant logs into one file for a bug report. It only reads. |
-| `ps5-perf` | CPU boost and the fan target. The fan runs on the console's firmware control: from v2.7.2 with Sony's own target (`sudo ps5-perf fan 70` sets one, `sudo ps5-perf fan default` goes back), up to v2.7.1 with 80 °C. `ps5-perf status` shows the fan mode and target, see [Fan control](/troubleshooting/fan). |
+| `ps5-perf` | CPU boost and Wi-Fi power saving; `ps5-perf status` shows the boost and the fan mode. The fan runs on the console's own control with Sony's target, see [Fan control](/troubleshooting/fan); v2.7.2 and v2.7.3 also set a target with `ps5-perf fan`, v2.6.1 to v2.7.1 used 80 °C. |
 | `ps5-warm-reboot` | Restarts straight back into Linux, without the PS5 OS and the loader. Off by default, `on`/`off`/`status`, see [Warm reboots](/post-install/warm-reboot-bazzite-deck). |
 | `ps5-bt-address` | One DualSense for the PS5 and Linux, on by default. `status`, `on`, `off`. |
 

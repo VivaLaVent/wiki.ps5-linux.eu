@@ -54,7 +54,7 @@ The update takes over at the next start with the loader; on a PS5 Pro, start wit
 
 - **`No update available`** means your channel has nothing newer, not that something is broken. On **Stable** that is the release marked **Latest**; pre-releases are only on **Beta**.
 - **Steam's update button doesn't update the PS5.** Bazzite's updater behind it needs a security module the PS5 kernel doesn't run. Up to v2.6.3 Steam shows **Update Error**; from v2.7 it finds nothing. Steam may also show SteamOS patch notes: those are Valve's notes for its channel, not this image's.
-- **Your channel decides the kernel:** Stable gets the kernel of the release marked **Latest**, Beta the newest pre-release's. `uname -r` shows `7.3.1-viva` across several releases; the release itself is on the `deck=` line, see [Which version runs](#which-version-runs).
+- **Your channel decides the kernel:** Stable gets the kernel of the release marked **Latest**, Beta the newest pre-release's. `uname -r` shows the same kernel across several releases (`7.3.1-viva` up to v2.7.3, `7.3.3-viva` from v2.8); the release itself is on the `deck=` line, see [Which version runs](#which-version-runs).
 - **The loader isn't part of the update.** The `.elf` on your USB stick or in your payload manager stays as it is; replace it only when the release notes say so.
 - **`mount: (hint) your fstab has been modified`** before the update starts is harmless.
 - **The first start after an update** can still use the old VRAM size; power off and start with the loader once more, see [VRAM](/troubleshooting/gpu#vram).
@@ -75,7 +75,7 @@ sudo rpm-ostree rebase ostree-image-signed:docker://ghcr.io/vivalavent/ps5-bazzi
 grep -E '^(deck|version)=' /usr/share/ps5-bazzite-bootc/VERSION
 ```
 
-`deck=` is the release (for example `v2.6.3`), `version=` the image build (`20261106.25`: the build date and a number). `ps5-report`'s **Install** line shows the channel and the build, `fastfetch` the release. `uname -r` shows only the kernel (`7.3.1-viva`), which is the same in several releases.
+`deck=` is the release (for example `v2.6.3`), `version=` the image build (`20261106.25`: the build date and a number). `ps5-report`'s **Install** line shows the channel and the build, `fastfetch` the release. `uname -r` shows only the kernel (`7.3.3-viva`), which is the same in several releases.
 
 ## Rolling back {#rolling-back}
 
