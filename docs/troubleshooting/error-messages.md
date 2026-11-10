@@ -65,6 +65,7 @@ PS5 Bazzite Deck with [Decky Loader](/post-install/decky): Remove the plugin fro
 ### A warm reboot hangs
 
 <<<<<<< ours
+<<<<<<< ours
 PS5 Bazzite Deck with `ps5-warm-reboot on`: on consoles with the IW620 chip, Wi-Fi and Bluetooth may not come back after one. Hold the power button until the console turns off, then start Linux with the loader. If it keeps happening, turn warm reboots off with `ps5-warm-reboot off` and report it in `#bazzite-problems` on [Discord](https://discord.gg/ps5linux) with the file `ps5-report` saves.
 
 ### The firewall doesn't start {#firewall}
@@ -77,6 +78,9 @@ sudo systemctl restart firewalld
 ```
 
 On v2.8 or newer, `--add-service=samba-client` in the same command puts the service back.
+=======
+PS5 Bazzite Deck with `ps5-warm-reboot on`: Hold the power button until the console turns off, then start Linux with the loader. If it keeps happening, turn warm reboots off with `ps5-warm-reboot off` and report it in `#bazzite-problems` on [Discord](https://discord.gg/ps5linux) with the file `ps5-report` saves.
+>>>>>>> theirs
 =======
 PS5 Bazzite Deck with `ps5-warm-reboot on`: Hold the power button until the console turns off, then start Linux with the loader. If it keeps happening, turn warm reboots off with `ps5-warm-reboot off` and report it in `#bazzite-problems` on [Discord](https://discord.gg/ps5linux) with the file `ps5-report` saves.
 >>>>>>> theirs

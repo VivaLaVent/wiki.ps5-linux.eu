@@ -46,6 +46,9 @@ The previous version stays on the drive after every update. To go back to it:
 Running `sudo bootc rollback` again, then powering off, takes you forward to the newer version.
 
 The loader doesn't need to know about rollbacks: at every shutdown, `ps5-bootc-sync` puts the version that starts next on the boot partition as `bzImage`, `initrd.img` and `cmdline.txt`, and keeps the previous version's kernel under `ostree/<id>/`. `ROLLBACK.txt` on the boot partition names both, and describes how to start the previous version from a PC if a new version doesn't start at all. That manual rollback **needs bazzite-bootc-loader**: it uses `path-override.txt`, and only this loader applies it to `cmdline.txt` and `vram.txt` as well as to the kernel and initrd. Another loader would start the previous kernel with the new version's `cmdline.txt`.
+<<<<<<< ours
+>>>>>>> theirs
+=======
 >>>>>>> theirs
 
 ## Game Mode and Desktop Mode {#game-mode-and-desktop-mode}

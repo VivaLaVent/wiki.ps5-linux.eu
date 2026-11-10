@@ -35,7 +35,11 @@ What works on each model and what is inside the console. Each row links to the c
 | Fan control | ✅ | ✅ | ✅ | [Fan control](/troubleshooting/fan) |
 | Sleep (suspend-to-idle) | ✅ BD; 🚧 elsewhere | ✅ BD; 🚧 elsewhere | ✅ BD | [PS5 Bazzite Deck](/choose/bazzite-deck) |
 <<<<<<< ours
+<<<<<<< ours
 | Warm reboots | 🧪 | 🧪 | 🧪 | [Warm reboots](/post-install/warm-reboot) |
+=======
+| Warm reboots (warm reboot) | 🧪 | 🧪 | 🧪 | [Warm reboots](/post-install/warm-reboot) |
+>>>>>>> theirs
 =======
 | Warm reboots (warm reboot) | 🧪 | 🧪 | 🧪 | [Warm reboots](/post-install/warm-reboot) |
 >>>>>>> theirs
@@ -110,6 +114,9 @@ Resolutions and refresh rates are detailed on [Display and HDMI](/troubleshootin
 | Warm reboots (kexec) | ✅ Working | Any image, see [Warm reboot](/post-install/warm-reboot) |
 | Sleep and wake (suspend-to-idle) | ⚠️ Not upstream | An open pull request on rmuxnet's repository; PS5 Bazzite Deck includes it |
 
+<<<<<<< ours
+>>>>>>> theirs
+=======
 >>>>>>> theirs
 Linux can't resume from the console's own rest mode: shutting Linux down puts the PS5 into rest mode, and the next power-up starts the PS5 OS. Suspend-to-idle sleeps and wakes without leaving Linux, and the warm reboot skips the PS5 OS and the loader; both are experimental.
 
