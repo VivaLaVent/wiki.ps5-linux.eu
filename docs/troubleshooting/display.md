@@ -18,7 +18,7 @@ HDR, CEC, hotplug, 4K120 over FRL with its fallback and ALLM are in upstream `ps
 
 ## The two HDMI chips
 
-Most consoles have the FLAVA3 chip, some later models the VERDE. HDR, VRR and 4K at 120 Hz need FLAVA3; which modes each chip drives is in the table under [Why only certain modes exist](#why-only-certain-modes-exist). Check which one you have:
+Most consoles have the FLAVA3 chip, some later models the VERDE. HDR, VRR and 4K at 120 Hz need FLAVA3: no PS5 Linux kernel knows how to set VERDE up for HDR, so HDR content came out washed out there, and from v2.10 PS5 Bazzite Deck no longer offers HDR on VERDE; which modes each chip drives is in the table under [Why only certain modes exist](#why-only-certain-modes-exist). Check which one you have:
 
 ```bash
 sudo dmesg | grep "HDMI IC Type"
@@ -107,6 +107,10 @@ CTA-861 codes the field as 0 default, 1 limited, 2 full. A first version wrote t
 ## Kernel parameters
 
 The display and HDMI parameters, with which kernel has which, are on [Boot options](/post-install/boot-options#options).
+
+:::note[PS5 Bazzite Deck v2.10: test switches]
+`hdmi.rearm`, `hdmi.edid_keep`, `hdmi.scdc_writes` and `hdmi.sleep_mute` (all on) each turn off one fix that rmux's kernel doesn't have, to find out on which TVs they are still needed. They change at runtime: `echo 0 | sudo tee /sys/module/hdmi/parameters/rearm`. The test per switch is in the project's [testing notes](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/docs/testing.md#display-switches).
+:::
 
 ## Display settings {#display-settings}
 

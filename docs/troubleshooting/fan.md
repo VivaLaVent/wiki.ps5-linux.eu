@@ -88,6 +88,15 @@ The image starts in firmware mode (`pwm1_enable` `3`): the console's own fan con
 - **v2.5 and v2.5.1** started on the curve and kept the firmware's lower target during sleep and shutdown.
 :::
 
+## 80 °C at idle {#idle}
+
+On PS5 Bazzite Deck the console's own fan control holds the chip at its target, idle included: the fan stays slow until 80 °C. That's safe for the chip. Clicking after shutdown is the case contracting as it cools. To idle cooler, add one of these to `cmdline.txt` ([how](/post-install/boot-options)):
+
+- `ps5_fan.target=70`: a lower target, anything from 40 °C; lower means more fan noise.
+- `ps5_fan.curve=1`: the kernel's curve, around 60 °C at idle, louder under load.
+
+Or set a curve in [PS5 Hardware Control](#hwcon).
+
 ## Target temperature (older kernels, PS5 Bazzite Deck v2.6.1 to v2.7.3)
 
 Kernels without the curve, and PS5 Bazzite Deck v2.6.1 to v2.7.3 in firmware mode, set a target SoC temperature and nothing else. The EMC's firmware then speeds the fan up or slows it down to hold that temperature; you don't set a duty or an RPM.

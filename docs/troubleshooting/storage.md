@@ -54,4 +54,4 @@ If the kernel starts but reports that it can't find the root filesystem, or boot
 rootwait rootdelay=60 usbcore.autosuspend=-1
 ```
 
-`rootwait rootdelay=60` waits up to 60 seconds for the drive, and `usbcore.autosuspend=-1` stops USB devices from going to sleep. For two drives, list both in the quirks: `usb-storage.quirks=xxxx:yyyy:u,aaaa:bbbb:u`.
+`rootwait rootdelay=60` waits up to 60 seconds for the drive, and `usbcore.autosuspend=-1` stops USB devices from going to sleep (set by default on PS5 Bazzite Deck from v2.10). For two drives, list both in the quirks: `usb-storage.quirks=xxxx:yyyy:u,aaaa:bbbb:u`.
