@@ -76,6 +76,7 @@ const sidebars: SidebarsConfig = {
           label: 'All images',
           link: {type: 'doc', id: 'post-install/all-distros'},
           items: [
+            'post-install/ssh',
             'post-install/dualsense',
             'post-install/browser-video',
             {

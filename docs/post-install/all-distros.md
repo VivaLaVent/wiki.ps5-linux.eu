@@ -19,7 +19,7 @@ Most images ship with SSH on and a known password. Change it:
 passwd
 ```
 
-The default users per image are on [Get in over SSH](/troubleshooting/getting-help#ssh-availability-by-distro). Keep SSH working: it is how you get in when the display goes black.
+The default users per image are on [Connect over SSH](/post-install/ssh#ssh-availability-by-distro). Keep SSH working: it is how you get in when the display goes black.
 
 ## Disable the screen saver
 

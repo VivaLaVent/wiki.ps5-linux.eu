@@ -29,49 +29,9 @@ Most problems leave Linux running behind a black screen or a missing device, so 
 
 ## Get in over SSH {#ssh}
 
-When the screen stays black, the console is often still running. Connect from a PC on the same network.
+<a id="ssh-availability-by-distro"></a><a id="find-your-ps5s-ip-address"></a><a id="connect-over-ssh"></a>
 
-### SSH availability by image {#ssh-availability-by-distro}
-
-| Distro | SSH on by default | Root login | Password login |
-| --- | --- | --- | --- |
-| Ubuntu | Yes | No (use your user and `sudo`) | Yes |
-| Arch | Yes | No | Yes |
-| CachyOS | Yes | No | Yes |
-| Fedora | Yes | No | Yes |
-| Debian | **No**: off because the default credentials are public | No | Yes |
-| Proxmox VE | Yes | **Yes** (`root@pam`, headless hypervisor) | Yes |
-| PS5 Bazzite Deck | Yes | No (user `ps5`, password `ps5`: change it!) | Yes |
-
-On Debian, turn SSH on once you have a desktop:
-
-```bash
-sudo systemctl enable --now ssh.service
-```
-
-The other images start it at boot; log in with the user you created on the first boot.
-
-### Find your PS5's IP address {#find-your-ps5s-ip-address}
-
-In a terminal on the PS5:
-
-```bash
-ip -brief a
-```
-
-The interface that is `UP` with an address from your home network is the one (`wlp*` for Wi-Fi, `enp*` for Ethernet).
-
-Without a picture, look in your router's list of connected devices for a host named after the distro (`ubuntu`, `archlinux`, `ps5` and so on).
-
-### Connect {#connect-over-ssh}
-
-```bash
-ssh <your-username>@<ps5-ip>
-```
-
-Accept the host key prompt the first time you connect.
-
-`WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!` after you switched the console to another install (bootc instead of Legacy, a reflash, another drive) is expected: every install has its own host key. Remove the old one with `ssh-keygen -R <ps5-ip>` and connect again. If you changed nothing on the console, don't connect, and ask on Discord. From here you can troubleshoot even if the display is black, see [Black screen, but SSH works](/troubleshooting/display#black-screen-but-ssh-works).
+When the screen stays black, Linux is often still running: connect from a PC or phone on the same network, as on [Connect over SSH](/post-install/ssh) (Windows, macOS, Linux and phones, the user per image, and the usual errors).
 
 ## Collect logs {#collect-logs-for-a-bug-report}
 
