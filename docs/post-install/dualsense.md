@@ -26,37 +26,52 @@ On Bazzite, pair a controller over Bluetooth from **Game Mode**, not from the de
 
 ## One DualSense for the PS5 and Linux
 
-The PS5 OS and Linux share the same Bluetooth chip, and therefore the same Bluetooth address. A DualSense with pairing profiles keeps one pairing per host address, so pairing it with Linux replaces the PS5 pairing, and the other way around. Normally you'd have to pair again every time you switch systems.
+The PS5 OS and Linux share one Bluetooth chip. A DualSense keeps one pairing per console address, so without help, pairing it on one system breaks it on the other. PS5 Bazzite Deck has two ways around that; `ps5-bt-address status` shows which one is on.
 
-Giving Linux its own Bluetooth address solves this. It is a boot-time service ([`ps5-bt-addr`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/files/ps5-bt-addr), and [`ps5-bt-pro-addr`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/files/ps5-bt-pro-addr) for the PS5 Pro) that any image can run; PS5 Bazzite Deck includes both and turns them on by default, except on the Slim's MediaTek chip, where the address broke connections on several units (off from v2.8.1; `ps5-bt-address on` switches it on). The DualSense then keeps one pairing for the PS5 on one profile, and one for Linux on another. No re-pairing and no USB cable are needed when you switch.
+| | Shared pairing (address **off**) | Linux-only address (address **on**) |
+| --- | --- | --- |
+| Default on | Slim (MediaTek), from v2.8.1 | original PS5 (IW620) and PS5 Pro |
+| Pairing | one, made in the PS5 OS; Linux gets it at every start through the loader | one in the PS5 OS and one in Linux, on two controller profiles |
+| Needs | bazzite-bootc-loader v2.9 or newer | a DualSense with profiles (its software 0630, PS5 system software 12.00) |
+| Warm reboots on the IW620 | work | restarts go through the PS5 OS, see below |
 
-Pairing profiles came to the DualSense with its software version **0630**, released with PS5 system software 12.00. A controller on older software has no profiles: PS + Square or Triangle does nothing. A jailbroken console on older system software can't update the controller, but a PC can: Sony's [DualSense firmware updater](https://controller.dl.playstation.net/controller/lang/en/fwupdater.html) for Windows, over USB. Check the version in the PS5 OS under Settings → Accessories → Controller (General) → Wireless Controller Device Software.
+The setting is stored in the install's `/etc`: it stays through updates, but a reflash or switching from Legacy to bootc starts from the default again. Check it after either.
 
-**Pair the DualSense with Linux** (make sure it is already paired with the PS5 OS on one profile):
+### Shared pairing {#shared-pairing}
 
-1. Start Linux.
-2. On the DualSense, hold **PS + Square** (or another face button than the PS5's): it switches to that profile, and keeps blinking in pairing mode if the profile has no pairing yet. Select the profile with a face button: **PS + Create** on the PS5's profile replaces the PS5's pairing.
-3. If it doesn't blink fast (the profile already holds a pairing, for example an earlier Linux one: remove that in Linux first), hold **PS + Create** on this profile until it does.
-4. Pair it in the Linux Bluetooth settings.
-5. Start the PS5 OS, select the PS5 profile on the DualSense, and check that it connects.
-6. Start Linux again, select the Linux profile, and check that it connects.
+The loader hands the PS5 OS's active pairings to Linux at every start, and `ps5-bt-import` adds them to Linux's Bluetooth settings before Bluetooth starts. The controller then connects in both systems without pairing again.
 
-From then on, hold **PS + the profile's button** for 2 to 3 seconds to switch: the PS5's profile in the PS5 OS, the Linux profile in Linux. No cable is needed.
+1. On an original PS5 or a Pro, in Linux: `ps5-bt-address off`. On a Slim it's already off.
+2. Use bazzite-bootc-loader v2.9 or newer (from the [releases](https://github.com/VivaLaVent/ps5-bazzite-deck/releases)).
+3. Power off. In the PS5 OS, check that the controller connects; pair it there if not.
+4. Start Linux with the loader and press the PS button: it connects.
 
-**Check or change the setting:** `ps5-bt-address status` shows the address in use; `ps5-bt-address off` turns the feature off (pair the DualSense with Linux again afterwards).
+Check it: `ps5-bt-address status` says **off**, and `journalctl -b -u ps5-bt-import -o cat` reports the pairings it brought over. If it says `no pairing export from the loader`, an older loader started Linux.
 
-**Known limits:**
+- **Pair in the PS5 OS, not in Linux.** A pairing made in Linux replaces the PS5 OS's, and the next start through the loader brings the PS5 OS's back.
+- **A newly paired controller comes over at the next start through the loader.** A warm reboot keeps the pairings Linux already has.
+- **Controllers paired in Linux while the address was on** stop connecting after the switch: pair them in the PS5 OS, then start Linux with the loader.
+- **Not with the boot files on the console's own storage** (`ps5-m2-install --boot`): Linux can't read the pairings the loader leaves there.
 
-- `bluetoothctl` and the Bluetooth settings still show the original address. The chip and the DualSense use the new one.
-- In rest mode, both profiles can wake the PS5, but once it has started only the PS5 profile connects.
-- On consoles with the IW620 chip, restarts go through the PS5 OS instead of [warm reboots](/post-install/bazzite#built-in-commands) while this is on: the chip doesn't survive a warm reboot with the changed address.
-- With the feature **off** (the Slim's default), a controller paired with the PS5 OS connects to Linux by itself and is refused in a loop, see [Controller refused in a loop](/troubleshooting/bluetooth#controller-refused-in-a-loop).
+### Linux-only address {#linux-only-address}
+
+A boot-time service ([`ps5-bt-addr`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/files/ps5-bt-addr), [`ps5-bt-pro-addr`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/files/ps5-bt-pro-addr) on the Pro) gives Linux an address of its own, with its own pairing on a second controller profile. Turn it on with `ps5-bt-address on`, then power off and start with the loader.
+
+1. Make sure the controller is paired with the PS5 OS on one profile.
+2. In Linux, hold **PS + Square** (or another face button than the PS5's): the controller switches to that profile and blinks fast if it holds no pairing yet. If it doesn't blink fast, hold **PS + Create** until it does (on the PS5's profile, that would replace the PS5's pairing).
+3. Pair it in Game Mode's Bluetooth settings.
+4. From then on, hold **PS + the profile's button** for 2 to 3 seconds to switch: the PS5's profile in the PS5 OS, the Linux profile in Linux.
+
+- `bluetoothctl` and the Bluetooth settings still show the original address; the chip and the DualSense use the new one (`ps5-bt-address status` shows it).
+- In rest mode both profiles can wake the PS5; once it has started, only the PS5 profile connects.
+- **IW620 (original PS5):** while the address is on, `sudo reboot` silently does a normal restart through the PS5 OS, even with `ps5-warm-reboot on`: the chip doesn't survive a warm reboot with the changed address. For warm reboots, use the shared pairing.
+- With the address off and a loader older than v2.9, a controller paired in the PS5 OS reaches Linux with a key Linux doesn't have and is refused in a loop, see [Controller refused in a loop](/troubleshooting/bluetooth#controller-refused-in-a-loop).
 
 How the address is set per chip, and the pitfalls found in testing, are on [Bluetooth](/troubleshooting/bluetooth#one-dualsense-for-the-ps5-and-linux).
 
 ## Controller quirks
 
-- **Used in the PS5 OS first:** pairing the controller in the PS5 OS breaks its Linux pairing. Remove it in Linux and pair again, or use the [shared Bluetooth address](#one-dualsense-for-the-ps5-and-linux) setup.
+- **Used in the PS5 OS first:** pairing the controller in the PS5 OS breaks its Linux pairing. Remove it in Linux and pair again, or use the [shared pairing](#shared-pairing).
 - **USB while connected over Bluetooth:** don't plug in the USB cable while the controller is connected over Bluetooth. The log shows `Duplicate device found for MAC`.
 - **Speaker and headphone jack:** only over USB. Over Bluetooth the controller's audio is not available, so a headset in the jack stays silent; use the HDMI output or a USB or Bluetooth headset instead.
 

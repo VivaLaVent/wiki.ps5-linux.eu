@@ -58,7 +58,7 @@ Both chips support 1080p60, 1080p120, 1440p60 and 4K60, when the display can do 
 
 | Feature | IW620 | MediaTek (Slim) | MediaTek (Pro) | Notes |
 | --- | :---: | :---: | :---: | --- |
-| One DualSense for the PS5 and Linux | ✅ | ✅ | ✅ | On by default, see [DualSense](/post-install/dualsense#one-dualsense-for-the-ps5-and-linux). |
+| One DualSense for the PS5 and Linux | ✅ | ✅ | ✅ | Shared pairing through the loader (default on the Slim), or a Linux-only address with a profile of its own (default on the original PS5 and the Pro), see [DualSense](/post-install/dualsense#one-dualsense-for-the-ps5-and-linux) |
 | Wi-Fi after restarting straight into Linux (`ps5-warm-reboot on`) | ⚠️ | ✅ | ✅ | IW620: from v2.8 the driver resets the chip when it finds the old firmware running; before, it was repaired after the start. If Wi-Fi is still missing, power off and run the loader. |
 | Bluetooth finds new devices | ✅ | ✅ | ✅ | IW620: broken in some earlier releases (a paired DualSense kept working). Update if the settings find nothing. |
 
