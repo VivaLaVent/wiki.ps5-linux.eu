@@ -20,7 +20,7 @@ Every PS5 kernel is stock Linux plus one patch file and a config, and every imag
 | Out-of-tree parts | The IW620 Wi-Fi driver: a separate repository upstream ([ps5-linux-mwifiex](https://github.com/ps5-linux/ps5-linux-mwifiex)), vendored in `oot/mwifiex` in rmuxnet's repository. | |
 | Image patches | Patches applied on top of a patch set by an image builder, for example PS5 Bazzite Deck's `patches/`. | The image repository |
 
-The result is a `bzImage`, an `initrd.img` built on the target distro, and a `/lib/modules/<version>` folder. The loader reads `bzImage`, `initrd.img`, `cmdline.txt` and `vram.txt` from the FAT32 boot partition and nothing else, so the kernel and the distro are independent: a kernel built for one image runs on another as long as its modules are installed there.
+The loader reads only `bzImage`, `initrd.img`, `cmdline.txt` and `vram.txt` from the boot partition, so a kernel built for one image runs on another once its modules are installed there.
 
 ## Version strings
 
@@ -30,7 +30,7 @@ The result is a `bzImage`, an `initrd.img` built on the target distro, and a `/l
 | `kernel-X.Y.Z-<commit>` | An upstream release tag: kernel X.Y.Z built from `ps5-linux-patches` at that commit. Every push to `main` makes one, with `.deb`, `.pkg.tar.zst` and `.rpm` packages named `linux-ps5`. The commit is the part that tells releases apart. |
 | `X.Y.Z-PinkSoup`, tag `X.Y.Z-PinkSoup-<commit>` | rmuxnet's release: `-PinkSoup` is the local version his full-LTO builds carry (`-Clang-ThinLTO` and `-Clang-NoLTO` for the other `LTO` settings in `build.cfg`), followed by the commit. |
 | `X.Y.0-rc…` | A build of the same fork from a release candidate, from before the stable tag existed. |
-| PS5 Bazzite Deck `vX.Y.Z` | An image version. Its kernel is the stable kernel plus rmuxnet's patch set at a pinned commit plus the image's own patches; each release's `VERSIONS.md` has the exact pins. A "quick kernel" release replaces only the kernel and modules on an installed image. |
+| PS5 Bazzite Deck `vX.Y` | An image version. Its kernel is stable Linux plus rmuxnet's patch set at a pinned commit plus the image's own patches; `build.sh` and `patches/series` in its repository name them. The kernel is called `X.Y.Z-viva`. |
 
 What you are running:
 
@@ -39,22 +39,22 @@ uname -r
 cat /proc/version
 ```
 
-`uname -r` gives the plain version for an upstream package (its config sets no local version), the `-PinkSoup` suffix for rmuxnet's release, and the stock version on PS5 Bazzite Deck (the image version is in `/etc/ps5-bazzite-deck-version`). `cat /proc/version` adds the compiler, which tells a Clang build from a GCC one.
+`uname -r` gives the plain version for an upstream package, `-PinkSoup` for rmuxnet's release and `-viva` on PS5 Bazzite Deck (`ps5-report` shows the image version). `cat /proc/version` adds the compiler.
 
 ## Repositories and branches
 
 | Repository | Branch | What it carries |
 | --- | --- | --- |
 | [ps5-linux/ps5-linux-patches](https://github.com/ps5-linux/ps5-linux-patches) | `main` | The official patch set. Changes land as pull requests (hotplug, HDR, CEC, USB-C DP, the Pro GPU, the fan curve, native FRL, the GPU governor). A package release per commit. |
-| [rmuxnet/ps5-linux-patches-1](https://github.com/rmuxnet/ps5-linux-patches-1) | default branch | The port to the newer stable series with `build.sh`, the clock drivers, his Bluetooth patches and the in-tree Wi-Fi driver; the releases are built from it. |
+| [rmuxnet/ps5-linux-patches-1](https://github.com/rmuxnet/ps5-linux-patches-1) | `shitshow` (default) | The port to the newer stable series with `build.sh`, the clock drivers, his Bluetooth patches and the in-tree Wi-Fi driver; his releases are built from it, and PS5 Bazzite Deck builds on it at a pinned commit from v2.5. |
 | | `main` | A mirror of upstream `main`. |
-| | `meower` | The earlier port that PS5 Bazzite Deck builds on, at a pinned commit; the image carries the later changes it needs as its own patches. |
+| | `meower` | The earlier port. PS5 Bazzite Deck built on it up to v2.3. |
 | | other branches | Work in progress. Not for users. |
 | [Slip-Up/ps5-linux-patches](https://github.com/Slip-Up/ps5-linux-patches) | | The native FRL, 4:2:0, ALLM and recovery work, merged upstream. |
-| [VivaLaVent/ps5-bazzite-deck](https://github.com/VivaLaVent/ps5-bazzite-deck) | tags `vX.Y.Z` | The image. `patches/` holds its kernel patches, each with a description at the top; `build.sh` section 3 is the order; `CHANGELOG.md` says what changed when and what is untested. |
+| [VivaLaVent/ps5-bazzite-deck](https://github.com/VivaLaVent/ps5-bazzite-deck) | tags `vX.Y` | The image. `patches/` holds its kernel patches, each with a description at the top; `patches/series` is their order; `CHANGELOG.md` says what changed when. |
 | [ps5-linux/ps5-linux-image](https://github.com/ps5-linux/ps5-linux-image) | | The image builders. They take the patch set as a `--patches-ref` (branch, tag or commit) and build the kernel packages the images ship. |
 
-Which feature is in which of them is on [Kernel setup](/post-install/kernel#what-is-where). rmuxnet's README sets the rules for his repository: changes go in as pull requests only, work taken from it is credited, and renamed forks of the kernel are not allowed.
+Which feature is in which of them is on [Kernel setup](/post-install/kernel#what-is-where).
 
 ## Apply a patch set by hand
 
@@ -66,14 +66,14 @@ The full commands are under [Build by hand](/post-install/kernel#build-by-hand).
 4. `cp ../ps5-linux-patches/.config .config` and `make olddefconfig` (`LLVM=1` for rmuxnet's config, which is made with Clang).
 5. Build, install the modules with `INSTALL_MOD_STRIP=1`, make the initrd, copy `bzImage` and `initrd.img` to the boot partition.
 
-A patch set only applies cleanly to the kernel version it was made for. `git apply --check` tells you before anything is touched; a failure on a different point release usually means a small context change, and `patch -p1 --dry-run` shows which hunks.
+A patch set only applies to the kernel version it was made for; `git apply --check` tells you before anything is touched.
 
 ## Add single patches on top
 
 There are two layers, and a patch is written for one of them:
 
 - **A patch to the patch set** changes `linux.patch` and `.config` themselves. Upstream pull requests are this kind: download one with `curl -L -o pr.patch https://github.com/ps5-linux/ps5-linux-patches/pull/<number>.patch` and apply it in the `ps5-linux-patches` checkout (`git apply pr.patch` or `git am pr.patch`) **before** step 3 above. PS5 Bazzite Deck does this with the suspend-to-idle pull request.
-- **A patch to the kernel tree** changes kernel source files. PS5 Bazzite Deck's `patches/` are this kind: apply them in the kernel tree **after** step 3, in the order `build.sh` lists them, because later ones are written against the state the earlier ones leave. Each file's header says what it does and which release introduced it.
+- **A patch to the kernel tree** changes kernel source files. PS5 Bazzite Deck's `patches/` are this kind: apply them in the kernel tree **after** step 3, in the order of `patches/series`. Each file's header says what it does.
 
 For every patch:
 
@@ -92,9 +92,7 @@ make LLVM=1 olddefconfig
 
 Then build as usual. Give the kernel a local version (`scripts/config --set-str CONFIG_LOCALVERSION "-mine"`) so its modules don't overwrite the ones of the kernel you are running.
 
-:::note[Patches move between the layers]
-When PS5 Bazzite Deck's or Slip's kernel-tree patches are merged upstream, they become part of `linux.patch` and applying them again fails with "patch does not apply". [What is where](/post-install/kernel#what-is-where) is a snapshot; `CHANGELOG.md` in the image repository and the pull requests upstream are the running record.
-:::
+A patch that has since been merged upstream fails with "patch does not apply": it is already in `linux.patch`.
 
 ## Put a kernel on an existing image
 
