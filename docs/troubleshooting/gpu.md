@@ -8,174 +8,78 @@ applies_to: all
 
 # GPU
 
-The PS5's GPU is an RDNA2 part inside the Oberon APU, PCI ID `1002:13fb` on the original PS5 and the Slim. The PS5 Pro has a different GPU, see [PS5 Pro](/troubleshooting/ps5-pro).
+Clocks, compute units, VRAM and hardware video on the original PS5 and the Slim. The Pro's GPU is on [PS5 Pro](/troubleshooting/ps5-pro).
 
-## Status
+## Quick answers {#limits}
 
-- `amdgpu` drives the GPU and the HDMI output on every kernel.
-- Hardware video decode and encode (VCN) work; HEVC encoding only with I-frames. See [Hardware video (VCN)](#video-engine).
-
-:::danger[Required modprobe options for a working display]
-Every working image ships `/etc/modprobe.d/ps5-amdgpu.conf` with:
-
-```text title="/etc/modprobe.d/ps5-amdgpu.conf"
-options amdgpu dpm=0 gpu_recovery=0
-```
-
-Without this file the GPU comes up without a picture. When you bring up a distro of your own, put it in place before you look at any other display problem.
-:::
-
-## Clocks and boost
-
-The console's firmware starts the CPU at 3.2 GHz and the GPU below the 2.23 GHz the PS5 OS runs it at. How the full clocks are reached depends on the kernel, see [Kernel setup](/post-install/kernel):
-
-| Kernel | CPU and GPU clocks | What to do |
-| --- | --- | --- |
-| [rmuxnet's kernel](/post-install/kernel#install-rmuxnets-release) | `ps5-cpufreq` and `ps5-gpufreq` scale them with the load. | Nothing for the GPU. CPU boost (3.3 to 3.5 GHz) is off until you turn it on, below. |
-| PS5 Bazzite Deck | The upstream GPU governor; CPU boost through `ps5-perf`. | On by default. |
-| Upstream (current packages) | The upstream GPU governor (`ps5_gpufreq.temp_limit`, see [PS5 Pro](/troubleshooting/ps5-pro#gpu-driver)); the CPU stays at 3.2 GHz until `ps5_control --boost on`. | Install [ps5-linux-tools](https://github.com/ps5-linux/ps5-linux-tools), below. |
-| Older upstream kernels | Fixed at the firmware's clocks until `ps5_control --boost on`. | Install [ps5-linux-tools](https://github.com/ps5-linux/ps5-linux-tools), below. |
-
-The upstream GPU governor is a devfreq driver: 500 to 2,230 MHz on the original PS5 and the Slim, 500 to 2,350 MHz on the Pro, with a thermal limit of 85 °C by default (`ps5_gpufreq.temp_limit=<50-95>` in `cmdline.txt`). Read the current clock from `cur_freq` under its directory in `/sys/class/devfreq/`.
-
-### rmuxnet's kernel: cpufreq and devfreq
-
-`ps5-cpufreq` drives the CPU P-states (800 MHz to 3.2 GHz, `schedutil` governor) through the SMU. The three boost states are off at boot. Turn them on:
-
-```bash
-echo 1 | sudo tee /sys/devices/system/cpu/cpufreq/boost
-```
-
-`ps5-gpufreq` is a devfreq driver at `/sys/class/devfreq/ps5-gpufreq/` with the `simple_ondemand` governor: 400 to 2,230 MHz on the original PS5 and the Slim, 500 to 2,350 MHz on the PS5 Pro, in 400 MHz steps up to 2,000 MHz and then the maximum. `cur_freq` shows the clock; `min_freq` and `max_freq` pin it, and `governor` set to `performance` holds the maximum.
-
-:::warning[Don't use ps5_control --boost on this kernel]
-The drivers already own the clocks. `ps5_control --boost on` pins them at maximum until a full restart and doesn't improve frame rates. Use the cpufreq `boost` switch above instead.
-:::
-
-### Older kernels: ps5-linux-tools
-
-On kernels without a clock driver, `ps5_control` from [ps5-linux-tools](https://github.com/ps5-linux/ps5-linux-tools) raises the clocks through the power controller:
-
-```bash
-cd ps5-linux-tools
-sudo ./ps5_control --fan on
-sudo ./ps5_control --boost on
-```
-
-Turn the fan on whenever you turn the boost on, as the PS5 OS does. `--fan max` runs the fan harder than `on` if you want to hold the boost clocks under a heavy load:
-
-```bash
-sudo ./ps5_control --fan max
-```
-
-To apply both at every boot:
-
-```bash
-sudo ./install.sh
-```
-
-This installs `ps5fan.service` and `ps5boost.service`. On a kernel with the fan curve (see [Fan control](/troubleshooting/fan)) `--fan` isn't needed.
-
-## 40 CU unlock
-
-The die has 40 compute units (CUs), but every console leaves the factory with 36 or 38 of them enabled; the others are switched off in the silicon, usually because they failed a test, sometimes only to even out production. Which case you have is per console, which is also why identical consoles benchmark differently. The PS5 kernel patch can switch the disabled CUs back on.
-
-**Kernel parameter:** `amdgpu.ps5_cu_unlock=N`
-
-| Value | Behaviour |
+| Problem | Do this |
 | --- | --- |
-| 0 | Off (default) |
-| 1 | Probe |
-| 2 | Unlock SE0/SH0 only |
-| 3 | Unlock all harvested CUs |
-| 4 | Probe all |
+| Micro-stutter | Remove `idle=halt` from `cmdline.txt` |
+| Game crashes after a long session, RAM nearly full | Less VRAM: 4 GB, see [VRAM](#vram) |
+| No picture on a distro of your own | `options amdgpu dpm=0 gpu_recovery=0` in `/etc/modprobe.d/ps5-amdgpu.conf`; every working image ships it |
 
-Without the parameter, `dmesg` shows the hardware default: 2 shader engines × 2 shader arrays × 10 CUs, of which 36 are active here:
+| Limit | What happens | Status |
+| --- | --- | --- |
+| GPU memory ceiling | A game that needs more than the GTT ceiling crashes with `Not enough memory for command submission`. Raise `ttm.pages_limit` rather than a fixed `vram.txt` carve-out, see [VRAM](/troubleshooting/gpu#vram). | Documented fix |
+| 40 CU unlock | More GPU power on units whose disabled pairs are good; artefacts, a purple tint or crashes on units where one isn't, see [40 CU unlock](/troubleshooting/gpu#40-cu-unlock). Don't use it on a Pro. | Silicon lottery |
+| HEVC encoding | The video engine corrupts colours with P-frames (red screen when streaming or recording). Use H.264, or HEVC with I-frames only, see [VCN](/troubleshooting/gpu#using-it-with-ffmpeg). | Known not to work |
+| GPU fault at session switches | Switching between a Gamescope session and a desktop can trigger a GPU page fault and `ring gfx_0.0.0 timeout`, most often at 4K120 on some TVs. It is on the compositor side; keep the desktop at 4K60 and switch sessions at the boot instead, see [Boot to the desktop](/post-install/boot-to-desktop). On a PS5 Pro the fault isn't recovered (`GPU Recovery Failed`) and the screen stays black until a restart. If you hit it, save the coredump before restarting: `sudo cp /sys/class/drm/card0/device/devcoredump/data ~/gpu-coredump.txt`. | Open |
+| `Failed to pin framebuffer: -ENOMEM` | Reported under memory pressure with a desktop and Steam running. No confirmed fix; more zram helped in one report, see [Memory and swap](/post-install/all-distros#memory-and-swap). | Open |
+| Graphical glitches in one game | Glitches in a single game. Add `RADV_DEBUG=nohiz %command%` to that game's launch options, see [Performance tips](#performance-tips). | Workaround |
+| No AV1 decode, no GPU load sensor on the base PS5 | AV1 video falls back to the CPU; KDE's system monitor shows no GPU usage, see [Browser video](/post-install/browser-video). | Hardware limits |
 
-```text
-amdgpu: SE 2, SH per SE 2, CU per SH 10, active_cu_number 36
-```
+## Clocks and boost {#clocks-and-boost}
 
-:::warning[Original PS5 and Slim only]
-Don't use this on a PS5 Pro: all of its 60 compute units are already active.
-:::
+| Kernel | Clocks | What to do |
+| --- | --- | --- |
+| PS5 Bazzite Deck | GPU governor; CPU boost through `ps5-perf` | Nothing, on by default |
+| [rmuxnet's kernel](/post-install/kernel#install-rmuxnets-release) | `ps5-cpufreq` and `ps5-gpufreq` follow the load | CPU boost: `echo 1 \| sudo tee /sys/devices/system/cpu/cpufreq/boost`. Don't use `ps5_control --boost` here |
+| Upstream packages | GPU governor; CPU at 3.2 GHz | `sudo ./ps5_control --boost on` from [ps5-linux-tools](https://github.com/ps5-linux/ps5-linux-tools) |
+| Older upstream kernels | Fixed at the firmware's clocks | `sudo ./ps5_control --fan on && sudo ./ps5_control --boost on`; `sudo ./install.sh` applies both at every start |
 
-It is a lottery. On many consoles all 40 CUs work and the GPU gets faster; on others the extra units produce green dots, a purple tint, flickering or crashes. Try it, and turn it off again at the first sign of trouble.
+The GPU governor runs 500 to 2,230 MHz (2,350 on the Pro) and slows down at 85 °C: `ps5_gpufreq.temp_limit=<50-95>` in `cmdline.txt`. The current clock is `cur_freq` under `/sys/class/devfreq/`.
 
-To unlock all CUs, add this to `cmdline.txt` on the FAT32 USB partition:
+## 40 CU unlock {#40-cu-unlock}
 
-```text title="cmdline.txt"
-amdgpu.ps5_cu_unlock=3
-```
+Consoles ship with 36 or 38 of the GPU's 40 compute units on. Switching the rest on makes the GPU faster on many consoles and causes green dots, a purple tint, flicker or crashes on others. Try it, and turn it off at the first sign of trouble. **Not on a PS5 Pro.**
 
-Or let this one-liner do it from Linux (it finds `cmdline.txt` in `/boot/efi` or `/efi`):
+Turn it on (`amdgpu.ps5_cu_unlock=3` in `cmdline.txt`):
 
 ```bash
 E=$(for d in /boot/efi /efi; do sudo test -f $d/cmdline.txt && echo $d && break; done); sudo sed -i -e 's/amdgpu\.ps5_cu_unlock=[0-9]*/amdgpu.ps5_cu_unlock=3/' -e '/ps5_cu_unlock/!s/[[:space:]]*$/ amdgpu.ps5_cu_unlock=3/' $E/cmdline.txt && sudo cat $E/cmdline.txt
 ```
 
-Reboot and run the loader, then check the result. It should show `40` (or `36` without the unlock):
+Power off, start with the loader, and check for `40`:
 
 ```bash
 sudo dmesg | grep active_cu_number
 ```
 
-To turn it off again:
+Turn it off:
 
 ```bash
 E=$(for d in /boot/efi /efi; do sudo test -f $d/cmdline.txt && echo $d && break; done); sudo sed -i 's/ *amdgpu\.ps5_cu_unlock=[0-9]*//' $E/cmdline.txt && sudo cat $E/cmdline.txt
 ```
 
-The patch enables the CUs in two places, the CC register and the SPI; changing only one of them makes the units show up without any work being sent to them. Source: [ps5-linux-patches commit 5b0dc56](https://github.com/ps5-linux/ps5-linux-patches/commit/5b0dc56c1b37a01dd813cb0f58cd4ae2fc6ed45a).
+- Glitches in a game after the unlock: first `RADV_DEBUG=nohiz %command%` in its Steam launch options.
+- Heavy artefacts with all 40: one of your disabled pairs is defective. 38 units perform like 36, so turn it off.
+- Values: `0` off, `1` probe, `2` SE0/SH0 only, `3` all, `4` probe all.
+- To test without changing `cmdline.txt`: [UMR](https://gitlab.freedesktop.org/tomstdenis/umr) can switch the units on at runtime. Compare a benchmark before and after; its topology view can keep showing them as off.
 
-:::info[Both shader engines need the same CU count]
-The GPU only uses extra CUs when its two shader engines (SEs) end up with the same number active. 38 CUs, with one SE at 20 and the other at 18, performs like 36. If a game glitches after the unlock, try `RADV_DEBUG=nohiz %command%` in its Steam launch options first, then 38 CUs instead of 40.
-:::
+## Async compute {#async-compute}
 
-:::warning[Disabled CUs come in pairs, and a pair can be bad]
-CUs are disabled two at a time, so a console has 36, 38 or 40 usable CUs and never an odd number. Heavy artefacts with all 40 on usually mean one of your disabled pairs is defective rather than merely switched off. Finding which one means testing 38 CUs with different pairs masked, and nothing about the console predicts the answer.
-:::
-
-### Runtime unlock with UMR (no kernel rebuild)
-
-[UMR](https://gitlab.freedesktop.org/tomstdenis/umr), AMD's GPU register debugger, can switch the extra CUs on while the system runs, which is a quick way to test your console before you change `cmdline.txt`. It is packaged in the AUR for Arch and as an RPM for Fedora and Bazzite; on Debian-based distros, build it from source.
-
-UMR's topology view can keep showing the CUs as disabled while the runtime unlock is in effect. Run a benchmark before and after and compare the scores rather than relying on the topology output.
-
-## Performance compared to the BC-250
-
-The AMD BC-250, a mining board built on the same APU, is the usual reference. At the same CU count and clock the BC-250 scores a few percent higher in Superposition than the PS5, with or without the 40 CU unlock, and the PS5's scores fall short of what scaling the BC-250's results by CU count would predict. The cause isn't known; CU detection isn't the problem, and the leading theory is that the PS5's clock doesn't hold steady under the benchmark. Without the boost the two platforms score closer together.
-
-:::danger[A dead end: lds_size]
-Setting `adev->gfx.cu_info.lds_size = 128;` in `amdgpu_device.c` has been suggested as a fix. A rebuild with it produced a black screen and no `amdgpu` output. It is listed here so nobody tries it again, not as a fix.
-:::
-
-## Async compute (compute queue) {#async-compute}
-
-The GPU has a compute queue next to the graphics queue, which games use to run lighting, post-processing or upscaling alongside rendering (async compute). Mesa hides it on this GPU family, because compute dispatches with partial threadgroups corrupted pictures there. DryhoppedIPA found the cause on the BC-250 ([bc250-gfx1013-fix](https://github.com/DryhoppedIPA/bc250-gfx1013-fix)): with the threadgroup workaround RADV already has for two older GPUs, the queue works, and Cyberpunk 2077 ran 20 to 25% faster there.
+Games use the GPU's compute queue for lighting, post-processing and upscaling alongside rendering. Upstream Mesa hides it on this GPU; PS5 Bazzite Deck's RADV turns it on.
 
 | Console | Compute queue |
 | --- | --- |
-| PS5 Pro | On, from PS5 Bazzite Deck v2.6.1, see [PS5 Pro](/troubleshooting/ps5-pro#radv). `AMD_VIOLA_COMPUTE_QUEUE=0 %command%` hides it |
-| Original PS5 and Slim | On, from PS5 Bazzite Deck v2.7.3 (bootc). `AMD_PS5_COMPUTE_QUEUE=0 %command%` hides it. Hidden on other images |
+| PS5 Pro | On from PS5 Bazzite Deck v2.6.1. Hide it: `AMD_VIOLA_COMPUTE_QUEUE=0 %command%` |
+| Original PS5 and Slim | On from PS5 Bazzite Deck v2.7.3 (bootc). Hide it: `AMD_PS5_COMPUTE_QUEUE=0 %command%`. Hidden on other images |
 
-The BC-250 project also has two kernel patches. They change only ROCm's compute contexts (KFD), which games don't use, so PS5 Bazzite Deck doesn't need them. Its mesh shader patches can hang the GPU and stay off there too.
+A corrupted picture, missing geometry or a hang in one game: hide the queue for that game and report it.
 
-Report what you see: FPS with and without `AMD_PS5_COMPUTE_QUEUE=0`, and any corrupted picture, missing geometry or hang.
+## VRAM {#vram}
 
-## VRAM
-
-PS5 Bazzite Deck sets **6 GB** from v2.6.1, once per install. The loader applies `vram.txt` when it starts the console, so a change takes effect at the next start with the loader, not at a [warm reboot](/post-install/warm-reboot); the first start after installing or updating can still show 512 MB. Check `cat /boot/efi/vram.txt` (it should be `0x180000000`) and `ps5-report`'s VRAM line. Tools such as PS5 Hardware Control's Memory tab write the same file: the last value written wins.
-
-Other images and the loader's default give 512 MB, but VRAM is **dynamic**: the driver takes more as needed. With the default split and about 14 GB usable, the ceiling works out at roughly 7 GB; the formula and how to raise it are below.
-
-To set a fixed minimum, edit `vram.txt` on the FAT32 USB partition. The loader reads the value as **hexadecimal bytes**, not decimal megabytes (`strtoull(buf, NULL, 16)` in `ps5-linux-loader/source/loader.c`). A decimal megabyte value gives the GPU almost nothing, and the boot ends in a black screen.
-
-The default (512 MB) is:
-
-```text title="vram.txt"
-20000000
-```
+`vram.txt` on the boot partition sets the **minimum** the GPU reserves, in **hexadecimal bytes**. The loader applies it, so a change takes effect at the next start with the loader, not at a warm reboot. A decimal value ends in a black screen.
 
 | Size | `vram.txt` value |
 | --- | --- |
@@ -186,41 +90,21 @@ The default (512 MB) is:
 | 6 GB (recommended for gaming) | `180000000` |
 | 8 GB | `200000000` |
 
-:::warning[What vram.txt actually controls]
-Every VRAM split is dynamic; 512 MB is **not** a special "fully dynamic" mode. The `vram.txt` value only sets the *minimum* amount of reserved VRAM, not the maximum. The real ceiling for dynamic allocation is:
+- **PS5 Bazzite Deck sets 6 GB** from v2.6.1. Check: `cat /boot/efi/vram.txt` (`0x180000000`) and the VRAM line of `ps5-report`.
+- **Gaming: 6 GB.** A game that crashes after a long session with RAM nearly full: 4 GB.
+- **Not gaming: leave the default.** Reserved VRAM is taken from everything else.
 
-```text
-(vram.txt split) + (remaining RAM not in that split) / 2
-```
+The GPU can use more than the minimum: up to `vram.txt + (remaining RAM) / 2`, about 10 GB with 6 GB set. A game that needs more crashes with `Not enough memory for command submission`. Raise the ceiling with `ttm.pages_limit` in `cmdline.txt`: the size in GB × 262144, so `ttm.pages_limit=2621440` for 10 GB. It doesn't make games faster.
 
-That is why a game that wants a little more than 8 GB of GPU memory crashes with `amdgpu_vm_validate() failed / Not enough memory for command submission` while `free` still shows plenty of RAM.
+## Performance tips {#performance-tips}
 
-**The real fix:** raise the GTT ceiling with the `ttm.pages_limit` kernel parameter instead of (or as well as) raising `vram.txt`:
-
-```text
-ttm.pages_limit = (desired GTT size in GB) × 1024 × 1024 / 4
-```
-
-For a console used for gaming, **6 GB in `vram.txt`** (`180000000`) is the usual choice: the GPU then has 6 GB it never has to compete for, and the ceiling becomes 6 + (14 - 6) / 2 = about 10 GB. On a server or a desktop that doesn't game, leave the default: the 6 GB are then locked away from everything else. Raising `ttm.pages_limit` gives the same ceiling without locking anything, and is the tool for games that need more than that.
-
-More VRAM leaves less RAM for the game and the system (about 14 GB in all): a game that crashes after a long session with RAM nearly full can do better with **4 GB** (`100000000`); on the Pro, Hogwarts Legacy and Dragon's Dogma 2 are examples. Raising `ttm.pages_limit` doesn't make games faster; leave it out unless a game runs out of GPU memory.
-
-Example for a 10 GB GTT ceiling:
-
-```text title="cmdline.txt"
-ttm.pages_limit=2621440
-```
-:::
-
-## Performance tips
-
-- **Micro-stuttering?** Remove `idle=halt` from `cmdline.txt`.
-- **Glitches in one game?** Add `RADV_DEBUG=nohiz %command%` to that game's Steam launch options. Keep it per game: it disables a depth optimisation and costs performance everywhere, and only a few games need it.
-- The [AMD BC-250 documentation](https://elektricm.github.io/amd-bc250-docs/) covers the same GPU and much of it carries over. Its section on VRAM and GTT doesn't match how the split works on the PS5; use the [VRAM](#vram) section above for that.
+- **Micro-stutter:** remove `idle=halt` from `cmdline.txt`.
+- **Glitches in one game:** `RADV_DEBUG=nohiz %command%` in that game's launch options only; it costs performance.
+- The [AMD BC-250 documentation](https://elektricm.github.io/amd-bc250-docs/) covers the same GPU. Its VRAM section doesn't apply to the PS5.
 
 ## Video engine (VCN) {#video-engine}
 
-The GPU's video engine (VCN 2.0, IP 2.0.3, driver `vcn_v2_0`) decodes and encodes video in hardware in every current PS5 kernel.
+Hardware video decode and encode work in every current kernel.
 
 | What | Status |
 | --- | --- |
@@ -231,44 +115,9 @@ The GPU's video engine (VCN 2.0, IP 2.0.3, driver `vcn_v2_0`) decodes and encode
 | Encode HEVC, normal GOP with P-frames | ❌ Broken: corrupt colours at every tested bitrate |
 | Decode H.264 High 10, AV1, VP8, Theora, MPEG-4 Part 2 | ❌ Not supported by the hardware |
 
-Frame sizes that decode: H.264 up to 4096×2304, HEVC and VP9 up to 8192×4352. The engine advertises H.264 at 4096×4096 but fails on it.
+Check it with `vainfo` (package `libva-utils` or `vainfo`).
 
-### How it works
-
-The video engine runs AMD's Navi 10 VCN firmware with one change: as shipped, that firmware waits at boot for a handshake from the SMU, which never comes on the PS5, so the patched copy doesn't wait. It lives in the patch set repository as `firmware/amdgpu/ps5_vcn.bin` and is compiled into the kernel.
-
-On `1002:13fb`, the driver also:
-
-- turns off VCN doorbells (the rings use direct register writes instead),
-- resets the VCPU before starting and after a failed stop,
-- clears stale ring state before starting.
-
-### Getting it
-
-:::note[Which kernels have it]
-Every current kernel: the upstream packages, rmuxnet's release and PS5 Bazzite Deck. On an old kernel, update or build from the current patch set, see [Kernel setup](/post-install/kernel).
-:::
-
-The repository's `.config` sets:
-
-```text
-CONFIG_EXTRA_FIRMWARE="amdgpu/ps5_vcn.bin"
-CONFIG_EXTRA_FIRMWARE_DIR="../ps5-linux-patches/firmware"
-```
-
-That path is relative to the kernel source tree, so `linux` and `ps5-linux-patches` must be cloned side by side, exactly as in the build steps.
-
-### Check that it works
-
-Install `libva-utils` (Arch) or `vainfo` (Debian/Ubuntu), then run:
-
-```bash
-vainfo
-```
-
-It lists H.264, HEVC, VP9, MPEG-2 and VC-1 decoding, plus H.264 and HEVC encoding, when the engine is up.
-
-### Using it with FFmpeg
+### FFmpeg {#using-it-with-ffmpeg}
 
 Decode:
 
@@ -282,25 +131,19 @@ Transcode to H.264:
 ffmpeg -hwaccel vaapi -hwaccel_output_format vaapi -i input.mkv -c:v h264_vaapi -b:v 12M output.mkv
 ```
 
-HEVC comes out clean only when every frame is an I-frame; with P-frames the colours are wrong. Force I-frames with `-g 1 -bf 0`:
+HEVC only with I-frames (`-g 1 -bf 0`), at a much higher bitrate; H.264 is the better encoder when file size matters:
 
 ```bash
 ffmpeg -hwaccel vaapi -hwaccel_output_format vaapi -i input.mkv -c:v hevc_vaapi -g 1 -bf 0 -b:v 25M output.mkv
 ```
 
-An all-I-frame stream needs a much higher bitrate for the same quality, so when file size matters, `h264_vaapi` is the better encoder.
-
 ### Browsers and streaming
 
-Firefox decodes through VAAPI by itself: H.264 at 720p, 1080p and 4K, HEVC and HEVC Main 10 at 1080p, and VP9 at 1080p all play without dropped frames. `about:support`, under **Media**, shows which codecs are decoded in hardware. Chrome needs flags, see [Browser video](/post-install/browser-video).
+Firefox decodes in hardware by itself (`about:support` → **Media**). Chrome needs flags, see [Browser video](/post-install/browser-video). Moonlight streaming works through Sunshine with H.264, see [Game streaming](/post-install/all-distros#game-streaming).
 
-Moonlight streaming from the PS5 works through Sunshine with H.264 VCN encoding, see [Game streaming](/post-install/all-distros#game-streaming).
+### Measurements
 
-### Results
-
-The short version: decoding in hardware costs around 1% of one CPU core, where software decoding of the heaviest streams (HEVC Main 10 at 4K) costs most of a core, and H.264 hardware transcoding runs at full frame rate at about 1 to 2.5% of a core.
-
-CPU figures are FFmpeg's CPU use between seconds 2 and 9.5 of each run, where 100% is one logical CPU.
+Hardware decoding costs about 1% of one CPU core (software: up to most of a core for 4K HEVC Main 10); H.264 transcoding runs at full frame rate at 1 to 2.5% of a core.
 
 <details>
 <summary>Decoding: CPU use</summary>
@@ -440,29 +283,3 @@ Higher is better. HEVC VCN results use a normal GOP with P-frames, which is why 
 | HEVC | 4K | 50 | 51.24 | 49.81 |
 
 </details>
-
-#### How to read the results
-
-| Term | Meaning |
-| --- | --- |
-| CPU scale | 100% = one logical CPU. FFmpeg CPU use between seconds 2 and 9.5. |
-| FPS | Paced runs, including startup. Not maximum throughput. |
-| HEVC VCN encoding | Normal GOP with P-frames. Corrupt colours at every tested bitrate; I-frame-only output is clean. |
-| PSNR | Measured over the first 60 encoded frames. Higher means less pixel error. |
-| File bitrate | Includes container overhead. |
-| Repeats | Decoding and 12 Mbps tests: two runs. Other bitrates: one run. |
-| Exact frames | Decoded pixels match software decoding exactly. |
-
-## Limits and open problems {#limits}
-
-What every PS5 Linux user runs into sooner or later, whatever the distro.
-
-| Limit | What happens | Status |
-| --- | --- | --- |
-| GPU memory ceiling | A game that needs more than the GTT ceiling crashes with `Not enough memory for command submission`. Raise `ttm.pages_limit` rather than a fixed `vram.txt` carve-out, see [VRAM](/troubleshooting/gpu#vram). | Documented fix |
-| 40 CU unlock | More GPU power on units whose disabled pairs are good; artefacts, a purple tint or crashes on units where one isn't, see [40 CU unlock](/troubleshooting/gpu#40-cu-unlock). Don't use it on a Pro. | Silicon lottery |
-| HEVC encoding | The video engine corrupts colours with P-frames (red screen when streaming or recording). Use H.264, or HEVC with I-frames only, see [VCN](/troubleshooting/gpu#using-it-with-ffmpeg). | Known not to work |
-| GPU fault at session switches | Switching between a Gamescope session and a desktop can trigger a GPU page fault and `ring gfx_0.0.0 timeout`, most often at 4K120 on some TVs. It is on the compositor side; keep the desktop at 4K60 and switch sessions at the boot instead, see [Boot to the desktop](/post-install/boot-to-desktop). On a PS5 Pro the fault isn't recovered (`GPU Recovery Failed`) and the screen stays black until a restart. If you hit it, save the coredump before restarting: `sudo cp /sys/class/drm/card0/device/devcoredump/data ~/gpu-coredump.txt`. | Open |
-| `Failed to pin framebuffer: -ENOMEM` | Reported under memory pressure with a desktop and Steam running. No confirmed fix; more zram helped in one report, see [Memory and swap](/post-install/all-distros#memory-and-swap). | Open |
-| Graphical glitches in one game | Glitches in a single game. Add `RADV_DEBUG=nohiz %command%` to that game's launch options, see [Performance tips](#performance-tips). | Workaround |
-| No AV1 decode, no GPU load sensor on the base PS5 | AV1 video falls back to the CPU; KDE's system monitor shows no GPU usage, see [Browser video](/post-install/browser-video). | Hardware limits |
