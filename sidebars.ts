@@ -77,7 +77,12 @@ const sidebars: SidebarsConfig = {
           link: {type: 'doc', id: 'post-install/all-distros'},
           items: [
             'post-install/ssh',
-            'post-install/dualsense',
+            {
+              type: 'category',
+              label: 'DualSense',
+              link: {type: 'doc', id: 'post-install/dualsense'},
+              items: ['post-install/dualsense-bazzite-deck'],
+            },
             'post-install/browser-video',
             {
               type: 'category',

@@ -18,7 +18,7 @@ The patches described here are in PS5 Bazzite Deck's [`patches/`](https://github
 ## First checks
 
 1. Check that the adapter is there and powered: `bluetoothctl show` should list a controller with `Powered: yes`.
-2. Check which setup is on: `ps5-bt-address status`. With the address off ([shared pairing](/post-install/dualsense#shared-pairing)) pair the controller in the PS5 OS and start Linux with bazzite-bootc-loader v2.9 or newer; with it on ([Linux-only address](/post-install/dualsense#linux-only-address)) pair it in Linux on a profile of its own.
+2. Check which setup is on: `ps5-bt-address status`. With the address off ([shared pairing](/post-install/dualsense-bazzite-deck#shared-pairing)) pair the controller in the PS5 OS and start Linux with bazzite-bootc-loader v2.9 or newer; with it on ([Linux-only address](/post-install/dualsense-bazzite-deck#linux-only-address)) pair it in Linux on a profile of its own.
 3. After a warm reboot without Bluetooth, power off and start with the loader.
 4. A Slim controller that pairs but doesn't connect, or drops after a few seconds: on several Slims the Linux-only address broke connections, so from v2.8.1 it is off by default on the Slim's MediaTek chip. On older versions, `ps5-bt-address off`, power off, start with the loader and pair again.
 
