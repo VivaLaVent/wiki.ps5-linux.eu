@@ -53,17 +53,33 @@ The first time, it asks whether to trust the PS5's key: answer `yes`. While you 
 - **Copy commands without the ```` ``` ```` lines** around them.
 - **Leave with `exit`.** The commands you run afterwards run on your own computer again; check the prompt (`ps5@…` is the PS5).
 
-## Copy files {#copy-files}
+## Copy a file from the PS5 to your computer {#copy-files}
 
-From your computer, not from inside the SSH session:
+Example: the `ps5-report` file. `ps5-report` saves it in your home folder on the PS5 and prints its name at the end, for example `saved to /var/home/ps5/ps5-report-20261110-1236.txt`.
 
-```bash
-scp ps5@192.168.1.50:ps5-report-20261110-1236.txt .
+Copy it from **your computer**, in a new terminal window, not inside the SSH session. (A prompt starting with `ps5@` is the PS5: type `exit` first.)
+
+**Windows**, in Terminal or PowerShell, into your Downloads folder:
+
+```powershell
+scp ps5@192.168.1.50:ps5-report-*.txt $HOME\Downloads\
 ```
 
-The `.` is the current folder (on Windows: your user folder in PowerShell). For several files, copy them one by one; `{a,b}` patterns don't work with current `scp`. To send a file to the PS5: `scp myfile.txt ps5@192.168.1.50:`.
+**macOS and Linux:**
 
-With a window instead: [WinSCP](https://winscp.net) on Windows, or any SFTP app on a phone, with the same address, user and password.
+```bash
+scp 'ps5@192.168.1.50:ps5-report-*.txt' ~/Downloads/
+```
+
+It asks for the PS5's password, then the file is in **Downloads**, ready to attach on Discord or GitHub.
+
+- `ps5-report-*.txt` copies every report in the home folder. For one, use the name `ps5-report` printed, such as `ps5-report-20261110-1236.txt`.
+- A path without `/` at the start is in the home folder on the PS5. Other files work the same: `ps5@192.168.1.50:/etc/fstab`.
+- Don't use `{a,b}` patterns to copy several files at once: current `scp` doesn't take them.
+
+**With a window instead of a command:** [WinSCP](https://winscp.net) on Windows, or the SFTP tab of an app such as Termius on a phone: connect with the same address, user and password, open the home folder, and drag the file to your computer or tap **Download**.
+
+**The other way, from your computer to the PS5's home folder:** `scp myfile.txt ps5@192.168.1.50:`
 
 ## Log in without a password {#keys}
 
