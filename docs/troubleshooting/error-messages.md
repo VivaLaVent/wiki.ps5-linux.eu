@@ -9,11 +9,11 @@ applies_to: all
 
 # Error messages and boot problems
 
-Problems with starting, updating or repairing the system, ordered by when they happen. Problems with one component (the picture, Wi-Fi, a controller) are on that component's page, see [Troubleshooting](/troubleshooting/getting-help#where-to-look).
+Problems with starting, updating or repairing the system, ordered by when they happen: find your message under **On this page**. Problems with one component (the picture, Wi-Fi, a controller) are on that component's page, see [Troubleshooting](/troubleshooting/getting-help#where-to-look).
 
 ## Starting Linux
 
-### Back to the PS5 OS or its login screen {#rest-mode-error-back-to-the-ps5-login-screen}
+### Orange light, then the PS5 OS or its login screen {#rest-mode-error-back-to-the-ps5-login-screen}
 
 Either the power button was pressed before the orange LED stopped blinking, USB power in rest mode isn't set to **Always** (see [Required PS5 settings](/installation/booting#required-ps5-settings)), or rest mode itself failed.
 
@@ -24,11 +24,25 @@ The loader works by putting the console into rest mode; when the LED turns solid
 
 Fix: plug the boot drive directly into a fast port, with nothing else on the fast ports, and connect the hub, keyboard and mouse only once Linux is up (the slow USB 2.0 port is fine for a keyboard). After a failed attempt, restart the PS5 OS completely (not into rest mode) before you jailbreak again.
 
-### Linux won't boot after running the exploit
+### Linux doesn't start after the exploit {#linux-wont-boot-after-running-the-exploit}
 
 Send the Linux loader as the only payload. If etaHEN, kstuff or anything else ran first, restart the PS5, jailbreak again and send only the loader, see [Booting Linux](/installation/booting#send-the-linux-loader).
 
-### "Could not create PS5 WiFi firmware directory"
+### "Unknown format", or the loader says "Couldn't find bzImage" (system software 4.x) {#gpt-first-lba}
+
+On PS5 system software 4.x, the PS5 can't read a drive flashed with a PS5 Bazzite Deck image older than v2.11: one field of its partition table (first usable LBA 2048) trips a bug in that system software. Newer system software and Legacy drives aren't affected.
+
+- **Flash v2.11 or newer,** or
+- **fix the drive you have** from a PC. It changes that one field, not your data, and only shows what it would do without `--apply`:
+
+  ```bash
+  curl -fsSLO https://raw.githubusercontent.com/VivaLaVent/ps5-bazzite-deck/main/bootc/tools/gpt-first-lba.py
+  sudo python3 gpt-first-lba.py /dev/sdX --apply
+  ```
+
+  macOS: `/dev/rdiskN`, after `diskutil unmountDisk diskN`. Windows: run it on the `.img` before flashing, `python gpt-first-lba.py ps5-bazzite-deck-bootc-vX.Y.img --apply`.
+
+### "Could not create PS5 WiFi firmware directory" {#could-not-create-ps5-wifi-firmware-directory}
 
 Harmless. The loader carries on and Linux boots; look elsewhere if the boot fails.
 
@@ -48,27 +62,25 @@ Older CachyOS images needed this Gamescope session fix for a different problem:
 sed -i 's/-steamos3//' /usr/bin/gamescope-session-ps5
 ```
 
-### "Repairing" or "PS5 wasn't turned off properly"
+### "Repairing" or "PS5 wasn't turned off properly" {#repairing-or-ps5-wasnt-turned-off-properly}
 
 Expected after a Linux session, and harmless.
 
 ## Using Linux
 
-### The screen saver froze the screen
+### The screen saver froze the screen {#the-screen-saver-froze-the-screen}
 
 The screen saver is broken on the PS5 and can't be dismissed once it starts. SSH in from another device and run `sudo reboot`, then turn the screen saver off in the desktop's power settings before any long install or download.
 
-### Game Mode doesn't start after installing a Decky plugin
+### Game Mode doesn't start after installing a Decky plugin {#game-mode-doesnt-start-after-installing-a-decky-plugin}
 
 PS5 Bazzite Deck with [Decky Loader](/post-install/decky): Remove the plugin from Desktop Mode: delete its folder under `~/homebrew/plugins/`, then switch to Game Mode again. If that isn't enough, `ujust setup-decky uninstall` removes Decky completely.
 
-### A warm reboot hangs
+### A warm reboot hangs {#a-warm-reboot-hangs}
 
-<<<<<<< ours
-<<<<<<< ours
 PS5 Bazzite Deck with `ps5-warm-reboot on`: on consoles with the IW620 chip, Wi-Fi and Bluetooth may not come back after one. Hold the power button until the console turns off, then start Linux with the loader. If it keeps happening, turn warm reboots off with `ps5-warm-reboot off` and report it in `#bazzite-problems` on [Discord](https://discord.gg/ps5linux) with the file `ps5-report` saves.
 
-### The firewall doesn't start {#firewall}
+### The firewall says `failed` {#firewall}
 
 PS5 Bazzite Deck up to v2.7.3: `firewall-cmd --state` says `failed`. The kernel lacks the NetBIOS helper that the samba-client service in Fedora's default zone needs; v2.8 has it. On older releases, this starts the firewall without that service:
 
@@ -78,14 +90,8 @@ sudo systemctl restart firewalld
 ```
 
 On v2.8 or newer, `--add-service=samba-client` in the same command puts the service back.
-=======
-PS5 Bazzite Deck with `ps5-warm-reboot on`: Hold the power button until the console turns off, then start Linux with the loader. If it keeps happening, turn warm reboots off with `ps5-warm-reboot off` and report it in `#bazzite-problems` on [Discord](https://discord.gg/ps5linux) with the file `ps5-report` saves.
->>>>>>> theirs
-=======
-PS5 Bazzite Deck with `ps5-warm-reboot on`: Hold the power button until the console turns off, then start Linux with the loader. If it keeps happening, turn warm reboots off with `ps5-warm-reboot off` and report it in `#bazzite-problems` on [Discord](https://discord.gg/ps5linux) with the file `ps5-report` saves.
->>>>>>> theirs
 
-### Modules or sysctl settings not loading {#modules-or-sysctl-settings-not-loading}
+### Settings or drivers missing at random {#modules-or-sysctl-settings-not-loading}
 
 Things fail at random after boot: a driver is missing, `/etc/sysctl.d` values are not applied, or a service behaves differently from one boot to the next.
 
@@ -126,7 +132,7 @@ Reboot, then run the check again. It should print nothing.
 
 ## Updates and kernels
 
-### PS5 Bazzite Deck v2.5: updates fail {#bazzite-deck-v25-updates-fail}
+### Updates fail: `Failed to start ostree-finalize-staged.service` {#bazzite-deck-v25-updates-fail}
 
 On v2.5, every update and `bootc switch` fails with `Failed to start ostree-finalize-staged.service` (`Unit greenboot-set-rollback-trigger.service is masked`). Later images are fixed; on v2.5, run the fix under [Updating from v2.5](/updating/bootc#updating) once.
 
@@ -140,11 +146,11 @@ PS5 Bazzite Deck up to v2.6.3: Steam's update button can't update the PS5 (Bazzi
 
 Your channel has nothing newer. On **Stable**, that is the release marked **Latest**: to get a pre-release, switch to Beta, see [Stable or Beta](/updating/bootc#update-channels). [Which version runs](/updating/bootc#which-version-runs) shows what you have.
 
-### Legacy update: "this is not a PS5 Bazzite Deck install"
+### Legacy update: "this is not a PS5 Bazzite Deck install" {#legacy-update-this-is-not-a-ps5-bazzite-deck-install}
 
 Legacy installs whose root isn't `LABEL=bazzite-deck` (copied to an M.2, for example) were refused by older update scripts. Run the update command with `v2.6.1` or later.
 
-### Kernel update breaks M.2 boot {#kernel-update-breaks-m2-boot}
+### Black screen after a kernel update on an M.2 install {#kernel-update-breaks-m2-boot}
 
 Two different problems get reported under this name.
 

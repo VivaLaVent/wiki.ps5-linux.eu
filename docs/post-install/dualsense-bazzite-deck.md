@@ -1,6 +1,6 @@
 ---
 title: "DualSense: PS5 Bazzite Deck"
-sidebar_label: PS5 Bazzite Deck
+sidebar_label: DualSense
 sidebar_position: 1
 description: "On PS5 Bazzite Deck, one DualSense for the PS5 OS and Linux: the shared pairing through the loader from v2.9, or a Linux-only Bluetooth address."
 hardware: [original, slim, pro]

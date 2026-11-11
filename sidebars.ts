@@ -1,9 +1,10 @@
 import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
 
 // The order a new user goes through: welcome → before you install → install → after installing → updating → troubleshooting.
-// After installing: three groups only, all images, PS5 Bazzite Deck and the other images; a topic that differs per image
-// gets a page for what they share and one child per group (First boot, Install to the M.2, Warm reboots, Build your own;
-// boot options sit with their group).
+// After installing: three groups only, all images, PS5 Bazzite Deck and the other images. A topic that differs per image
+// has its shared page under All images and its per-image page in that image's group (DualSense, Warm reboots, boot
+// options), never nested under All images. Installing has no per-image groups, so First boot and Install to the M.2
+// keep one child per image there.
 // Troubleshooting: the start page (SSH and logs), error messages, then one page per component.
 
 const sidebars: SidebarsConfig = {
@@ -77,19 +78,9 @@ const sidebars: SidebarsConfig = {
           link: {type: 'doc', id: 'post-install/all-distros'},
           items: [
             'post-install/ssh',
-            {
-              type: 'category',
-              label: 'DualSense',
-              link: {type: 'doc', id: 'post-install/dualsense'},
-              items: ['post-install/dualsense-bazzite-deck'],
-            },
+            'post-install/dualsense',
             'post-install/browser-video',
-            {
-              type: 'category',
-              label: 'Warm reboots',
-              link: {type: 'doc', id: 'post-install/warm-reboot'},
-              items: ['post-install/warm-reboot-bazzite-deck', 'post-install/warm-reboot-other-images'],
-            },
+            'post-install/warm-reboot',
             'post-install/boot-options',
           ],
         },
@@ -97,13 +88,13 @@ const sidebars: SidebarsConfig = {
           type: 'category',
           label: 'PS5 Bazzite Deck',
           link: {type: 'doc', id: 'post-install/bazzite'},
-          items: ['post-install/decky', 'post-install/bazzite-boot-options'],
+          items: ['post-install/decky', 'post-install/dualsense-bazzite-deck', 'post-install/warm-reboot-bazzite-deck', 'post-install/bazzite-boot-options'],
         },
         {
           type: 'category',
           label: 'Other images',
           link: {type: 'doc', id: 'post-install/not-bazzite-deck'},
-          items: ['post-install/package-repository', 'post-install/kernel', 'post-install/boot-to-desktop', 'post-install/other-boot-options'],
+          items: ['post-install/package-repository', 'post-install/kernel', 'post-install/boot-to-desktop', 'post-install/warm-reboot-other-images', 'post-install/other-boot-options'],
         },
       ],
     },

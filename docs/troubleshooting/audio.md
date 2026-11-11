@@ -8,22 +8,15 @@ applies_to: all
 
 # Audio
 
-Sound goes out over HDMI together with the picture, and on most TVs and monitors that is all there is to it. The cases where it isn't are below.
+Sound goes out over HDMI with the picture.
 
-## Audio plays through the controller instead of HDMI
+## Quick answers
 
-A DualSense on a USB cable is also a sound card, and some desktops make it the default output. Pick the HDMI output in the sound settings instead; on GNOME that is **Settings → Sound → Output**, on KDE **System Settings → Sound**, in Steam's Game Mode **Settings → Audio → Output Device**. If the desktop keeps switching back, remove the DualSense from the list of outputs in the sound settings, or connect it over Bluetooth, where it carries no audio.
-
-If the HDMI output is listed but stays silent, switching the sound server from PipeWire to PulseAudio has helped on some images.
-
-## No HDMI audio at all
-
-A few monitors get no sound from the console at all, while the same cable and the same mode give sound on a TV. There is no fix for this yet. Use a USB or Bluetooth audio device on those monitors.
-
-## Audio hiccup every 40 seconds (DP-to-HDMI adapters)
-
-A short dropout about every 40 seconds with an active DisplayPort-to-HDMI adapter came from amdgpu's display clock manager, which assumed a DP audio clock of 5988740 where the hardware runs at 6000000. The fix is in `dcn201_clk_mgr.c` in every current kernel; update if you still hear it.
-
-## HDMI audio delay
-
-Sound that lags behind the picture was a kernel bug and has been fixed in the PS5 patch set; update first. If the lag remains, change the output format in the sound settings from **Digital Stereo (HDMI)** to **Digital Surround 5.1 (HDMI)**, which has cured the remaining cases, most noticeably in video playback.
+| Problem | Do this |
+| --- | --- |
+| Sound comes from the controller | A DualSense on a USB cable is also a sound card. Choose the HDMI output: GNOME **Settings → Sound → Output**, KDE **System Settings → Sound**, Game Mode **Settings → Audio → Output Device**. If it keeps switching back, connect the controller over Bluetooth |
+| The HDMI output is listed but silent | Switching the sound server from PipeWire to PulseAudio has helped on some images |
+| No HDMI sound at all on a monitor, fine on a TV | No fix yet: use a USB or Bluetooth audio device |
+| Sound lags behind the picture | Update the kernel. If it remains, set the output to **Digital Surround 5.1 (HDMI)** instead of Digital Stereo |
+| A dropout every 40 seconds through a DisplayPort-to-HDMI adapter | Update the kernel |
+| No sound from the controller's speaker or headphone jack | Only over USB, see [DualSense](/post-install/dualsense#controller-quirks) |

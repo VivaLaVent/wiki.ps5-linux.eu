@@ -8,50 +8,35 @@ applies_to: all
 
 # Storage and USB
 
-Problems with the drive Linux runs from. Which drives and ports to use in the first place is on [Drives and USB ports](/getting-started/drives).
+Problems with the drive Linux runs from. Which drives and ports to use is on [Drives and USB ports](/getting-started/drives).
 
-## Slow starts, long Steam updates, black screens on a hard drive {#slow-drive}
+## Quick answers
 
-Hard drives, and SATA SSDs in cheap USB adapters, are much slower than a USB NVMe SSD. Starts take minutes, Steam's updates can keep the screen black for a long time, and some adapters drop the drive under a long write (I/O errors, a frozen picture). If the drive's light shows activity, wait. If it happens often, move the system to a USB NVMe SSD or the [M.2 slot](/installation/m2-install). A drive that disconnects needs the UAS setting below.
+| Problem | Do this |
+| --- | --- |
+| The USB SSD disconnects, freezes or shows I/O errors | Turn UAS off for that drive, see [UAS](#uas) |
+| "Root filesystem not found", or the start hangs | `rootwait rootdelay=60 usbcore.autosuspend=-1` in `cmdline.txt`, see [Slow to appear](#root) |
+| Slow starts, long black screens during Steam updates | A hard drive or a SATA SSD in a cheap adapter: wait while its light shows activity, or move to a USB NVMe SSD or the [M.2 slot](/installation/m2-install) <a id="slow-drive"></a> |
+| Emergency shell after holding the power button | Let the filesystem check finish. If it doesn't start: `sudo e2fsck -f /dev/sdX4` from a Linux PC (partition 4 is the root on a bootc install) |
+| Linux won't start from an SSD in an enclosure | Another enclosure |
+| Nothing on a rear USB port | Move the drive to the front USB-C port |
+| The picture dies after a while and the drive is asleep | The enclosure's own idle timer: turn off screen blanking, or use another enclosure |
+| Much less free space than the drive's size | `sudo resize2fs /dev/sda1` (your root partition) |
 
-After holding the power button during a write, the next start can take longer while the filesystem is checked, or stop in an emergency shell. Let it finish; if it doesn't start, check the root partition from a Linux PC with `sudo e2fsck -f /dev/sdX4` (`sdX` is the drive; the root is partition 4 on a bootc install).
+## Turn UAS off for one drive {#uas}
 
-## USB SSD disconnects, freezes or shows I/O errors {#uas}
-
-Many USB-C SSDs and enclosures have buggy UAS support. Turn UAS off for that drive only: find its ID (`xxxx:yyyy`) with `lsusb`, then add this to `cmdline.txt`:
+Many USB-C SSDs and enclosures have buggy UAS support. Find the drive's ID (`xxxx:yyyy`) with `lsusb` and add this to `cmdline.txt`:
 
 ```text title="cmdline.txt"
 usb-storage.quirks=xxxx:yyyy:u
 ```
 
-## Some enclosures don't boot with the loader
+Two drives: `usb-storage.quirks=xxxx:yyyy:u,aaaa:bbbb:u`.
 
-If Linux won't boot from an SSD in a USB enclosure, try a different enclosure.
+## A drive that is slow to appear {#root}
 
-## Rear ports and M.2 enclosures
-
-An M.2 enclosure that boots from the rear USB-A ports on one kernel is sometimes only detected on the front USB-C port with another. Whether that is the kernel or the enclosure isn't settled. If a rear port shows nothing, move the drive to the front USB-C port before you look further.
-
-## Enclosure goes to sleep
-
-Some SSD enclosures have their own idle timer and don't wake up again once Linux has started. The symptoms look like a dead display or a bad image. Turn off the desktop's automatic screen blanking so the system stays active, and if the enclosure still sleeps, use another one.
-
-## The drive shows much less free space than its capacity
-
-The root partition starts small and is meant to grow to the drive on the first boot. If `df` shows only a few GB free on a much larger drive, grow the filesystem:
-
-```bash
-sudo resize2fs /dev/sda1
-```
-
-Change the device and partition to match your drive.
-
-## Root filesystem not found or boot hangs
-
-If the kernel starts but reports that it can't find the root filesystem, or boot stalls with a USB SSD, the drive is probably slow to appear. Add these to `cmdline.txt`, together with the UAS setting above if you have I/O errors:
-
-```text
+```text title="cmdline.txt"
 rootwait rootdelay=60 usbcore.autosuspend=-1
 ```
 
-`rootwait rootdelay=60` waits up to 60 seconds for the drive, and `usbcore.autosuspend=-1` stops USB devices from going to sleep (set by default on PS5 Bazzite Deck from v2.10). For two drives, list both in the quirks: `usb-storage.quirks=xxxx:yyyy:u,aaaa:bbbb:u`.
+It waits up to 60 seconds for the drive and keeps USB devices from going to sleep. PS5 Bazzite Deck sets `usbcore.autosuspend=-1` itself from v2.10.

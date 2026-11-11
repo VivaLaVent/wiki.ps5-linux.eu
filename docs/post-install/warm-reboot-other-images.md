@@ -1,6 +1,6 @@
 ---
 title: "Warm reboots: other images"
-sidebar_label: Other images
+sidebar_label: Warm reboots
 sidebar_position: 2
 description: "Restart an official or self-built PS5 Linux image straight back into Linux with kexec, from ps5-linux-tools or by hand."
 hardware: [original, slim, pro]

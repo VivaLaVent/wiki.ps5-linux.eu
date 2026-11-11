@@ -1,0 +1,85 @@
+---
+title: Flash the image to USB
+sidebar_label: Flash to USB
+sidebar_position: 1
+description: Write the downloaded PS5 Linux image to a USB drive with balenaEtcher or dd, from Windows, macOS or Linux.
+hardware: [original, slim, pro]
+applies_to: all
+---
+
+# Flash the image to USB
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+You have an image file from [Choose your image](/getting-started/which-image): a PS5 Bazzite Deck `.img`, or an official `.img.xz`.
+
+The drive must be **64 GB or larger**; an external SSD makes everything faster. Flashing erases the drive.
+
+## Check the download \{#check-the-download}
+
+PS5 Bazzite Deck's image comes as several `.img.7z.001`, `.002`, … parts. Extract them with [7-Zip](https://www.7-zip.org) by opening the `.001` file; Windows' built-in extraction and some other tools produce a broken `.img`. The release's `.sha256` file lists the `.img`'s checksum on its first line. Compare it with yours:
+
+<Tabs groupId="os">
+<TabItem value="windows" label="Windows" default>
+
+```powershell
+certutil -hashfile ps5-bazzite-deck-bootc-vX.Y.img SHA256
+```
+
+</TabItem>
+<TabItem value="unix" label="macOS / Linux">
+
+```bash
+sha256sum ps5-bazzite-deck-bootc-vX.Y.img    # macOS: shasum -a 256 …
+```
+
+</TabItem>
+</Tabs>
+
+Releases before v2.6.1 list only the checksums of the `.7z` parts.
+
+## Flash it
+
+<Tabs groupId="os">
+<TabItem value="windows" label="Windows" default>
+
+Use [balenaEtcher](https://etcher.balena.io/):
+
+1. **Flash from file** → pick the `.img` (an `.img.xz` works too, without unpacking it first).
+2. **Select target** → pick the USB drive. Check its size: everything on it is erased.
+3. **Flash!**, then wait until it has also checked the written drive.
+
+When Windows then offers to format the drive, choose **Cancel**: the Linux partitions are fine, Windows just can't read them. Formatting erases the install.
+
+:::warning[Not Rufus]
+The image has to be written to the drive byte for byte, which Rufus calls **DD mode**. Rufus used to ask whether to write in ISO or DD mode; current versions no longer ask, and drives flashed with them stopped in an emergency shell (`/dev/disk/by-label/bazzite-deck does not exist`) for several users. balenaEtcher always writes byte for byte, and it fixed the problem for all of them.
+:::
+
+</TabItem>
+<TabItem value="unix" label="macOS / Linux">
+
+[balenaEtcher](https://etcher.balena.io/) works here as well. With `dd`:
+
+```bash
+# Find your drive first with lsblk (Linux) or diskutil list (macOS)
+sudo dd if=ps5-ubuntu2604.img of=/dev/sdX bs=4M status=progress conv=fsync
+```
+
+On Linux, a compressed `.img.xz` can be flashed directly:
+
+```bash
+xzcat ps5-ubuntu2604.img.xz | sudo dd of=/dev/sdX bs=4M status=progress conv=fsync
+sync
+```
+
+:::danger
+Double-check the target device. `dd` overwrites whatever you point it at without asking.
+:::
+
+</TabItem>
+</Tabs>
+
+## Next steps
+
+To change boot options before the first start, edit `cmdline.txt` from your PC, see [Edit cmdline.txt from a PC](/post-install/boot-options#edit-from-a-pc). Then **[start Linux with the loader](/installation/booting)**.

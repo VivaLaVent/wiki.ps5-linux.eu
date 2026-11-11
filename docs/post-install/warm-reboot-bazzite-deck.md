@@ -1,6 +1,6 @@
 ---
 title: "Warm reboots: PS5 Bazzite Deck"
-sidebar_label: PS5 Bazzite Deck
+sidebar_label: Warm reboots
 sidebar_position: 1
 description: "PS5 Bazzite Deck restarts straight back into Linux with ps5-warm-reboot: turning it on, what reboots warm, updates and IW620 consoles."
 hardware: [original, slim, pro]
