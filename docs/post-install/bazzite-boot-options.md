@@ -13,15 +13,11 @@ How `cmdline.txt` and `vram.txt` work, how to edit them from a PC, and every opt
 
 ## The default line
 
-On bootc, the line is written from the system's own kernel arguments: `root=` names the partition by UUID, `ostree=` the version to start, and from v2.7.1 `firmware_class.path=/etc/firmware` lets the IW620 Wi-Fi driver find its firmware at its first load. Legacy installs start with this line:
-
-```text title="cmdline.txt"
-root=LABEL=bazzite-deck rw rootwait console=ttyTitania0 console=tty0 mitigations=off idle=halt preempt=full
-```
+The line is written from the system's own kernel arguments: `root=` names the partition by UUID, `ostree=` the version to start, and from v2.7.1 `firmware_class.path=/etc/firmware` lets the IW620 Wi-Fi driver find its firmware at its first load.
 
 ## Add or remove an option {#edit}
 
-On bootc, `cmdline.txt` is written from the system's own kernel arguments at every start and shutdown. Add an option the bootc way, so it survives updates and rollbacks:
+`cmdline.txt` is written from the system's own kernel arguments at every start and shutdown. Add an option the bootc way, so it survives updates and rollbacks:
 
 ```bash
 sudo rpm-ostree kargs --append=amdgpu.force_1080p=1      # add
@@ -30,7 +26,7 @@ sudo rpm-ostree kargs --delete=amdgpu.force_1080p=1      # remove
 
 An option added to `cmdline.txt` from a PC, for example when the screen stays black, is kept too.
 
-On Legacy installs, edit `cmdline.txt` directly, see [Edit cmdline.txt](/post-install/boot-options#edit-cmdlinetxt). Changes take effect at the next start with the loader.
+Changes take effect at the next start with the loader.
 
 Every option, and which kernel has it, is on [Boot options](/post-install/boot-options#options).
 

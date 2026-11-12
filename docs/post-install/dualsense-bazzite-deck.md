@@ -20,7 +20,7 @@ PS5 Bazzite Deck has two ways to use one controller in both the PS5 OS and Linux
 | Needs | PS5 Bazzite Deck **v2.9** or newer and **bazzite-bootc-loader v2.9** or newer | a DualSense with profiles (its software 0630, PS5 system software 12.00) |
 | Warm reboots on the IW620 | work | restarts go through the PS5 OS |
 
-The setting is stored in the install's `/etc`: it stays through updates, but a reflash or switching from Legacy to bootc starts from the default again. Check it after either.
+The setting is stored in the install's `/etc`: it stays through updates and through the [in-place switch from Legacy](/updating/legacy), but a reflash starts from the default again. Check it after one.
 
 ## Shared pairing {#shared-pairing}
 

@@ -9,7 +9,7 @@ applies_to: bazzite-deck
 
 # Install to the M.2: PS5 Bazzite Deck
 
-PS5 Bazzite Deck moves the system you are running onto the M.2, bootc and Legacy alike. Nothing is reinstalled: your games, settings and files come along, and the system starts exactly as you left it. On bootc the USB drive also keeps `/boot`, which holds the kernels of all installed versions.
+PS5 Bazzite Deck moves the system you are running onto the M.2. Nothing is reinstalled: your games, settings and files come along, and the system starts exactly as you left it. The USB drive also keeps `/boot`, which holds the kernels of all installed versions.
 
 First [install the drive and run `m2_init`](/installation/m2-install). Then, on the PS5 in a terminal (password `ps5`):
 
@@ -33,4 +33,4 @@ First [install the drive and run `m2_init`](/installation/m2-install). Then, on 
 
 To go back to the USB system: `sudo ps5-m2-install --back` (or the download line above with `--back`), then power off and start with the loader. The copy on the M.2 stays; running `sudo ps5-m2-install` again from the USB system replaces it.
 
-**Updates work as before:** on bootc with `sudo bootc upgrade`, on Legacy with the update command from the release notes. Keep the USB drive plugged in for both.
+**Updates work as before,** with `sudo bootc upgrade`. Keep the USB drive plugged in for them.

@@ -18,7 +18,7 @@ Two small files on the USB drive's FAT32 boot partition control how Linux starts
 
 `cmdline.txt` must stay **one single line**. Add an option at the end with a space in front of it; delete it the same way.
 
-- **On the PS5, in Linux:** the boot partition is mounted at `/boot/efi` on most images (`/efi` on Legacy PS5 Bazzite Deck installs; on bootc use [its own way](/post-install/bazzite-boot-options#edit)) and belongs to root, so a file manager can show it but not save to it. Open a terminal (on PS5 Bazzite Deck: Desktop Mode → **Konsole**); these commands find the partition by themselves:
+- **On the PS5, in Linux:** the boot partition is mounted at `/boot/efi` on most images (on PS5 Bazzite Deck use [its own way](/post-install/bazzite-boot-options#edit)) and belongs to root, so a file manager can show it but not save to it. Open a terminal (on PS5 Bazzite Deck: Desktop Mode → **Konsole**); these commands find the partition by themselves:
 
   ```bash
   E=$(for d in /efi /boot/efi; do sudo test -f $d/cmdline.txt && echo $d && break; done)

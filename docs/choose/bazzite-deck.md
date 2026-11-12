@@ -33,7 +33,7 @@ PS5 Bazzite Deck is a **bootc** image: the whole system is one image, built and 
 It starts with **bazzite-bootc-loader**, attached to every release, see [Which loader](/getting-started/loader#which-loader). It starts other images like the official loader, so one loader works for everything.
 
 :::note[Installed before v2.5?]
-Older installs run the **Legacy** form; `ps5-report` shows `legacy` on its **Install** line. Legacy installs still update in place with the command in each release's notes, but switching to bootc is recommended. Switching means flashing the bootc image, which erases the drive: use a second drive, or copy off what you want to keep first.
+Older installs run the **Legacy** form; `ps5-report` shows `legacy` on its **Install** line. Legacy is no longer supported or updated from v2.13 on. Switch to bootc in place, keeping your games, or by flashing: see [Switching from Legacy](/updating/legacy).
 :::
 
 ## What works on your console

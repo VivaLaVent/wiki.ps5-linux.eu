@@ -148,7 +148,7 @@ Your channel has nothing newer. On **Stable**, that is the release marked **Late
 
 ### Legacy update: "this is not a PS5 Bazzite Deck install" {#legacy-update-this-is-not-a-ps5-bazzite-deck-install}
 
-Legacy installs whose root isn't `LABEL=bazzite-deck` (copied to an M.2, for example) were refused by older update scripts. Run the update command with `v2.6.1` or later.
+Legacy installs are no longer updated, so this command no longer applies. Switch to bootc, see [Switching from Legacy](/updating/legacy).
 
 ### Black screen after a kernel update on an M.2 install {#kernel-update-breaks-m2-boot}
 
