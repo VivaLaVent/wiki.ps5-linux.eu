@@ -16,6 +16,7 @@ Clocks, compute units, VRAM and hardware video on the original PS5 and the Slim.
 | --- | --- |
 | Micro-stutter | Remove `idle=halt` from `cmdline.txt` |
 | Game crashes after a long session, RAM nearly full | Less VRAM: 4 GB, see [VRAM](#vram) |
+| A game needs Mesh shaders or "DirectX 12 Ultimate" (original PS5, Slim) | PS5 Bazzite Deck from v2.14: `ps5-directmesh %command%` in its launch options, see [Mesh shaders](#mesh-shaders) |
 | No picture on a distro of your own | `options amdgpu dpm=0 gpu_recovery=0` in `/etc/modprobe.d/ps5-amdgpu.conf`; every working image ships it |
 
 | Limit | What happens | Status |
@@ -101,6 +102,26 @@ The GPU can use more than the minimum: up to `vram.txt + (remaining RAM) / 2`, a
 - **Micro-stutter:** remove `idle=halt` from `cmdline.txt`.
 - **Glitches in one game:** `RADV_DEBUG=nohiz %command%` in that game's launch options only; it costs performance.
 - The [AMD BC-250 documentation](https://elektricm.github.io/amd-bc250-docs/) covers the same GPU. Its VRAM section doesn't apply to the PS5.
+
+## Mesh shaders (experimental) {#mesh-shaders}
+
+The original PS5 and the Slim have no Mesh shaders in Mesa's driver, and some D3D12 games don't start without them. PS5 Bazzite Deck from v2.14 ships [DirectMesh](https://github.com/lonewolf0622/Mesh-Shaders-for-Rdna-1-) as a second driver that adds them. It is used only by the games you choose. In Steam, right-click the game, **Properties**, **Launch Options**:
+
+```text
+ps5-directmesh %command%
+```
+
+Check it in a terminal: `ps5-directmesh vulkaninfo | grep -i mesh_shader` lists `VK_EXT_mesh_shader`.
+
+| Situation | Do this |
+| --- | --- |
+| The game hangs or the picture freezes | Remove the launch option; the game is back on the normal driver. Please report it with `sudo dmesg \| grep -iE "amdgpu\|ring\|timeout" \| tail -20` |
+| Objects are missing or drawn wrong | `RADV_BC250_MESH_TASK_IDX=0 ps5-directmesh %command%`, and report whether it changes anything |
+| Compare with the game's path without Mesh shaders | `RADV_DEBUG=nomeshshader ps5-directmesh %command%` |
+| PS5 Pro | Not needed and not used: the launcher changes nothing there |
+| Another image | Build DirectMesh yourself from its page, and add the PS5's GPU ID `13fb` to its device list or start the game with `RADV_DIRECTMESH=1` |
+
+DirectMesh was written for the AMD BC-250, whose GPU is the same family as the PS5's, and tested there. On a PS5 it is new: other games and the desktop keep the normal driver, so trying it on one game risks only that game.
 
 ## Video engine (VCN) {#video-engine}
 
