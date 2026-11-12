@@ -50,7 +50,7 @@ Already on the channel you want:
 sudo bootc upgrade
 ```
 
-The update takes over at the next start with the loader; on a PS5 Pro, start with the loader once more for its GPU firmware.
+The update takes over at the next start with the loader. Use the loader from the same release: from v2.13 it brings a PS5 Pro's GPU firmware on that first start (up to v2.12.1, a Pro needs one start more).
 
 - **`No update available`** means your channel has nothing newer, not that something is broken. On **Stable** that is the release marked **Latest**; pre-releases are only on **Beta**.
 - **Steam's update button doesn't update the PS5.** Bazzite's updater behind it needs a security module the PS5 kernel doesn't run. Up to v2.6.3 Steam shows **Update Error**; from v2.7 it finds nothing. Steam may also show SteamOS patch notes: those are Valve's notes for its channel, not this image's.

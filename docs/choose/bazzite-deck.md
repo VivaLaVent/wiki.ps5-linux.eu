@@ -62,7 +62,7 @@ Both chips support 1080p60, 1080p120, 1440p60 and 4K60, when the display can do 
 | Wi-Fi after restarting straight into Linux (`ps5-warm-reboot on`) | ⚠️ | ✅ | ✅ | IW620: from v2.8 the driver resets the chip when it finds the old firmware running; before, it was repaired after the start. If Wi-Fi is still missing, power off and run the loader. |
 | Bluetooth finds new devices | ✅ | ✅ | ✅ | IW620: broken in some earlier releases (a paired DualSense kept working). Update if the settings find nothing. |
 
-**PS5 Pro:** the GPU runs with its 60 compute units and the Pro's own firmware, Wi-Fi and Bluetooth work from a cold boot, and overlays show the GPU load. The GPU firmware has to be dumped by the Linux loader, which bazzite-bootc-loader does on the firmware versions it has offsets for; see [PS5 Pro](/troubleshooting/ps5-pro#gpu-firmware) for which loaders do and what to expect after an update. Not supported on the Pro: the 40 CU unlock. Reports are welcome in `#bazzite-ps5-pro-tests`.
+**PS5 Pro:** the GPU runs with its 60 compute units and the Pro's own firmware, Wi-Fi and Bluetooth work from a cold boot, and overlays show the GPU load. The GPU firmware has to be dumped by the Linux loader, which bazzite-bootc-loader does on the firmware versions it has offsets for. From v2.13 it also hands the firmware to Linux, so it's there from the first start; see [PS5 Pro](/troubleshooting/ps5-pro#gpu-firmware) for which loaders dump it. Not supported on the Pro: the 40 CU unlock. Reports are welcome in `#bazzite-ps5-pro-tests`.
 
 ## What you need for this image
 

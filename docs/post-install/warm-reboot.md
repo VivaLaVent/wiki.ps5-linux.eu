@@ -16,7 +16,7 @@ A warm reboot starts the new kernel without the console's firmware resetting any
 
 - **The Wi-Fi/Bluetooth chip** keeps whatever state the last boot left. The IW620's Wi-Fi needs the driver reloaded after a warm reboot, unless the driver resets the chip itself (ps5-linux-mwifiex from 9 November 2026, PS5 Bazzite Deck from v2.8); its Bluetooth side can hang, see [Bluetooth problems](/troubleshooting/bluetooth#bluetooth-problems).
 - **The HDMI chip** keeps the mode the last kernel set. The new kernel sets it up again; a display that needs the full link-training sequence may stay black until a cold start.
-- **Firmware the loader dumps** (Wi-Fi, PS5 Pro GPU) stays on the boot partition and is picked up again; nothing is re-dumped.
+- **Firmware the loader dumps** (Wi-Fi, PS5 Pro GPU) is picked up again from where Linux keeps it; nothing is re-dumped. On PS5 Bazzite Deck from v2.13 the warm reboot adds the PS5 Pro GPU firmware to the initrd itself, as the loader does.
 
 ## IW620 hazard
 

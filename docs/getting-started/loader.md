@@ -17,7 +17,7 @@ All three start Linux from the USB drive the same way: they read `bzImage`, `ini
 
 | Loader | What it is | Pick it when |
 | --- | --- | --- |
-| **bazzite-bootc-loader**, on every [PS5 Bazzite Deck release](https://github.com/VivaLaVent/ps5-bazzite-deck/releases) | From v2.6.1: soniciso1's loader below, built for each release, plus `path-override.txt` for `cmdline.txt` and `vram.txt` (used for a [manual rollback](/updating/bootc#rolling-back)). Up to v2.5.1 it was built from the official loader. | You run PS5 Bazzite Deck. It starts every other image too. |
+| **bazzite-bootc-loader**, on every [PS5 Bazzite Deck release](https://github.com/VivaLaVent/ps5-bazzite-deck/releases) | From v2.6.1: soniciso1's loader below, built for each release, plus `path-override.txt` for `cmdline.txt` and `vram.txt` (used for a [manual rollback](/updating/bootc#rolling-back)). From v2.13 it also hands Linux what it dumps (the Pro's GPU firmware, the Wi-Fi firmware, the PS5's Bluetooth pairings) in the initrd, so they arrive on the first start, also without a USB drive. Up to v2.5.1 it was built from the official loader. | You run PS5 Bazzite Deck. It starts every other image too. |
 | [soniciso1/ps5-linux-loader](https://github.com/soniciso1/ps5-linux-loader/releases) | The official loader plus offsets for more firmware versions, including the Pro's GPU firmware dump on most Pro firmware versions, see [GPU firmware](/troubleshooting/ps5-pro#gpu-firmware). | Any other image, especially on a PS5 Pro. |
 | [rmuxwashere/ps5-linux-loader](https://github.com/rmuxwashere/ps5-linux-loader/releases) | An earlier fork of the official loader; its fixes have gone upstream. It doesn't dump the Pro's GPU firmware. | Only if a newer loader doesn't start on your console. |
 

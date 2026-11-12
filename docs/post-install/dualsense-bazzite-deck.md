@@ -36,7 +36,7 @@ Check it: `ps5-bt-address status` says **off**, and `journalctl -b -u ps5-bt-imp
 - **Pair in the PS5 OS, not in Linux.** A pairing made in Linux replaces the PS5 OS's, and the next start through the loader brings the PS5 OS's back.
 - **A newly paired controller comes over at the next start through the loader.** A warm reboot keeps the pairings Linux already has.
 - **Controllers paired in Linux while the address was on** stop connecting after the switch: pair them in the PS5 OS, then start Linux with the loader.
-- **Not with the boot files on the console's own storage** (`ps5-m2-install --boot`): Linux can't read the pairings the loader leaves there.
+- **With the boot files on the console's own storage** (`ps5-m2-install --boot`): from v2.13 the loader hands the pairings to Linux in the initrd. Older loaders leave them where Linux can't read them.
 
 ## Linux-only address {#linux-only-address}
 
