@@ -11,7 +11,7 @@ applies_to: bazzite-deck
 
 PS5 Bazzite Deck moves the system you are running onto the M.2. Nothing is reinstalled: your games, settings and files come along, and the system starts exactly as you left it. The USB drive also keeps `/boot`, which holds the kernels of all installed versions.
 
-First [install the drive and run `m2_init`](/installation/m2-install). Then, on the PS5 in a terminal (password `ps5`):
+First [install the drive and run `m2_init`](/installation/m2-install). Only `m2_init` from ps5-linux-tools: its `install.sh` adds a fan and CPU control beside PS5 Bazzite Deck's own. Then, on the PS5 in a terminal (password `ps5`):
 
 1. **Move the system:**
 

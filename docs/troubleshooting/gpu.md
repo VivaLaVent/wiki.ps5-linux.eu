@@ -119,7 +119,7 @@ Check it in a terminal: `ps5-directmesh vulkaninfo | grep -i mesh_shader` lists 
 | Objects are missing or drawn wrong | `RADV_BC250_MESH_TASK_IDX=0 ps5-directmesh %command%`, and report whether it changes anything |
 | Compare with the game's path without Mesh shaders | `RADV_DEBUG=nomeshshader ps5-directmesh %command%` |
 | PS5 Pro | Not needed and not used: the launcher changes nothing there |
-| Another image | Build DirectMesh yourself from its page, and add the PS5's GPU ID `13fb` to its device list or start the game with `RADV_DIRECTMESH=1` |
+| Another image | Build DirectMesh yourself from its page, and add the PS5's GPU ID (`13fb` or `13db`, see `cat /sys/bus/pci/devices/0000:20:00.0/device`) to its device list or start the game with `RADV_DIRECTMESH=1` |
 
 DirectMesh was written for the AMD BC-250, whose GPU is the same family as the PS5's, and tested there. On a PS5 it is new: other games and the desktop keep the normal driver, so trying it on one game risks only that game.
 

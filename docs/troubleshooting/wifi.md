@@ -18,7 +18,7 @@ applies_to: all
 | Bazzite: no networks listed | Remove `/etc/NetworkManager/conf.d/iwd.conf`, then `sudo systemctl restart NetworkManager` <a id="bazzite-no-wi-fi-networks"></a> |
 | A hidden network doesn't show up | `ext_scan=2` on the `options moal` line; the default in current drivers and PS5 Bazzite Deck from v2.8 |
 | The interface shows as unavailable | `nmcli radio wifi on; rfkill unblock wifi` |
-| Slow, dropping, or stuck under load | Power saving off: `ps_mode=0`, see [Drops under load](#driver-stuck-under-sustained-load) |
+| Slow, dropping, or stuck under load | The firmware's own power saving: `ps_mode=0`, see [Drops under load](#driver-stuck-under-sustained-load) |
 | The driver loads but no interface appears | [Firmware in the wrong place](#adapter-shows-as-unclaimed-the-driver-loads-but-never-binds) |
 | Connects only after switching Wi-Fi off and on once | Known right after a first start; do that once |
 
@@ -98,7 +98,7 @@ Block woal_cfg80211_deauthenticate in abnormal driver state
 PCIe In-band Reset Fail
 ```
 
-Load the driver with `ps_mode=0` instead of `ps_mode=2` on its `options moal` line. PS5 Bazzite Deck ships that (`ps5-perf wifi` sets it again). With two `options moal` files in `/etc/modprobe.d/`, modprobe merges both: keep one.
+Load the driver with `ps_mode=0` instead of `ps_mode=2` on its `options moal` line. `0` keeps the firmware's default, which has power saving on; `2` switches it off, and that is what ran into the reset loop. PS5 Bazzite Deck ships `ps_mode=0` in `/usr/lib/modprobe.d/ps5.conf`; check with `cat /sys/module/moal/parameters/ps_mode`. With two `options moal` files in `/etc/modprobe.d/`, modprobe merges both: keep one.
 
 ## Wi-Fi before the first start
 
