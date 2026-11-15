@@ -30,6 +30,7 @@ The Pro's GPU needs eight `viola_*.bin` files, which the loader dumps from the P
 | 11.60 | Yes | Yes |
 | 12.00, 12.02, 12.40, 12.70 | No | Yes |
 | 12.20, 12.60 | No | No |
+| 13.00 | Yes (since 14 November) | bazzite-bootc-loader from v2.16 |
 | 13.20, 13.60 | Yes | Yes |
 | 13.40, 13.42 | No | Yes |
 

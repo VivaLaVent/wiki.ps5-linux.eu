@@ -25,7 +25,7 @@ Clocks, compute units, VRAM and hardware video on the original PS5 and the Slim.
 | 40 CU unlock | More GPU power on units whose disabled pairs are good; artefacts, a purple tint or crashes on units where one isn't, see [40 CU unlock](/troubleshooting/gpu#40-cu-unlock). Don't use it on a Pro. | Silicon lottery |
 | HEVC encoding | The video engine corrupts colours with P-frames (red screen when streaming or recording). Use H.264, or HEVC with I-frames only, see [VCN](/troubleshooting/gpu#using-it-with-ffmpeg). | Known not to work |
 | GPU fault at session switches | Switching between a Gamescope session and a desktop can trigger a GPU page fault and `ring gfx_0.0.0 timeout`, most often at 4K120 on some TVs. It is on the compositor side; keep the desktop at 4K60 and switch sessions at the boot instead, see [Boot to the desktop](/post-install/boot-to-desktop). On a PS5 Pro the fault isn't recovered (`GPU Recovery Failed`) and the screen stays black until a restart. If you hit it, save the coredump before restarting: `sudo cp /sys/class/drm/card0/device/devcoredump/data ~/gpu-coredump.txt`. | Open |
-| `Failed to pin framebuffer: -ENOMEM` | The VRAM is full: every picture needs one free block of VRAM, and a game that fills it leaves none, so Game Mode ends and drops to the desktop. More likely with 4 GB in `vram.txt`. PS5 Bazzite Deck from v2.15 has a test switch that takes the picture from normal memory instead: `echo 1 \| sudo tee /sys/module/amdgpu/parameters/ps5_scanout_gtt` (until the next restart). Untested on a PS5, so please report what happens. | Open |
+| `Failed to pin framebuffer: -ENOMEM` | The VRAM is full: every picture needs one free block of VRAM, and a game that fills it leaves none, so Game Mode ends and drops to the desktop. More likely with 4 GB in `vram.txt`. PS5 Bazzite Deck from v2.15 has a test that takes the picture from normal memory instead. It needs two kernel options: `sudo rpm-ostree kargs --append=amdgpu.sg_display=1 --append=amdgpu.ps5_scanout_gtt=1`, then a start with the loader (undo with `--delete=` for both). Not yet seen working on a PS5: report what happens, especially a flickering or frozen screen. | Open |
 | Graphical glitches in one game | Glitches in a single game. Add `RADV_DEBUG=nohiz %command%` to that game's launch options, see [Performance tips](#performance-tips). | Workaround |
 | No AV1 decode, no GPU load sensor on the base PS5 | AV1 video falls back to the CPU; KDE's system monitor shows no GPU usage, see [Browser video](/post-install/browser-video). | Hardware limits |
 
@@ -76,7 +76,7 @@ Games use the GPU's compute queue for lighting, post-processing and upscaling al
 | PS5 Pro | On from PS5 Bazzite Deck v2.6.1. Hide it: `AMD_VIOLA_COMPUTE_QUEUE=0 %command%` |
 | Original PS5 and Slim | On from PS5 Bazzite Deck v2.7.3 (bootc). Hide it: `AMD_PS5_COMPUTE_QUEUE=0 %command%`. Hidden on other images |
 
-A corrupted picture, missing geometry or a hang in one game: hide the queue for that game and report it.
+A corrupted picture, missing geometry or a hang in one game: hide the queue for that game and report it. To hide it for every game: `echo AMD_PS5_COMPUTE_QUEUE=0 | sudo tee /etc/environment.d/90-ps5-compute-queue.conf` (`AMD_VIOLA_COMPUTE_QUEUE=0` on a Pro), then log out and back in; delete the file to undo.
 
 ## VRAM {#vram}
 

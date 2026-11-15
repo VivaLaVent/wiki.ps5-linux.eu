@@ -51,7 +51,7 @@ Every patch file starts with a description of what it does and why.
 
 ## Files baked into the image
 
-Not kernel changes, but an image needs them too: a stable MAC for NetworkManager on the IW620, udev rules that keep the Bluetooth chips and the Salina xHCI powered, the `DefaultDependencies=no` drop-in for `ps5-stage-firmware.service` (see [Modules or sysctl settings not loading](/troubleshooting/error-messages#modules-or-sysctl-settings-not-loading)), the Linux-only Bluetooth address and connectable services (see [Bluetooth](/troubleshooting/bluetooth)), `hidp` loaded at boot, the warm-reboot units (see [Warm reboots](/post-install/warm-reboot)), and the Pro firmware staging (see [PS5 Pro](/troubleshooting/ps5-pro#gpu-firmware)). All under [`files/`](https://github.com/VivaLaVent/ps5-bazzite-deck/tree/main/files).
+Not kernel changes, but an image needs them too: a stable MAC for NetworkManager on the IW620, udev rules that keep the Bluetooth chips and the Salina xHCI powered, the `DefaultDependencies=no` drop-in for `ps5-stage-firmware.service` (see [Modules or sysctl settings not loading](/troubleshooting/error-messages#modules-or-sysctl-settings-not-loading)), the Bluetooth connectable service and the pairing import (see [Bluetooth](/troubleshooting/bluetooth)), `hidp` loaded at boot, the warm-reboot units (see [Warm reboots](/post-install/warm-reboot)), and the Pro firmware staging (see [PS5 Pro](/troubleshooting/ps5-pro#gpu-firmware)). All under [`files/`](https://github.com/VivaLaVent/ps5-bazzite-deck/tree/main/files).
 
 ## Upstream repositories to track
 

@@ -16,7 +16,7 @@ applies_to: bazzite-deck
   :::
 
 - **After you join Wi-Fi, Steam updates itself** in the background, often behind a blank screen with a blinking cursor (or a grey mouse pointer) that looks frozen, for several minutes, and for much longer on a hard drive. The same can happen later when Steam updates while a game downloads. Don't power off during this: it is the most common cause of a broken first start. The console can also restart once by itself after the network setup; cold boot and run the loader again.
-- The first start is at **1080p60**. Choose your resolution under Game Mode → Settings → Display; it is remembered.
+- The first start is at your display's **own resolution at 60 Hz** (from v2.16; 1080p60 before). Choose another resolution or refresh rate under Game Mode → Settings → Display; it is remembered. On a 4K TV, games then render at 4K too: 1080p there gives higher frame rates. If the screen stays dark, add `amdgpu.force_1080p=1` to `cmdline.txt` on the boot partition from a PC.
 - Set **RGB range** to **Full**, both in Game Mode and on the desktop.
 
 - **Be patient:** the first start can stay black for a few minutes, and much longer on a hard drive or a slow USB stick. On a USB SSD, more than **10 minutes** without a picture or a blinking cursor means something is wrong: power off and see [Display recovery](/troubleshooting/display#display-recovery) and [Storage and USB](/troubleshooting/storage).

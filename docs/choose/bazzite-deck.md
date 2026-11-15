@@ -52,17 +52,30 @@ One image runs on every supported PS5. What you get depends on three parts of th
 | HDR (1080p60, 4K60) | ✅ | ❌ | Game Mode → Settings → Display |
 | VRR | ✅ | ❌ | At every resolution: Game Mode → Settings → Display → Enable VRR. Displays with HDMI VRR; monitors that only have FreeSync from v2.7.1. |
 
-Both chips support 1080p60, 1080p120, 1440p60 and 4K60, when the display can do them. The console always starts at 1080p60; choose another mode in the settings. Details: [Display and HDMI](/troubleshooting/display#supported-resolutions).
+Both chips support 1080p60, 1080p120, 1440p60 and 4K60, when the display can do them. From v2.16 the console starts at the display's own resolution at 60 Hz (1080p60 before, and on displays without a matching mode); choose another mode in the settings. Details: [Display and HDMI](/troubleshooting/display#supported-resolutions).
 
 **By Wi-Fi/Bluetooth chip:**
 
 | Feature | IW620 | MediaTek (Slim) | MediaTek (Pro) | Notes |
 | --- | :---: | :---: | :---: | --- |
-| One DualSense for the PS5 and Linux | ✅ | ✅ | ✅ | Shared pairing through the loader (default on the Slim), or a Linux-only address with a profile of its own (default on the original PS5 and the Pro), see [DualSense](/post-install/dualsense-bazzite-deck) |
+| One DualSense for the PS5 and Linux | ✅ | ✅ | ✅ | Pair it in the PS5 OS; Linux gets the pairing through the loader at every start (all consoles from v2.16), see [DualSense](/post-install/dualsense-bazzite-deck) |
 | Wi-Fi after restarting straight into Linux (`ps5-warm-reboot on`) | ⚠️ | ✅ | ✅ | IW620: from v2.8 the driver resets the chip when it finds the old firmware running; before, it was repaired after the start. If Wi-Fi is still missing, power off and run the loader. |
 | Bluetooth finds new devices | ✅ | ✅ | ✅ | IW620: broken in some earlier releases (a paired DualSense kept working). Update if the settings find nothing. |
 
 **PS5 Pro:** the GPU runs with its 60 compute units and the Pro's own firmware, Wi-Fi and Bluetooth work from a cold boot, and overlays show the GPU load. The GPU firmware has to be dumped by the Linux loader, which bazzite-bootc-loader does on the firmware versions it has offsets for. From v2.13 it also hands the firmware to Linux, so it's there from the first start; see [PS5 Pro](/troubleshooting/ps5-pro#gpu-firmware) for which loaders dump it. Not supported on the Pro: the 40 CU unlock. Reports are welcome in `#bazzite-ps5-pro-tests`.
+
+**Controllers, wheels and streaming** (from v2.16; Bazzite's own extra drivers, built for the PS5 kernel):
+
+| Device | Driver |
+| --- | --- |
+| Xbox Wireless Adapter for Windows | xone. Controllers on a cable keep the kernel's own driver |
+| Xbox controllers over Bluetooth | xpadneo: rumble, trigger rumble, every button |
+| Racing wheels with force feedback | Logitech (new-lg4ff), Thrustmaster (hid-tmff2, T150/TMX), Fanatec |
+| GameCube controller adapter | gcadapter-oc: higher polling rate |
+| OBS virtual camera | v4l2loopback |
+| Razer keyboards, mice and headsets | openrazer |
+
+These are new on the PS5: report what works and what doesn't.
 
 ## What you need for this image
 
