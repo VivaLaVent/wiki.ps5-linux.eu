@@ -15,7 +15,7 @@ Clocks, compute units, VRAM and hardware video on the original PS5 and the Slim.
 | Problem | Do this |
 | --- | --- |
 | Micro-stutter | Remove `idle=halt` from `cmdline.txt` |
-| Game crashes after a long session, RAM nearly full | Less VRAM: 4 GB, see [VRAM](#vram) |
+| Game crashes after a long session, RAM nearly full | Less VRAM: 5 GB, see [VRAM](#vram) |
 | A game needs Mesh shaders or "DirectX 12 Ultimate" (original PS5, Slim) | PS5 Bazzite Deck from v2.14: `ps5-directmesh %command%` in its launch options, see [Mesh shaders](#mesh-shaders) |
 | No picture on a distro of your own | `options amdgpu dpm=0 gpu_recovery=0` in `/etc/modprobe.d/ps5-amdgpu.conf`; every working image ships it |
 
@@ -25,7 +25,7 @@ Clocks, compute units, VRAM and hardware video on the original PS5 and the Slim.
 | 40 CU unlock | More GPU power on units whose disabled pairs are good; artefacts, a purple tint or crashes on units where one isn't, see [40 CU unlock](/troubleshooting/gpu#40-cu-unlock). Don't use it on a Pro. | Silicon lottery |
 | HEVC encoding | The video engine corrupts colours with P-frames (red screen when streaming or recording). Use H.264, or HEVC with I-frames only, see [VCN](/troubleshooting/gpu#using-it-with-ffmpeg). | Known not to work |
 | GPU fault at session switches | Switching between a Gamescope session and a desktop can trigger a GPU page fault and `ring gfx_0.0.0 timeout`, most often at 4K120 on some TVs. It is on the compositor side; keep the desktop at 4K60 and switch sessions at the boot instead, see [Boot to the desktop](/post-install/boot-to-desktop). On a PS5 Pro the fault isn't recovered (`GPU Recovery Failed`) and the screen stays black until a restart. If you hit it, save the coredump before restarting: `sudo cp /sys/class/drm/card0/device/devcoredump/data ~/gpu-coredump.txt`. | Open |
-| `Failed to pin framebuffer: -ENOMEM` | Reported under memory pressure with a desktop and Steam running. No confirmed fix; more zram helped in one report, see [Memory and swap](/post-install/all-distros#memory-and-swap). | Open |
+| `Failed to pin framebuffer: -ENOMEM` | The VRAM is full: every picture needs one free block of VRAM, and a game that fills it leaves none, so Game Mode ends and drops to the desktop. More likely with 4 GB in `vram.txt`. PS5 Bazzite Deck from v2.15 has a test switch that takes the picture from normal memory instead: `echo 1 \| sudo tee /sys/module/amdgpu/parameters/ps5_scanout_gtt` (until the next restart). Untested on a PS5, so please report what happens. | Open |
 | Graphical glitches in one game | Glitches in a single game. Add `RADV_DEBUG=nohiz %command%` to that game's launch options, see [Performance tips](#performance-tips). | Workaround |
 | No AV1 decode, no GPU load sensor on the base PS5 | AV1 video falls back to the CPU; KDE's system monitor shows no GPU usage, see [Browser video](/post-install/browser-video). | Hardware limits |
 
@@ -88,11 +88,12 @@ A corrupted picture, missing geometry or a hang in one game: hide the queue for 
 | 1 GB | `40000000` |
 | 2 GB | `80000000` |
 | 4 GB | `100000000` |
+| 5 GB | `140000000` |
 | 6 GB (recommended for gaming) | `180000000` |
 | 8 GB | `200000000` |
 
 - **PS5 Bazzite Deck sets 6 GB** from v2.6.1. Check: `cat /boot/efi/vram.txt` (`0x180000000`) and the VRAM line of `ps5-report`.
-- **Gaming: 6 GB.** A game that crashes after a long session with RAM nearly full: 4 GB.
+- **Gaming: 6 GB.** A game that crashes after a long session with RAM nearly full: 5 GB. 4 GB frees more RAM but leaves the picture short of VRAM: glitches, and games dropping out of Game Mode.
 - **Not gaming: leave the default.** Reserved VRAM is taken from everything else.
 
 The GPU can use more than the minimum: up to `vram.txt + (remaining RAM) / 2`, about 10 GB with 6 GB set. A game that needs more crashes with `Not enough memory for command submission`. Raise the ceiling with `ttm.pages_limit` in `cmdline.txt`: the size in GB × 262144, so `ttm.pages_limit=2621440` for 10 GB. It doesn't make games faster.
