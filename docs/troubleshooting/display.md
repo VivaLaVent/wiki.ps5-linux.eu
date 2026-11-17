@@ -20,7 +20,7 @@ Modes, black screens, 4K120, VRR and HDR. Performance once there is a picture is
 | HDR washed out | VERDE has no HDR. On FLAVA3, see [HDR](#hdr) |
 | Colours too dark or washed out without HDR | [RGB range](#rgb-range) |
 | No picture until the HDMI cable is replugged | Turn off the TV's HDMI Device Link/CEC and auto input switching; report it with `ps5-report` |
-| Black after choosing a mode | Desktop: wait 15 seconds, the old mode returns. Otherwise [Get the picture back](#display-recovery) |
+| Black after choosing a mode | Desktop: wait 15 seconds, the old mode returns. Game Mode keeps it: [change the mode](#change-the-mode-from-a-desktop) over SSH |
 | TV dark at every mode after trying 4K120 | Unplug the TV's power for a minute, then start the console |
 | Black screen in a game on a PS5 Pro | [PS5 Pro](/troubleshooting/ps5-pro#other-problems-on-the-pro) |
 
@@ -75,10 +75,19 @@ The console runs but the TV shows nothing. Get in with a keyboard (<kbd>Ctrl</kb
 
 ### 2. Change the mode {#change-the-mode-from-a-desktop}
 
-KDE, over SSH:
+**Game Mode** keeps the mode you chose in `~/.config/gamescope/modes.cfg`. Over SSH, move it aside and restart the session:
 
 ```bash
-export XDG_RUNTIME_DIR=/run/user/$(id -u) DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus
+mv ~/.config/gamescope/modes.cfg ~/.config/gamescope/modes.cfg.bak
+sudo systemctl restart display-manager
+```
+
+It comes back at the display's preferred mode. To set a mode directly, write it in gamescope's format, display name from `modes.cfg.bak`, before restarting: `echo 'LG Electronics LG TV SSCR2:2560x1440@120 1' > ~/.config/gamescope/modes.cfg`. Steam's own render resolution is separate (Game Mode → Settings → Display): with **Automatically set resolution** on, Steam renders at 1080p and scales up.
+
+**KDE**, over SSH:
+
+```bash
+export XDG_RUNTIME_DIR=/run/user/$(id -u) DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus WAYLAND_DISPLAY=wayland-0 QT_QPA_PLATFORM=wayland
 ```
 
 ```bash
@@ -88,7 +97,7 @@ kscreen-doctor output.DP-1.hdr.disable              # HDR off (enable = on)
 kscreen-doctor output.DP-1.vrrpolicy.never          # VRR off (automatic = only full-screen apps, always)
 ```
 
-PS5 Bazzite Deck in Game Mode: the resolution has no command, use step 3. VRR off: `export XDG_RUNTIME_DIR=/run/user/$(id -u) GAMESCOPE_WAYLAND_DISPLAY=gamescope-0; gamescopectl adaptive_sync 0`. To the desktop: `steamos-session-select plasma`.
+Game Mode, VRR off: `export XDG_RUNTIME_DIR=/run/user/$(id -u) GAMESCOPE_WAYLAND_DISPLAY=gamescope-0; gamescopectl adaptive_sync 0`. To the desktop: `steamos-session-select plasma`.
 
 ### 3. Safe mode for one start
 

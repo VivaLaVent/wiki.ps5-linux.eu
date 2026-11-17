@@ -9,92 +9,85 @@ applies_to: bazzite-deck
 
 # PS5 Bazzite Deck
 
-[PS5 Bazzite Deck](https://github.com/VivaLaVent/ps5-bazzite-deck) turns the PS5 into a Steam console. It is [Bazzite](https://bazzite.gg) in Steam Deck mode, adapted for the PS5: it starts in the KDE desktop, with **Steam Gaming Mode** (the Steam Deck interface) one click away, and Steam can make Game Mode the default.
-
-It runs from a USB drive (or the M.2 slot) and is started by the Linux loader, like any other image. The PS5 itself is not modified: when you restart or power off, the PS5 starts its own system again, even with the drive still plugged in.
+[Bazzite](https://bazzite.gg) in Steam Deck mode for the PS5. It starts in the KDE desktop with **Game Mode** (the Steam Deck interface) one click away, runs from a USB drive or the M.2 slot, and is started by the Linux loader. The PS5 itself isn't changed: restart or power off, and it starts its own system.
 
 - **Download:** [releases](https://github.com/VivaLaVent/ps5-bazzite-deck/releases)
-- **Help and testing:** [Discord](https://discord.gg/ps5linux), channel `#bazzite-problems`
-- **Support the project:** [Ko-fi](https://ko-fi.com/vivalavent)
+- **Help:** [Discord](https://discord.gg/ps5linux), channel `#bazzite-problems`
+- **Donate:** [Ko-fi](https://ko-fi.com/vivalavent)
 
 :::tip[Which version?]
-Use the release marked **Latest**. Releases marked **Pre-release** are test builds, even when their version number is higher. If an update gives you trouble, `sudo bootc rollback` goes back to the version before. To see which version a console runs, see [Which version runs](/updating/bootc#which-version-runs).
+Use the release marked **Latest**; **Pre-release** builds are for testing. `sudo bootc rollback` undoes an update.
 :::
 
 ## Built with bootc
 
-PS5 Bazzite Deck is a **bootc** image: the whole system is one image, built and checked as a unit with GitHub Actions from the [PS5 Bazzite Deck repository](https://github.com/VivaLaVent/ps5-bazzite-deck), the way Bazzite itself is made. VivaLaVent develops it this way because it makes updates safe:
+The whole system is one image, built by GitHub Actions like Bazzite itself.
 
-- **Every console runs the same system.** The PS5 kernel, drivers and fixes are part of the image, not files changed on your drive.
-- **Updates download in the background** and take over at the next start. A power cut during an update doesn't leave a half-installed system.
-- **The previous version stays on the drive.** `sudo bootc rollback`, then power off and start with the loader, takes you back ([Rolling back](/updating/bootc#rolling-back)).
-- **Games, settings and your files are kept** across updates and rollbacks.
+- Updates download in the background and apply at the next start; a power cut can't leave a half-installed system.
+- The previous version stays on the drive: `sudo bootc rollback` ([Rolling back](/updating/bootc#rolling-back)).
+- Games, settings and files are kept.
 
-It starts with **bazzite-bootc-loader**, attached to every release, see [Which loader](/getting-started/loader#which-loader). It starts other images like the official loader, so one loader works for everything.
+Start it with **bazzite-bootc-loader** from the same release ([Which loader](/getting-started/loader#which-loader)); it starts other images too.
 
 :::note[Installed before v2.5?]
-Older installs run the **Legacy** form; `ps5-report` shows `legacy` on its **Install** line. Legacy is no longer supported or updated from v2.13 on. Switch to bootc in place, keeping your games, or by flashing: see [Switching from Legacy](/updating/legacy).
+That is the **Legacy** form (`legacy` on the Install line of `ps5-report`), no longer updated: [switch to bootc](/updating/legacy).
 :::
 
 ## What works on your console
 
-
-One image runs on every supported PS5. What you get depends on three parts of the console; `ps5-report` shows all three. See [Hardware status](/getting-started/hardware#console-models-and-chips) for how to check them by hand.
+It depends on the HDMI chip, the Wi-Fi/Bluetooth chip and the model; `ps5-report` shows all three ([Hardware status](/getting-started/hardware#console-models-and-chips)).
 
 **By HDMI chip:**
 
-| Feature | FLAVA3 (most consoles) | VERDE (some later models) | Notes |
-| --- | :---: | :---: | --- |
-| 1440p at 120 Hz | ✅ | ✅ from v2.7 | VERDE: new in v2.7, report how it works on your display. |
-| 100 Hz (1080p, 1440p; 4K on FLAVA3) | ✅ from v2.7 | ✅ from v2.7 | Offered when the display takes it. v2.6.x: FLAVA3 only, with `hdmi.modes_100hz=1`. |
-| Other modes the display lists (144 or 165 Hz, ultrawide) | ✅ from v2.7 | ❌ | Up to the HDMI chip's 600 MHz without FRL. New in v2.7, report how it works. |
-| 4K at 120 Hz | ✅ | ❌ | Needs an HDMI 2.1 TV and cable. Only offered when the TV can take it, and falls back to 4K60 by itself if the link fails. |
-| HDR (1080p60, 4K60) | ✅ | ❌ | Game Mode → Settings → Display |
-| VRR | ✅ | ❌ | At every resolution: Game Mode → Settings → Display → Enable VRR. Displays with HDMI VRR; monitors that only have FreeSync from v2.7.1. |
+| Feature | FLAVA3 (most consoles) | VERDE (some later models) |
+| --- | :---: | :---: |
+| 1080p, 1440p and 4K at 60 Hz; 1080p at 120 Hz | ✅ | ✅ |
+| 1440p at 100 and 120 Hz; 1080p at 100 Hz | ✅ | ✅ |
+| Other modes the display lists (144 or 165 Hz, ultrawide) | ✅ | ❌ |
+| 4K at 120 Hz (HDMI 2.1 TV and cable) | ✅ | ❌ |
+| HDR (1080p60, 4K60) | ✅ | ❌ |
+| VRR (HDMI VRR or FreeSync) | ✅ | ❌ |
 
-Both chips support 1080p60, 1080p120, 1440p60 and 4K60, when the display can do them. From v2.16 the console starts at the display's own resolution at 60 Hz (1080p60 before, and on displays without a matching mode); choose another mode in the settings. Details: [Display and HDMI](/troubleshooting/display#supported-resolutions).
+It starts at the display's own resolution at 60 Hz; choose another under Game Mode → Settings → Display ([Display](/troubleshooting/display#supported-resolutions)).
 
 **By Wi-Fi/Bluetooth chip:**
 
-| Feature | IW620 | MediaTek (Slim) | MediaTek (Pro) | Notes |
-| --- | :---: | :---: | :---: | --- |
-| One DualSense for the PS5 and Linux | ✅ | ✅ | ✅ | Pair it in the PS5 OS; Linux gets the pairing through the loader at every start (all consoles from v2.16), see [DualSense](/post-install/dualsense-bazzite-deck) |
-| Wi-Fi after restarting straight into Linux (`ps5-warm-reboot on`) | ⚠️ | ✅ | ✅ | IW620: from v2.8 the driver resets the chip when it finds the old firmware running; before, it was repaired after the start. If Wi-Fi is still missing, power off and run the loader. |
-| Bluetooth finds new devices | ✅ | ✅ | ✅ | IW620: broken in some earlier releases (a paired DualSense kept working). Update if the settings find nothing. |
+| Feature | IW620 | MediaTek (Slim) | MediaTek (Pro) |
+| --- | :---: | :---: | :---: |
+| One DualSense for the PS5 and Linux ([DualSense](/post-install/dualsense-bazzite-deck)) | own Linux pairing | shared pairing | own Linux pairing |
+| Wi-Fi after a warm reboot (`ps5-warm-reboot on`) | ⚠️ | ✅ | ✅ |
 
-**PS5 Pro:** the GPU runs with its 60 compute units and the Pro's own firmware, Wi-Fi and Bluetooth work from a cold boot, and overlays show the GPU load. The GPU firmware has to be dumped by the Linux loader, which bazzite-bootc-loader does on the firmware versions it has offsets for. From v2.13 it also hands the firmware to Linux, so it's there from the first start; see [PS5 Pro](/troubleshooting/ps5-pro#gpu-firmware) for which loaders dump it. Not supported on the Pro: the 40 CU unlock. Reports are welcome in `#bazzite-ps5-pro-tests`.
+IW620: while Linux has its own Bluetooth address (the default), restarts go through the PS5 OS. If Wi-Fi is missing after a warm reboot, power off and start with the loader.
 
-**Controllers, wheels and streaming** (from v2.16; Bazzite's own extra drivers, built for the PS5 kernel):
+**PS5 Pro:** all 60 compute units, with the Pro's own GPU firmware, which the loader dumps on most system software versions ([PS5 Pro](/troubleshooting/ps5-pro)).
+
+**Controllers, wheels and streaming** (from v2.16):
 
 | Device | Driver |
 | --- | --- |
-| Xbox Wireless Adapter for Windows | xone. Controllers on a cable keep the kernel's own driver |
-| Xbox controllers over Bluetooth | xpadneo: rumble, trigger rumble, every button |
+| Xbox Wireless Adapter | xone (controllers on a cable keep the kernel's driver) |
+| Xbox controllers over Bluetooth | xpadneo |
 | Racing wheels with force feedback | Logitech (new-lg4ff), Thrustmaster (hid-tmff2, T150/TMX), Fanatec |
-| GameCube controller adapter | gcadapter-oc: higher polling rate |
+| GameCube controller adapter | gcadapter-oc |
 | OBS virtual camera | v4l2loopback |
-| Razer keyboards, mice and headsets | openrazer |
-
-These are new on the PS5: report what works and what doesn't.
+| Razer devices | openrazer |
 
 ## What you need for this image
 
-
-- A PS5 on a [supported firmware](/getting-started/prerequisites#firmware), and [bazzite-bootc-loader](/getting-started/loader#which-loader).
-- An original PS5, a PS5 Slim or a PS5 Pro.
-- **etaHEN and kstuff off:** they don't work together with the Linux loader (freezes, especially when going to sleep).
-- A USB drive of **64 GB or more**, ideally an external SSD (much faster than a stick).
-- A PC to download and flash the image. A USB keyboard is handy for the first setup.
-- The [required PS5 settings](/installation/booting#required-ps5-settings): USB power in rest mode set to **Always**, and HDMI Device Link **off** (otherwise you'll usually get a black screen).
+- An original PS5, Slim or Pro on a [supported firmware](/getting-started/prerequisites#firmware), and [bazzite-bootc-loader](/getting-started/loader#which-loader).
+- etaHEN and kstuff off: with the Linux loader they cause freezes.
+- A USB drive of 64 GB or more; an external SSD is much faster than a stick.
+- A PC to flash the image. A USB keyboard helps with the first setup.
+- The [PS5 settings](/installation/booting#required-ps5-settings): USB power in rest mode **Always**, HDMI Device Link **off**.
 
 ## Download and extract
 
-1. **Download** all `ps5-bazzite-deck-bootc-vX.Y.img.7z.00*` files, the `.sha256` file and `bazzite-bootc-loader-vX.Y.elf` from the [release marked Latest](https://github.com/VivaLaVent/ps5-bazzite-deck/releases) into one folder.
-2. **Verify** the download: the `.img.sha256` file lists the checksum of the `.img` first, then one for each `.7z.00*` volume. On Linux, `sha256sum -c --ignore-missing <file>.img.sha256` checks the volumes; on Windows, `Get-FileHash <file> -Algorithm SHA256` in PowerShell for each volume, compared with its line.
-3. **Extract** the `.001` file with [7-Zip](https://7-zip.org) (Windows), Keka (macOS) or `7z x` (Linux). You get an `.img` file: that is the file you flash.
+1. Download the `ps5-bazzite-deck-bootc-vX.Y.img.7z.00*` files, the `.sha256` file and `bazzite-bootc-loader-vX.Y.elf` from the [release marked Latest](https://github.com/VivaLaVent/ps5-bazzite-deck/releases) into one folder.
+2. Check them: `sha256sum -c --ignore-missing <file>.img.sha256` on Linux, or `Get-FileHash <file> -Algorithm SHA256` per volume on Windows.
+3. Extract the `.001` file with [7-Zip](https://7-zip.org) (Windows), Keka (macOS) or `7z x` (Linux). The `.img` is what you flash.
 
-Already installed? Update with `sudo bootc upgrade`, see [Updating](/updating/bootc#updating).
+Already installed? `sudo bootc upgrade` ([Updating](/updating/bootc#updating)).
 
 ## Next steps
 
-**[Flash the image to USB](/installation/flash)**, then start Linux and work through the first boot.
+[Flash the image](/installation/flash), then start Linux.

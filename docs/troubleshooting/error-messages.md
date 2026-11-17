@@ -42,6 +42,20 @@ On PS5 system software 4.x, the PS5 can't read a drive flashed with a PS5 Bazzit
 
   macOS: `/dev/rdiskN`, after `diskutil unmountDisk diskN`. Windows: run it on the `.img` before flashing, `python gpt-first-lba.py ps5-bazzite-deck-bootc-vX.Y.img --apply`.
 
+### Emergency shell after an update: "Couldn't find specified OSTree root" {#ostree-boot-counter}
+
+M.2 installs from v2.11 or older: the boot partition names the right version under the wrong counter.
+
+- **From a PC:** in `cmdline.txt` on the USB drive's `boot` partition, change `ostree=/ostree/boot.1/` to `boot.0` (or `boot.0` to `boot.1`). Leave the rest of the line.
+- **In the shell**, with a USB keyboard (`nvme0n1p1` is the M.2's Linux partition; `blkid` lists it):
+  ```bash
+  mount /dev/nvme0n1p1 /sysroot 2>/dev/null || mount -o remount,rw /sysroot
+  cd /sysroot/ostree && { [ -e boot.1 ] || ln -s "$(readlink boot.0)" boot.1; [ -e boot.0 ] || ln -s "$(readlink boot.1)" boot.0; }
+  cd / && umount /sysroot && reboot -f
+  ```
+
+Then start with the loader and update: v2.13 and newer handle this themselves.
+
 ### "Could not create PS5 WiFi firmware directory" {#could-not-create-ps5-wifi-firmware-directory}
 
 Harmless. The loader carries on and Linux boots; look elsewhere if the boot fails.

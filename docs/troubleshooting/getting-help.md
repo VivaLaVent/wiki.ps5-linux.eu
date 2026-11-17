@@ -21,7 +21,7 @@ Most problems leave Linux running behind a black screen or a missing device, so 
 | PS5 Pro: GPU firmware, 36 instead of 60 compute units, games that go black | [PS5 Pro](/troubleshooting/ps5-pro) |
 | Wireless networks | [Wi-Fi](/troubleshooting/wifi) |
 | Wired networks and USB adapters | [Ethernet](/troubleshooting/ethernet) |
-| Controllers and pairing | [Bluetooth](/troubleshooting/bluetooth) |
+| Controllers, pairing, the Linux-only Bluetooth address | [Bluetooth](/troubleshooting/bluetooth) |
 | Fan noise, temperatures | [Fan](/troubleshooting/fan) |
 | A USB drive that disconnects or isn't found | [Storage and USB](/troubleshooting/storage) |
 | Sound | [Audio](/troubleshooting/audio) |

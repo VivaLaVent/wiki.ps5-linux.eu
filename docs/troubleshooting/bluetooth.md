@@ -2,7 +2,7 @@
 title: Bluetooth and DualSense
 sidebar_label: Bluetooth
 sidebar_position: 7
-description: "The PS5's Bluetooth chips under Linux, and fixes for controllers that don't pair, reconnect or stay connected."
+description: "The PS5's Bluetooth chips under Linux, the Linux-only address, and fixes for controllers that don't pair, reconnect or stay connected."
 hardware: [original, slim, pro]
 applies_to: all
 ---
@@ -17,7 +17,7 @@ Fixes for controllers that don't pair, connect or stay connected. Pairing itself
 | --- | --- |
 | No adapter | `bluetoothctl show` should list a controller with `Powered: yes`. After a warm reboot: power off and start with the loader |
 | Controller paired in the PS5 OS doesn't connect, or `Refusing connection … unknown device` repeats | [Controller refused in a loop](#controller-refused-in-a-loop) |
-| Slim: pairs but doesn't connect, or drops after seconds | A Linux-only address from v2.15 or older: update, power off, start with the loader, pair in the PS5 OS |
+| Slim: pairs but doesn't connect, or drops after seconds | Linux-only address off (the default from v2.8.1): `ps5-bt-address off`, power off, start with the loader, pair again |
 | Original PS5: the settings find no new devices | An old kernel quirk; update PS5 Bazzite Deck |
 | Adapter disappears after a while | The chip went into USB power saving. PS5 Bazzite Deck prevents it; elsewhere, a udev rule that sets `power/control` to `on` for the chip (`1286:2059`, `0e8d:3603`, `0e8d:3605`) and the USB controller (`104d:9108`) |
 | Gone after a warm reboot (IW620) | Reload `btusb`; if that fails, power off and start with the loader. See [warm reboots](#iw620-the-linux-only-address-and-warm-reboots) |
@@ -46,13 +46,30 @@ Each needs kernel fixes, which PS5 Bazzite Deck carries in its [`patches/`](http
 
 ## One DualSense for the PS5 and Linux {#one-dualsense-for-the-ps5-and-linux}
 
-The pairing made in the PS5 OS reaches Linux through the loader; the steps are on [DualSense: PS5 Bazzite Deck](/post-install/dualsense-bazzite-deck).
+The two setups and their steps are on [DualSense: PS5 Bazzite Deck](/post-install/dualsense-bazzite-deck). `ps5-bt-address status` shows which is on.
 
 ### Controller refused in a loop {#controller-refused-in-a-loop}
 
-`Refusing connection … unknown device` repeats: Linux has the PS5 OS's address but not its pairing. Start Linux with bazzite-bootc-loader v2.9 or newer, see [Shared pairing](/post-install/dualsense-bazzite-deck#shared-pairing).
+`Refusing connection … unknown device` repeats: Linux has the PS5 OS's address but not its pairing. Either:
 
-<a id="iw620-the-linux-only-address-and-warm-reboots"></a>Up to v2.15 the original PS5 and the Pro gave Linux a Bluetooth address of its own; from v2.16 Linux uses the console's address, see [Coming from the Linux-only address](/post-install/dualsense-bazzite-deck#linux-only-address).
+- **Share the pairing:** start Linux with bazzite-bootc-loader v2.9 or newer on PS5 Bazzite Deck v2.9 or newer, see [Shared pairing](/post-install/dualsense-bazzite-deck#shared-pairing).
+- **Or give Linux its own address:** `ps5-bt-address on`, power off, start with the loader, and pair the controller in Game Mode on another profile, see [Linux-only address](/post-install/dualsense-bazzite-deck#linux-only-address).
+
+### Is the Linux-only address applied?
+
+With it applied, the second character of the address differs from the PS5's (`9C:…` becomes `9E:…`):
+
+```bash
+cat /sys/class/bluetooth/hci0/address
+journalctl -u ps5-bt-addr -b --no-pager | tail -5   # why it wasn't applied
+sudo systemctl restart ps5-bt-addr; sleep 3; cat /sys/class/bluetooth/hci0/address
+```
+
+`ps5-report` shows it on its Bluetooth line.
+
+### IW620: the Linux-only address and warm reboots {#iw620-the-linux-only-address-and-warm-reboots}
+
+No fix: the chip doesn't survive a warm reboot with the changed address. PS5 Bazzite Deck therefore restarts through the PS5 OS while the address is on. For warm reboots, turn it off (`ps5-bt-address off`), see [IW620 consoles](/post-install/warm-reboot-bazzite-deck#iw620-consoles).
 
 ## Reconnect after a restart {#dualsense-pairs-once-but-wont-reconnect}
 
