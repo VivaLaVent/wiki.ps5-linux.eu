@@ -17,7 +17,7 @@ Modes, black screens, 4K120, VRR and HDR. Performance once there is a picture is
 | Black screen, console is running | [Get the picture back](#display-recovery), then [Black screen](#black-screen) |
 | Stuck at 1080p | Choose the mode yourself: desktop display settings, or Steam's in Game Mode. 1080p60 is only the safe first mode |
 | No 120 Hz, 4K120 or VRR | Needs the FLAVA3 chip and a display that supports it, see [Which modes work](#supported-resolutions) |
-| HDR washed out | VERDE has no HDR. On FLAVA3, see [HDR](#hdr) |
+| HDR washed out | VERDE: HDR needs PS5 Bazzite Deck v3.0 or newer. See [HDR](#hdr) |
 | Colours too dark or washed out without HDR | [RGB range](#rgb-range) |
 | No picture until the HDMI cable is replugged | Turn off the TV's HDMI Device Link/CEC and auto input switching; report it with `ps5-report` |
 | Black after choosing a mode | Desktop: wait 15 seconds, the old mode returns. Game Mode keeps it: [change the mode](#change-the-mode-from-a-desktop) over SSH |
@@ -34,10 +34,11 @@ The console has one of two HDMI chips. Check yours: `sudo dmesg | grep "HDMI IC 
 | --- | --- | --- |
 | 1080p60, 1080p120, 1440p60, 4K60 | ✅ | ✅ |
 | 1440p120 | ✅ | ⚠️ PS5 Bazzite Deck v2.7+, few reports |
-| 4K120 | ✅ on TVs that take the link, see [4K120](#4k120-over-hdmi-21-frl) | ❌ |
+| 4K120 | ✅ on TVs that take the link, see [4K120](#4k120-over-hdmi-21-frl) | ✅ PS5 Bazzite Deck v3.0+ |
 | 1080p100, 1440p100, 4K100 | ⚠️ PS5 Bazzite Deck v2.7+ | ⚠️ not 4K100 |
 | 144/165 Hz, ultrawide, other modes the display lists (up to 600 MHz) | ⚠️ PS5 Bazzite Deck v2.7+ | ❌ |
-| VRR, HDR | ✅ | ❌ |
+| HDR | ✅ | ✅ PS5 Bazzite Deck v3.0+ |
+| VRR | ✅ | ❌ |
 
 A mode is only offered if the display accepts it. Monitors are less predictable than TVs: the same model can work for one person and stay black for another (panel revision, firmware, cable).
 
@@ -134,7 +135,7 @@ FLAVA3 only, PS5 Bazzite Deck. Confirmed at 4K60, 1080p120, 1440p60 and 1440p120
 
 ## HDR {#hdr}
 
-FLAVA3 only. On VERDE no PS5 Linux kernel can set HDR up, so PS5 Bazzite Deck from v2.10 doesn't offer it there.
+FLAVA3, and VERDE from PS5 Bazzite Deck v3.0. On VERDE, HDR goes out as 12-bit YCbCr 4:2:2, and 4K at 100/120 Hz over FRL as 10-bit with HDR. If a VERDE console shows wrong colours since v3.0, switch the new parts off, then start with the loader: `sudo rpm-ostree kargs --append=hdmi.verde_infoframes=0 --append=hdmi.verde_deep_colour=0 --append=hdmi.verde_frl=0`. If it doesn't start at all: on a PC, add ` hdmi.verde_infoframes=0 hdmi.verde_deep_colour=0 hdmi.verde_frl=0` to the end of the line in `cmdline.txt` on the drive's boot partition.
 
 On FLAVA3, HDR goes out as 12-bit 4:2:2 only at **1080p60 or 4K60**. Washed out: check which the kernel used, with HDR on:
 

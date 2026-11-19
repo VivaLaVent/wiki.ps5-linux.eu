@@ -40,7 +40,7 @@ Check it: `ps5-bt-address status` says **off**, and `journalctl -b -u ps5-bt-imp
 
 ## Linux-only address {#linux-only-address}
 
-A boot-time service ([`ps5-bt-addr`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/files/ps5-bt-addr), [`ps5-bt-pro-addr`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/files/ps5-bt-pro-addr) on the Pro) gives Linux an address of its own, with its own pairing on a second controller profile. Turn it on with `ps5-bt-address on`, then power off and start with the loader.
+PS5 Pro only, from v3.0: a boot-time service ([`ps5-bt-pro-addr`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/bootc/system_files/usr/bin/ps5-bt-pro-addr)) gives Linux an address of its own, with its own pairing on a second controller profile. It is on by default on the Pro; `ps5-bt-address off` or `on` switches it, then power off and start with the loader. On v2.16.2 and older, the original PS5 and the Slim had it too.
 
 1. Make sure the controller is paired with the PS5 OS on one profile.
 2. In Linux, hold **PS + Square** (or another face button than the PS5's): the controller switches to that profile and blinks fast if it holds no pairing yet. If it doesn't blink fast, hold **PS + Create** until it does (on the PS5's profile, that would replace the PS5's pairing).

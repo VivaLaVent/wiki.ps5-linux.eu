@@ -11,7 +11,7 @@ applies_to: bazzite-deck
 
 What a warm reboot is and what it doesn't reset is on [Warm reboots](/post-install/warm-reboot).
 
-Warm reboots are built in and off by default. The image has no `kexec-tools`: a small script loads the kernel with the `kexec_file_load` system call and hooks into `reboot.target`. Source: [`files/ps5-kexec`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/files/ps5-kexec).
+Warm reboots are built in and off by default. The image has no `kexec-tools`: a small script loads the kernel with the `kexec_file_load` system call and hooks into `reboot.target`. Source: [`ps5-kexec`](https://github.com/VivaLaVent/ps5-bazzite-deck/blob/main/bootc/system_files/usr/bin/ps5-kexec).
 
 ## Turn it on or off
 

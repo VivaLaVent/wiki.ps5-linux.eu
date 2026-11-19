@@ -25,7 +25,7 @@ What works on each model and what is inside the console. Each row links to the c
 | 1080p/1440p 120 Hz, HDR | ✅ FLAVA3 chip | ✅ FLAVA3 chip | ✅ | [Display and HDMI](/troubleshooting/display) |
 | 4K 120 Hz | 🧪 FLAVA3, depends on the TV | 🧪 FLAVA3, depends on the TV | 🧪 | [Display and HDMI](/troubleshooting/display) |
 | VRR (HDMI VRR displays; FreeSync-only from v2.7.1) | ✅ FLAVA3, BD | ✅ FLAVA3, BD | ✅ BD | [Display and HDMI](/troubleshooting/display) |
-| VERDE HDMI chip | ✅ up to 1080p120, 1440p60, 4K60 (PS5 Bazzite Deck from v2.7: also 100 Hz and 1440p120); no HDR or VRR | same | n/a | [Display and HDMI](/troubleshooting/display) |
+| VERDE HDMI chip | ✅ up to 1080p120, 1440p60, 4K60 (PS5 Bazzite Deck from v2.7: also 100 Hz and 1440p120; from v3.0 HDR and 4K at 100/120 Hz); no VRR | same | n/a | [Display and HDMI](/troubleshooting/display) |
 | USB-C DisplayPort | 🧪 off by default | 🧪 | 🧪 | [Display and HDMI](/troubleshooting/display) |
 | Video decode and encode (VCN) | ✅ HEVC encode with I-frames only | ✅ | ✅ | [GPU](/troubleshooting/gpu#video-engine) |
 | Ethernet | ✅ | ✅ | ✅ | [Ethernet](/troubleshooting/ethernet) |
@@ -58,7 +58,7 @@ Linux runs on the original PS5, the PS5 Slim and the PS5 Pro. Within those model
 
 On [PS5 Bazzite Deck](/choose/bazzite-deck), `ps5-report` shows all three on its first lines.
 
-- **HDMI chip:** VERDE consoles don't get 4K at 120 Hz, HDR or VRR, and get 1440p at 120 Hz only on PS5 Bazzite Deck from v2.7. How the chip works and why is on [Display and HDMI](/troubleshooting/display); the feature table is on [PS5 Bazzite Deck](/choose/bazzite-deck#what-works-on-your-console).
+- **HDMI chip:** VERDE consoles don't get VRR; they get 1440p at 120 Hz on PS5 Bazzite Deck from v2.7, and HDR and 4K at 120 Hz from v3.0. How the chip works and why is on [Display and HDMI](/troubleshooting/display); the feature table is on [PS5 Bazzite Deck](/choose/bazzite-deck#what-works-on-your-console).
 - **Wi-Fi/Bluetooth chip:** the IW620 uses the out-of-tree `mwifiex` port, built into rmuxnet's kernel, the `linux-ps5` package and PS5 Bazzite Deck, see [Wi-Fi](/troubleshooting/wifi). The MediaTek chips use the in-kernel `mt7921e` (Slim) and `mt7925e` (Pro) drivers, which every current kernel builds; their Bluetooth needs fixes that PS5 Bazzite Deck has, see [Bluetooth](/troubleshooting/bluetooth).
 - **PS5 Pro:** supported by the loader (see [Which loader](/getting-started/loader#which-loader)). Its GPU ("Viola") needs its own firmware, which the loader dumps on the firmware versions it has offsets for, see [GPU firmware](/troubleshooting/ps5-pro#gpu-firmware); the kernel package stages it into the initrd at boot, and from PS5 Bazzite Deck v2.13 bazzite-bootc-loader puts it there itself. The GPU has 60 active compute units, so the [40 CU unlock](/troubleshooting/gpu#40-cu-unlock) doesn't apply. Details on [PS5 Pro](/troubleshooting/ps5-pro).
 

@@ -15,6 +15,7 @@ Fixes for controllers that don't pair, connect or stay connected. Pairing itself
 
 | Problem | Do this |
 | --- | --- |
+| DualSense over Bluetooth: late or ghost inputs in Proton games | Bazzite Portal → Troubleshoot → switch **InputPlumber** off |
 | No adapter | `bluetoothctl show` should list a controller with `Powered: yes`. After a warm reboot: power off and start with the loader |
 | Controller paired in the PS5 OS doesn't connect, or `Refusing connection … unknown device` repeats | [Controller refused in a loop](#controller-refused-in-a-loop) |
 | Slim: pairs but doesn't connect, or drops after seconds | Linux-only address off (the default from v2.8.1): `ps5-bt-address off`, power off, start with the loader, pair again |
@@ -53,7 +54,7 @@ The two setups and their steps are on [DualSense: PS5 Bazzite Deck](/post-instal
 `Refusing connection … unknown device` repeats: Linux has the PS5 OS's address but not its pairing. Either:
 
 - **Share the pairing:** start Linux with bazzite-bootc-loader v2.9 or newer on PS5 Bazzite Deck v2.9 or newer, see [Shared pairing](/post-install/dualsense-bazzite-deck#shared-pairing).
-- **Or give Linux its own address:** `ps5-bt-address on`, power off, start with the loader, and pair the controller in Game Mode on another profile, see [Linux-only address](/post-install/dualsense-bazzite-deck#linux-only-address).
+- **PS5 Pro, or Linux's own address:** `ps5-bt-address on` (PS5 Pro only from v3.0), power off, start with the loader, and pair the controller in Game Mode on another profile, see [Linux-only address](/post-install/dualsense-bazzite-deck#linux-only-address).
 
 ### Is the Linux-only address applied?
 
@@ -69,7 +70,7 @@ sudo systemctl restart ps5-bt-addr; sleep 3; cat /sys/class/bluetooth/hci0/addre
 
 ### IW620: the Linux-only address and warm reboots {#iw620-the-linux-only-address-and-warm-reboots}
 
-No fix: the chip doesn't survive a warm reboot with the changed address. PS5 Bazzite Deck therefore restarts through the PS5 OS while the address is on (it is off by default from v2.16.2), see [IW620 consoles](/post-install/warm-reboot-bazzite-deck#iw620-consoles).
+No fix: the chip doesn't survive a warm reboot with the changed address. On PS5 Bazzite Deck v2.16.2 and older, restarts went through the PS5 OS while the address was on; from v3.0 the original PS5 has no Linux-only address, so this no longer happens.
 
 ## Reconnect after a restart {#dualsense-pairs-once-but-wont-reconnect}
 

@@ -16,7 +16,7 @@ Clocks, compute units, VRAM and hardware video on the original PS5 and the Slim.
 | --- | --- |
 | Micro-stutter | Remove `idle=halt` from `cmdline.txt` |
 | Game crashes after a long session, RAM nearly full | Less VRAM: 5 GB, see [VRAM](#vram) |
-| A game needs Mesh shaders or "DirectX 12 Ultimate" (original PS5, Slim) | PS5 Bazzite Deck from v2.14: `ps5-directmesh %command%` in its launch options, see [Mesh shaders](#mesh-shaders) |
+| A game needs Mesh shaders or "DirectX 12 Ultimate" (original PS5, Slim) | PS5 Bazzite Deck from v3.0: on by default, see [Mesh shaders](#mesh-shaders). v2.14 to v2.16: `ps5-directmesh %command%` in its launch options |
 | No picture on a distro of your own | `options amdgpu dpm=0 gpu_recovery=0` in `/etc/modprobe.d/ps5-amdgpu.conf`; every working image ships it |
 
 | Limit | What happens | Status |
@@ -74,9 +74,9 @@ Games use the GPU's compute queue for lighting, post-processing and upscaling al
 | Console | Compute queue |
 | --- | --- |
 | PS5 Pro | On from PS5 Bazzite Deck v2.6.1. Hide it: `AMD_VIOLA_COMPUTE_QUEUE=0 %command%` |
-| Original PS5 and Slim | On from PS5 Bazzite Deck v2.7.3 (bootc). Hide it: `AMD_PS5_COMPUTE_QUEUE=0 %command%`. Hidden on other images |
+| Original PS5 and Slim | On from PS5 Bazzite Deck v2.7.3 (bootc). Hide it: `AMD_PS5_COMPUTE_QUEUE=0 %command%`; from v3.0, where DirectMesh is the driver and keeps its queue, `AMD_PS5_COMPUTE_QUEUE=0 ps5-directmesh --system %command%`. Hidden on other images |
 
-A corrupted picture, missing geometry or a hang in one game: hide the queue for that game and report it. To hide it for every game: `echo AMD_PS5_COMPUTE_QUEUE=0 | sudo tee /etc/environment.d/90-ps5-compute-queue.conf` (`AMD_VIOLA_COMPUTE_QUEUE=0` on a Pro), then log out and back in; delete the file to undo.
+A corrupted picture, missing geometry or a hang in one game: hide the queue for that game and report it. To hide it for every game: `echo AMD_PS5_COMPUTE_QUEUE=0 | sudo tee /etc/environment.d/90-ps5-compute-queue.conf` (`AMD_VIOLA_COMPUTE_QUEUE=0` on a Pro), plus `ps5-directmesh off` on v3.0 and newer, then restart; delete the file to undo.
 
 ## VRAM {#vram}
 
@@ -106,23 +106,27 @@ The GPU can use more than the minimum: up to `vram.txt + (remaining RAM) / 2`, a
 
 ## Mesh shaders (experimental) {#mesh-shaders}
 
-The original PS5 and the Slim have no Mesh shaders in Mesa's driver, and some D3D12 games don't start without them. PS5 Bazzite Deck from v2.14 ships [DirectMesh](https://github.com/lonewolf0622/Mesh-Shaders-for-Rdna-1-) as a second driver that adds them. It is used only by the games you choose. In Steam, right-click the game, **Properties**, **Launch Options**:
+The original PS5 and the Slim have no Mesh shaders in Mesa's driver, and some D3D12 games don't start without them. PS5 Bazzite Deck ships [DirectMesh](https://github.com/lonewolf0622/Mesh-Shaders-for-Rdna-1-), a driver that adds them. From v3.0 it is the Vulkan driver of the whole session there: Game Mode, Steam, games and desktop programs. Flatpak apps keep their own runtime's driver.
 
-```text
-ps5-directmesh %command%
-```
+| | Command |
+| --- | --- |
+| Off, back to the standard driver everywhere | `ps5-directmesh off`, then restart |
+| On again | `ps5-directmesh on`, then restart |
+| What is set | `ps5-directmesh status` |
+| One game on the standard driver | Launch option `ps5-directmesh --system %command%` |
+| One game on DirectMesh while it is off (and on v2.14 to v2.16) | Launch option `ps5-directmesh %command%` |
 
-Check it in a terminal: `ps5-directmesh vulkaninfo | grep -i mesh_shader` lists `VK_EXT_mesh_shader`.
+Check it in a terminal: `vulkaninfo | grep -i mesh_shader` lists `VK_EXT_mesh_shader`.
 
 | Situation | Do this |
 | --- | --- |
-| The game hangs or the picture freezes | Remove the launch option; the game is back on the normal driver. Please report it with `sudo dmesg \| grep -iE "amdgpu\|ring\|timeout" \| tail -20` |
+| The game hangs, doesn't start or the picture freezes | Put it on the standard driver with `ps5-directmesh --system %command%`, or `ps5-directmesh off` for everything. Please report it with `sudo dmesg \| grep -iE "amdgpu\|ring\|timeout" \| tail -20` |
 | Objects are missing or drawn wrong | `RADV_BC250_MESH_TASK_IDX=0 ps5-directmesh %command%`, and report whether it changes anything |
 | Compare with the game's path without Mesh shaders | `RADV_DEBUG=nomeshshader ps5-directmesh %command%` |
 | PS5 Pro | Not needed and not used: the launcher changes nothing there |
 | Another image | Build DirectMesh yourself from its page, and add the PS5's GPU ID (`13fb` or `13db`, see `cat /sys/bus/pci/devices/0000:20:00.0/device`) to its device list or start the game with `RADV_DIRECTMESH=1` |
 
-DirectMesh was written for the AMD BC-250, whose GPU is the same family as the PS5's, and tested there. On a PS5 it is new: other games and the desktop keep the normal driver, so trying it on one game risks only that game.
+DirectMesh was written for the AMD BC-250, whose GPU is the same family as the PS5's. If games that worked before stop starting, `ps5-directmesh off` is the first thing to try.
 
 ## Video engine (VCN) {#video-engine}
 

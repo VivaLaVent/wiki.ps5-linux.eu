@@ -9,6 +9,10 @@ applies_to: bazzite-deck
 
 # Switching from Legacy to bootc
 
+:::note
+The converter is no longer part of PS5 Bazzite Deck from v3.0. The copy from v2.16.2 below still works: it installs the current Stable, which then updates normally.
+:::
+
 Legacy installs, the PS5 Bazzite Deck installs from before v2.5, are no longer supported or updated from v2.13 on. `ps5-report` shows `legacy` on its **Install** line on one. Switch to bootc one of two ways.
 
 ## In place, keeping your games {#in-place}
@@ -18,7 +22,7 @@ The script sets the Stable bootc system up beside the Legacy one on the same dri
 On the PS5, in a terminal (Desktop Mode → **Konsole**) or over SSH (password `ps5`), with at least 30 GB free on the system drive:
 
 ```bash
-curl -fsSLO https://raw.githubusercontent.com/VivaLaVent/ps5-bazzite-deck/main/tools/legacy-to-bootc.sh
+curl -fsSLO https://raw.githubusercontent.com/VivaLaVent/ps5-bazzite-deck/v2.16.2/tools/legacy-to-bootc.sh
 sudo bash legacy-to-bootc.sh            # checks only, changes nothing
 sudo bash legacy-to-bootc.sh --apply    # downloads the Stable image (about 7 GB) and sets it up
 ```

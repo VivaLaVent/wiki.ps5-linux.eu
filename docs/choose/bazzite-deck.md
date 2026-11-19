@@ -44,9 +44,11 @@ It depends on the HDMI chip, the Wi-Fi/Bluetooth chip and the model; `ps5-report
 | 1080p, 1440p and 4K at 60 Hz; 1080p at 120 Hz | ✅ | ✅ |
 | 1440p at 100 and 120 Hz; 1080p at 100 Hz | ✅ | ✅ |
 | Other modes the display lists (144 or 165 Hz, ultrawide) | ✅ | ❌ |
-| 4K at 120 Hz (HDMI 2.1 TV and cable) | ✅ | ❌ |
-| HDR (1080p60, 4K60) | ✅ | ❌ |
+| 4K at 120 Hz (HDMI 2.1 TV and cable) | ✅ | ✅ from v3.0 |
+| HDR (1080p60, 4K60; VERDE also 1440p120 and 4K120) | ✅ | ✅ from v3.0 |
 | VRR (HDMI VRR or FreeSync) | ✅ | ❌ |
+
+On VERDE, HDR and 4K at 120 Hz are new in v3.0; [HDR](/troubleshooting/display#hdr) has the off switch.
 
 It starts at the display's own resolution at 60 Hz; choose another under Game Mode → Settings → Display ([Display](/troubleshooting/display#supported-resolutions)).
 

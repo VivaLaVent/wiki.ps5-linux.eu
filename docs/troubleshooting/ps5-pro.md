@@ -19,7 +19,7 @@ The Pro has its own GPU ("Viola", 60 compute units) and a MediaTek MT7925 Wi-Fi/
 | Orange light, then the PS5 OS starts instead of Linux | Rest mode was refused, see [Error messages](/troubleshooting/error-messages#rest-mode-error-back-to-the-ps5-login-screen) |
 | Game crashes after a long session | Less VRAM: 5 GB, see [VRAM](/troubleshooting/gpu#vram) |
 | Log floods with `mp1fw_sendmsg: Error : busy` | An old kernel's CPU clock driver: update |
-| CPU stays at 3.2 GHz | The Pro's CPU clock is left to the console. From v2.16.2: `ps5-perf pro-boost on` for the console's own boost to 3.5 GHz (it adds heat; `off` undoes it) |
+| CPU clock | From v3.0 the console's own boost to 3.5 GHz is on. It adds heat; `ps5-perf pro-boost off` goes back to 3.2 GHz (on v2.16.2 it is off: `ps5-perf pro-boost on`) |
 
 ## GPU firmware {#gpu-firmware}
 
