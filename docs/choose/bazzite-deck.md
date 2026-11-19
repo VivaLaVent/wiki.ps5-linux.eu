@@ -54,10 +54,10 @@ It starts at the display's own resolution at 60 Hz; choose another under Game Mo
 
 | Feature | IW620 | MediaTek (Slim) | MediaTek (Pro) |
 | --- | :---: | :---: | :---: |
-| One DualSense for the PS5 and Linux ([DualSense](/post-install/dualsense-bazzite-deck)) | own Linux pairing | shared pairing | own Linux pairing |
+| One DualSense for the PS5 and Linux ([DualSense](/post-install/dualsense-bazzite-deck)) | shared pairing | shared pairing | own Linux pairing |
 | Wi-Fi after a warm reboot (`ps5-warm-reboot on`) | ⚠️ | ✅ | ✅ |
 
-IW620: while Linux has its own Bluetooth address (the default), restarts go through the PS5 OS. If Wi-Fi is missing after a warm reboot, power off and start with the loader.
+IW620: if Wi-Fi is missing after a warm reboot, power off and start with the loader.
 
 **PS5 Pro:** all 60 compute units, with the Pro's own GPU firmware, which the loader dumps on most system software versions ([PS5 Pro](/troubleshooting/ps5-pro)).
 

@@ -69,7 +69,7 @@ sudo systemctl restart ps5-bt-addr; sleep 3; cat /sys/class/bluetooth/hci0/addre
 
 ### IW620: the Linux-only address and warm reboots {#iw620-the-linux-only-address-and-warm-reboots}
 
-No fix: the chip doesn't survive a warm reboot with the changed address. PS5 Bazzite Deck therefore restarts through the PS5 OS while the address is on. For warm reboots, turn it off (`ps5-bt-address off`), see [IW620 consoles](/post-install/warm-reboot-bazzite-deck#iw620-consoles).
+No fix: the chip doesn't survive a warm reboot with the changed address. PS5 Bazzite Deck therefore restarts through the PS5 OS while the address is on (it is off by default from v2.16.2), see [IW620 consoles](/post-install/warm-reboot-bazzite-deck#iw620-consoles).
 
 ## Reconnect after a restart {#dualsense-pairs-once-but-wont-reconnect}
 

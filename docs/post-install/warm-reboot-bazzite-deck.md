@@ -42,7 +42,7 @@ A new kernel needs a cold start: starting it with a warm reboot skips the consol
 
 ## IW620 consoles
 
-Because of the [IW620 hazard](/post-install/warm-reboot#iw620-hazard), restarts on an IW620 console go through the PS5 OS while the Linux-only Bluetooth address is on (the default), even with `ps5-warm-reboot on`. `ps5-report` names the chip on its **Wireless** line.
+Because of the [IW620 hazard](/post-install/warm-reboot#iw620-hazard), restarts on an IW620 console go through the PS5 OS while the Linux-only Bluetooth address is on (off by default from v2.16.2), even with `ps5-warm-reboot on`. `ps5-report` names the chip on its **Wireless** line.
 
 There is no message: `sudo reboot` does a normal restart through the PS5 OS. To use warm reboots on an IW620 console, turn the address off with `ps5-bt-address off`. Linux and the PS5 OS then share the console's address; with bazzite-bootc-loader v2.9 or newer, a controller paired in the PS5 OS connects in Linux too, see [Shared pairing](/post-install/dualsense-bazzite-deck#shared-pairing).
 

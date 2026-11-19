@@ -15,7 +15,7 @@ PS5 Bazzite Deck has two ways to use one controller in both the PS5 OS and Linux
 
 | | Shared pairing (address **off**) | Linux-only address (address **on**) |
 | --- | --- | --- |
-| Default on | Slim (MediaTek), from v2.8.1 | original PS5 (IW620) and PS5 Pro |
+| Default on | original PS5 and Slim (from v2.16.2) | PS5 Pro: the shared pairing doesn't connect there yet |
 | Pairing | one, made in the PS5 OS; Linux gets it at every start through the loader | one in the PS5 OS and one in Linux, on two controller profiles |
 | Needs | PS5 Bazzite Deck **v2.9** or newer and **bazzite-bootc-loader v2.9** or newer | a DualSense with profiles (its software 0630, PS5 system software 12.00) |
 | Warm reboots on the IW620 | work | restarts go through the PS5 OS |
@@ -26,7 +26,7 @@ The setting is stored in the install's `/etc`: it stays through updates and thro
 
 The loader hands the PS5 OS's active pairings to Linux at every start, and `ps5-bt-import` adds them to Linux's Bluetooth settings before Bluetooth starts. The controller then connects in both systems without pairing again.
 
-1. On an original PS5 or a Pro, in Linux: `ps5-bt-address off`. On a Slim it's already off.
+1. On an original PS5 or a Slim it's already set. On a Pro the shared pairing doesn't connect yet ([#73](https://github.com/VivaLaVent/ps5-bazzite-deck/issues/73)); use the Linux-only address there.
 2. Start Linux with **bazzite-bootc-loader v2.9 or newer** (`bazzite-bootc-loader-v2.9.elf` and later, from the [releases](https://github.com/VivaLaVent/ps5-bazzite-deck/releases)).
 3. Power off. In the PS5 OS, check that the controller connects; pair it there if not.
 4. Start Linux with the loader and press the PS button: it connects.
